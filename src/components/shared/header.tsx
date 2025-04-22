@@ -18,7 +18,9 @@ export const Header = () => {
                             />
                         </Link>
                     </div>
-                    <Navbar isHomePage />
+                    <div className="hidden lg:block">
+                        <Navbar isHomePage />
+                    </div>
                 </div>
                 <div className="flex items-center gap-lg">
                     <Search />
