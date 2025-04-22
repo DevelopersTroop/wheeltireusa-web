@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const getBoltPatterns = async (year: string, make: string, model: string) => {
-  // fetch(`https://api.driverightdata.com/eu/api/vehicle-info/GetVehicleDataFromDRD_NA?username=Tire_Wheel_Experts&securityToken=0b035d5ccecc43f2a9adce9849c7024e&DRDModelID=178902&DRDChassisID=92688`)
-  return ["5x100", "5x114.3", "5x120"];
-};
+// const getBoltPatterns = async (year: string, make: string, model: string) => {
+//   // fetch(`https://api.driverightdata.com/eu/api/vehicle-info/GetVehicleDataFromDRD_NA?username=Tire_Wheel_Experts&securityToken=0b035d5ccecc43f2a9adce9849c7024e&DRDModelID=178902&DRDChassisID=92688`)
+//   return ["5x100", "5x114.3", "5x120"];
+// };
 
 const yearMakeModelSlice = createSlice({
   name: "yearMakeModel",

@@ -27,19 +27,19 @@ type IBaseQueryArgs<TData> = {
   url: string;
   data?: TData;
   headers?: Record<string, string>;
-  params?: Record<string, any>;
+  params?: Record<string, unknown>;
 };
 
 type ApiResponse<T> = {
   data: T;
   statusCode: number;
-  [key: string]: any;
+  [key: string]: unknown;
 };
 
 export type TBaseQueryError = {
   error: {
     status: number;
-    data: any;
+    data: unknown;
     statusText: string;
     message: string;
   };
@@ -67,7 +67,7 @@ export const baseQuery =
         data: response.data.data,
         meta: { statusCode, ...rest },
       };
-    } catch (axiosError: any) {
+    } catch (axiosError: unknown) {
       const error = axiosError as AxiosError;
       return {
         error: {

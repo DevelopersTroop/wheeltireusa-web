@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-export default function middleware(request: Request) {
+export default function middleware() {
   const response = NextResponse.next();
   if (process.env.NODE_ENV !== "development") {
     response.headers.set(
