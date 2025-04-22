@@ -1,0 +1,6 @@
+ssh -i "amani-forged.pem" ec2-user@ec2-3-15-212-130.us-east-2.compute.amazonaws.com
+ 
+cd web/ && git fetch --all && git reset --hard origin/main && npm run build && pm2 restart 1 && pm2 save && pm2 logs 1
+ 
+
+git fetch --all && git reset --hard origin/main && npm run build && pm2 restart 1 && pm2 save && pm2 logs 1
