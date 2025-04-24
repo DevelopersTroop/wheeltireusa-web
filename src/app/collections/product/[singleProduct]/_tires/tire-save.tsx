@@ -1,6 +1,5 @@
 'use client'; // Use client-side rendering for this component
 import { TInventoryItem } from '@/types/product';
-import Image from 'next/image';
 
 const TireSave = ({}: { product: TInventoryItem }) => {
   return (
