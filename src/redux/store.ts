@@ -1,5 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import ymmReducer from "./features/ymm-slice";
+import mailFilterReducer from "./features/mainFilterSlice";
+import userReducer from "./features/userSlice";
+
 import {
   FLUSH,
   PAUSE,
@@ -20,7 +22,7 @@ const rootPersistConfig = {
 
 // Register reducers that's need to be persisted
 const persistingReducer = combineReducers({
-  yearMakeModel: ymmReducer,
+  user: userReducer,
 });
 
 const persistedReducer = persistReducer(rootPersistConfig, persistingReducer);
@@ -28,6 +30,7 @@ const persistedReducer = persistReducer(rootPersistConfig, persistingReducer);
 // Register reducers that's not need to be persisted
 const rootReducer = combineReducers({
   persisted: persistedReducer,
+  mainFilter: mailFilterReducer,
   [baseApi.reducerPath]: baseApi.reducer,
 });
 
