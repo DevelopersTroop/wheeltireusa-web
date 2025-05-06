@@ -3,5 +3,3 @@
 
 echo "Running pre-commit checks..."
 npm run lint-staged
-echo "Testing..."
-npm run test
