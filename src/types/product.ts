@@ -98,3 +98,27 @@ export type TInventoryItem = {
   rear_width?: string;
   dealer_price?: string;
 };
+
+export type TInventoryListItem = {
+  _id?: string;
+  title?: string;
+  slug?: string;
+  brand?: string;
+  sku?: string;
+  model_group?: string;
+  tire_type?: string[];
+  renderedImages?: { series: string; path: string }[];
+  createdAt?: string;
+  updatedAt?: string;
+  item_image?: string;
+  inventory_available?: number;
+  msrp?: number;
+  price?: number;
+  category?: TCategory;
+  wheel_size?: string;
+  finish?: string;
+  lip_size?: string;
+  bolt_pattern_1?: string;
+  purchase_description?: string;
+  min_price?: number;
+};

@@ -40,6 +40,10 @@ const nextConfig: NextConfig = {
         protocol: 'http',
         hostname: 'www.google.co.uk',
       },
+      {
+        protocol: 'https',
+        hostname: 'd3pl580m833nyd.cloudfront.net',
+      },
     ],
   },
 };

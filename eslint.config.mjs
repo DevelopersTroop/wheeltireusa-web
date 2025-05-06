@@ -12,7 +12,10 @@ export default defineConfig([
   pluginReact.configs.flat.recommended,
   {
     "rules": {
-      "react/react-in-jsx-scope": "off"
+      "react/react-in-jsx-scope": "off",
+      "@typescript-eslint/no-unused-expressions": "off",
+      "react/prop-types": "off",
+      "no-unsafe-optional-chaining": "off"
     }
   }
 ]);

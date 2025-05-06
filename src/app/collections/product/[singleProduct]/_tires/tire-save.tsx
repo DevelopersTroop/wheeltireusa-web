@@ -1,7 +1,8 @@
 'use client'; // Use client-side rendering for this component
 import { TInventoryItem } from '@/types/product';
 
-const TireSave = ({}: { product: TInventoryItem }) => {
+const TireSave = ({ product }: { product: TInventoryItem }) => {
+  console.log('product', product);
   return (
     <>
       <div className="relative flex w-full flex-col items-start justify-center self-stretch">
