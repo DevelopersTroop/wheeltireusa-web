@@ -1,3 +1,4 @@
+import { TInventoryItem } from '@/types/product';
 import { FiSearch } from 'react-icons/fi';
 
 const DeliveryCost = ({ product }: { product: TInventoryItem }) => {
