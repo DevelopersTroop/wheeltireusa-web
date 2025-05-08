@@ -1,3 +1,4 @@
+'use client';
 import { Form } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React, { Ref, useImperativeHandle } from 'react';
