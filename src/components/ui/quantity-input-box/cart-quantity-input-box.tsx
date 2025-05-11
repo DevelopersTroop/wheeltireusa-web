@@ -1,5 +1,6 @@
 'use client';
-import { useTypedSelector } from '@/app/globalRedux/store';
+
+import { useTypedSelector } from '@/redux/store';
 import { Minus, Plus } from 'lucide-react';
 import React, { useMemo } from 'react';
 

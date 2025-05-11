@@ -1,6 +1,7 @@
-"use client";
-import { TMainFilter } from "@/types/main-filter";
-import { createSlice } from "@reduxjs/toolkit";
+'use client';
+import { TMainFilter } from '@/types/main-filter';
+import { DeepPartial } from '@/utils/shared';
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState: TMainFilter = {
   list: {
@@ -8,66 +9,73 @@ const initialState: TMainFilter = {
     makes: [],
     models: [],
     bodyTypes: [],
-    subModels: []
+    subModels: [],
   },
-  year: "",
-  make: "",
-  model: "",
-  bodyType: "",
-  subModel: {
-    SubModel: "",
-    DRChassisID: "",
-    DRModelID: ""
+  current: {
+    year: '',
+    make: '',
+    model: '',
+    bodyType: '',
+    isFilterModalOpen: false,
+    subModel: {
+      SubModel: '',
+      DRChassisID: '',
+      DRModelID: '',
+    },
+    vehicleInformation: {
+      boltPattern: '',
+      frontRimSize: '',
+      rearRimSize: '',
+      frontCenterBore: '',
+      rearCenterBore: '',
+      maxWheelLoad: '',
+      tireSizes: [],
+      supportedWheels: [],
+    },
   },
-  vehicleInformation: {
-    boltPattern: "",
-    frontRimSize: "",
-    rearRimSize: "",
-    frontCenterBore: "",
-    rearCenterBore: "",
-    maxWheelLoad: "",
-    tireSizes: [],
-    supportedWheels: []
-  },
-  submitMainFilter: {},
-  isFilterModalOpen: false
-}
+};
 const mainFilterSlice = createSlice({
-  name: "mainFilter",
+  name: 'mainFilter',
   initialState,
   reducers: {
-    setMainFilter: (state, action: { payload: Partial<TMainFilter> }) => {
+    setMainFilter: (state, action: { payload: DeepPartial<TMainFilter> }) => {
       return {
         ...state,
         ...action.payload,
-        vehicleInformation: {
-          ...state.vehicleInformation,
-          ...(action.payload?.vehicleInformation ?? {})
-        },
         list: {
           ...state.list,
-          ...(action.payload?.list ?? {})
+          ...(action.payload?.list ?? {}),
         },
-        subModel: {
-          ...state.subModel,
-          ...(action.payload?.subModel ?? {})
-        }
-      }
+        current: {
+          ...state.current,
+          ...(action.payload?.current ?? {}),
+          submodel: {
+            ...state.current.subModel,
+            ...action.payload?.current?.subModel,
+          },
+          vehicleInformation: {
+            ...state.current.vehicleInformation,
+            ...action.payload?.current?.vehicleInformation,
+          },
+        },
+      };
     },
     clearMainFilter: (state) => {
-      state = initialState
-    },
-    submitMainFilter: (state, action: { payload: object }) => {
-      state.submitMainFilter = action.payload
+      Object.assign(state, initialState);
     },
     openMainFilterModal: (state) => {
-      state.isFilterModalOpen = true
+      state.current.isFilterModalOpen = true;
     },
     closeMainFilterModal: (state) => {
-      state.isFilterModalOpen = false
+      state.current.isFilterModalOpen = false;
     },
-  }
+  },
 });
 
 export default mainFilterSlice.reducer;
-export const { setMainFilter, clearMainFilter, submitMainFilter, openMainFilterModal, closeMainFilterModal } = mainFilterSlice.actions;
+export const {
+  setMainFilter,
+  clearMainFilter,
+  openMainFilterModal,
+  closeMainFilterModal,
+} = mainFilterSlice.actions;
