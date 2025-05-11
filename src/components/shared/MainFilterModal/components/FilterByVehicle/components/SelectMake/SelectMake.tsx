@@ -11,7 +11,7 @@ const SelectMake = () => {
       </div>
 
       <div className="text-muted-dark text-[20px] px-6 order-3">
-        Select Year
+        Select Make
       </div>
       <div className="grid grid-cols-5 gap-3 px-6 order-4">
         {filteredMakes.map((make) => (
@@ -20,6 +20,7 @@ const SelectMake = () => {
             onClick={setMake}
             key={make}
             text={make}
+            name="make"
           />
         ))}
       </div>

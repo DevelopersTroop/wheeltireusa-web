@@ -6,19 +6,21 @@ import {
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import { useTypedSelector } from '@/redux/store';
+import { TMainFilter } from '@/types/main-filter';
 import { Check, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 type BrickBoxProps = {
   [K in Exclude<
     keyof React.ComponentProps<'button'>,
-    'className'
+    'className' | 'name'
   >]?: React.ComponentProps<'button'>[K];
 } & {
   text: string;
   className?: string;
   checked?: boolean;
   isDismissable?: boolean;
+  name: keyof TMainFilter['current'];
 };
 
 const BrickBoxWithoutTooltip = ({
@@ -28,18 +30,20 @@ const BrickBoxWithoutTooltip = ({
   className,
   checked = false,
   isDismissable = false,
+  name,
   ...props
 }: BrickBoxProps) => {
   const [isCheckedState, setIsCheckedState] = useState(checked);
   const mainFilterState = useTypedSelector((state) => state.mainFilter);
+  console.log('Rendered');
 
   useEffect(() => {
-    if (mainFilterState?.current?.model === text) {
+    if (mainFilterState?.current?.[name] === text) {
       setIsCheckedState(true);
     } else {
       setIsCheckedState(false);
     }
-  }, [mainFilterState?.current?.model]);
+  }, [mainFilterState?.current?.[name]]);
 
   return (
     <button
@@ -57,7 +61,12 @@ const BrickBoxWithoutTooltip = ({
           <Check color="#63A82B" size={20} />
         </div>
       )}
-      <div className="whitespace-nowrap text-ellipsis overflow-hidden">
+      <div
+        className={cn(
+          'whitespace-nowrap text-ellipsis overflow-hidden',
+          isCheckedState && 'text-black font-medium'
+        )}
+      >
         {text}
       </div>
       {isDismissable && (

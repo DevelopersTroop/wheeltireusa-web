@@ -20,6 +20,7 @@ const SelectYear = () => {
             onClick={setYear}
             key={year}
             text={year}
+            name="year"
           />
         ))}
       </div>

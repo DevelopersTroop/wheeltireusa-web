@@ -11,7 +11,7 @@ const SelectModel = () => {
         <Search search={search} setSearch={setSearch} />
       </div>
       <div className="text-muted-dark text-[20px] px-6 order-2">
-        Select Year
+        Select Model
       </div>
       <div className="grid grid-cols-4 gap-3 px-6 order-4">
         {filteredModels.map((model) => (
@@ -20,6 +20,7 @@ const SelectModel = () => {
             onClick={setModel}
             key={model}
             text={model}
+            name="model"
           />
         ))}
       </div>

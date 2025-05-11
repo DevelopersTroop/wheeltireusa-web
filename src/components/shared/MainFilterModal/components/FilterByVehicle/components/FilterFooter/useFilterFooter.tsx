@@ -1,6 +1,6 @@
 import { useTypedSelector } from '@/redux/store';
 
-const useFilterByVehicle = () => {
+const useFilterFooter = () => {
   const mainFilterState = useTypedSelector((state) => state.mainFilter);
 
   return {
@@ -10,4 +10,4 @@ const useFilterByVehicle = () => {
   };
 };
 
-export default useFilterByVehicle;
+export default useFilterFooter;
