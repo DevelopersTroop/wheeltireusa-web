@@ -2,12 +2,18 @@ import BrickBox from '../../../BrickBox/BrickBox';
 import Search from '../../../Search/Search';
 import useSelectMake from './useSelectMake';
 const SelectMake = () => {
-  const { search, filteredMakes, setSearch, setMake } = useSelectMake();
+  const { search, filteredMakes, setSearch, setMake, alphabets, setAlphabets } =
+    useSelectMake();
 
   return (
     <>
-      <div className="pb-5 pt-3 px-6 border-b border-muted-dark order-1">
-        <Search search={search} setSearch={setSearch} />
+      <div className="pb-5 pt-3 px-6 border-b border-muted-dark order-1 flex justify-between">
+        <Search
+          search={search}
+          setSearch={setSearch}
+          setAlphabets={setAlphabets}
+          alphabets={alphabets}
+        />
       </div>
 
       <div className="text-muted-dark text-[20px] px-6 order-3">

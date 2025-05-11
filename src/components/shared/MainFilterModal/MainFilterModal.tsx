@@ -30,7 +30,7 @@ const YmmForm = () => {
   return (
     <>
       <Dialog open={isFilterModalOpen} onOpenChange={handleDialogChange}>
-        <DialogContent className="sm:max-w-1/2 bg-muted p-0">
+        <DialogContent className="sm:max-w-1/2 bg-muted p-0 lg:max-w-2/3">
           <Tabs defaultValue="vehicle">
             <TabsList className="p-6 bg-muted border-b-1 border-muted-dark rounded-none w-full flex justify-start pb-[30px] mt-4">
               <div className="flex items-center space-x-6">

@@ -65,6 +65,7 @@ const makeData = {
 const useSelectMake = () => {
   const dispatch = useDispatch();
   const [search, setSearch] = useState('');
+  const [alphabets, setAlphabets] = useState<string[]>([]);
   const [filteredMakes, setFilteredMakes] = useState(makeData.data.makes);
   const setMake = (e: React.MouseEvent<HTMLButtonElement>) => {
     dispatch(
@@ -79,10 +80,20 @@ const useSelectMake = () => {
   useEffect(() => {
     const handler = setTimeout(() => {
       setFilteredMakes(() => {
-        if (search) {
-          return makeData.data.makes.filter((make) =>
-            make.toLowerCase().includes(search.toLowerCase())
-          );
+        if (search || alphabets.length > 0) {
+          const searchedWithText =
+            search !== ''
+              ? makeData.data.makes.filter((make) =>
+                  make.toLowerCase().includes(search.toLowerCase())
+                )
+              : makeData.data.makes;
+          const searchedWithAlphabet =
+            alphabets.length > 0
+              ? searchedWithText.filter((make) =>
+                  alphabets.includes(make.charAt(0).toLowerCase())
+                )
+              : searchedWithText;
+          return searchedWithAlphabet;
         }
         return makeData.data.makes;
       });
@@ -92,9 +103,9 @@ const useSelectMake = () => {
     return () => {
       clearTimeout(handler);
     };
-  }, [search, makeData.data.makes]);
+  }, [search, alphabets, makeData.data.makes]);
 
-  return { search, filteredMakes, setSearch, setMake };
+  return { search, filteredMakes, setSearch, setMake, alphabets, setAlphabets };
 };
 
 export default useSelectMake;
