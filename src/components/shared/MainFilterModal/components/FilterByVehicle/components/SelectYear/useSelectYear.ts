@@ -98,8 +98,12 @@ const useSelectYear = () => {
   const setYear = (e: React.MouseEvent<HTMLButtonElement>) => {
     dispatch(
       setMainFilter({
-        current: {
-          year: e?.currentTarget?.textContent?.trim(),
+        filters: {
+          byVehicle: {
+            current: {
+              year: e?.currentTarget?.textContent?.trim(),
+            },
+          },
         },
       })
     );

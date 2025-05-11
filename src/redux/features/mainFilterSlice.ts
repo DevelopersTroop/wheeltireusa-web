@@ -1,36 +1,48 @@
 'use client';
 import { TMainFilter } from '@/types/main-filter';
 import { DeepPartial } from '@/utils/shared';
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState: TMainFilter = {
-  list: {
-    years: [],
-    makes: [],
-    models: [],
-    bodyTypes: [],
-    subModels: [],
-  },
-  current: {
-    year: '',
-    make: '',
-    model: '',
-    bodyType: '',
-    isFilterModalOpen: false,
-    subModel: {
-      SubModel: '',
-      DRChassisID: '',
-      DRModelID: '',
+  isFilterModalOpen: false,
+  filters: {
+    byVehicle: {
+      list: {
+        years: [],
+        makes: [],
+        models: [],
+        bodyTypes: [],
+        subModels: [],
+      },
+      current: {
+        year: '',
+        make: '',
+        model: '',
+        bodyType: '',
+        subModel: {
+          SubModel: '',
+          DRChassisID: '',
+          DRModelID: '',
+        },
+        vehicleInformation: {
+          boltPattern: '',
+          frontRimSize: '',
+          rearRimSize: '',
+          frontCenterBore: '',
+          rearCenterBore: '',
+          maxWheelLoad: '',
+          tireSizes: [],
+          supportedWheels: [],
+        },
+      },
     },
-    vehicleInformation: {
-      boltPattern: '',
-      frontRimSize: '',
-      rearRimSize: '',
-      frontCenterBore: '',
-      rearCenterBore: '',
-      maxWheelLoad: '',
-      tireSizes: [],
-      supportedWheels: [],
+    byTireBrand: {
+      list: {
+        brands: [],
+      },
+      current: {
+        brand: '',
+      },
     },
   },
 };
@@ -38,24 +50,50 @@ const mainFilterSlice = createSlice({
   name: 'mainFilter',
   initialState,
   reducers: {
-    setMainFilter: (state, action: { payload: DeepPartial<TMainFilter> }) => {
+    setMainFilter: (state, action: PayloadAction<DeepPartial<TMainFilter>>) => {
       return {
         ...state,
         ...action.payload,
-        list: {
-          ...state.list,
-          ...(action.payload?.list ?? {}),
-        },
-        current: {
-          ...state.current,
-          ...(action.payload?.current ?? {}),
-          submodel: {
-            ...state.current.subModel,
-            ...action.payload?.current?.subModel,
+        filters: {
+          ...state.filters,
+          ...action.payload.filters,
+          byVehicle: {
+            ...state.filters.byVehicle,
+            list: {
+              ...state.filters.byVehicle.list,
+              ...(action.payload?.filters?.byVehicle?.list ?? {}),
+              subModels: [
+                ...(state.filters.byVehicle.list.subModels ?? []),
+                ...(action.payload?.filters?.byVehicle?.list?.subModels ?? []),
+              ],
+            },
+            current: {
+              ...state.filters.byVehicle.current,
+              ...(action.payload?.filters?.byVehicle?.current ?? {}),
+              submodel: {
+                ...state.filters.byVehicle.current.subModel,
+                ...action.payload?.filters?.byVehicle?.current?.subModel,
+              },
+              vehicleInformation: {
+                ...state.filters.byVehicle.current.vehicleInformation,
+                ...action.payload?.filters?.byVehicle?.current
+                  ?.vehicleInformation,
+              },
+            },
           },
-          vehicleInformation: {
-            ...state.current.vehicleInformation,
-            ...action.payload?.current?.vehicleInformation,
+          byTireBrand: {
+            ...state.filters.byTireBrand,
+            ...(action.payload?.filters?.byTireBrand ?? {}),
+            list: {
+              brands: [
+                ...(state.filters.byTireBrand.list.brands ?? []),
+                ...(action.payload?.filters?.byTireBrand?.list?.brands ?? []),
+              ],
+            },
+            current: {
+              ...state.filters.byTireBrand.current,
+              ...(action.payload?.filters?.byTireBrand?.current ?? {}),
+            },
           },
         },
       };
@@ -64,10 +102,10 @@ const mainFilterSlice = createSlice({
       Object.assign(state, initialState);
     },
     openMainFilterModal: (state) => {
-      state.current.isFilterModalOpen = true;
+      state.isFilterModalOpen = true;
     },
     closeMainFilterModal: (state) => {
-      state.current.isFilterModalOpen = false;
+      state.isFilterModalOpen = false;
     },
   },
 });

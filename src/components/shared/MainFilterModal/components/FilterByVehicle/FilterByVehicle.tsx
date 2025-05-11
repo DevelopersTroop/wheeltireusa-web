@@ -14,10 +14,9 @@ const SelectModel = dynamic(
   () => import('./components/SelectModel/SelectModel'),
   { ssr: false, loading: () => <ListSkeleton title="Model" /> }
 );
-const FilterFooter = dynamic(
-  () => import('./components/FilterFooter/FilterFooter'),
-  { ssr: false }
-);
+const FilterFooter = dynamic(() => import('../FilterFooter/FilterFooter'), {
+  ssr: false,
+});
 const SelectYear = dynamic(() => import('./components/SelectYear/SelectYear'), {
   ssr: false,
   loading: () => <ListSkeleton title="Year" />,
@@ -41,7 +40,7 @@ const FilterByVehicle = () => {
           {year && make && <SelectModel />}
         </div>
       </ScrollArea>
-      <FilterFooter />
+      {year && make && model && <FilterFooter />}
     </div>
   );
 };

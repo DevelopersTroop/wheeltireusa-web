@@ -75,8 +75,12 @@ const useSelectModel = () => {
   const setModel = (e: React.MouseEvent<HTMLButtonElement>) => {
     dispatch(
       setMainFilter({
-        current: {
-          model: e?.currentTarget?.textContent?.trim(),
+        filters: {
+          byVehicle: {
+            current: {
+              model: e?.currentTarget?.textContent?.trim(),
+            },
+          },
         },
       })
     );

@@ -36,14 +36,26 @@ export type TMainFilterVehicleInformation = {
 };
 
 export type TMainFilter = {
-  list: Partial<TMainFilterList>;
-  current: {
-    year: string;
-    make: string;
-    model: string;
-    bodyType: string;
-    subModel: Partial<TMainFilterSubModel>;
-    vehicleInformation: Partial<TMainFilterVehicleInformation>;
-    isFilterModalOpen: boolean;
+  isFilterModalOpen: boolean;
+  filters: {
+    byVehicle: {
+      list: Partial<TMainFilterList>;
+      current: {
+        year: string;
+        make: string;
+        model: string;
+        bodyType: string;
+        subModel: Partial<TMainFilterSubModel>;
+        vehicleInformation: Partial<TMainFilterVehicleInformation>;
+      };
+    };
+    byTireBrand: {
+      list: {
+        brands: string[];
+      };
+      current: {
+        brand: string;
+      };
+    };
   };
 };

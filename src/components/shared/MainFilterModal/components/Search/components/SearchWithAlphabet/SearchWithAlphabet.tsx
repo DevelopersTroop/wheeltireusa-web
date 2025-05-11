@@ -59,8 +59,10 @@ const SearchWithAlphabet = ({
           value={alphabet}
           onClick={selectAlphabet}
           className={cn(
-            'cursor-pointer text-[18px]',
-            isSelected(alphabet) ? 'text-gray-400/80' : ''
+            'cursor-pointer text-[18px] hover:text-gray-500/90',
+            isSelected(alphabet)
+              ? 'text-gray-400/80 hover:text-gray-400/80'
+              : ''
           )}
         >
           {alphabet}

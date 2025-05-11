@@ -9,7 +9,8 @@ const SelectedItem = () => {
       {year && (
         <BrickBox
           checked={true}
-          name="year"
+          filterType="byVehicle"
+          fieldName="year"
           text={year}
           isDismissable={true}
           onClick={clearYear}
@@ -18,7 +19,8 @@ const SelectedItem = () => {
       {make && (
         <BrickBox
           checked={true}
-          name="make"
+          filterType="byVehicle"
+          fieldName="make"
           text={make}
           isDismissable={true}
           onClick={clearMake}
@@ -27,7 +29,8 @@ const SelectedItem = () => {
       {model && (
         <BrickBox
           checked={true}
-          name="model"
+          filterType="byVehicle"
+          fieldName="model"
           text={model}
           isDismissable={true}
           onClick={clearModel}

@@ -4,7 +4,7 @@ const ListSkeleton = ({ title }: { title: string }) => {
   return (
     <>
       <div className="pb-5 pt-3 px-6 border-b border-muted-dark order-1">
-        <BrickBoxSkeleton className="w-1/3" />
+        <BrickBoxSkeleton className="w-1/4" />
       </div>
 
       <div className="text-muted-dark text-[20px] px-6 order-3">

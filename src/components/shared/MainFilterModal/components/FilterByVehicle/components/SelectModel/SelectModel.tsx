@@ -20,7 +20,8 @@ const SelectModel = () => {
             onClick={setModel}
             key={model}
             text={model}
-            name="model"
+            filterType="byVehicle"
+            fieldName="model"
           />
         ))}
       </div>

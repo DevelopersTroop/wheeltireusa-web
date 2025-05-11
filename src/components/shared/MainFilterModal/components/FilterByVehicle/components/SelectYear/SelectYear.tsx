@@ -20,7 +20,8 @@ const SelectYear = () => {
             onClick={setYear}
             key={year}
             text={year}
-            name="year"
+            filterType="byVehicle"
+            fieldName="year"
           />
         ))}
       </div>

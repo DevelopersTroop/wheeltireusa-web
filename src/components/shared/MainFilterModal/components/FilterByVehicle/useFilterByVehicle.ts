@@ -4,9 +4,9 @@ const useFilterByVehicle = () => {
   const mainFilterState = useTypedSelector((state) => state.mainFilter);
 
   return {
-    year: mainFilterState.current.year,
-    make: mainFilterState.current.make,
-    model: mainFilterState.current.model,
+    year: mainFilterState.filters.byVehicle.current.year,
+    make: mainFilterState.filters.byVehicle.current.make,
+    model: mainFilterState.filters.byVehicle.current.model,
   };
 };
 

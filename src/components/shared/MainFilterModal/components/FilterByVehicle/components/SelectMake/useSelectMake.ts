@@ -70,8 +70,12 @@ const useSelectMake = () => {
   const setMake = (e: React.MouseEvent<HTMLButtonElement>) => {
     dispatch(
       setMainFilter({
-        current: {
-          make: e?.currentTarget?.textContent?.trim(),
+        filters: {
+          byVehicle: {
+            current: {
+              make: e?.currentTarget?.textContent?.trim(),
+            },
+          },
         },
       })
     );

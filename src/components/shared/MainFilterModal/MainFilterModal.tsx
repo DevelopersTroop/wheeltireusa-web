@@ -12,13 +12,12 @@ import {
   openMainFilterModal,
 } from '@/redux/features/mainFilterSlice';
 import { useDispatch } from 'react-redux';
+import FilterByTireBrand from './components/FilterByTireBrand/FilterByTireBrand';
 import FilterByVehicle from './components/FilterByVehicle/FilterByVehicle';
 
 const YmmForm = () => {
   const dispatch = useDispatch();
-  const {
-    current: { isFilterModalOpen },
-  } = useMainFilterModal();
+  const { isFilterModalOpen } = useMainFilterModal();
 
   const handleDialogChange = (isOpen: boolean) => {
     dispatch(openMainFilterModal());
@@ -56,7 +55,7 @@ const YmmForm = () => {
               Change your password here.
             </TabsContent>
             <TabsContent value="tireBrand">
-              Change your password here.
+              <FilterByTireBrand />
             </TabsContent>
           </Tabs>
         </DialogContent>

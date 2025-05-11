@@ -9,8 +9,12 @@ const useSelectedItem = () => {
   const clearModel = () => {
     dispatch(
       setMainFilter({
-        current: {
-          model: undefined,
+        filters: {
+          byVehicle: {
+            current: {
+              model: undefined,
+            },
+          },
         },
       })
     );
@@ -18,9 +22,13 @@ const useSelectedItem = () => {
   const clearMake = () => {
     dispatch(
       setMainFilter({
-        current: {
-          make: undefined,
-          model: undefined,
+        filters: {
+          byVehicle: {
+            current: {
+              make: undefined,
+              model: undefined,
+            },
+          },
         },
       })
     );
@@ -28,10 +36,14 @@ const useSelectedItem = () => {
   const clearYear = () => {
     dispatch(
       setMainFilter({
-        current: {
-          year: undefined,
-          model: undefined,
-          make: undefined,
+        filters: {
+          byVehicle: {
+            current: {
+              year: undefined,
+              model: undefined,
+              make: undefined,
+            },
+          },
         },
       })
     );
@@ -40,9 +52,9 @@ const useSelectedItem = () => {
     clearModel,
     clearMake,
     clearYear,
-    model: mainFilterState.current.model,
-    make: mainFilterState.current.make,
-    year: mainFilterState.current.year,
+    model: mainFilterState.filters.byVehicle.current.model,
+    make: mainFilterState.filters.byVehicle.current.make,
+    year: mainFilterState.filters.byVehicle.current.year,
   };
 };
 

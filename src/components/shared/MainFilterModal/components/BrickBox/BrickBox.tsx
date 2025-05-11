@@ -20,7 +20,8 @@ type BrickBoxProps = {
   className?: string;
   checked?: boolean;
   isDismissable?: boolean;
-  name: keyof TMainFilter['current'];
+  filterType: keyof TMainFilter['filters'];
+  fieldName: string;
 };
 
 const BrickBoxWithoutTooltip = ({
@@ -30,7 +31,8 @@ const BrickBoxWithoutTooltip = ({
   className,
   checked = false,
   isDismissable = false,
-  name,
+  fieldName,
+  filterType,
   ...props
 }: BrickBoxProps) => {
   const [isCheckedState, setIsCheckedState] = useState(checked);
@@ -38,12 +40,14 @@ const BrickBoxWithoutTooltip = ({
   console.log('Rendered');
 
   useEffect(() => {
-    if (mainFilterState?.current?.[name] === text) {
+    // @ts-expect-error Hasib will fix this TS error
+    if (mainFilterState?.filters?.[filterType]?.current?.[fieldName] === text) {
       setIsCheckedState(true);
     } else {
       setIsCheckedState(false);
     }
-  }, [mainFilterState?.current?.[name]]);
+    // @ts-expect-error Hasib will fix this TS error
+  }, [mainFilterState?.filters?.[filterType]?.current?.[fieldName]]);
 
   return (
     <button
@@ -71,7 +75,7 @@ const BrickBoxWithoutTooltip = ({
       </div>
       {isDismissable && (
         <div className="ml-10">
-          <X size={20} />
+          <X size={16} />
         </div>
       )}
     </button>

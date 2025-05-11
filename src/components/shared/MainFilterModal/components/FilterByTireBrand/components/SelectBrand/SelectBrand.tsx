@@ -1,9 +1,15 @@
 import BrickBox from '../../../BrickBox/BrickBox';
 import Search from '../../../Search/Search';
-import useSelectMake from './useSelectMake';
-const SelectMake = () => {
-  const { search, filteredMakes, setSearch, setMake, alphabets, setAlphabets } =
-    useSelectMake();
+import useSelectBrand from './useSelectBrand';
+const SelectBrand = () => {
+  const {
+    search,
+    filteredBrands,
+    setSearch,
+    setBrand,
+    alphabets,
+    setAlphabets,
+  } = useSelectBrand();
 
   return (
     <>
@@ -20,14 +26,14 @@ const SelectMake = () => {
         Select Make
       </div>
       <div className="grid grid-cols-5 gap-3 px-6 order-4">
-        {filteredMakes.map((make) => (
+        {filteredBrands.map((brand) => (
           <BrickBox
             showTooltip={true}
-            onClick={setMake}
-            key={make}
-            text={make}
-            filterType="byVehicle"
-            fieldName="make"
+            onClick={setBrand}
+            key={brand}
+            text={brand}
+            filterType="byTireBrand"
+            fieldName="brand"
           />
         ))}
       </div>
@@ -35,4 +41,4 @@ const SelectMake = () => {
   );
 };
 
-export default SelectMake;
+export default SelectBrand;
