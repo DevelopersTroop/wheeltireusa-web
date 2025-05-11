@@ -11,11 +11,18 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { z } from 'zod';
 
+const passwordSchema = z
+  .string()
+  .min(8, 'Password must be at least 8 characters') // Minimum length check
+  .regex(/[A-Z]/, 'Password must contain at least one uppercase letter') // Uppercase letter check
+  .regex(/[a-z]/, 'Password must contain at least one lowercase letter') // Lowercase letters check
+  .regex(/\d/, 'Password must contain at least one digit'); // Digit check
+
 const formSchema = z
   .object({
     fullName: z.string().min(5, 'Full name must be at least 5 characters'),
     email: z.string().email('Invalid email'),
-    password: z.string().min(8, 'Password must be at least 8 characters'),
+    password: passwordSchema,
     confirmPassword: z
       .string()
       .min(8, 'Confirm Password must be at least 8 characters'),
@@ -122,7 +129,13 @@ const RegisterPage = () => {
               placeholder="Enter your password"
               heading="Password"
               showMessage={true}
-              onChange={(e) => setPassword(e.target.value)}
+              onChangeValidationCheck={(value) => {
+                setPassword(value);
+                // rules.forEach((rule) => {
+                //   rule.isValid(value);
+                // }
+                // );
+              }}
             />
             <div className="text-gray-600 mt-2">
               <p className="mb-1">Password must contain:</p>
