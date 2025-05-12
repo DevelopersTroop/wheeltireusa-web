@@ -8,6 +8,7 @@ const productData: TInventoryItem = {
     text: '31200',
     value: '31200',
   },
+  slug: 'amani-allora-26x16-et-101-fully-polished-af-all26168lpb-101fp-fc1',
   name: 'CVPGTS02',
   title: 'Venom Power 245/35ZR20 95W XL Ragnarok GTS',
   item_type: {
