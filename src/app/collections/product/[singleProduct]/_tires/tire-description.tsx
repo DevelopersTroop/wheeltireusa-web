@@ -1,6 +1,7 @@
+import { TInventoryItem } from '@/types/product';
 import React, { useState } from 'react';
 
-const TireDescription: React.FC = () => {
+const TireDescription: React.FC<{ product: TInventoryItem }> = () => {
   const [activeTab, setActiveTab] = useState('Description');
 
   const renderContent = () => {

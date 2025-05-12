@@ -3,6 +3,7 @@ export type TInventoryItem = {
     text: string;
     value: string;
   };
+  slug: string;
   name?: string;
   title?: string;
   item_type?: {
