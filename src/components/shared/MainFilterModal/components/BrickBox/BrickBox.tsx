@@ -9,6 +9,7 @@ import { useTypedSelector } from '@/redux/store';
 import { TMainFilter } from '@/types/main-filter';
 import { Check, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useMergedBrickBoxContext } from './context/MergedBrickBoxProvider';
 
 type BrickBoxProps = {
   [K in Exclude<
@@ -49,12 +50,16 @@ const BrickBoxWithoutTooltip = ({
     // @ts-expect-error Hasib will fix this TS error
   }, [mainFilterState?.filters?.[filterType]?.current?.[fieldName]]);
 
+  const isMerged = useMergedBrickBoxContext();
+
   return (
     <button
       type={type}
       className={cn(
-        'bg-white border-muted-dark border-1 rounded px-3 py-[7.5px] inline-flex items-center space-x-2 text-lg text-muted-foreground cursor-pointer hover:text-black hover:border-black',
-        isCheckedState && 'border-black',
+        !isMerged
+          ? 'bg-white border-muted-dark border-1 rounded px-3 py-[7.5px] inline-flex items-center space-x-2 text-lg text-muted-foreground cursor-pointer hover:text-black hover:border-black'
+          : 'inline-flex items-center space-x-2 text-lg text-muted-foreground cursor-pointer',
+        !isMerged && isCheckedState ? 'border-black' : '',
         className
       )}
       {...props}
@@ -74,7 +79,7 @@ const BrickBoxWithoutTooltip = ({
         {text}
       </div>
       {isDismissable && (
-        <div className="ml-10">
+        <div className={cn(!isMerged ? 'ml-10' : 'ml-0')}>
           <X size={16} />
         </div>
       )}

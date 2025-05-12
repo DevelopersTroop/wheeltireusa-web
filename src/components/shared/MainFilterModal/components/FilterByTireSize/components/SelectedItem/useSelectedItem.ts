@@ -25,7 +25,15 @@ const useSelectedItem = () => {
   const clearFrontTireWidth = () => {
     dispatch(
       setMainFilter({
-        filters: { byTireSize: { current: { frontTireWidth: '' } } },
+        filters: {
+          byTireSize: {
+            current: {
+              frontTireWidth: '',
+              frontTireAspectRatio: '',
+              frontTireDiameter: '',
+            },
+          },
+        },
       })
     );
   };
@@ -33,7 +41,15 @@ const useSelectedItem = () => {
   const clearRearTireWidth = () => {
     dispatch(
       setMainFilter({
-        filters: { byTireSize: { current: { rearTireWidth: '' } } },
+        filters: {
+          byTireSize: {
+            current: {
+              rearTireWidth: '',
+              rearTireAspectRatio: '',
+              rearTireDiameter: '',
+            },
+          },
+        },
       })
     );
   };
@@ -41,7 +57,11 @@ const useSelectedItem = () => {
   const clearFrontTireAspectRatio = () => {
     dispatch(
       setMainFilter({
-        filters: { byTireSize: { current: { frontTireAspectRatio: '' } } },
+        filters: {
+          byTireSize: {
+            current: { frontTireAspectRatio: '', frontTireWidth: '' },
+          },
+        },
       })
     );
   };
@@ -49,7 +69,11 @@ const useSelectedItem = () => {
   const clearRearTireAspectRatio = () => {
     dispatch(
       setMainFilter({
-        filters: { byTireSize: { current: { rearTireAspectRatio: '' } } },
+        filters: {
+          byTireSize: {
+            current: { rearTireAspectRatio: '', rearTireWidth: '' },
+          },
+        },
       })
     );
   };
