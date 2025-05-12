@@ -14,6 +14,7 @@ import {
 import { useDispatch } from 'react-redux';
 import FilterByTireBrand from './components/FilterByTireBrand/FilterByTireBrand';
 import FilterByVehicle from './components/FilterByVehicle/FilterByVehicle';
+import FilterByTireSize from './components/FilterByTireSize/FilterByTireSize';
 
 const YmmForm = () => {
   const dispatch = useDispatch();
@@ -52,7 +53,7 @@ const YmmForm = () => {
               <FilterByVehicle />
             </TabsContent>
             <TabsContent value="tireSize">
-              Change your password here.
+              <FilterByTireSize />
             </TabsContent>
             <TabsContent value="tireBrand">
               <FilterByTireBrand />

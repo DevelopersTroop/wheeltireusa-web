@@ -44,6 +44,21 @@ const initialState: TMainFilter = {
         brand: '',
       },
     },
+    byTireSize: {
+      list: {
+        diameters: [],
+        widths: [],
+        aspectRatios: [],
+      },
+      current: {
+        frontTireDiameter: '',
+        rearTireDiameter: '',
+        frontTireWidth: '',
+        rearTireWidth: '',
+        frontTireAspectRatio: '',
+        rearTireAspectRatio: '',
+      },
+    },
   },
 };
 const mainFilterSlice = createSlice({
@@ -93,6 +108,18 @@ const mainFilterSlice = createSlice({
             current: {
               ...state.filters.byTireBrand.current,
               ...(action.payload?.filters?.byTireBrand?.current ?? {}),
+            },
+          },
+          byTireSize: {
+            ...state.filters.byTireSize,
+            ...(action.payload?.filters?.byTireSize ?? {}),
+            list: {
+              ...state.filters.byTireSize.list,
+              ...(action.payload?.filters?.byTireSize?.list ?? {}),
+            },
+            current: {
+              ...state.filters.byTireSize.current,
+              ...(action.payload?.filters?.byTireSize?.current ?? {}),
             },
           },
         },

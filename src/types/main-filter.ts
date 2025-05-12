@@ -57,5 +57,20 @@ export type TMainFilter = {
         brand: string;
       };
     };
+    byTireSize: {
+      list: {
+        diameters: string[];
+        widths: string[];
+        aspectRatios: string[];
+      };
+      current: {
+        frontTireDiameter: string;
+        rearTireDiameter: string;
+        frontTireWidth: string;
+        rearTireWidth: string;
+        frontTireAspectRatio: string;
+        rearTireAspectRatio: string;
+      };
+    };
   };
 };
