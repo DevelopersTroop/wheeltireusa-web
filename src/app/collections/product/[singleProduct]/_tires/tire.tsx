@@ -1,7 +1,7 @@
+import { ImageGallery } from '@/components/shared/imageGallery';
 import Breadcrumb from '@/components/ui/breadcrumb/breadcrumb';
 import Item from '@/components/ui/breadcrumb/item';
 import { TInventoryItem } from '@/types/product';
-import Image from 'next/image';
 import TireDescription from './tire-description';
 import TireDetails from './tire-details';
 
@@ -21,13 +21,11 @@ const Tire = ({ product }: { product: TInventoryItem }) => {
 
       <div className="mt-6 flex w-full flex-col gap-4 lg:mt-3 mb-10 lg:flex-row lg:gap-8">
         <div className="flex w-full flex-col lg:w-4/6">
-          <div className="w-[100px]">
-            <Image
-              src={product?.item_image}
-              alt={product?.name}
-              className="w-full object-cover"
-              width={100}
-              height={100}
+          <div className="w-full">
+            <ImageGallery
+              images={Array.from({ length: 6 }).map(() => ({
+                src: product?.item_image || '',
+              }))}
             />
           </div>
           <TireDescription product={product} />
