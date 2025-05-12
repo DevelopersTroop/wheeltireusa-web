@@ -1,73 +1,146 @@
-"use client";
-import { TMainFilter } from "@/types/main-filter";
-import { createSlice } from "@reduxjs/toolkit";
+'use client';
+import { TMainFilter } from '@/types/main-filter';
+import { DeepPartial } from '@/utils/shared';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState: TMainFilter = {
-  list: {
-    years: [],
-    makes: [],
-    models: [],
-    bodyTypes: [],
-    subModels: []
+  isFilterModalOpen: false,
+  filters: {
+    byVehicle: {
+      list: {
+        years: [],
+        makes: [],
+        models: [],
+        bodyTypes: [],
+        subModels: [],
+      },
+      current: {
+        year: '',
+        make: '',
+        model: '',
+        bodyType: '',
+        subModel: {
+          SubModel: '',
+          DRChassisID: '',
+          DRModelID: '',
+        },
+        vehicleInformation: {
+          boltPattern: '',
+          frontRimSize: '',
+          rearRimSize: '',
+          frontCenterBore: '',
+          rearCenterBore: '',
+          maxWheelLoad: '',
+          tireSizes: [],
+          supportedWheels: [],
+        },
+      },
+    },
+    byTireBrand: {
+      list: {
+        brands: [],
+      },
+      current: {
+        brand: '',
+      },
+    },
+    byTireSize: {
+      list: {
+        diameters: [],
+        widths: [],
+        aspectRatios: [],
+      },
+      current: {
+        frontTireDiameter: '',
+        rearTireDiameter: '',
+        frontTireWidth: '',
+        rearTireWidth: '',
+        frontTireAspectRatio: '',
+        rearTireAspectRatio: '',
+      },
+    },
   },
-  year: "",
-  make: "",
-  model: "",
-  bodyType: "",
-  subModel: {
-    SubModel: "",
-    DRChassisID: "",
-    DRModelID: ""
-  },
-  vehicleInformation: {
-    boltPattern: "",
-    frontRimSize: "",
-    rearRimSize: "",
-    frontCenterBore: "",
-    rearCenterBore: "",
-    maxWheelLoad: "",
-    tireSizes: [],
-    supportedWheels: []
-  },
-  submitMainFilter: {},
-  isFilterModalOpen: false
-}
+};
 const mainFilterSlice = createSlice({
-  name: "mainFilter",
+  name: 'mainFilter',
   initialState,
   reducers: {
-    setMainFilter: (state, action: { payload: Partial<TMainFilter> }) => {
+    setMainFilter: (state, action: PayloadAction<DeepPartial<TMainFilter>>) => {
       return {
         ...state,
         ...action.payload,
-        vehicleInformation: {
-          ...state.vehicleInformation,
-          ...(action.payload?.vehicleInformation ?? {})
+        filters: {
+          ...state.filters,
+          ...action.payload.filters,
+          byVehicle: {
+            ...state.filters.byVehicle,
+            list: {
+              ...state.filters.byVehicle.list,
+              ...(action.payload?.filters?.byVehicle?.list ?? {}),
+              subModels: [
+                ...(state.filters.byVehicle.list.subModels ?? []),
+                ...(action.payload?.filters?.byVehicle?.list?.subModels ?? []),
+              ],
+            },
+            current: {
+              ...state.filters.byVehicle.current,
+              ...(action.payload?.filters?.byVehicle?.current ?? {}),
+              submodel: {
+                ...state.filters.byVehicle.current.subModel,
+                ...action.payload?.filters?.byVehicle?.current?.subModel,
+              },
+              vehicleInformation: {
+                ...state.filters.byVehicle.current.vehicleInformation,
+                ...action.payload?.filters?.byVehicle?.current
+                  ?.vehicleInformation,
+              },
+            },
+          },
+          byTireBrand: {
+            ...state.filters.byTireBrand,
+            ...(action.payload?.filters?.byTireBrand ?? {}),
+            list: {
+              brands: [
+                ...(state.filters.byTireBrand.list.brands ?? []),
+                ...(action.payload?.filters?.byTireBrand?.list?.brands ?? []),
+              ],
+            },
+            current: {
+              ...state.filters.byTireBrand.current,
+              ...(action.payload?.filters?.byTireBrand?.current ?? {}),
+            },
+          },
+          byTireSize: {
+            ...state.filters.byTireSize,
+            ...(action.payload?.filters?.byTireSize ?? {}),
+            list: {
+              ...state.filters.byTireSize.list,
+              ...(action.payload?.filters?.byTireSize?.list ?? {}),
+            },
+            current: {
+              ...state.filters.byTireSize.current,
+              ...(action.payload?.filters?.byTireSize?.current ?? {}),
+            },
+          },
         },
-        list: {
-          ...state.list,
-          ...(action.payload?.list ?? {})
-        },
-        subModel: {
-          ...state.subModel,
-          ...(action.payload?.subModel ?? {})
-        }
-      }
+      };
     },
     clearMainFilter: (state) => {
-      state = initialState
-    },
-    submitMainFilter: (state, action: { payload: object }) => {
-      state.submitMainFilter = action.payload
+      Object.assign(state, initialState);
     },
     openMainFilterModal: (state) => {
-      state.isFilterModalOpen = true
+      state.isFilterModalOpen = true;
     },
     closeMainFilterModal: (state) => {
-      state.isFilterModalOpen = false
+      state.isFilterModalOpen = false;
     },
-  }
+  },
 });
 
 export default mainFilterSlice.reducer;
-export const { setMainFilter, clearMainFilter, submitMainFilter, openMainFilterModal, closeMainFilterModal } = mainFilterSlice.actions;
+export const {
+  setMainFilter,
+  clearMainFilter,
+  openMainFilterModal,
+  closeMainFilterModal,
+} = mainFilterSlice.actions;

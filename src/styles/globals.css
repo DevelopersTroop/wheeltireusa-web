@@ -45,6 +45,18 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 }
+@theme {
+  --animate-shimmer: shimmer 1.5s infinite linear;
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+}
 
 @utility container {
   padding-inline: 10px;
@@ -76,12 +88,19 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.66 0.1741 247.88);
-  --primary-foreground: oklch(1 0 0) ;
+  --primary: oklch(0.66 0.2096 36.32);
+  --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
+
+  /*For gray color*/
+  --muted: oklch(0.97 0.0028 308.43);
+  /*can be used for gray background*/
+  --muted-dark: oklch(0.84 0.0088 308.34);
+  /*can be used for border*/
+  --muted-foreground: oklch(0.4 0.0186 277.37);
+  /*can be used for gray text*/
+
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
@@ -107,6 +126,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
