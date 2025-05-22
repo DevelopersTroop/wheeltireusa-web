@@ -125,7 +125,7 @@ const AboutContent: React.FC = () => {
       </div>
 
       <Container className="!py-0">
-        <div className="w-full h-[548px] flex flex-col md:flex-row gap-8">
+        <div className="w-full md:h-[548px] flex flex-col md:flex-row gap-8">
           <div className="w-full md:w-[55%] flex flex-col gap-8 items-start justify-center">
             <div className="flex flex-col gap-4">
               <h2 className="text-2xl  sm:text-[64px] text-[#212227] font-bold">

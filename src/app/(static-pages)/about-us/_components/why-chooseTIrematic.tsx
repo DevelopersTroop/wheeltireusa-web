@@ -36,25 +36,45 @@ const features = [
 const WhyChooseTirematic = () => {
   return (
     <Container>
-      <div className="py-28 bg-white flex flex-col gap-10">
+      <div className=" flex flex-col gap-10 py-10 sm:py-28 bg-white">
         <h2 className="text-2xl sm:text-[64px] font-bold text-[#212227]">
           Why Choose Tirematic?
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature, index) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {features.slice(0, 3).map((feature, index) => (
             <div
               key={index}
-              className="bg-gray-100 p-6 rounded-lg shadow-sm hover:shadow-md transition duration-300"
+              className="flex flex-col gap-4 bg-[#F5F4F6] py-10 px-8 rounded-lg "
             >
               <div>
-                {' '}
                 <img src={feature.icon} alt={feature.title} />{' '}
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                {feature.title}
-              </h3>
-              <p className="text-gray-600 text-sm">{feature.description}</p>
+              <div className="flex flex-col gap-2">
+                <h3 className="text-2xl font-bold text-[#212227]">
+                  {feature.title}
+                </h3>
+                <p className="text-base font-normal">{feature.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+          {features.slice(3, 5).map((feature, index) => (
+            <div
+              key={index + 3}
+              className="flex flex-col gap-4 bg-[#F5F4F6] py-10 px-8 rounded-lg "
+            >
+              <div>
+                <img src={feature.icon} alt={feature.title} />{' '}
+              </div>
+              <div className="flex flex-col gap-2">
+                <h3 className="text-2xl font-bold text-[#212227]">
+                  {feature.title}
+                </h3>
+                <p className="text-base font-normal">{feature.description}</p>
+              </div>
             </div>
           ))}
         </div>

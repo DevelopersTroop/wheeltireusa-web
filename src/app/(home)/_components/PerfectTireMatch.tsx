@@ -4,7 +4,7 @@ const PerfectTireMatch = () => {
   return (
     <div className="bg-[#131316]">
       <Container className="!py-0">
-        <div className="w-full h-[548px] flex flex-col md:flex-row gap-8">
+        <div className="w-full md:h-[548px] flex flex-col md:flex-row gap-8">
           <div className="w-full md:w-2/5 flex flex-col gap-8 items-start justify-center">
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-2">

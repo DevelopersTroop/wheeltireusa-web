@@ -11,7 +11,7 @@ interface NavMenu {
 const navMenus: NavMenu[] = [
   {
     label: 'Shop tires', // Main menu item
-    href: '/collections/product-category/tire', // Link to the wheels category
+    href: '#', // Link to the wheels category
     meagMenu: true, // Indicates this is part of a mega menu
     children: [
       {
@@ -41,7 +41,7 @@ const navMenus: NavMenu[] = [
         ],
       },
       {
-        label: 'Custom Order All Wheels', // Submenu for custom wheels
+        label: 'Custom Order All Wheels',
         href: '/pick-your-passenger-forging?wheel_type=custom-wheels',
         children: [
           {
@@ -62,27 +62,22 @@ const navMenus: NavMenu[] = [
           },
         ],
       },
-
-      {
-        label: 'Browse All Designs',
-        href: '/collections/product-category/wheels',
-      },
     ],
   },
   {
     label: 'Delivery and Installation',
-    href: '/collections/product-category/custom-steering-wheel',
+    href: '#',
     meagMenu: false,
   },
   {
     label: 'Deals',
-    href: '/collections/product-category/in-stock-wheels',
+    href: '#',
     meagMenu: false,
   },
   {
     meagMenu: false,
     label: 'Tire Advice',
-    href: '/tire-advice',
+    href: '#',
     children: [
       {
         label: 'Contact Us',
@@ -98,35 +93,35 @@ const navMenus: NavMenu[] = [
       },
       {
         label: 'Forgings',
-        href: '/forgings',
+        href: '#',
       },
     ],
   },
   {
     meagMenu: false,
     label: 'Financing',
-    href: '/financing',
+    href: '#',
   },
   {
     meagMenu: false,
     label: 'Support',
-    href: '/contact-us',
+    href: '#',
     children: [
       {
         label: 'Contact Us',
-        href: '/contact-us',
+        href: '#',
       },
       {
-        label: 'FAQ',
-        href: '/frequently-asked-questions',
+        label: 'About Us',
+        href: '/about-us',
       },
       {
         label: 'Sponsorship',
-        href: '/sponsorship',
+        href: '#',
       },
       {
         label: 'Forgings',
-        href: '/forgings',
+        href: '#',
       },
     ],
   },
