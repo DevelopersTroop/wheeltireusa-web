@@ -3,7 +3,6 @@
 import { ReactNode, useState } from 'react';
 import { push as Menu } from 'react-burger-menu';
 import { MdOutlineClose } from 'react-icons/md';
-import { useDispatch } from 'react-redux';
 import WheelFilterAndSort from '../../_tire/wheel-filter-and-sort';
 import WheelsShowFilterOption from './wheel-show-filter-option';
 
@@ -13,14 +12,14 @@ type SidebarProps = {
 
 const SidebarWheelFilters = ({ children }: SidebarProps) => {
   // Dispatch is used to trigger actions related to the off-canvas filter's state
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   // State to track whether the off-canvas filter menu is open or closed
   // Extract the state of the off-canvas filter from the global Redux store
   // const { isOpenFilter } = useTypedSelector((state) => state.offcanvasFilter);
   const [isOpenFilter, setIsOpenFilter] = useState(false);
 
-  const toggleFilter = () => setIsOpenFilter((prev) => !prev);
+  // const toggleFilter = () => setIsOpenFilter((prev) => !prev);
   const openFilter = () => setIsOpenFilter(true);
   const closeFilter = () => setIsOpenFilter(false);
 
@@ -30,7 +29,7 @@ const SidebarWheelFilters = ({ children }: SidebarProps) => {
       <div className="flex justify-between">
         <button
           className="rounded-xl border border-[#CFCFCF] px-4 w-[93px]  h-[41px]"
-          onClick={() => dispatch(toggleFilter())}
+          // onClick={() => dispatch(toggleFilter())}
         >
           <p className="flex gap-1 items-center text-[#210203]">
             <img src="filterIcon.png" alt="icon" className="w-4 h-4" />

@@ -10,7 +10,7 @@ type QuantityInputProps = {
   id: string;
   isDually: boolean;
   className?: string;
-  [props: string];
+  [props: string]: unknown;
 };
 
 // The main component for inputting the product quantity
@@ -37,9 +37,9 @@ const QuantityInput = ({
         inputValue={1}
         maxInputValue={maxQuantity}
         minInputValue={4}
-        onDecrease={() => updateInputQuantityByBtn('increase')}
-        onIncrease={() => updateInputQuantityByBtn('decrease')}
-        onInputChange={(e) => updateStateQuantity(Number(e.target.value))}
+        onDecrease={() => {}}
+        onIncrease={() => {}}
+        onInputChange={() => {}}
         quantityStep={1}
       />
     </>

@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   // Lint & Prettify TS and JS files
   '**/*.(ts|tsx|js)': (filenames) => [
     `next lint --fix --file ${filenames.join(' ')}`,
@@ -7,4 +7,4 @@ module.exports = {
 
   // Prettify only Markdown and JSON files
   '**/*.(md|json)': (filenames) => `prettier --write ${filenames.join(' ')}`,
-}
+};

@@ -1,6 +1,16 @@
 import { TFilters, TPriceFilter, TSingleFilter } from '../types/filter';
 // import defaultLipSizeData from "../../public/default-lip.json";
 
+const defaultLipSizeData = [
+  {
+    diameter: '30',
+    frontWidth: '245',
+    defaultFrontLip: '8.5',
+    rearWidth: '255',
+    defaultRearLip: '7.5',
+  },
+];
+
 export const getPriceFilter = (filters: TFilters) => {
   return 'min' in filters?.price ? filters?.price : { min: 0, max: 0 };
 };

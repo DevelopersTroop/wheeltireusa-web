@@ -28,7 +28,9 @@ const TireQuantitySection = ({ product }: { product: TInventoryItem }) => {
       </div>
       <div className="flex flex-row justify-between items-baseline self-stretch relative w-full gap-4 mt-4">
         <h2 className="text-base font-normal">Tire set discount</h2>
-        <h2 className="text-xl font-semibold">-${product?.price * 4} </h2>
+        <h2 className="text-xl font-semibold">
+          -${(product?.price || 1) * 4}{' '}
+        </h2>
       </div>
     </>
   );

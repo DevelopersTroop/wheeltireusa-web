@@ -1,5 +1,5 @@
 'use client';
-import { TSingleFilter } from '@/app/types/filter'; // Importing the type for the filter data
+import { TSingleFilter } from '@/types/filter'; // Importing the type for the filter data
 import { Checkbox } from '@/components/ui/checkbox';
 // import { ScrollArea } from "@/components/ui/scroll-area";
 import { useMemo, useRef, useCallback } from 'react';

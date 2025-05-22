@@ -2,9 +2,9 @@
 
 // import { Metadata } from 'next'; // Metadata handling for page SEO
 // import { PageProps } from '@/app/types/page';
-import TireCategory from './_tire/tire-category';
+import { PageProps } from '@/types/page';
 import FilterProvider from './_filters/filter-store/filter-provider';
-import { AppProps } from 'next/app';
+import TireCategory from './_tire/tire-category';
 
 // Defining type for the page props
 // type ProductsPageProps = {
@@ -34,12 +34,16 @@ import { AppProps } from 'next/app';
 // }
 
 // Main Collection component that renders the appropriate category collection based on categorySlug
-const Collection = async ({ params, page = 1 }: AppProps) => {
+const Collection = async ({
+  params,
+}: PageProps<{
+  params: Promise<{ categorySlug: string; page: number }>;
+}>) => {
   // Extracting categorySlug from params
-  const { categorySlug } = await params;
+  const { categorySlug, page } = await params;
   console.log('categorySlug', categorySlug);
   // Variable to hold the collection component to render based on category
-  const collection = <TireCategory page={page} />;
+  const collection = <TireCategory page={page || 1} />;
 
   // Wrapping the selected collection with FilterProvider to apply filters
   return (

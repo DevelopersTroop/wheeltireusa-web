@@ -1,21 +1,45 @@
-import js from "@eslint/js";
-import globals from "globals";
-import tseslint from "typescript-eslint";
-import pluginReact from "eslint-plugin-react";
-import { defineConfig } from "eslint/config";
+import { FlatCompat } from '@eslint/eslintrc';
+import js from '@eslint/js';
+import globals from 'globals';
 
+// FlatCompat helps bring in legacy `extends` and `rules` from plugins
+const compat = new FlatCompat({
+  baseDirectory: import.meta.dirname,
+  recommendedConfig: js.configs.recommended
+});
 
-export default defineConfig([
-  { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"], plugins: { js }, extends: ["js/recommended"] },
-  { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"], languageOptions: { globals: globals.browser } },
-  tseslint.configs.recommended,
-  pluginReact.configs.flat.recommended,
+export default [
+  // Legacy-style "extends" support for Next.js, React, etc.
+  ...compat.config({
+    extends: [
+      'eslint:recommended',
+      'plugin:@typescript-eslint/recommended',
+      'plugin:react/recommended',
+      'next',
+    ],
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
+  }),
+
+  // Additional config for global browser variables and modern file matching
   {
-    "rules": {
-      "react/react-in-jsx-scope": "off",
-      "@typescript-eslint/no-unused-expressions": "off",
-      "react/prop-types": "off",
-      "no-unsafe-optional-chaining": "off"
-    }
-  }
-]);
+    files: ['**/*.{js,ts,jsx,tsx}'],
+    languageOptions: {
+      globals: globals.browser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+      },
+    },
+    rules: {
+      // Optional overrides
+      'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off',
+      '@typescript-eslint/no-unused-expressions': 'off',
+      'no-unsafe-optional-chaining': 'off',
+    },
+  },
+];

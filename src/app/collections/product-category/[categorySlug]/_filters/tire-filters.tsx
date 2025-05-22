@@ -3,16 +3,17 @@ import { useEffect, useState } from 'react';
 
 // UI Components
 // import { useSearchParams } from "next/navigation";
-import FilterLoadingSkeleton from '../_loading/filter-loading-skeleton';
+import { TPriceFilter, TSingleFilter } from '@/types/filter';
 import { getFiltersExceptPriceFilterBy, getPriceFilter } from '@/utils/filter';
-import WheelDiameter from './widgets/tire/wheel-diameter';
-import Wheelsize from './widgets/tire/wheel-size';
+import FilterLoadingSkeleton from '../_loading/filter-loading-skeleton';
 import { SaleFilter } from './sale-filter';
 import WheelBoltPattern from './widgets/tire/wheel-bolt-pattern';
 import WheelDesign from './widgets/tire/wheel-design';
+import WheelDiameter from './widgets/tire/wheel-diameter';
 import WheelFinish from './widgets/tire/wheel-finish';
 import WheelModel from './widgets/tire/wheel-model';
 import WheelPriceRange from './widgets/tire/wheel-price-range';
+import Wheelsize from './widgets/tire/wheel-size';
 
 //InStockWheelFilters Component
 const TireFilters = () => {
@@ -20,23 +21,19 @@ const TireFilters = () => {
   // const searchParams = useSearchParams();
 
   // Mock data for filters
-  const mockFilters = {
-    filters: {
-      forging_style: ['Style A', 'Style B', 'Style C'],
-      wheel_diameter: ['18', '19', '20'],
-      wheel_size: ['8.5', '9.5', '10.5'],
-      bolt_pattern: ['5x114.3', '5x120', '6x139.7'],
-      design_type: ['Design 1', 'Design 2', 'Design 3'],
-      model_group: ['Model X', 'Model Y', 'Model Z'],
-      finish: ['Gloss Black', 'Matte Silver', 'Chrome'],
-      price: { min: 100, max: 1000 },
-    },
+  const mockFilters: Record<string, TSingleFilter[] | TPriceFilter> = {
+    forging_style: [{ value: 'Style A', count: 2 }],
+    wheel_diameter: [{ value: 18, count: 18 }],
+    wheel_size: [{ value: 8.5, count: 8.5 }],
+    bolt_pattern: [{ value: '5x114.3', count: 1 }],
+    design_type: [{ value: 'Design 1', count: 2 }],
+    model_group: [{ value: 'Model X', count: 2 }],
+    finish: [{ value: 'Finish X', count: 2 }],
+    price: { min: 100, max: 1000 },
   };
 
   // Simulate fetching data
-  const [data, setData] = useState<{
-    filters: typeof mockFilters.filters;
-  } | null>(null);
+  const [data, setData] = useState<typeof mockFilters | null>(null);
 
   useEffect(() => {
     // Simulate an API call delay
@@ -66,7 +63,7 @@ const TireFilters = () => {
           <div className={'px-5 py-3 border-b'}>
             <Wheelsize
               filterKey={'wheel_size'}
-              size={getFiltersExceptPriceFilterBy(data?.filters, 'wheel_size')}
+              size={getFiltersExceptPriceFilterBy(data, 'wheel_size')}
             />
           </div>
 
@@ -74,16 +71,13 @@ const TireFilters = () => {
           <div className={'px-5 py-3 border-b'}>
             <WheelModel
               filterKey={'model_group'}
-              model={getFiltersExceptPriceFilterBy(
-                data?.filters,
-                'model_group'
-              )}
+              model={getFiltersExceptPriceFilterBy(data, 'model_group')}
             />
           </div>
 
           {/* Price Range Filter */}
           <div>
-            <WheelPriceRange price={getPriceFilter(data?.filters)} />
+            <WheelPriceRange price={getPriceFilter(data)} />
           </div>
 
           {/* Sale Filter (Toggle for filtering products on sale) */}
@@ -94,10 +88,7 @@ const TireFilters = () => {
           <div className={'px-5 py-3 border-b'}>
             <WheelDiameter
               filterKey={'wheel_diameter'}
-              diameter={getFiltersExceptPriceFilterBy(
-                data?.filters,
-                'wheel_diameter'
-              )}
+              diameter={getFiltersExceptPriceFilterBy(data, 'wheel_diameter')}
             />
           </div>
 
@@ -105,10 +96,7 @@ const TireFilters = () => {
           <div className={'px-5 py-3 border-b'}>
             <WheelBoltPattern
               filterKey={'bolt_pattern'}
-              boltPattern={getFiltersExceptPriceFilterBy(
-                data?.filters,
-                'bolt_pattern'
-              )}
+              boltPattern={getFiltersExceptPriceFilterBy(data, 'bolt_pattern')}
             />
           </div>
 
@@ -116,10 +104,7 @@ const TireFilters = () => {
           <div className={'px-5 py-3 border-b'}>
             <WheelDesign
               filterKey={'design_type'}
-              design={getFiltersExceptPriceFilterBy(
-                data?.filters,
-                'design_type'
-              )}
+              design={getFiltersExceptPriceFilterBy(data, 'design_type')}
             />
           </div>
 
@@ -127,7 +112,7 @@ const TireFilters = () => {
           <div className={'px-5 py-3'}>
             <WheelFinish
               filterKey={'finish'}
-              finish={getFiltersExceptPriceFilterBy(data?.filters, 'finish')}
+              finish={getFiltersExceptPriceFilterBy(data, 'finish')}
             />
           </div>
         </div>
