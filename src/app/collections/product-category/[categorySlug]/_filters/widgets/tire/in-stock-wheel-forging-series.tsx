@@ -1,9 +1,9 @@
 'use client';
-import { TSingleFilter } from '@/app/types/filter';
+import { TSingleFilter } from '@/types/filter';
 import React, { useState } from 'react';
 import FilterHeading from '../../template/filter-heading';
 import SelectFilterTemplate from '../../template/select-filter-template';
-import { sortSeriesFilter } from '@/app/utils/filter';
+import { sortSeriesFilter } from '@/utils/filter';
 
 const InStockWheelForgingSeries = ({
   series,

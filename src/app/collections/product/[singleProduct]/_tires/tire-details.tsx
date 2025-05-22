@@ -1,6 +1,6 @@
 'use client';
 // Import necessary types and components
-import { TInventoryItem } from '@/app/types/product';
+import { TInventoryItem } from '@/types/product';
 
 import {
   Accordion,

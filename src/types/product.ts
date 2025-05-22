@@ -1,31 +1,15 @@
+import { TCategory } from './category';
+
 export type TInventoryItem = {
-  internal_id?: {
-    text: string;
-    value: string;
-  };
+  internal_id?: string;
   slug: string;
   name?: string;
   title?: string;
-  item_type?: {
-    text: string;
-    value: string;
-  };
-  item_class?: {
-    text: string;
-    value: string;
-  };
-  brand?: {
-    text: string;
-    value: string;
-  };
-  model_group?: {
-    text: string;
-    value: string;
-  };
-  category?: {
-    text: string;
-    value: string;
-  };
+  item_type?: string;
+  item_class?: string;
+  brand?: string;
+  model_group?: string;
+  category?: TCategory;
   forging_style?: string;
   wheel_size?: string;
   wheel_diameter?: string;
@@ -51,9 +35,9 @@ export type TInventoryItem = {
   purchase_description?: string;
   short_description?: string;
   item_image?: string;
-  msrp?: string;
-  price?: string;
-  inventory_available?: string;
+  msrp?: number;
+  price?: number;
+  inventory_available?: number;
   build_available?: string;
   steering_wheel_addon_options_1?: string;
   steering_wheel_addon_options_2?: string;

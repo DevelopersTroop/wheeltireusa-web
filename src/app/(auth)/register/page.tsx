@@ -28,6 +28,7 @@ const formSchema = z
     confirmPassword: z
       .string()
       .min(8, 'Confirm Password must be at least 8 characters'),
+    terms: z.boolean().default(false),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
@@ -41,6 +42,7 @@ const defaultValues: TFieldValues = {
   email: '',
   password: '',
   confirmPassword: '',
+  terms: false,
 };
 
 const rules = [
@@ -86,7 +88,7 @@ const RegisterPage = () => {
     setIsLoadingRegister(true);
     userRegister({
       firstName: data.fullName.split(' ')[0],
-      lastName: data.fullName.split(' ')[1] | ' ',
+      lastName: data.fullName.split(' ')[1] || '',
       email: data.email,
       password: data.password,
       role: 'customer',

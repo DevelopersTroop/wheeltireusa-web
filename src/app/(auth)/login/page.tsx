@@ -14,10 +14,16 @@ import { z } from 'zod';
 import { userLogin } from './login';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
+import {
+  setAccessToken,
+  setRefreshToken,
+  setUserDetails,
+} from '@/redux/features/userSlice';
 
 const formSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
+  terms: z.boolean().default(false).optional(),
 });
 
 type TFieldValues = z.infer<typeof formSchema>;

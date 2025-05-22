@@ -1,4 +1,5 @@
-import { TCartState } from './../globalRedux/features/cart/cart-slice';
+import { TInventoryItem } from '@/types/product';
+
 export function formatPrice(number: number | undefined | null): string {
   if (typeof number === 'undefined' || number === null || isNaN(number)) {
     return '0.00';
@@ -41,7 +42,9 @@ export function getPrice(
 }
 
 export function calculateCartTotal<T = string>(
-  products: TCartState['products'],
+  products: {
+    [x: string]: TInventoryItem & { quantity: number };
+  },
   discount?: number,
   format: boolean = true
 ): T {

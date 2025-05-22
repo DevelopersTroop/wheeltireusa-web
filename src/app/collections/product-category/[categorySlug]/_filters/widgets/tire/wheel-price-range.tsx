@@ -1,6 +1,6 @@
 'use client';
 
-import { TPriceFilter } from '@/app/types/filter';
+import { TPriceFilter } from '@/types/filter';
 import { useState, useCallback, useRef } from 'react';
 import FilterHeading from '../../template/filter-heading';
 import useFilter from '../../filter-store/use-filter';

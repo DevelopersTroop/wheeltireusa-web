@@ -1,8 +1,6 @@
 'use client';
-
-import { useTypedSelector } from '@/redux/store';
 import { Minus, Plus } from 'lucide-react';
-import React, { useMemo } from 'react';
+import React from 'react';
 
 type QuantityInputBoxProps = {
   className?: string;
@@ -26,32 +24,32 @@ const CartQuantityInputBox = ({
   quantityStep,
   maxInputValue,
 }: QuantityInputBoxProps) => {
-  const { products } = useTypedSelector((state) => state.persisted.cart);
+  // const { products } = useTypedSelector((state) => state.persisted.cart);
 
-  const isDisabled = useMemo(() => {
-    const productsData = Object.values(products).filter(
-      (p) => p.cartPackage === id && p.item_class !== 'Accessories'
-    );
-    const increseDisabled = productsData.some((p) => {
-      return (
-        p.inventory_available &&
-        (p?.quantity ?? 1) + (p?.inventoryStep ?? 1) - 1 >=
-          p.inventory_available
-      );
-    });
-    const decreaseDisabled = productsData.some(
-      (p) => p.quantity === p.minInventory
-    );
-    return {
-      increase: increseDisabled,
-      decrease: decreaseDisabled,
-    };
-  }, [Object.values(products), id]);
+  // const isDisabled = useMemo(() => {
+  //   const productsData = Object.values(products).filter(
+  //     (p) => p.cartPackage === id && p.item_class !== 'Accessories'
+  //   );
+  //   const increseDisabled = productsData.some((p) => {
+  //     return (
+  //       p.inventory_available &&
+  //       (p?.quantity ?? 1) + (p?.inventoryStep ?? 1) - 1 >=
+  //         p.inventory_available
+  //     );
+  //   });
+  //   const decreaseDisabled = productsData.some(
+  //     (p) => p.quantity === p.minInventory
+  //   );
+  //   return {
+  //     increase: increseDisabled,
+  //     decrease: decreaseDisabled,
+  //   };
+  // }, [Object.values(products), id]);
   return (
     <div className={'flex gap-0 items-start relative w-[164px]'}>
       <button
         onClick={onIncrease}
-        disabled={isDisabled.decrease}
+        // disabled={isDisabled.decrease}
         className="rounded-tl-xl rounded-bl-xl border border-[#cfcfcf] p-3 flex gap-2 justify-center items-center relative w-14 h-14 bg-white disabled:cursor-not-allowed disabled:text-gray-500"
       >
         <Minus size={18} />
@@ -73,7 +71,7 @@ const CartQuantityInputBox = ({
         />
       </div>
       <button
-        disabled={isDisabled.increase}
+        // disabled={isDisabled.increase}
         onClick={onDecrease}
         className="rounded-tr-xl rounded-br-xl border border-[#cfcfcf] p-3 flex gap-2 justify-center items-center relative w-14 h-14 bg-white disabled:cursor-not-allowed disabled:text-gray-500"
       >
