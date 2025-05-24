@@ -20,7 +20,7 @@ server {
     set \$commit_sha $COMMIT_SHA;
 
     location / {
-        proxy_pass http://localhost:3000;
+        proxy_pass http://localhost:3001;
         proxy_http_version 1.1;
         proxy_set_header Host \$host;
         proxy_set_header X-Real-IP \$remote_addr;
@@ -43,7 +43,7 @@ server {
     }
 
     location @fallback_next_static {
-        proxy_pass http://localhost:3000/_next/static/\$1;
+        proxy_pass http://localhost:3001/_next/static/\$1;
         proxy_set_header Host \$host;
     }
 
@@ -58,7 +58,7 @@ server {
     }
 
     location @fallback_public {
-        proxy_pass http://localhost:3000/public/\$1;
+        proxy_pass http://localhost:3001/public/\$1;
         proxy_set_header Host \$host;
     }
 
