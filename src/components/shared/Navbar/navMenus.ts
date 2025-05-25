@@ -11,7 +11,7 @@ interface NavMenu {
 const navMenus: NavMenu[] = [
   {
     label: 'Shop tires', // Main menu item
-    href: '#', // Link to the wheels category
+    href: '/collections/product-category/tires', // Link to the wheels category
     meagMenu: true, // Indicates this is part of a mega menu
     children: [
       {

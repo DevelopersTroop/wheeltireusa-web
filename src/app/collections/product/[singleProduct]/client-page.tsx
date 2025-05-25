@@ -5,9 +5,9 @@ import { TInventoryItem } from '@/types/product';
 
 const productData: TInventoryItem = {
   internal_id: '680a6da7a29afbb08bef2d4d',
-  slug: 'amani-allora-26x16-et-101-fully-polished-af-all26168lpb-101fp-fc1',
-  title: 'Amani Allora 26x16 ET -101 Fully Polished',
-  brand: 'Amani',
+  slug: 'Venom Power 33X12.50R22LT 10PR 109Q Swamp Thing M/T',
+  title: 'Venom Power 33X12.50R22LT 10PR 109Q Swamp Thing M/T',
+  brand: 'Venom Power',
   category: {
     _id: '680a6d4ea29afbb08bef1e84',
     title: 'In-stock, Factory Wheels',
@@ -17,7 +17,7 @@ const productData: TInventoryItem = {
   finish: 'Polished',
   forging_style: 'Off-Road',
   inventory_available: 4,
-  item_image: 'ns-products/jzcptvuhymza_1745522761330.png',
+  item_image: 'ns-products/tire.webp',
   lip_size: '9.88',
   msrp: 1780.17,
   price: 1483.48,

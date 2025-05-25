@@ -3,7 +3,7 @@
 import { ReactNode, useState } from 'react';
 import { push as Menu } from 'react-burger-menu';
 import { MdOutlineClose } from 'react-icons/md';
-import WheelFilterAndSort from '../../_tire/wheel-filter-and-sort';
+import WheelFilterAndSort from '../../_tires/wheel-filter-and-sort';
 import WheelsShowFilterOption from './wheel-show-filter-option';
 
 type SidebarProps = {

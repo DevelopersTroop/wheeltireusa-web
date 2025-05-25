@@ -4,6 +4,7 @@ import Item from '@/components/ui/breadcrumb/item';
 import { TInventoryItem } from '@/types/product';
 import TireDescription from './tire-description';
 import TireDetails from './tire-details';
+import { s3BucketUrl } from '@/utils/api';
 
 const Tire = ({ product }: { product: TInventoryItem }) => {
   return (
@@ -24,7 +25,7 @@ const Tire = ({ product }: { product: TInventoryItem }) => {
           <div className="w-full">
             <ImageGallery
               images={Array.from({ length: 6 }).map(() => ({
-                src: product?.item_image || '',
+                src: `${s3BucketUrl}/${product?.item_image}`,
               }))}
             />
           </div>

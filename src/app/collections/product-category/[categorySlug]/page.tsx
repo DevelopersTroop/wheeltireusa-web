@@ -4,7 +4,7 @@
 // import { PageProps } from '@/app/types/page';
 import { PageProps } from '@/types/page';
 import FilterProvider from './_filters/filter-store/filter-provider';
-import TireCategory from './_tire/tire-category';
+import TireCategory from './_tires/tire-category';
 
 // Defining type for the page props
 // type ProductsPageProps = {
