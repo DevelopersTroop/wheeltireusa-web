@@ -43,11 +43,10 @@ const TireFilters = () => {
   }, []);
 
   // const { data } = useGetProductFiltersQuery({ category: "in-stock-wheels", forgingProfile: searchParams.get("forging_style") });
-
   return (
     <>
       {/* Show loading skeleton while fetching filters */}
-      {!data?.filters ? (
+      {!data ? (
         <FilterLoadingSkeleton />
       ) : (
         <div className={'w-[304px] filter-shadow rounded-2xl bg-[#F7F7F7]'}>
