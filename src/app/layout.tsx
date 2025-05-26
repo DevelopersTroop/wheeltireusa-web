@@ -1,5 +1,6 @@
 import { Footer } from '@/components/shared/Footer/Footer';
 import { Header } from '@/components/shared/Header/Header';
+import { CheckoutProvider } from '@/context/checkoutContext';
 import ReduxWrapper from '@/redux/ReduxWrapper';
 import '@/styles/globals.css';
 import type { Metadata } from 'next';
@@ -27,9 +28,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${dmSans.variable} antialiased`}>
         <ReduxWrapper>
-          <Header />
-          <main>{children}</main>
-          <Footer />
+          <CheckoutProvider>
+            <Header />
+            <main>{children}</main>
+            <Footer />
+          </CheckoutProvider>
         </ReduxWrapper>
         <Toaster />
       </body>

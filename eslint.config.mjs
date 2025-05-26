@@ -40,6 +40,8 @@ export default [
       'react/prop-types': 'off',
       '@typescript-eslint/no-unused-expressions': 'off',
       'no-unsafe-optional-chaining': 'off',
+      '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/no-explicit-any':'warn'
     },
   },
 ];

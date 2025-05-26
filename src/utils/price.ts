@@ -1,3 +1,4 @@
+import { TCheckoutState } from '@/redux/features/checkoutSlice';
 import { TInventoryItem } from '@/types/product';
 
 export function formatPrice(number: number | undefined | null): string {
@@ -58,3 +59,18 @@ export function calculateCartTotal<T = string>(
     ? (formatPrice(totalPrice - (discount ?? 0)) as T)
     : (totalPrice as T);
 }
+
+export const calculateCheckoutTotal = <T = string>(
+  products: TCheckoutState['productsInfo'],
+  discount?: number,
+  format: boolean = true
+) => {
+  let totalPrice = 0;
+  for (const product of products) {
+    totalPrice +=
+      (getPrice(product?.msrp, product?.price) ?? 0) * (product?.quantity ?? 1);
+  }
+  return format
+    ? (formatPrice(totalPrice - (discount ?? 0)) as T)
+    : (totalPrice as T);
+};
