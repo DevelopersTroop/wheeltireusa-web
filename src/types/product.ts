@@ -57,10 +57,7 @@ export type TInventoryItem = {
     value: string;
   }[];
   speed_rating?: string;
-  sidewall?: {
-    text: string;
-    value: string;
-  };
+  sidewall?: string;
   tire_load_index?: string;
   tire_max_load_lbs?: string;
   tire_max_load_lbs_2?: string;
