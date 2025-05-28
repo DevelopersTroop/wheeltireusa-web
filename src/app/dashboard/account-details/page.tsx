@@ -101,8 +101,8 @@ const AccountDetails = () => {
           // Here you would typically call the API to update the account details
         }}
       >
-        <div className="flex flex-col min-[500px]:flex-row items-center gap-4">
-          <div>
+        <div className="w-full flex flex-col min-[500px]:flex-row items-center gap-4">
+          <div className="w-full">
             <Text<TFieldValues>
               name="firstName"
               placeholder="First Name"
@@ -110,7 +110,7 @@ const AccountDetails = () => {
               showMessage={true}
             />
           </div>
-          <div>
+          <div className="w-full">
             <Text<TFieldValues>
               name="lastName"
               placeholder="Last Name"
@@ -121,7 +121,7 @@ const AccountDetails = () => {
         </div>
 
         <div className="flex flex-col min-[500px]:flex-row items-center gap-4">
-          <div>
+          <div className="w-full">
             <Text<TFieldValues>
               name="role"
               placeholder="Role"
@@ -130,7 +130,7 @@ const AccountDetails = () => {
               disabled={true}
             />
           </div>
-          <div>
+          <div className="w-full">
             <Text<TFieldValues>
               name="email"
               type="email"
