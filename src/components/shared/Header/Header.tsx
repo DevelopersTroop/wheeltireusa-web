@@ -33,7 +33,7 @@ export const Header = () => {
               </div>
               <div className="flex items-center gap-4 lg:gap-8">
                 <Search />
-                <Link href={'/'}>
+                <Link href={'/login'}>
                   <UserCircle />
                 </Link>
                 <Link href={'/cart'} className="relative">
