@@ -74,7 +74,7 @@ const LoginPage = () => {
         //   router.push("/dashboard");
         // }
         console.log('Login successful');
-        router.push('/');
+        router.push('/dashboard/orders');
       })
       .finally(() => {
         setIsSubmitting(false);
