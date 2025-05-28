@@ -119,10 +119,6 @@ const navMenus: NavMenu[] = [
         label: 'Sponsorship',
         href: '#',
       },
-      {
-        label: 'Forgings',
-        href: '#',
-      },
     ],
   },
 ];

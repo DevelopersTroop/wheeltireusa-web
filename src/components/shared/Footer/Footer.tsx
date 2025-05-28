@@ -37,7 +37,7 @@ export const Footer = () => {
                   <div className={'flex justify-center lg:justify-start'}>
                     <Link href={'/'}>
                       <Image
-                        src="/images/header/tirematic-logo.png"
+                        src="/images/header/tirematic-logo.webp"
                         alt="Tirematic"
                         width={100}
                         height={100}
