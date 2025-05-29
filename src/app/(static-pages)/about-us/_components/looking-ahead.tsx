@@ -2,10 +2,10 @@ import Container from '@/components/ui/container/container';
 
 const LookingAhead = () => {
   return (
-    <div className="bg-black py-10 sm:py-36">
+    <div className="bg-black py-16 sm:py-[152px]">
       <Container>
         <div className="flex flex-col gap-4">
-          <h2 className="text-2xl sm:text-[64px] font-bold text-white">
+          <h2 className="text-[40px] sm:text-5xl lg:text-[64px] font-bold text-white">
             Looking Ahead
           </h2>
 

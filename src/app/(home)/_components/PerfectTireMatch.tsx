@@ -4,14 +4,14 @@ const PerfectTireMatch = () => {
   return (
     <div className="bg-[#131316]">
       <Container className="!py-0">
-        <div className="w-full md:h-[548px] flex flex-col md:flex-row gap-8">
-          <div className="w-full md:w-2/5 flex flex-col gap-8 items-start justify-center">
+        <div className="w-full lg:h-[548px] flex flex-col lg:flex-row gap-8 pt-16 lg:pt-0">
+          <div className="w-full lg:w-2/5 flex flex-col gap-6 lg:gap-8 items-start justify-center">
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-2">
-                <h2 className="text-3xl md:text-[40px] text-[#FFFFFF] font-bold">
+                <h2 className="text-2xl md:text-[40px] text-[#FFFFFF] font-bold">
                   Find Your Perfect Tire Match with Tirematic!
                 </h2>
-                <p className="text-xl text-[#FFFFFF] font-semibold">
+                <p className="text-lg md:text-xl text-[#FFFFFF] font-semibold">
                   Get Expert Recommendations for Every Road and Condition.
                 </p>
               </div>
@@ -29,36 +29,36 @@ const PerfectTireMatch = () => {
               Tires
             </button>
           </div>
-          <div className="w-full md:w-3/5 h-full max-h-[548px] flex flex-row relative">
-            <div className="w-full h-full max-h-[548px]">
+          <div className="w-full lg:w-3/5 h-[360px] lg:h-full lg:max-h-[548px] flex flex-row relative">
+            <div className="w-full h-full">
               <img
                 src="/images/tireMatch/image1.png"
                 alt="Tire"
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="absolute bottom-0 -left-36">
+            <div className="hidden md:block absolute bottom-0 md:-left-28 lg:-left-32">
               <img
                 src="/images/tireMatch/tire.png"
                 alt="Tirematic"
                 className=" w-full h-full object-contain"
               />
             </div>
-            <div className="w-full h-full max-h-[548px]">
+            <div className="w-full h-full">
               <img
                 src="/images/tireMatch/image2.png"
                 alt="Tirematic"
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="w-full h-full max-h-[548px]">
+            <div className="w-full h-full ">
               <img
                 src="/images/tireMatch/image3.png"
                 alt="Tirematic"
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="w-full max-w-[204px] h-full max-h-[548px]">
+            <div className="w-full h-full">
               <img
                 src="/images/tireMatch/image4.png"
                 alt="Tirematic"
