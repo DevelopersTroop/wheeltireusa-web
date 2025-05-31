@@ -1,9 +1,16 @@
 'use client'; // Client-side component
 
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import LoadingSpinner from '@/components/ui/loading-spinner/loading-spinner';
+import useAuth from '@/hooks/use-auth';
 // Import necessary hooks, components, and utilities
 import Text from '@/lib/generic-form/fields/Text';
 import GenericForm from '@/lib/generic-form/GenericForm';
+import { setUserDetails } from '@/redux/features/userSlice';
+import { apiBaseUrl } from '@/utils/api';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { z } from 'zod';
 
 const formSchema = z.object({
@@ -17,89 +24,73 @@ type TFieldValues = z.infer<typeof formSchema>;
 
 const AccountDetails = () => {
   // Access user authentication details
-  // const { user } = useAuth();
+  const { user } = useAuth();
 
   // Local states for loading, error, and success messages
-  // const [loading, setLoading] = useState(false);
-  // const [error, setError] = useState<string | null>(null);
-  // const [success, setSuccess] = useState<string | null>(null);
-  // const dispatch = useDispatch();
-
-  // Initialize form state using react-hook-form
-
-  const user: TFieldValues = {
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'johndeo@gmail.com',
-    role: 'Admin',
-  };
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const dispatch = useDispatch();
 
   const defaultValues: TFieldValues = {
     firstName: user?.firstName || '',
     lastName: user?.lastName || '',
     email: user?.email || '',
-    role: user?.role || '',
+    role: 'Customer', // Assuming role is static for this example
   };
 
-  // // API call to update account details
-  // const changeAccountApi = async (values: ChangeAccountDetailsValues) => {
-  //   try {
-  //     setLoading(true);
-  //     setError(null);
-  //     const response = await fetch(
-  //       `${apiBaseUrl}/auth/profile/${user?._id}`,
-  //       {
-  //         method: "PUT",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           "Authorization": `Bearer ${user?.accessToken}`,
-  //         },
-  //         body: JSON.stringify({
-  //           firstName: values.firstName,
-  //           lastName: values.lastName,
-  //         }),
-  //       }
-  //     );
-  //     const data = await response.json();
-  //     if (data.statusCode === 200) {
-  //       dispatch(setUserDetails({ userDetails: data?.data?.user }));
-  //       setSuccess(data.message || "Account updated successfully");
-  //     } else {
-  //       const errorData = data;
-  //       throw new Error(errorData.message || "Failed to update account.");
-  //     }
-  //   } catch (err) {
-  //     setError((err as Error).message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  // API call to update account details
+  const changeAccountApi = async (values: TFieldValues) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await fetch(`${apiBaseUrl}/auth/profile/${user?._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user?.accessToken}`,
+        },
+        body: JSON.stringify({
+          firstName: values.firstName,
+          lastName: values.lastName,
+        }),
+      });
+      const data = await response.json();
+      if (data.statusCode === 200) {
+        dispatch(setUserDetails({ userDetails: data?.data?.user }));
+        setSuccess(data.message || 'Account updated successfully');
+      } else {
+        const errorData = data;
+        throw new Error(errorData.message || 'Failed to update account.');
+      }
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  // // Show loading spinner while the request is in progress
-  // if (loading) return <LoadingSpinner />
+  // Show loading spinner while the request is in progress
+  if (loading) return <LoadingSpinner />;
 
   return (
     <div className="border-x border-b p-8">
-      {/* {success && (
-        <Alert className="mt-4">
+      {success && (
+        <Alert className="my-4">
           <AlertDescription>{success}</AlertDescription>
         </Alert>
       )}
 
       {error && (
-        <Alert variant="destructive" className="mt-4">
+        <Alert variant="destructive" className="my-4">
           <AlertDescription>{error}</AlertDescription>
         </Alert>
-      )} */}
+      )}
 
       <GenericForm
         schema={formSchema}
         defaultValues={defaultValues}
-        onSubmit={(values: TFieldValues) => {
-          // Handle form submission
-          console.log('Form submitted with values:', values);
-          // Here you would typically call the API to update the account details
-        }}
+        onSubmit={changeAccountApi}
       >
         <div className="w-full flex flex-col min-[500px]:flex-row items-center gap-4">
           <div className="w-full">

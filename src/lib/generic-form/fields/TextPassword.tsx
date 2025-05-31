@@ -61,7 +61,7 @@ const TextPassword = <T extends FieldValues>({
           <div className="flex justify-between items-center">
             {heading && <FormLabel>{heading}</FormLabel>}
             {checkForgotPassword && (
-              <Link href="#" className="underline">
+              <Link href="/forgot-password" className="underline">
                 Forgot password
               </Link>
             )}

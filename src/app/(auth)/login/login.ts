@@ -1,8 +1,6 @@
 'use client';
 
-// import { TUser } from "@/app/types/user";
 import { apiBaseUrl } from '@/utils/api';
-// import { apiBaseUrl } from "@/app/utils/api";
 import { TUser } from '@/types/user';
 
 export const userLogin = async ({
