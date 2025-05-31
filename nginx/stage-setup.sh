@@ -78,7 +78,7 @@ server {
 
 server {
     listen 443 ssl;
-    server_name www.tiremetic.stage.developertroop.com;
+    server_name tiremetic.stage.developertroop.com;
 
     return 301 https://tiremetic.stage.developertroop.com\$request_uri;
 
@@ -86,20 +86,6 @@ server {
     ssl_certificate_key /etc/letsencrypt/live/tiremetic.stage.developertroop.com/privkey.pem;
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
-}
-
-server {
-    listen 80;
-    server_name tiremetic.stage.developertroop.com www.tiremetic.stage.developertroop.com;
-
-    if (\$host = tiremetic.stage.developertroop.com) {
-        return 301 https://\$host\$request_uri;
-    }
-    if (\$host = www.tiremetic.stage.developertroop.com) {
-        return 301 https://tiremetic.stage.developertroop.com\$request_uri;
-    }
-
-    return 404;
 }
 EOF
 
