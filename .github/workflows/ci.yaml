@@ -78,22 +78,6 @@ jobs:
           APP_DIR: ${{ secrets.STAGING_PROJECT_DIR }}
           BUCKET_NAME: ${{ secrets.STAGING_S3_BUCKET_NAME }}
 
-      - name: Inject Commit SHA and Reload NGINX using stage-setup.sh
-        run: |
-          echo "$KEY" > private_key.pem
-          chmod 600 private_key.pem
-          ssh -i private_key.pem $USER@$HOST "
-            cd $APP_DIR/nginx &&
-            bash stage-setup.sh ${COMMIT_SHA}
-          "
-          rm private_key.pem
-        env:
-          HOST: ${{ secrets.STAGING_HOST }}
-          USER: ${{ secrets.STAGING_USER }}
-          KEY: ${{ secrets.STAGING_KEY }}
-          COMMIT_SHA: ${{ env.COMMIT_SHA }}
-          APP_DIR: ${{ secrets.STAGING_PROJECT_DIR }}
-
       - name: Start or Restart App with PM2
         run: |
           echo "$KEY" > private_key.pem
@@ -112,4 +96,20 @@ jobs:
           HOST: ${{ secrets.STAGING_HOST }}
           USER: ${{ secrets.STAGING_USER }}
           KEY: ${{ secrets.STAGING_KEY }}
+          APP_DIR: ${{ secrets.STAGING_PROJECT_DIR }}
+
+      - name: Inject Commit SHA and Reload NGINX using stage-setup.sh
+        run: |
+          echo "$KEY" > private_key.pem
+          chmod 600 private_key.pem
+          ssh -i private_key.pem $USER@$HOST "
+            cd $APP_DIR/nginx &&
+            bash stage-setup.sh ${COMMIT_SHA}
+          "
+          rm private_key.pem
+        env:
+          HOST: ${{ secrets.STAGING_HOST }}
+          USER: ${{ secrets.STAGING_USER }}
+          KEY: ${{ secrets.STAGING_KEY }}
+          COMMIT_SHA: ${{ env.COMMIT_SHA }}
           APP_DIR: ${{ secrets.STAGING_PROJECT_DIR }}
