@@ -2,7 +2,12 @@
 
 COMMIT_SHA=$1
 
-sudo tee /etc/nginx/conf.d/amani-frontend.conf > /dev/null <<EOF
+if [ -z "$COMMIT_SHA" ]; then
+  echo "Usage: $0 <commit-sha>"
+  exit 1
+fi
+
+sudo tee /etc/nginx/conf.d/tiremetic-web.conf > /dev/null <<EOF
 server {
     listen 443 ssl;
     server_name tiremetic.stage.developertroop.com;
@@ -16,8 +21,6 @@ server {
         text/xml application/xml application/xml+rss text/javascript
         font/ttf font/otf application/font-woff application/font-woff2
         image/svg+xml;
-
-    set \$commit_sha $COMMIT_SHA;
 
     location / {
         proxy_pass http://localhost:3001;
@@ -33,7 +36,7 @@ server {
     }
 
     location ~ ^/_next/static/(.*)\$ {
-        proxy_pass http://dqr3i089ew1e2.cloudfront.net/amani-frontend/\$commit_sha/_next/static/\$1;
+        proxy_pass http://dqr3i089ew1e2.cloudfront.net/tiremetic-web/${COMMIT_SHA}/_next/static/\$1;
         proxy_set_header Host dqr3i089ew1e2.cloudfront.net;
         proxy_ssl_name dqr3i089ew1e2.cloudfront.net;
         proxy_ssl_server_name on;
@@ -48,7 +51,7 @@ server {
     }
 
     location ~ ^/public/(.*)\$ {
-        proxy_pass http://dqr3i089ew1e2.cloudfront.net/amani-frontend/\$commit_sha/public/\$1;
+        proxy_pass http://dqr3i089ew1e2.cloudfront.net/tiremetic-web/${COMMIT_SHA}/public/\$1;
         proxy_set_header Host dqr3i089ew1e2.cloudfront.net;
         proxy_ssl_name dqr3i089ew1e2.cloudfront.net;
         proxy_ssl_server_name on;
@@ -95,10 +98,17 @@ server {
     if (\$host = www.tiremetic.stage.developertroop.com) {
         return 301 https://tiremetic.stage.developertroop.com\$request_uri;
     }
-    
+
     return 404;
 }
 EOF
 
-# Reload NGINX
-sudo nginx -t && (sudo systemctl reload nginx || sudo systemctl restart nginx)
+# Test and reload NGINX
+if sudo nginx -t; then
+  echo "✅ NGINX configuration is valid."
+  sudo systemctl reload nginx || sudo systemctl restart nginx
+  echo "🔄 NGINX reloaded successfully."
+else
+  echo "❌ NGINX configuration test failed. Aborting reload."
+  exit 1
+fi
