@@ -21,8 +21,6 @@ server {
         font/ttf font/otf application/font-woff application/font-woff2
         image/svg+xml;
 
-    set $commit_sha c61359b;
-
     location / {
         proxy_pass http://localhost:3000;
         proxy_http_version 1.1;
