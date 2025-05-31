@@ -1,20 +1,23 @@
 'use client'; // Enables client-side rendering for this component
 import Container from '@/components/ui/container/container';
-import React from 'react';
+import React, { useEffect } from 'react';
 import DashbaordSidebar from './_components/dashbaord-sidebar'; // Sidebar component for dashboard
 import DashboardBreadcrumb from './_components/dashboard-breadcrumb'; // Breadcrumb navigation for dashboard
+import useAuth from '@/hooks/use-auth';
+import { useRouter } from 'next/navigation';
 
 // Dashboard layout component that wraps the dashboard pages
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
-  // const {user} = useAuth(); // Get user authentication status
-  // const router = useRouter(); // Initialize Next.js router
+  const { user } = useAuth(); // Get user authentication status
+  const router = useRouter(); // Initialize Next.js router
 
   // Redirect to login page if the user is not authenticated
-  // useEffect(() => {
-  //     if (user === null) {
-  //         router.push("/login");
-  //     }
-  // }, [user]);
+  useEffect(() => {
+    if (user === null) {
+      router.push('/login');
+    }
+  }, [user, router]);
+
   return (
     <>
       <Container>

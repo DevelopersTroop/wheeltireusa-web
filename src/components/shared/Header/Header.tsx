@@ -1,4 +1,4 @@
-import { Search, ShoppingCart, UserCircle } from 'lucide-react';
+import { Search, ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
 import Navbar from '../Navbar/Navbar';
 import Image from 'next/image';
@@ -6,6 +6,7 @@ import FilterModals from '@/components/shared/MainFilterModal/MainFilterModal';
 import MobileMenuButton from './mobile-menu/mobile-menu-button';
 import HeaderProvider from './context/header-provider';
 import MobileMenuWrapper from './mobile-menu/mobile-menu-wrapper';
+import UserAccountLink from './user-account-link/user-account-link';
 
 export const Header = () => {
   return (
@@ -33,9 +34,10 @@ export const Header = () => {
               </div>
               <div className="flex items-center gap-4 lg:gap-8">
                 <Search />
-                <Link href={'/login'}>
+                {/* <Link href={'/login'}>
                   <UserCircle />
-                </Link>
+                </Link> */}
+                <UserAccountLink />
                 <Link href={'/cart'} className="relative">
                   <ShoppingCart />
                   <span className="absolute w-5 h-5 flex items-center justify-center font-semibold bg-primary text-white rounded-full text-[12px] z-0 firefox-badge chrome-badge">
