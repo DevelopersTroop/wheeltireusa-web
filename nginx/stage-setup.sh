@@ -2,11 +2,6 @@
 
 COMMIT_SHA=$1
 
-if [ -z "$COMMIT_SHA" ]; then
-  echo "Usage: $0 <commit-sha>"
-  exit 1
-fi
-
 sudo tee /etc/nginx/conf.d/tiremetic-web.conf > /dev/null <<EOF
 server {
     server_name tiremetic.stage.developertroop.com;
@@ -20,6 +15,8 @@ server {
         text/xml application/xml application/xml+rss text/javascript
         font/ttf font/otf application/font-woff application/font-woff2
         image/svg+xml;
+
+    set \$commit_sha $COMMIT_SHA;
 
     location / {
         proxy_pass http://localhost:3000;
