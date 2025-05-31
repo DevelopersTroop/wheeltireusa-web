@@ -2,7 +2,7 @@
 
 COMMIT_SHA=$1
 
-sudo tee /etc/nginx/conf.d/tiremetic-web.conf > /dev/null <<EOF
+sudo tee /etc/nginx/conf.d/amani-frontend.conf > /dev/null <<EOF
 server {
     listen 443 ssl;
     server_name tiremetic.stage.developertroop.com;
@@ -17,25 +17,25 @@ server {
         font/ttf font/otf application/font-woff application/font-woff2
         image/svg+xml;
 
-    set $commit_sha 7d1aa82;
+    set \$commit_sha $COMMIT_SHA;
 
     location / {
         proxy_pass http://localhost:3001;
         proxy_http_version 1.1;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_set_header Upgrade \$http_upgrade;
         proxy_set_header Connection 'upgrade';
-        proxy_cache_bypass $http_upgrade;
+        proxy_cache_bypass \$http_upgrade;
         add_header Cache-Control "no-cache, no-store, must-revalidate";
     }
 
-    location ~ ^/_next/static/(.*)$ {
-        proxy_pass http://d3pl580m833nyd.cloudfront.net/tiremetic-web/$commit_sha/_next/static/$1;
-        proxy_set_header Host d3pl580m833nyd.cloudfront.net;
-        proxy_ssl_name d3pl580m833nyd.cloudfront.net;
+    location ~ ^/_next/static/(.*)\$ {
+        proxy_pass http://dqr3i089ew1e2.cloudfront.net/amani-frontend/\$commit_sha/_next/static/\$1;
+        proxy_set_header Host dqr3i089ew1e2.cloudfront.net;
+        proxy_ssl_name dqr3i089ew1e2.cloudfront.net;
         proxy_ssl_server_name on;
         add_header Cache-Control "no-cache, no-store, must-revalidate";
 
@@ -43,14 +43,14 @@ server {
     }
 
     location @fallback_next_static {
-        proxy_pass http://localhost:3001/_next/static/$1;
-        proxy_set_header Host $host;
+        proxy_pass http://localhost:3001/_next/static/\$1;
+        proxy_set_header Host \$host;
     }
 
-    location ~ ^/public/(.*)$ {
-        proxy_pass http://d3pl580m833nyd.cloudfront.net/tiremetic-web/$commit_sha/public/$1;
-        proxy_set_header Host d3pl580m833nyd.cloudfront.net;
-        proxy_ssl_name d3pl580m833nyd.cloudfront.net;
+    location ~ ^/public/(.*)\$ {
+        proxy_pass http://dqr3i089ew1e2.cloudfront.net/amani-frontend/\$commit_sha/public/\$1;
+        proxy_set_header Host dqr3i089ew1e2.cloudfront.net;
+        proxy_ssl_name dqr3i089ew1e2.cloudfront.net;
         proxy_ssl_server_name on;
         add_header Cache-Control "no-cache, no-store, must-revalidate";
 
@@ -58,8 +58,8 @@ server {
     }
 
     location @fallback_public {
-        proxy_pass http://localhost:3001/public/$1;
-        proxy_set_header Host $host;
+        proxy_pass http://localhost:3001/public/\$1;
+        proxy_set_header Host \$host;
     }
 
     location /healthz {
@@ -74,12 +74,28 @@ server {
 }
 
 server {
-    if ($host = tiremetic.stage.developertroop.com) {
-        return 301 https://$host$request_uri;
-    }
+    listen 443 ssl;
+    server_name www.tiremetic.stage.developertroop.com;
 
+    return 301 https://tiremetic.stage.developertroop.com\$request_uri;
+
+    ssl_certificate /etc/letsencrypt/live/tiremetic.stage.developertroop.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/tiremetic.stage.developertroop.com/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+}
+
+server {
     listen 80;
-    server_name tiremetic.stage.developertroop.com;
+    server_name tiremetic.stage.developertroop.com www.tiremetic.stage.developertroop.com;
+
+    if (\$host = tiremetic.stage.developertroop.com) {
+        return 301 https://\$host\$request_uri;
+    }
+    if (\$host = www.tiremetic.stage.developertroop.com) {
+        return 301 https://tiremetic.stage.developertroop.com\$request_uri;
+    }
+    
     return 404;
 }
 EOF
