@@ -17,23 +17,23 @@ server {
         font/ttf font/otf application/font-woff application/font-woff2
         image/svg+xml;
 
-    set \$commit_sha $COMMIT_SHA;
+    set $commit_sha 7d1aa82;
 
     location / {
         proxy_pass http://localhost:3001;
         proxy_http_version 1.1;
-        proxy_set_header Host \$host;
-        proxy_set_header X-Real-IP \$remote_addr;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto \$scheme;
-        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
-        proxy_cache_bypass \$http_upgrade;
+        proxy_cache_bypass $http_upgrade;
         add_header Cache-Control "no-cache, no-store, must-revalidate";
     }
 
-    location ~ ^/_next/static/(.*)\$ {
-        proxy_pass http://d3pl580m833nyd.cloudfront.net/tiremetic-web/\$commit_sha/_next/static/\$1;
+    location ~ ^/_next/static/(.*)$ {
+        proxy_pass http://d3pl580m833nyd.cloudfront.net/tiremetic-web/$commit_sha/_next/static/$1;
         proxy_set_header Host d3pl580m833nyd.cloudfront.net;
         proxy_ssl_name d3pl580m833nyd.cloudfront.net;
         proxy_ssl_server_name on;
@@ -43,12 +43,12 @@ server {
     }
 
     location @fallback_next_static {
-        proxy_pass http://localhost:3001/_next/static/\$1;
-        proxy_set_header Host \$host;
+        proxy_pass http://localhost:3001/_next/static/$1;
+        proxy_set_header Host $host;
     }
 
-    location ~ ^/public/(.*)\$ {
-        proxy_pass http://d3pl580m833nyd.cloudfront.net/tiremetic-web/\$commit_sha/public/\$1;
+    location ~ ^/public/(.*)$ {
+        proxy_pass http://d3pl580m833nyd.cloudfront.net/tiremetic-web/$commit_sha/public/$1;
         proxy_set_header Host d3pl580m833nyd.cloudfront.net;
         proxy_ssl_name d3pl580m833nyd.cloudfront.net;
         proxy_ssl_server_name on;
@@ -58,8 +58,8 @@ server {
     }
 
     location @fallback_public {
-        proxy_pass http://localhost:3001/public/\$1;
-        proxy_set_header Host \$host;
+        proxy_pass http://localhost:3001/public/$1;
+        proxy_set_header Host $host;
     }
 
     location /healthz {
@@ -74,8 +74,8 @@ server {
 }
 
 server {
-    if (\$host = tiremetic.stage.developertroop.com) {
-        return 301 https://\$host\$request_uri;
+    if ($host = tiremetic.stage.developertroop.com) {
+        return 301 https://$host$request_uri;
     }
 
     listen 80;
