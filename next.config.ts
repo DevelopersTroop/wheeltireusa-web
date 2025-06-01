@@ -44,6 +44,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'd3pl580m833nyd.cloudfront.net',
       },
+      {
+        protocol: 'https',
+        hostname: '4520456.app.netsuite.com',
+      },
     ],
   },
 };

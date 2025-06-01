@@ -21,11 +21,11 @@ const TireFilterAndSort = () => {
 
   // const filterOptions = Array.from(searchParams.entries());
 
-  const filterOptions = Array.from(searchParams.entries()).flatMap(
-    ([key, value]) => {
+  const filterOptions = Array.from(searchParams.entries())
+    .filter(([key]) => key !== 'page')
+    .flatMap(([key, value]) => {
       return value.split(',').map((v) => [key, v]);
-    }
-  );
+    });
 
   // Destructure functions from custom hook for filter management
   const {
@@ -42,8 +42,8 @@ const TireFilterAndSort = () => {
       >
         {/* Display each filter option as a button */}
         {filterOptions.length > 0
-          ? filterOptions.map(([key, value], index) =>
-              key !== 'passenger' ? (
+          ? filterOptions.map(([key, value], index) => {
+              return key !== 'passenger' ? (
                 <button
                   onClick={() => removeFilterValue(key, value)}
                   key={index}
@@ -78,8 +78,8 @@ const TireFilterAndSort = () => {
               ) : (
                 // Empty fragment for "passenger" key (do not render anything)
                 <React.Fragment key={index}></React.Fragment>
-              )
-            )
+              );
+            })
           : ''}
         {/* Display "Clear all" button if there are filters */}
         {filterOptions.length > 0 && (

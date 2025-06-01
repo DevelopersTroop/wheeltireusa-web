@@ -11,6 +11,15 @@ type ProductPaginationProps = {
   searchParams: URLSearchParams | ReadonlyURLSearchParams;
 };
 
+const getSearchParams = (
+  page: number,
+  searchParams: URLSearchParams | ReadonlyURLSearchParams
+) => {
+  const params = new URLSearchParams(searchParams);
+  params.set('page', String(page));
+  return params.toString();
+};
+
 const ProductPagination = ({
   categorySlug,
   page,
@@ -58,9 +67,7 @@ const ProductPagination = ({
       <Pagination ariaLabel={'Product Pagination'}>
         <PaginationItem
           key={'previous'}
-          href={`/collections/product-category/${categorySlug}/${
-            page - 1
-          }?${searchParams.toString()}`}
+          href={`/collections/product-category/${categorySlug}?${getSearchParams(page - 1, searchParams)}`}
           disabled={page === 1}
           className={page === 1 ? 'not-allowed pointer-events-none' : 'pointer'}
         >
@@ -84,7 +91,7 @@ const ProductPagination = ({
           typeof item === 'number' ? (
             <PaginationItem
               key={'apagination_' + index}
-              href={`/collections/product-category/${categorySlug}/${item}?${searchParams.toString()}`}
+              href={`/collections/product-category/${categorySlug}?${getSearchParams(item, searchParams)}`}
               active={page === item}
             >
               {item}
@@ -97,9 +104,7 @@ const ProductPagination = ({
         )}
         <PaginationItem
           key={'next'}
-          href={`/collections/product-category/${categorySlug}/${
-            page + 1
-          }?${searchParams.toString()}`}
+          href={`/collections/product-category/${categorySlug}?${getSearchParams(page + 1, searchParams)}`}
           disabled={page === totalPages}
           className={
             page === totalPages ? 'not-allowed pointer-events-none' : 'pointer'

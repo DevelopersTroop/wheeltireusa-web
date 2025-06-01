@@ -34,7 +34,7 @@ export default function RootLayout({
             <Footer />
           </CheckoutProvider>
         </ReduxWrapper>
-        <Toaster />
+        <Toaster richColors />
       </body>
     </html>
   );

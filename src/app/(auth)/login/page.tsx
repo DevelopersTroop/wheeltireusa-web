@@ -19,7 +19,7 @@ import {
   setRefreshToken,
   setUserDetails,
 } from '@/redux/features/userSlice';
-import useAuth from '@/hooks/use-auth';
+import useAuth from '@/hooks/useAuth';
 
 const formSchema = z.object({
   email: z.string().email(),

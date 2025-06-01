@@ -4,7 +4,7 @@
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import LoadingSpinner from '@/components/ui/loading-spinner/loading-spinner';
-import useAuth from '@/hooks/use-auth';
+import useAuth from '@/hooks/useAuth';
 import TextPassword from '@/lib/generic-form/fields/TextPassword';
 import GenericForm from '@/lib/generic-form/GenericForm';
 import { removeUser } from '@/redux/features/userSlice';

@@ -50,6 +50,7 @@
 }
 @theme {
   --animate-shimmer: shimmer 1.5s infinite linear;
+  --animate-color-pulse: color-pulse 2s ease-in-out infinite;
 
   @keyframes shimmer {
     0% {
@@ -57,6 +58,15 @@
     }
     100% {
       background-position: 200% 0;
+    }
+  }
+  @keyframes color-pulse {
+    0%,
+    100% {
+      background-color: var(--color-gray-200);
+    }
+    50% {
+      background-color: var(--color-gray-300);
     }
   }
 }

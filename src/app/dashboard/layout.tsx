@@ -3,7 +3,7 @@ import Container from '@/components/ui/container/container';
 import React, { useEffect } from 'react';
 import DashbaordSidebar from './_components/dashbaord-sidebar'; // Sidebar component for dashboard
 import DashboardBreadcrumb from './_components/dashboard-breadcrumb'; // Breadcrumb navigation for dashboard
-import useAuth from '@/hooks/use-auth';
+import useAuth from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 
 // Dashboard layout component that wraps the dashboard pages

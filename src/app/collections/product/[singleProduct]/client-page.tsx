@@ -7,6 +7,8 @@ const productData: TInventoryItem = {
   internal_id: '680a6da7a29afbb08bef2d4d',
   slug: 'Venom Power 33X12.50R22LT 10PR 109Q Swamp Thing M/T',
   title: 'Venom Power 33X12.50R22LT 10PR 109Q Swamp Thing M/T',
+  description: 'Venom Power 33X12.50R22LT 10PR 109Q Swamp Thing M/T',
+  _id: '1',
   brand: 'Venom Power',
   category: {
     _id: '680a6d4ea29afbb08bef1e84',
@@ -17,7 +19,7 @@ const productData: TInventoryItem = {
   finish: 'Polished',
   forging_style: 'Off-Road',
   inventory_available: 4,
-  item_image: 'ns-products/tire.webp',
+  image_url: 'ns-products/tire.webp',
   lip_size: '9.88',
   msrp: 1780.17,
   price: 1483.48,

@@ -1,5 +1,5 @@
 'use client';
-import useAuth from '@/hooks/use-auth';
+import useAuth from '@/hooks/useAuth';
 import Link from 'next/link';
 import React, { useEffect } from 'react';
 import { UserCircle } from 'lucide-react';

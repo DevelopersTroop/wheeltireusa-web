@@ -6,44 +6,19 @@ import { PageProps } from '@/types/page';
 import FilterProvider from './_filters/filter-store/filter-provider';
 import TireCategory from './_tires/tire-category';
 
-// Defining type for the page props
-// type ProductsPageProps = {
-//   params: Promise<{ categorySlug: string }>; // Category slug is extracted from params
-//   page?: number;
-// };
-
-// Async function to generate metadata for the page based on category
-// export async function generateMetadata(
-//   props: AppProps<{ categorySlug: string }>
-// ): Promise<Metadata> {
-//   try {
-//     // Destructuring categorySlug from params
-//     const { categorySlug } = await props.params;
-//     console.log('categorySlug', categorySlug);
-//     return {
-//       // Set the page title dynamically based on the category
-//       title: `tire${categorySlug} - TireMatic`,
-//     };
-//   } catch (error) {
-//     // Return default metadata in case of error
-//     console.error('Error generating metadata:', error);
-//     return {
-//       title: 'Error',
-//     };
-//   }
-// }
-
 // Main Collection component that renders the appropriate category collection based on categorySlug
 const Collection = async ({
   params,
+  searchParams,
 }: PageProps<{
-  params: Promise<{ categorySlug: string; page: number }>;
+  params: Promise<{ categorySlug: string }>;
+  searchParams: Promise<{ page: string }>;
 }>) => {
   // Extracting categorySlug from params
-  const { categorySlug, page } = await params;
-  console.log('categorySlug', categorySlug);
+  const { categorySlug } = await params;
+  const { page } = await searchParams;
   // Variable to hold the collection component to render based on category
-  const collection = <TireCategory page={page || 1} />;
+  const collection = <TireCategory page={Number(page) || 1} />;
 
   // Wrapping the selected collection with FilterProvider to apply filters
   return (

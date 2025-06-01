@@ -95,7 +95,7 @@ const TireCard = ({
               {/* Display tire image */}
               <Image
                 className="max-w-[272px] max-h-[272px] object-contain"
-                src={`${s3BucketUrl}/${products[0]?.item_image}`}
+                src={products[0].image_url}
                 width={272}
                 height={272}
                 alt={products[0]?.title ?? ''}

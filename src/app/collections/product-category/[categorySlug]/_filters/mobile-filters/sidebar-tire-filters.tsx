@@ -3,8 +3,8 @@
 import { ReactNode, useState } from 'react';
 import { push as Menu } from 'react-burger-menu';
 import { MdOutlineClose } from 'react-icons/md';
-import TireFilterAndSort from '../../_tires/tire-filter-and-sort';
 import WheelsShowFilterOption from './wheel-show-filter-option';
+import TireFilterAndSort from '../../_tires/tire-filter-and-sort';
 
 type SidebarProps = {
   children: ReactNode;

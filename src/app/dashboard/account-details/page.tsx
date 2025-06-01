@@ -3,7 +3,7 @@
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import LoadingSpinner from '@/components/ui/loading-spinner/loading-spinner';
-import useAuth from '@/hooks/use-auth';
+import useAuth from '@/hooks/useAuth';
 // Import necessary hooks, components, and utilities
 import Text from '@/lib/generic-form/fields/Text';
 import GenericForm from '@/lib/generic-form/GenericForm';

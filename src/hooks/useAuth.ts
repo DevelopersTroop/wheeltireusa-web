@@ -1,6 +1,8 @@
 'use client';
+import { apiInstance } from '@/redux/apis/base';
 import { removeUser, setUserDetails } from '@/redux/features/userSlice';
 import { RootState } from '@/redux/store';
+import { TUser } from '@/types/user';
 import { apiBaseUrl } from '@/utils/api';
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,20 +16,10 @@ const useAuth = () => {
   const refreshUser = async () => {
     // Fetch the current user's details from the API
     const getUser = async () => {
-      const response = await fetch(`${apiBaseUrl}/auth/current-user`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${user.accessToken}`,
-          // "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaXJzdE5hbWUiOiJBaGFkIiwibGFzdE5hbWUiOiJIb3NzYWluIiwiZW1haWwiOiJhaGFkeHg5OUBnbWFpbC5jb20iLCJfaWQiOiI2Nzc2Mzc3OTcyNjg1ZjAwZmE3NTdiZWMiLCJ2ZXJpZmllZCI6ZmFsc2UsInJvbGUiOjIsImlhdCI6MTczNTk3NDUyOCwiZXhwIjoxNzY3NTEwNTI4LCJhdWQiOiJBbWFuaSBGb3JnZWQiLCJpc3MiOiJBbWFuaSBGb3JnZWQifQ.eHiKW52FGZ_qVJyeYQGIkSoGXJaOD2P3KFqmRWcb9JI`
-        },
-      });
-      const { statusCode, data } = await response.json();
-      // If the API response is successful, return the user data
-      if (statusCode === 200) {
-        return data['user'];
-      } else {
-        return null; // Return null if the API response is unsuccessful
-      }
+      const { data } = await apiInstance.get<{ data: { user: TUser } }>(
+        `/auth/current-user`
+      );
+      return data.data.user;
     };
 
     const refreshedUser = await getUser();
@@ -58,23 +50,11 @@ const useAuth = () => {
     email: string;
     password: string;
   }): Promise<unknown> => {
-    const response = await fetch(`${apiBaseUrl}/auth/signup`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ ...input, role: 'customer' }),
-    });
-
-    const result = await response.json();
-
-    if (!response.ok || result?.response === false) {
-      const errorMessage =
-        result?.errors?.[0]?.message || 'Something went wrong during signup';
-      throw new Error(errorMessage);
-    }
-
-    return result.data;
+    const { data } = await apiInstance.post<{ data: { user: TUser } }>(
+      `/auth/signup`,
+      { ...input, role: 'customer' }
+    );
+    return data.data.user;
   };
 
   // Return the functions and user state for external use

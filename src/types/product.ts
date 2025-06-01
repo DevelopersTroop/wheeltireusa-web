@@ -1,6 +1,7 @@
 import { TCategory } from './category';
 
 export type TInventoryItem = {
+  _id: string;
   internal_id?: string;
   slug: string;
   name?: string;
@@ -17,6 +18,7 @@ export type TInventoryItem = {
   finish?: string;
   lip_size?: string;
   offset?: string;
+  description: string;
   bolt_pattern_1?: string;
   bolt_pattern_2?: string;
   centerbore?: string;
@@ -56,6 +58,7 @@ export type TInventoryItem = {
     text: string;
     value: string;
   }[];
+  image_url: string;
   speed_rating?: string;
   sidewall?: string;
   tire_load_index?: string;
