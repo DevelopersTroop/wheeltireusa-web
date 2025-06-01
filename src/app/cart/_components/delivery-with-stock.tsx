@@ -1,7 +1,7 @@
 const DeliveryWithStock = ({ deliveryTime }: { deliveryTime: string }) => {
   // const deliveryTimeString = getFormatedDeliveryTimeString(deliveryTime)
   return (
-    <div className="pl-0 pr-5 flex flex-col gap-3 items-start  flex-1 relative w-full">
+    <div className="pl-0 pr-5 flex flex-col gap-2 items-start  flex-1 relative w-full">
       <div className="flex gap-1 items-center relative">
         <svg
           width="16"
@@ -28,14 +28,16 @@ const DeliveryWithStock = ({ deliveryTime }: { deliveryTime: string }) => {
       <div className="flex gap-1 items-baseline relative whitespace-nowrap">
         <p className="text-base leading-[19px] text-[#210203]">
           <span className="text-[#210203] text-base font-normal">
-            Delivered in
+            Delivered by
           </span>
         </p>
 
-        <h5 className="text-xl leading-6 text-[#210203]">
-          <span className="text-[#210203] text-xl font-bold">
+        <h5 className=" leading-6">
+          <span className="text-[#212227] text-base font-semibold">
             {deliveryTime}
-          </span>
+          </span>{' '}
+          to
+          <span className="underline text-base text-[#61636B]"> 07286</span>
         </h5>
       </div>
     </div>

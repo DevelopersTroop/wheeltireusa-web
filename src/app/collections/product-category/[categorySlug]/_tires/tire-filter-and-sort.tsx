@@ -15,7 +15,7 @@ import useFilter from '../_filters/filter-store/use-filter';
 
 //InStockWheelFilterAndSort Component
 
-const WheelFilterAndSort = () => {
+const TireFilterAndSort = () => {
   // Access the URL search parameters to extract current filters and sorting options
   const searchParams = useSearchParams();
 
@@ -93,7 +93,7 @@ const WheelFilterAndSort = () => {
       </div>
       {/* Sorting section */}
       <div className="w-full lg:w-1/3 flex flex-row gap-3 items-start justify-end -mt-1.5">
-        <p className="h-11 text-base leading-[19px] flex items-center text-[#504949]">
+        <p className="pt-1 text-base leading-[19px] flex items-center text-[#504949]">
           <span className="text-[#504949] text-base font-normal whitespace-nowrap">
             Sort by
           </span>
@@ -129,4 +129,4 @@ const WheelFilterAndSort = () => {
   );
 };
 
-export default WheelFilterAndSort;
+export default TireFilterAndSort;
