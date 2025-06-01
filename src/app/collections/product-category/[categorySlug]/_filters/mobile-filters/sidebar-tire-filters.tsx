@@ -3,14 +3,14 @@
 import { ReactNode, useState } from 'react';
 import { push as Menu } from 'react-burger-menu';
 import { MdOutlineClose } from 'react-icons/md';
-import WheelFilterAndSort from '../../_tires/wheel-filter-and-sort';
+import TireFilterAndSort from '../../_tires/tire-filter-and-sort';
 import WheelsShowFilterOption from './wheel-show-filter-option';
 
 type SidebarProps = {
   children: ReactNode;
 };
 
-const SidebarWheelFilters = ({ children }: SidebarProps) => {
+const SidebarTireFilters = ({ children }: SidebarProps) => {
   // Dispatch is used to trigger actions related to the off-canvas filter's state
   // const dispatch = useDispatch();
 
@@ -38,7 +38,7 @@ const SidebarWheelFilters = ({ children }: SidebarProps) => {
         </button>
 
         {/* InStockWheelFilterAndSort Component: Handles sorting and filter options */}
-        <WheelFilterAndSort />
+        <TireFilterAndSort />
       </div>
 
       {/* InStockWheelsShowFilterOption: Displays the selected filters */}
@@ -74,4 +74,4 @@ const SidebarWheelFilters = ({ children }: SidebarProps) => {
   );
 };
 
-export default SidebarWheelFilters;
+export default SidebarTireFilters;

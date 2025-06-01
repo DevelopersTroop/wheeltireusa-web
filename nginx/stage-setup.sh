@@ -4,7 +4,6 @@ COMMIT_SHA=$1
 
 sudo tee /etc/nginx/conf.d/tiremetic-web.conf > /dev/null <<EOF
 server {
-    listen 443 ssl;
     server_name tiremetic.stage.developertroop.com;
 
     gzip on;
@@ -33,9 +32,9 @@ server {
     }
 
     location ~ ^/_next/static/(.*)\$ {
-        proxy_pass http://d3pl580m833nyd.cloudfront.net/tiremetic-web/\$commit_sha/_next/static/\$1;
-        proxy_set_header Host d3pl580m833nyd.cloudfront.net;
-        proxy_ssl_name d3pl580m833nyd.cloudfront.net;
+        proxy_pass http://dpgcl9gapwcdl.cloudfront.net/oe-web/\$commit_sha/_next/static/\$1;
+        proxy_set_header Host dpgcl9gapwcdl.cloudfront.net;
+        proxy_ssl_name dpgcl9gapwcdl.cloudfront.net;
         proxy_ssl_server_name on;
         add_header Cache-Control "no-cache, no-store, must-revalidate";
 
@@ -48,9 +47,9 @@ server {
     }
 
     location ~ ^/public/(.*)\$ {
-        proxy_pass http://d3pl580m833nyd.cloudfront.net/tiremetic-web/\$commit_sha/public/\$1;
-        proxy_set_header Host d3pl580m833nyd.cloudfront.net;
-        proxy_ssl_name d3pl580m833nyd.cloudfront.net;
+        proxy_pass http://dpgcl9gapwcdl.cloudfront.net/oe-web/\$commit_sha/public/\$1;
+        proxy_set_header Host dpgcl9gapwcdl.cloudfront.net;
+        proxy_ssl_name dpgcl9gapwcdl.cloudfront.net;
         proxy_ssl_server_name on;
         add_header Cache-Control "no-cache, no-store, must-revalidate";
 
@@ -67,22 +66,30 @@ server {
         add_header Content-Type text/plain;
     }
 
-    ssl_certificate /etc/letsencrypt/live/tiremetic.stage.developertroop.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/tiremetic.stage.developertroop.com/privkey.pem;
-    include /etc/letsencrypt/options-ssl-nginx.conf;
-    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/tiremetic.stage.developertroop.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/tiremetic.stage.developertroop.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
 }
 
 server {
     if (\$host = tiremetic.stage.developertroop.com) {
         return 301 https://\$host\$request_uri;
-    }
+    } # managed by Certbot
 
-    listen 80;
     server_name tiremetic.stage.developertroop.com;
-    return 404;
+    listen 80;
+    return 404; # managed by Certbot
 }
 EOF
 
-# Reload NGINX
-sudo nginx -t && (sudo systemctl reload nginx || sudo systemctl restart nginx)
+# Test and reload NGINX
+if sudo nginx -t; then
+  echo "✅ NGINX configuration is valid."
+  sudo systemctl reload nginx || sudo systemctl restart nginx
+  echo "🔄 NGINX reloaded successfully."
+else
+  echo "❌ NGINX configuration test failed. Aborting reload."
+  exit 1
+fi

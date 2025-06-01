@@ -9,16 +9,17 @@ import TextCheckBox from '@/lib/generic-form/fields/TextCheck';
 import TextPassword from '@/lib/generic-form/fields/TextPassword';
 import GenericForm from '@/lib/generic-form/GenericForm';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { z } from 'zod';
 import { userLogin } from './login';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import {
   setAccessToken,
   setRefreshToken,
   setUserDetails,
 } from '@/redux/features/userSlice';
+import useAuth from '@/hooks/use-auth';
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -34,8 +35,10 @@ const defaultValues: TFieldValues = {
 };
 
 const LoginPage = () => {
+  const searchParams = useSearchParams();
   const router = useRouter();
   const dispatch = useDispatch();
+  const { user } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false); // State to track form submission status
   const [errors, setErrors] = useState<
     {
@@ -50,6 +53,17 @@ const LoginPage = () => {
     message: '',
     isSuccess: false,
   }); // State to store success status and message
+
+  useEffect(() => {
+    if (user) {
+      const redirect = searchParams.get('redirect');
+      if (redirect) {
+        router.push(redirect);
+      } else {
+        router.push('/dashboard/orders');
+      }
+    }
+  }, [user, router, searchParams]);
 
   const onSubmit = (values: TFieldValues) => {
     console.log(values);
@@ -67,14 +81,14 @@ const LoginPage = () => {
         dispatch(setUserDetails({ userDetails: data.user }));
 
         // Redirect the user after login
-        // const redirect = searchParams.get("redirect");
-        // if (redirect) {
-        //   router.push(redirect);
-        // } else {
-        //   router.push("/dashboard");
-        // }
-        console.log('Login successful');
-        router.push('/');
+        const redirect = searchParams.get('redirect');
+        if (redirect) {
+          router.push(redirect);
+        } else {
+          router.push('/dashboard/orders');
+        }
+        // console.log('Login successful');
+        // router.push('/dashboard/orders');
       })
       .finally(() => {
         setIsSubmitting(false);

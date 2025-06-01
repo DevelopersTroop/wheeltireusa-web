@@ -29,16 +29,16 @@ const ShopByCategory = () => {
   return (
     <div className="bg-[#131316]">
       <Container>
-        <div className="w-full h-full flex flex-col md:flex-row gap-8 items-center justify-center py-8 md:py-28 text-white">
-          <div className="w-full md:w-1/2 flex flex-col gap-8">
-            <div className="flex flex-col gap-4">
-              <p className="text-xl text-[#AFB0B6] font-normal uppercase tracking-wide">
+        <div className="w-full h-full flex flex-col md:flex-row gap-18 md:gap-8 items-center justify-center py-16 md:py-28 text-white">
+          <div className="w-full md:w-1/2 flex flex-col gap-6 sm:gap-8">
+            <div className="flex flex-col gap-3 sm:gap-4">
+              <p className="text-base sm:text-xl text-[#AFB0B6] font-normal uppercase tracking-wide">
                 Shop by Category
               </p>
-              <h2 className="text-3xl md:text-[40px] text-[#FFFFFF] font-bold">
+              <h2 className="text-[24px] md:text-[40px] text-[#FFFFFF] font-bold">
                 Tires for Every Road, Every Journey
               </h2>
-              <p className="text-xl text-[#AFB0B6] font-normal">
+              <p className="text-base sm:text-xl text-[#AFB0B6] font-normal">
                 Whether its city streets or off-road adventures, find your
                 perfect match here.
               </p>
@@ -50,8 +50,11 @@ const ShopByCategory = () => {
 
           <div className="w-full md:w-1/2 flex flex-col gap-12">
             {tireData.map((tire) => (
-              <div key={tire.id} className="flex items-center rounded ">
-                <div className="w-3/5 relative">
+              <div
+                key={tire.id}
+                className="w-full h-[160px] flex items-center rounded"
+              >
+                <div className="w-1/2 lg:w-3/5 h-[160px] relative">
                   <img
                     src="/images/shopCategoty/tire.png"
                     alt="Tire"
@@ -63,13 +66,13 @@ const ShopByCategory = () => {
                     src={tire.image}
                     alt={tire.title}
                     width={200}
-                    height={100}
+                    height={160}
                     className="object-cover w-full h-full"
                   />
                 </div>
-                <div className="w-2/5 h-full px-5 py-4 flex flex-col justify-between gap-3 sm:gap-10">
+                <div className="w-1/2 lg:w-2/5 h-full px-5 py-4 flex flex-col justify-between bg-[#212227] rounded-r-md">
                   <div className="flex flex-col gap-2">
-                    <span className="text-base font-normal text-[#FFFFFF]">
+                    <span className="text-[12px] sm:text-base font-normal text-[#FFFFFF]">
                       {tire.brand}
                     </span>
                     <h4 className="text-[#FFFFFF] font-bold text-lg sm:text-2xl">
@@ -78,7 +81,7 @@ const ShopByCategory = () => {
                   </div>
                   <a
                     href="#"
-                    className="text-[##FFFFFF] text-base font-normal underline"
+                    className="text-[##FFFFFF] text-[13px] sm:text-base font-normal underline"
                   >
                     {tire.label}
                   </a>

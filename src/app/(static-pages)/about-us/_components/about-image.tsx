@@ -1,6 +1,6 @@
 const AboutImage = () => {
   return (
-    <div className="w-full h-[230px] sm:h-[320px]">
+    <div className="w-full h-[220px] sm:h-[320px]">
       <img
         src="/images/about/AboutImage2.png"
         alt="about image"

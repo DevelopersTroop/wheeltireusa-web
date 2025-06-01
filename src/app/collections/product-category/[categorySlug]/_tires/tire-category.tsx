@@ -3,17 +3,16 @@
 import Breadcrumb from '@/components/ui/breadcrumb/breadcrumb';
 import Item from '@/components/ui/breadcrumb/item';
 import Container from '@/components/ui/container/container';
+import { TInventoryItem } from '@/types/product';
+import { useParams, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import SidebarTireFilters from '../_filters/mobile-filters/sidebar-tire-filters';
+import TireFilters from '../_filters/tire-filters';
 import ProductCardSkeleton from '../_loading/product-card-skeleton';
 import NoProductsFound from '../no-products-found';
-import { useParams, useSearchParams } from 'next/navigation';
-import TireFilters from '../_filters/tire-filters';
-import SidebarWheelFilters from '../_filters/mobile-filters/sidebar-wheel-filters';
-import WheelFilterAndSort from './wheel-filter-and-sort';
 import ProductPagination from '../product-pagination';
-import { useState } from 'react';
-import { TInventoryItem } from '@/types/product';
-import { useEffect } from 'react';
-import ProductCard from './wheel-card';
+import TireCard from './tire-card';
+import TireFilterAndSort from './tire-filter-and-sort';
 
 const mockData: {
   pages: number;
@@ -24,142 +23,160 @@ const mockData: {
   total: 6,
   products: [
     {
-      internal_id: '680a6da7a29afbb08bef2d4d',
-      slug: 'Venom Power 33X12.50R22LT 10PR 109Q Swamp Thing',
-      title: 'Venom Power 33X12.50R22LT 10PR 109Q Swamp Thing',
-      brand: 'Venom Power',
-      category: {
-        _id: '680a6d4ea29afbb08bef1e84',
-        title: 'In-stock, Factory Wheels',
-        slug: 'in-stock-factory-wheels',
-      },
-      bolt_pattern_1: 'Blank 8x',
-      finish: 'Polished',
-      forging_style: 'Off-Road',
-      inventory_available: 4,
+      internal_id: 'TI-001',
+      slug: 'front-tire-123',
+      name: 'Michelin Pilot Sport Front',
+      title: 'Michelin Pilot Sport 225/45R17',
+      item_type: 'tire',
+      item_class: 'performance',
+      brand: 'Michelin',
+      model_group: 'Pilot Sport',
+      category: { _id: 'cat1', title: 'Tires', slug: 'tires' },
+      forging_style: 'Standard',
+      wheel_size: '17',
+      wheel_diameter: '17',
+      wheel_width: '7.5',
+      finish: 'Black',
+      lip_size: '1.0',
+      offset: '35',
+      bolt_pattern_1: '5x114.3',
+      bolt_pattern_2: '',
+      centerbore: '66.1',
+      load_rating: '1200',
+      xfactor: 'N/A',
+      yfactor: 'N/A',
+      backspacing: '5.5',
+      raw_size: '225/45R17',
+      tire_width: '225',
+      tire_aspect_ratio: '45',
+      tire_diameter: '17',
+      ship_weight: '22',
+      ship_width: '9',
+      ship_height: '25',
+      ship_depth: '25',
+      purchase_description: 'High performance summer tire.',
+      short_description: 'Great grip and handling.',
       item_image: 'ns-products/tire.webp',
-      lip_size: '9.88',
-      msrp: 1780.17,
-      price: 1483.48,
-      model_group: 'Venom Power',
-      wheel_size: '26x16',
-      tire_size: '',
-      tire_type: [],
+      msrp: 200,
+      price: 180,
+      inventory_available: 10,
+      build_available: 'yes',
+      steering_wheel_addon_options_1: '',
+      steering_wheel_addon_options_2: '',
+      steering_wheel_addon_options_3: '',
+      terrain: { text: 'Street', value: 'street' },
+      blank_bolt_patterns: '',
+      design_type: 'asymmetric',
+      style: 'sport',
+      dually: false,
+      finish_type: 'matte',
+      suspension_type: 'standard',
+      tire_type: [
+        { text: 'Summer', value: 'summer' },
+        { text: 'Performance', value: 'performance' },
+      ],
+      speed_rating: 'Y',
+      sidewall: 'Black',
+      tire_load_index: '91',
+      tire_max_load_lbs: '1356',
+      tire_max_load_lbs_2: '',
+      tire_max_load_kg: '615',
+      tire_max_load_kg_2: '',
+      ply: '4',
+      approved_rim_contours: '7-8.5',
+      tread_depth_32nds: '10',
+      tread_depth_mm: '8',
+      std_rim: '7.5',
+      max_air_pressure_kpa: '300',
+      max_air_pressure_psi: '44',
+      tire_size: '225/45R17',
+      seo_description:
+        'Michelin Pilot Sport 225/45R17 summer tire for performance vehicles.',
+      front_size: '225/45R17',
+      rear_size: '',
+      front_diameter: '17',
+      front_width: '225',
+      rear_diameter: '',
+      rear_width: '',
+      dealer_price: '160',
     },
     {
-      internal_id: '680a6da7a29afbb08bef2d4e',
-      slug: 'Venom Power 33X12.50R22LT 10PR 109Q Swamp Thing 21',
-      title: 'Venom Power 33X12.50R22LT 10PR 109Q Swamp Thing 21',
-      brand: 'Venom Power',
-      category: {
-        _id: '680a6d4ea29afbb08bef1e84',
-        title: 'In-stock, Factory Wheels',
-        slug: 'in-stock-factory-wheels',
-      },
-      bolt_pattern_1: 'Blank 8x',
-      finish: 'Polished',
-      forging_style: 'Off-Road',
-      inventory_available: 4,
-      item_image: 'ns-products/tire.webp',
-      lip_size: '9.88',
-      msrp: 1780.17,
-      price: 1483.48,
-      model_group: 'Venom Power',
-      wheel_size: '26x16',
-      tire_size: '',
-      tire_type: [],
-    },
-    {
-      internal_id: '680a6da7a29afbb08bef2d4f',
-      slug: 'Venom Power 33X12.50R22LT 10PR 109Q Swamp Thing 22',
-      title: 'Venom Power 33X12.50R22LT 10PR 109Q Swamp Thing',
-      brand: 'Venom Power',
-      category: {
-        _id: '680a6d4ea29afbb08bef1e84',
-        title: 'In-stock, Factory Wheels',
-        slug: 'in-stock-factory-wheels',
-      },
-      bolt_pattern_1: 'Blank 8x',
-      finish: 'Polished',
-      forging_style: 'Off-Road',
-      inventory_available: 4,
-      item_image: 'ns-products/tire.webp',
-      lip_size: '9.88',
-      msrp: 1780.17,
-      price: 1483.48,
-      model_group: 'Venom Power',
-      wheel_size: '26x16',
-      tire_size: '',
-      tire_type: [],
-    },
-    {
-      internal_id: '680a6da7a29afbb08bef2d4g',
-      slug: 'Venom Power 33X12.50R22LT 10PR 109Q Swamp Thing 23',
-      title: 'Venom Power 33X12.50R22LT 10PR 109Q Swamp Thing 23',
-      brand: 'Venom Power',
-      category: {
-        _id: '680a6d4ea29afbb08bef1e84',
-        title: 'In-stock, Factory Wheels',
-        slug: 'in-stock-factory-wheels',
-      },
-      bolt_pattern_1: 'Blank 8x',
-      finish: 'Polished',
-      forging_style: 'Off-Road',
-      inventory_available: 4,
-      item_image: 'ns-products/tire.webp',
-      lip_size: '9.88',
-      msrp: 1780.17,
-      price: 1483.48,
-      model_group: 'Venom Power',
-      wheel_size: '26x16',
-      tire_size: '',
-      tire_type: [],
-    },
-    {
-      internal_id: '680a6da7a29afbb08bef2d4h',
-      slug: 'Venom Power 33X12.50R22LT 10PR 109Q Swamp Thing 24',
-      title: 'Venom Power 33X12.50R22LT 10PR 109Q Swamp Thing',
-      brand: 'Venom Power',
-      category: {
-        _id: '680a6d4ea29afbb08bef1e84',
-        title: 'In-stock, Factory Wheels',
-        slug: 'in-stock-factory-wheels',
-      },
-      bolt_pattern_1: 'Blank 8x',
-      finish: 'Polished',
-      forging_style: 'Off-Road',
-      inventory_available: 4,
-      item_image: 'ns-products/tire.webp',
-      lip_size: '9.88',
-      msrp: 1780.17,
-      price: 1483.48,
-      model_group: 'Venom Power',
-      wheel_size: '26x16',
-      tire_size: '',
-      tire_type: [],
-    },
-    {
-      internal_id: '680a6da7a29afbb08bef2d4i',
-      slug: 'Venom Power 33X12.50R22LT 10PR 109Q Swamp Thing 25',
-      title: 'Venom Power 33X12.50R22LT 10PR 109Q Swamp Thing 25',
-      brand: 'Venom Power',
-      category: {
-        _id: '680a6d4ea29afbb08bef1e84',
-        title: 'In-stock, Factory Wheels',
-        slug: 'in-stock-factory-wheels',
-      },
-      bolt_pattern_1: 'Blank 8x',
-      finish: 'Polished',
-      forging_style: 'Off-Road',
-      inventory_available: 4,
-      item_image: 'ns-products/tire.webp',
-      lip_size: '9.88',
-      msrp: 1780.17,
-      price: 1483.48,
-      model_group: 'Venom Power',
-      wheel_size: '26x16',
-      tire_size: '',
-      tire_type: [],
+      internal_id: 'TI-002',
+      slug: 'rear-tire-456',
+      name: 'Michelin Pilot Sport Rear',
+      title: 'Michelin Pilot Sport 245/40R17',
+      item_type: 'tire',
+      item_class: 'performance',
+      brand: 'Michelin',
+      model_group: 'Pilot Sport',
+      category: { _id: 'cat1', title: 'Tires', slug: 'tires' },
+      forging_style: 'Standard',
+      wheel_size: '17',
+      wheel_diameter: '17',
+      wheel_width: '8.5',
+      finish: 'Black',
+      lip_size: '1.2',
+      offset: '40',
+      bolt_pattern_1: '5x114.3',
+      bolt_pattern_2: '',
+      centerbore: '66.1',
+      load_rating: '1300',
+      xfactor: 'N/A',
+      yfactor: 'N/A',
+      backspacing: '6.0',
+      raw_size: '245/40R17',
+      tire_width: '245',
+      tire_aspect_ratio: '40',
+      tire_diameter: '17',
+      ship_weight: '24',
+      ship_width: '10',
+      ship_height: '25',
+      ship_depth: '25',
+      purchase_description: 'Rear performance tire for sporty driving.',
+      short_description: 'Enhanced rear traction.',
+      item_image: 'tires/michelin-pilot-sport-rear.png',
+      msrp: 220,
+      price: 200,
+      inventory_available: 8,
+      build_available: 'yes',
+      steering_wheel_addon_options_1: '',
+      steering_wheel_addon_options_2: '',
+      steering_wheel_addon_options_3: '',
+      terrain: { text: 'Street', value: 'street' },
+      blank_bolt_patterns: '',
+      design_type: 'asymmetric',
+      style: 'sport',
+      dually: false,
+      finish_type: 'matte',
+      suspension_type: 'standard',
+      tire_type: [
+        { text: 'Summer', value: 'summer' },
+        { text: 'Performance', value: 'performance' },
+      ],
+      speed_rating: 'Y',
+      sidewall: 'Black',
+      tire_load_index: '95',
+      tire_max_load_lbs: '1521',
+      tire_max_load_lbs_2: '',
+      tire_max_load_kg: '690',
+      tire_max_load_kg_2: '',
+      ply: '4',
+      approved_rim_contours: '8-9.5',
+      tread_depth_32nds: '10',
+      tread_depth_mm: '8',
+      std_rim: '8.5',
+      max_air_pressure_kpa: '300',
+      max_air_pressure_psi: '44',
+      tire_size: '245/40R17',
+      seo_description:
+        'Michelin Pilot Sport 245/40R17 rear summer tire for performance vehicles.',
+      front_size: '',
+      rear_size: '245/40R17',
+      front_diameter: '',
+      front_width: '',
+      rear_diameter: '17',
+      rear_width: '245',
+      dealer_price: '180',
     },
   ],
 };
@@ -238,9 +255,9 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
       <div className="max-w-[1450px] mx-auto w-full px-5 lg:px-16 pb-20 lg:pb-30 pt-3">
         {/* Mobile filter sidebar */}
         <div className="w-full lg:hidden pb-3 pt-1 lg:pt-3">
-          <SidebarWheelFilters>
+          <SidebarTireFilters>
             <TireFilters />
-          </SidebarWheelFilters>
+          </SidebarTireFilters>
         </div>
         {/* Main content layout */}
         <div className="flex w-full gap-8 pt-2 lg:pt-0">
@@ -273,7 +290,7 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
               {/* Display message when no products are found */}
               <div className="w-full flex flex-col">
                 <div className="hidden lg:block py-3">
-                  <WheelFilterAndSort />
+                  <TireFilterAndSort />
                 </div>
                 <NoProductsFound />{' '}
                 {/* Component to show when no products are found */}
@@ -284,16 +301,24 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
               <div className="w-full">
                 {/* Display products if available */}
                 <div className="hidden lg:block py-3">
-                  <WheelFilterAndSort />
+                  <TireFilterAndSort />
                 </div>
-                <div
-                  className={
-                    'w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-8'
+                <div className={'w-full'}>
+                  {/* {data?.products.map((product) => (
+                    <ProductCard product={products} key={product.slug} />
+                  ))} */}
+                  {
+                    <TireCard
+                      products={data?.products || []}
+                      wheelInfo={{
+                        frontForging: '',
+                        rearForging: '',
+                        hasDually: false,
+                        hasOffRoad: false,
+                      }}
+                      cartPackage={searchParams.get('cartPackage') || null}
+                    />
                   }
-                >
-                  {data?.products.map((product) => (
-                    <ProductCard product={product} key={product.slug} />
-                  ))}
                 </div>
               </div>
             </>

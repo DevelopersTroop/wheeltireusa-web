@@ -40,38 +40,41 @@ const deals = [
 
 const DealsAndRebates = () => {
   return (
-    <Container className="mx-auto py-10 md:py-30">
-      <h2 className="text-[40px] font-bold text-center mb-4">
-        Deals and Rebates
-      </h2>
-      <p className="text-xl font-normal text-center text-[#464853] mb-8">
-        Your road to great deals starts here
-      </p>
-
-      <div className="grid md:grid-cols-2 gap-8">
+    <Container className="flex flex-col gap-8 mx-auto py-16 md:py-30">
+      <div className="flex flex-col gap-3 sm:gap-4 text-center">
+        <h2 className="text-2xl sm:text-[40px] font-bold text-center">
+          Deals and Rebates
+        </h2>
+        <p className="text-lg sm:text-xl font-normal text-center text-[#464853]">
+          Your road to great deals starts here
+        </p>
+      </div>
+      <div className="grid xl:grid-cols-2 gap-3 sm:gap-8">
         {deals.map((deal) => (
           <div
             key={deal.id}
-            className="flex bg-white rounded-xl shadow overflow-hidden"
+            className="flex flex-col sm:flex-row items-center bg-white rounded-xl shadow overflow-hidden"
           >
-            <div className="w-1/2 relative h-40 md:h-[248px]">
+            <div className="w-full  sm:w-1/2 relative h-[220px] md:h-[248px]">
               <Image
                 src={deal.image}
                 alt={deal.title}
                 layout="fill"
                 objectFit="cover"
-                className="rounded-l-xl"
+                className="rounded-l-xl w-full h-full object-cover"
               />
               <span className="h-8 absolute top-5 left-5 bg-[#F6511D] text-white text-lg font-bold px-3  rounded">
                 {deal.daysLeft} days left
               </span>
             </div>
-            <div className="w-1/2 flex flex-col justify-center px-4 py-6 gap-5">
+            <div className="w-full sm:w-1/2 flex flex-col justify-center px-4 gap-5 py-6 sm:py-0">
               {deal.brand && (
                 <img src={deal?.brand} alt={deal.brand} className="w-24 h-4" />
               )}
               <div>
-                <h3 className="text-2xl font-bold mb-2">{deal.title}</h3>
+                <h3 className="text-xl sm:text-2xl font-semibold sm:font-bold mb-2">
+                  {deal.title}
+                </h3>
                 <p className="text-base text-[#464853] font-normal">
                   {deal.description}
                 </p>
@@ -81,7 +84,7 @@ const DealsAndRebates = () => {
         ))}
       </div>
 
-      <div className="text-center mt-8">
+      <div className="text-center">
         <a href="#" className="text-[#212227] text-xl underline font-normal">
           View all deals
         </a>
