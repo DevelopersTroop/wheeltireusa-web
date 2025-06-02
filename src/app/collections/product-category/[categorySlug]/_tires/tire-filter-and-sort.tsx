@@ -92,18 +92,18 @@ const TireFilterAndSort = () => {
         )}
       </div>
       {/* Sorting section */}
-      <div className="w-full min-[1300px]:w-1/3 flex flex-row gap-3 items-start justify-end -mt-1.5">
-        <p className="pt-1 text-base leading-[19px] flex items-center text-[#504949]">
-          <span className="text-[#504949] text-base font-normal whitespace-nowrap">
-            Sort by
-          </span>
-        </p>
+      <div className="w-full min-[1300px]:w-1/3 flex items-center flex-row gap-3 justify-end -mt-1.5">
         {/* Select dropdown for sorting options */}
         <Select
           onValueChange={(value) => toggleFilterValue('sort', value, false)}
           value={searchParams.get('sort') || undefined}
         >
-          <SelectTrigger className="w-full max-w-[180px]">
+          <p className="text-base leading-[19px] flex items-center text-[#504949]">
+            <span className="text-[#504949] text-base font-normal whitespace-nowrap">
+              Sort by
+            </span>
+          </p>
+          <SelectTrigger className="w-full max-w-[180px] !h-[41px]">
             <SelectValue placeholder="Sort options" />
           </SelectTrigger>
           <SelectContent>

@@ -11,11 +11,11 @@ const WheelsShowFilterOption = () => {
   // const filterOptions = Array.from(searchParams.entries());
 
   // Extract filter options from the URL search parameters and handle multiple values per key
-  const filterOptions = Array.from(searchParams.entries()).flatMap(
-    ([key, value]) => {
+  const filterOptions = Array.from(searchParams.entries())
+    .filter(([key]) => key !== 'page')
+    .flatMap(([key, value]) => {
       return value.split(',').map((v) => [key, v]);
-    }
-  );
+    });
 
   // Retrieve filter management functions from the useFilter custom hook
   const { removeFilterValue, clearAllFilters } = useFilter();

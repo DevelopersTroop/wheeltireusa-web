@@ -12,6 +12,7 @@ import NoProductsFound from '../no-products-found';
 import ProductPagination from '../product-pagination';
 import TireCard from './tire-card';
 import TireFilterAndSort from './tire-filter-and-sort';
+import useFilter from '../_filters/filter-store/use-filter';
 
 // Type definition for page props, optional page parameter
 type ProductsPageProps = {
@@ -21,7 +22,8 @@ type ProductsPageProps = {
 const TireCategory = ({ page = 1 }: ProductsPageProps) => {
   const searchParams = useSearchParams(); // Accessing search parameters from the URL
   const { categorySlug } = useParams(); // Getting the category slug from the URL parameters
-  const { data, isLoading } = useGetProductsQuery({ page });
+  const { filters } = useFilter();
+  const { data, isLoading } = useGetProductsQuery({ page, ...filters });
 
   return (
     <>

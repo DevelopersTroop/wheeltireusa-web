@@ -175,6 +175,9 @@
   body {
     @apply bg-background text-foreground;
   }
+  button {
+    @apply cursor-pointer;
+  }
 }
 
 @supports (-moz-appearance: none) {

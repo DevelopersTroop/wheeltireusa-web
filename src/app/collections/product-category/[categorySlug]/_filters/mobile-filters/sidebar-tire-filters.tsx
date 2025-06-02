@@ -26,7 +26,7 @@ const SidebarTireFilters = ({ children }: SidebarProps) => {
   return (
     <div id="filter">
       {/* Filter Button: Toggles the off-canvas filter menu visibility */}
-      <div className="flex justify-between">
+      <div className="flex justify-between items-center">
         <button
           className="rounded-xl border border-[#CFCFCF] px-4 w-[93px]  h-[41px]"
           // onClick={() => dispatch(toggleFilter())}
@@ -66,6 +66,7 @@ const SidebarTireFilters = ({ children }: SidebarProps) => {
           bmMenu: {
             background: '#F7F7F7',
           },
+          bmBurgerButton: { display: 'none' },
         }}
       >
         {/* Content inside the off-canvas menu */}
