@@ -12,9 +12,9 @@ export const GalleryItem: React.FC<{ src: string; index: number }> = ({
       <Image
         priority={index < 1 ? true : false}
         fill
-        src={src}
+        src={src?.length > 0 ? src : '/not-available.webp'}
         objectFit="cover"
-        alt=""
+        alt="gallery image"
       />
       <div
         onClick={() => {

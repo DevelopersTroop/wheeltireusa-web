@@ -1,5 +1,5 @@
 'use client';
-import { TSingleFilter } from '@/app/types/filter';
+import { TSingleFilter } from '@/types/filter';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import FilterHeading from '../../template/filter-heading';

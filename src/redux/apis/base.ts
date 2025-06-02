@@ -1,5 +1,7 @@
-import { BaseQueryFn, createApi } from "@reduxjs/toolkit/query/react";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import { TErrorResponse } from '@/types/response';
+import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react';
+import axios, { AxiosError, AxiosResponse } from 'axios';
+import { toast } from 'sonner';
 
 export const apiInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -7,8 +9,8 @@ export const apiInstance = axios.create({
 });
 
 apiInstance.interceptors.request.use((req) => {
-  if (typeof window !== "undefined") {
-    const storedData = localStorage.getItem("persist:amani-forged-store");
+  if (typeof window !== 'undefined') {
+    const storedData = localStorage.getItem('persist:amani-forged-store');
     if (storedData) {
       const parsedData = JSON.parse(storedData);
       if (!parsedData?.user?.length) return req;
@@ -22,8 +24,28 @@ apiInstance.interceptors.request.use((req) => {
   return req;
 });
 
+apiInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const err = error as TErrorResponse;
+
+    const message = err?.response?.data?.message || 'Something went wrong';
+    const errorsArray = err?.response?.data?.errors;
+
+    if (Array.isArray(errorsArray) && errorsArray.length > 0) {
+      toast.error(message, {
+        description: errorsArray.map((e) => e?.message || '').join('\n'),
+      });
+    } else {
+      toast.error(message);
+    }
+
+    return Promise.reject(error); // Always return rejected promise to maintain error chain
+  }
+);
+
 type IBaseQueryArgs<TData> = {
-  method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+  method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   url: string;
   data?: TData;
   headers?: Record<string, string>;
@@ -47,11 +69,11 @@ export type TBaseQueryError = {
 
 export const baseQuery =
   <TData = unknown, TRes extends ApiResponse<TData> = ApiResponse<TData>>({
-    baseURL = "/",
+    baseURL = '/',
   }: {
     baseURL?: string;
   }): BaseQueryFn<IBaseQueryArgs<TData>, TData, unknown> =>
-  async ({ method = "GET", url, data, headers, params }) => {
+  async ({ method = 'GET', url, data, headers, params }) => {
     try {
       const response: AxiosResponse<TRes> = await apiInstance.request({
         method,

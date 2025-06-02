@@ -1,13 +1,19 @@
 'use client';
-import { TSingleFilter } from '@/app/types/filter';
-import Select from '@/app/ui/input/select';
-import { capitalizeWords } from '@/app/utils/string';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { TSingleFilter } from '@/types/filter';
+import { capitalizeWords } from '@/utils/string';
 
 type SingleValuedFilterProps = {
   defaultOption: string;
   filterData: TSingleFilter[];
   filterKey: string;
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  onChange: (v: string) => void;
 };
 
 // SingleFilter component to display a dropdown filter with single-value options
@@ -21,17 +27,26 @@ const SingleFilter = ({
     <>
       <div>
         <form onSubmit={(e) => e.preventDefault()}>
-          <Select value={defaultOption} onChange={onChange} name={filterKey}>
-            <option value={''}>
-              Select {capitalizeWords(filterKey).replace('Custom', '')}
-            </option>
+          <Select
+            value={defaultOption}
+            onValueChange={(value) => onChange(value)}
+            name={filterKey}
+          >
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">
+                Select {capitalizeWords(filterKey).replace('Custom', '')}
+              </SelectItem>
+            </SelectContent>
             {filterData.map((data) => (
-              <option
+              <SelectItem
                 key={`custom-wheel-forging-filter-${data.value}`}
-                value={data.value}
+                value={data.value.toString()}
               >
                 {data.value}
-              </option>
+              </SelectItem>
             ))}
           </Select>
         </form>

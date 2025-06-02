@@ -12,7 +12,7 @@ export const Lightbox: React.FC<ILightboxProps> = ({ images, ...props }) => {
     <YetLightbox
       slides={images}
       open={open}
-      close={() => setOpen(false)}
+      close={() => setOpen(false, 0)}
       {...props}
     />
   );

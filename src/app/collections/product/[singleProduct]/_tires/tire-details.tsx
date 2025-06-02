@@ -1,6 +1,6 @@
 'use client';
 // Import necessary types and components
-import { TInventoryItem } from '@/app/types/product';
+import { TInventoryItem } from '@/types/product';
 
 import {
   Accordion,
@@ -106,7 +106,7 @@ const TireDetails = ({ product }: { product: TInventoryItem }) => {
                   </div>
                   <p className="text-base leading-[19px] text-[#210203]">
                     <span className="line-clamp-1 text-base font-normal text-[#210203]">
-                      {product.wheel_size ? product.wheel_size : 'N/A'}
+                      {product.raw_size ? product.raw_size : 'N/A'}
                     </span>
                   </p>
                 </div>
@@ -145,7 +145,7 @@ const TireDetails = ({ product }: { product: TInventoryItem }) => {
                     </div>
                     <p className="text-base leading-[19px] text-[#210203]">
                       <span className="line-clamp-1 text-base font-normal text-[#210203]">
-                        {product.style ? product.style : 'N/A'}
+                        {product.spoke_style ? product?.spoke_style : 'N/A'}
                       </span>
                     </p>
                   </div>

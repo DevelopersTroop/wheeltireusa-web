@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 
 // Defining the Page component
 const Page = () => {
-  redirect('/collections/product-category/tire');
+  redirect('/collections/product-category/tires');
 };
 
 export default Page;

@@ -1,6 +1,7 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import mailFilterReducer from "./features/mainFilterSlice";
-import userReducer from "./features/userSlice";
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import mailFilterReducer from './features/mainFilterSlice';
+import userReducer from './features/userSlice';
+import checkoutReducer from './features/checkoutSlice';
 
 import {
   FLUSH,
@@ -11,18 +12,19 @@ import {
   PURGE,
   REGISTER,
   REHYDRATE,
-} from "redux-persist";
-import storage from "redux-persist/lib/storage";
-import { baseApi } from "./apis/base";
-import { TypedUseSelectorHook, useSelector, useDispatch } from "react-redux";
+} from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import { baseApi } from './apis/base';
+import { TypedUseSelectorHook, useSelector, useDispatch } from 'react-redux';
 const rootPersistConfig = {
-  key: "tirematic-store",
+  key: 'tirematic-store',
   storage,
 };
 
 // Register reducers that's need to be persisted
 const persistingReducer = combineReducers({
   user: userReducer,
+  checkout: checkoutReducer,
 });
 
 const persistedReducer = persistReducer(rootPersistConfig, persistingReducer);
@@ -46,7 +48,6 @@ const store = configureStore({
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-
 
 export const persistor = persistStore(store);
 

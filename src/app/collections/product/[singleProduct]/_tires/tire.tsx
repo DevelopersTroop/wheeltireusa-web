@@ -13,8 +13,8 @@ const Tire = ({ product }: { product: TInventoryItem }) => {
           <Item href={'/'}>Home</Item>
           <Item href={'/'}>Collection</Item>
           <Item href={`/`}>Tire</Item>
-          <Item isEnd={true} href={`/collections/product/${product.slug}`}>
-            {product?.model_group?.text}
+          <Item isEnd={true} href={`/collections/product/${product?.slug}`}>
+            {product?.model}
           </Item>
         </Breadcrumb>
       </div>
@@ -24,7 +24,7 @@ const Tire = ({ product }: { product: TInventoryItem }) => {
           <div className="w-full">
             <ImageGallery
               images={Array.from({ length: 6 }).map(() => ({
-                src: product?.item_image || '',
+                src: product?.image_url,
               }))}
             />
           </div>

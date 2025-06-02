@@ -29,17 +29,17 @@ const QuantityInputBox = ({
 }: QuantityInputBoxProps) => {
   return (
     <>
-      <div className="flex gap-0 items-start relative w-[164px]">
+      <div className="flex gap-0 items-start relative ">
         <button
           onClick={onIncrease}
           className={cn(
-            'rounded-tl-xl rounded-bl-xl border border-[#cfcfcf] p-3 flex gap-2 justify-center items-center relative w-14 h-14 bg-white disabled:cursor-not-allowed disabled:text-gray-500'
+            'rounded-tl-xl rounded-bl-xl border border-[#cfcfcf] p-3 flex gap-2 justify-center items-center relative w-10 h-10 bg-white disabled:cursor-not-allowed disabled:text-gray-500'
           )}
           disabled={Number(inputValue) <= Number(minInputValue)}
         >
           <Minus size={18} />
         </button>
-        <div className="border-x-0 border-y border-[#cfcfcf]  flex gap-2 justify-center items-center flex-1 self-stretch relative  bg-white">
+        <div className="border-x-0 border-y border-[#cfcfcf]  flex gap-2 justify-center items-center self-stretch relative  bg-white">
           <input
             type="number"
             disabled={true}
@@ -50,13 +50,13 @@ const QuantityInputBox = ({
             max={maxInputValue}
             name={inputName}
             id={id}
-            className="p-3 w-14 disabled:cursor-not-allowed disabled:bg-white text-base leading-[19px] text-[#210203] font-normal focus:outline-none text-center"
+            className="w-10 disabled:cursor-not-allowed disabled:bg-white text-base leading-[19px] text-[#210203] font-normal focus:outline-none text-center"
           />
         </div>
         <button
           onClick={onDecrease}
           className={cn(
-            'rounded-tr-xl rounded-br-xl border border-[#cfcfcf] p-3 flex gap-2 justify-center items-center relative w-14 h-14 bg-white disabled:cursor-not-allowed disabled:text-gray-500'
+            'rounded-tr-xl rounded-br-xl border border-[#cfcfcf] p-3 flex gap-2 justify-center items-center relative w-10 h-10 bg-white disabled:cursor-not-allowed disabled:text-gray-500'
           )}
           disabled={Number(inputValue) >= Number(maxInputValue)}
         >

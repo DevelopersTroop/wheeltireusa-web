@@ -24,6 +24,7 @@ type TextProps<T> = {
   description?: string;
   showMessage?: boolean;
   checkForgotPassword?: boolean;
+  onChangeValidationCheck?: (value: string) => void;
 };
 
 const TextPassword = <T extends FieldValues>({
@@ -33,6 +34,7 @@ const TextPassword = <T extends FieldValues>({
   description,
   showMessage = true,
   checkForgotPassword = false,
+  onChangeValidationCheck,
   ...props
 }: TextProps<T>) => {
   const { control } = useGenericForm<T>();
@@ -59,14 +61,23 @@ const TextPassword = <T extends FieldValues>({
           <div className="flex justify-between items-center">
             {heading && <FormLabel>{heading}</FormLabel>}
             {checkForgotPassword && (
-              <Link href="#" className="underline">
+              <Link href="/forgot-password" className="underline">
                 Forgot password
               </Link>
             )}
           </div>
           <FormControl className="w-full">
             <div className="relative">
-              <Input key={inputType} type={inputType} {...props} {...field} />
+              <Input
+                key={inputType}
+                type={inputType}
+                {...props}
+                {...field}
+                onChange={(e) => {
+                  field.onChange(e);
+                  onChangeValidationCheck?.(e.target.value);
+                }}
+              />
               {type === 'password' ? (
                 <div
                   onClick={() => {

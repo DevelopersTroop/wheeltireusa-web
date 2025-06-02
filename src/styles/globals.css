@@ -1,5 +1,37 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+[class^="icon-"],
+[class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: "icomoon" !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-bolt-pattern:before {
+  content: "\e900";
+}
+
+.icon-finish:before {
+  content: "\e901";
+}
+
+.icon-lip-size:before {
+  content: "\e902";
+}
+
+.icon-size:before {
+  content: "\e903";
+}
 
 @theme inline {
   --breakpoint-2xl: 110rem;
@@ -40,13 +72,17 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --radius-xs: 0.5rem;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --spacing-xs: 0.75rem;
+  --spacing-smx: 1.25rem;
 }
 @theme {
   --animate-shimmer: shimmer 1.5s infinite linear;
+  --animate-color-pulse: color-pulse 2s ease-in-out infinite;
 
   @keyframes shimmer {
     0% {
@@ -54,6 +90,15 @@
     }
     100% {
       background-position: 200% 0;
+    }
+  }
+  @keyframes color-pulse {
+    0%,
+    100% {
+      background-color: var(--color-gray-200);
+    }
+    50% {
+      background-color: var(--color-gray-300);
     }
   }
 }
@@ -129,6 +174,9 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+  button {
+    @apply cursor-pointer;
   }
 }
 

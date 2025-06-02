@@ -1,4 +1,5 @@
 'use client';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import Breadcrumb from '@/components/ui/breadcrumb/breadcrumb';
 import Item from '@/components/ui/breadcrumb/item';
 import { Button } from '@/components/ui/button';
@@ -8,11 +9,22 @@ import TextCheckBox from '@/lib/generic-form/fields/TextCheck';
 import TextPassword from '@/lib/generic-form/fields/TextPassword';
 import GenericForm from '@/lib/generic-form/GenericForm';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { z } from 'zod';
+import { userLogin } from './login';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import {
+  setAccessToken,
+  setRefreshToken,
+  setUserDetails,
+} from '@/redux/features/userSlice';
+import useAuth from '@/hooks/useAuth';
 
 const formSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
+  terms: z.boolean().default(false).optional(),
 });
 
 type TFieldValues = z.infer<typeof formSchema>;
@@ -23,8 +35,64 @@ const defaultValues: TFieldValues = {
 };
 
 const LoginPage = () => {
-  const onSubmit = (data: TFieldValues) => {
-    console.log(data);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const { user } = useAuth();
+  const [isSubmitting, setIsSubmitting] = useState(false); // State to track form submission status
+  const [errors, setErrors] = useState<
+    {
+      name: string;
+      message: string;
+    }[]
+  >([]); // State to store error messages
+  const [success, setSuccess] = useState<{
+    isSuccess: boolean;
+    message: string;
+  }>({
+    message: '',
+    isSuccess: false,
+  }); // State to store success status and message
+
+  useEffect(() => {
+    if (user) {
+      const redirect = searchParams.get('redirect');
+      if (redirect) {
+        router.push(redirect);
+      } else {
+        router.push('/dashboard/orders');
+      }
+    }
+  }, [user, router, searchParams]);
+
+  const onSubmit = (values: TFieldValues) => {
+    console.log(values);
+    setIsSubmitting(true);
+    userLogin({ email: values.email, password: values.password })
+      .then(async (data) => {
+        if (Array.isArray(data)) {
+          setSuccess({ isSuccess: false, message: '' });
+          return setErrors(data);
+        }
+        setErrors([]);
+        setSuccess({ isSuccess: true, message: 'Login successful' });
+        dispatch(setAccessToken({ accessToken: data.token.accessToken }));
+        dispatch(setRefreshToken({ refreshToken: data.token.refreshToken }));
+        dispatch(setUserDetails({ userDetails: data.user }));
+
+        // Redirect the user after login
+        const redirect = searchParams.get('redirect');
+        if (redirect) {
+          router.push(redirect);
+        } else {
+          router.push('/dashboard/orders');
+        }
+        // console.log('Login successful');
+        // router.push('/dashboard/orders');
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+      });
   };
 
   const icons = [
@@ -60,6 +128,22 @@ const LoginPage = () => {
             </Link>
           </div>
         </div>
+
+        {/* Display error messages if any */}
+        {errors.length > 0 &&
+          errors.map((error) => (
+            <Alert variant="destructive" key={error.message} className="my-4">
+              <AlertDescription>{error.message}</AlertDescription>
+            </Alert>
+          ))}
+
+        {/* Display success message if login is successful */}
+        {success.isSuccess && (
+          <Alert className="my-4">
+            <AlertDescription>{success.message}</AlertDescription>
+          </Alert>
+        )}
+
         <GenericForm
           schema={formSchema}
           defaultValues={defaultValues}
@@ -90,9 +174,10 @@ const LoginPage = () => {
             <Button
               className="w-full !h-11 bg-[#F6511D] hover:bg-orange-500"
               type="submit"
+              disabled={isSubmitting}
             >
-              {' '}
-              <img src="UserCircle.svg" className="w-5 h-5 text-white" /> Login
+              <img src="UserCircle.svg" className="w-5 h-5 text-white" />{' '}
+              {isSubmitting ? 'Please wait...' : 'Login'}
             </Button>
           </div>
         </GenericForm>

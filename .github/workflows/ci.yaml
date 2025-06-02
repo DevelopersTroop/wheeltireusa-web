@@ -78,6 +78,26 @@ jobs:
           APP_DIR: ${{ secrets.STAGING_PROJECT_DIR }}
           BUCKET_NAME: ${{ secrets.STAGING_S3_BUCKET_NAME }}
 
+      - name: Start or Restart App with PM2
+        run: |
+          echo "$KEY" > private_key.pem
+          chmod 600 private_key.pem
+          ssh -i private_key.pem $USER@$HOST "
+            cd $APP_DIR &&
+            if pm2 show tiremetic-stage-web | grep -q 'online'; then
+              pm2 restart tiremetic-stage-web
+            else
+              pm2 start ecosystem.config.js --only tiremetic-stage-web
+            fi &&
+            pm2 save
+          "
+          rm private_key.pem
+        env:
+          HOST: ${{ secrets.STAGING_HOST }}
+          USER: ${{ secrets.STAGING_USER }}
+          KEY: ${{ secrets.STAGING_KEY }}
+          APP_DIR: ${{ secrets.STAGING_PROJECT_DIR }}
+
       - name: Inject Commit SHA and Reload NGINX using stage-setup.sh
         run: |
           echo "$KEY" > private_key.pem
@@ -92,24 +112,4 @@ jobs:
           USER: ${{ secrets.STAGING_USER }}
           KEY: ${{ secrets.STAGING_KEY }}
           COMMIT_SHA: ${{ env.COMMIT_SHA }}
-          APP_DIR: ${{ secrets.STAGING_PROJECT_DIR }}
-
-      - name: Start or Restart App with PM2
-        run: |
-          echo "$KEY" > private_key.pem
-          chmod 600 private_key.pem
-          ssh -i private_key.pem $USER@$HOST "
-            cd $APP_DIR &&
-            if pm2 list | grep -q 'tiremetic-stage-web'; then
-              pm2 restart tiremetic-stage-web
-            else
-              pm2 start npm --name 'tiremetic-stage-web' -- start
-            fi &&
-            pm2 save
-          "
-          rm private_key.pem
-        env:
-          HOST: ${{ secrets.STAGING_HOST }}
-          USER: ${{ secrets.STAGING_USER }}
-          KEY: ${{ secrets.STAGING_KEY }}
           APP_DIR: ${{ secrets.STAGING_PROJECT_DIR }}

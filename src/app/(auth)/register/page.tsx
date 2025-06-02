@@ -10,15 +10,25 @@ import GenericForm from '@/lib/generic-form/GenericForm';
 import Link from 'next/link';
 import { useState } from 'react';
 import { z } from 'zod';
+import { userRegister } from './register';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+
+const passwordSchema = z
+  .string()
+  .min(8, 'Password must be at least 8 characters') // Minimum length check
+  .regex(/[A-Z]/, 'Password must contain at least one uppercase letter') // Uppercase letter check
+  .regex(/[a-z]/, 'Password must contain at least one lowercase letter') // Lowercase letters check
+  .regex(/\d/, 'Password must contain at least one digit'); // Digit check
 
 const formSchema = z
   .object({
     fullName: z.string().min(5, 'Full name must be at least 5 characters'),
     email: z.string().email('Invalid email'),
-    password: z.string().min(8, 'Password must be at least 8 characters'),
+    password: passwordSchema,
     confirmPassword: z
       .string()
       .min(8, 'Confirm Password must be at least 8 characters'),
+    terms: z.boolean().default(false),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
@@ -32,6 +42,7 @@ const defaultValues: TFieldValues = {
   email: '',
   password: '',
   confirmPassword: '',
+  terms: false,
 };
 
 const rules = [
@@ -56,8 +67,59 @@ const rules = [
 const RegisterPage = () => {
   const [password, setPassword] = useState('');
 
+  const [errors, setErrors] = useState<
+    {
+      message: string;
+      field: string;
+      location: string;
+    }[]
+  >([]); // State to store error messages
+  const [success, setSuccess] = useState<{
+    isSuccess: boolean;
+    message: string;
+  }>({
+    message: '',
+    isSuccess: false,
+  }); // State to store success status and message
+  const [isLoadingRegister, setIsLoadingRegister] = useState(false); // State to track loading status
+
   const onSubmit = (data: TFieldValues) => {
     console.log(data);
+    setIsLoadingRegister(true);
+    userRegister({
+      firstName: data.fullName.split(' ')[0],
+      lastName: data.fullName.split(' ')[1] || '',
+      email: data.email,
+      password: data.password,
+      role: 'customer',
+    })
+      .then((response) => {
+        const { statusCode, data, errors } = response;
+        if (data && statusCode === 201) {
+          // triggerGaSignupEvent({
+          //   email: values.email,
+          //   role: "customer",
+          //   name: `${values.firstName} ${values.lastName}`,
+          // })
+          // resetForm();
+          // setIsVisibleForm(false);
+          setSuccess({
+            isSuccess: true,
+            message: 'Please check your email to verify your account',
+          });
+          setErrors([]);
+          console.log('User registered successfully:', data);
+        } else if (errors) {
+          setErrors(errors);
+          setSuccess({ isSuccess: false, message: '' });
+          console.log('Registration failed:', errors);
+        }
+      })
+      .finally(() => {
+        window.scrollTo(0, 0);
+        setIsLoadingRegister(false);
+        console.log('Registration process completed');
+      });
   };
 
   const icons = [
@@ -95,6 +157,19 @@ const RegisterPage = () => {
             </Link>
           </div>
         </div>
+        {/* Display error messages if any */}
+        {errors.length > 0 &&
+          errors.map((error) => (
+            <Alert variant="destructive" key={error.message} className="mt-4">
+              <AlertDescription>{error.message}</AlertDescription>
+            </Alert>
+          ))}
+        {/* Display success message if registration is successful */}
+        {success.isSuccess && (
+          <Alert className="mt-4">
+            <AlertDescription>{success.message}</AlertDescription>
+          </Alert>
+        )}
         <GenericForm
           schema={formSchema}
           defaultValues={defaultValues}
@@ -122,7 +197,13 @@ const RegisterPage = () => {
               placeholder="Enter your password"
               heading="Password"
               showMessage={true}
-              onChange={(e) => setPassword(e.target.value)}
+              onChangeValidationCheck={(value) => {
+                setPassword(value);
+                // rules.forEach((rule) => {
+                //   rule.isValid(value);
+                // }
+                // );
+              }}
             />
             <div className="text-gray-600 mt-2">
               <p className="mb-1">Password must contain:</p>
@@ -164,10 +245,10 @@ const RegisterPage = () => {
             <Button
               className="w-full !h-11 bg-[#F6511D] hover:bg-orange-500"
               type="submit"
+              disabled={isLoadingRegister}
             >
-              {' '}
               <img src="UserCircle.svg" className="w-5 h-5 text-white" />{' '}
-              Register
+              {isLoadingRegister ? 'Please wait...' : 'Register'}
             </Button>
           </div>
         </GenericForm>
