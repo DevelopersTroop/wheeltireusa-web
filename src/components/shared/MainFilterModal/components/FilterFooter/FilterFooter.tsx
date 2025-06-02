@@ -4,8 +4,7 @@ import { Search } from 'lucide-react';
 import useFilterFooter from './useFilterFooter';
 
 const FilterFooter = () => {
-  const { allTireSizes } = useFilterFooter();
-  console.log('allTireSizes', allTireSizes);
+  const { allTireSizes, submitFilter } = useFilterFooter();
 
   return (
     <>
@@ -15,6 +14,7 @@ const FilterFooter = () => {
             <Button
               disabled={!allTireSizes || allTireSizes?.length === 0}
               className="bg-primary rounded !px-12 py-6 font-normal cursor-pointer disabled:cursor-not-allowed"
+              onClick={submitFilter}
             >
               <span>
                 <Search

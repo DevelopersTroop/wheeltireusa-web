@@ -1,12 +1,17 @@
-import { setMainFilter } from '@/redux/features/mainFilterSlice';
+import {
+  closeMainFilterModal,
+  setMainFilter,
+} from '@/redux/features/mainFilterSlice';
 import { useTypedSelector } from '@/redux/store';
 import { TDriverightData } from '@/types/main-filter';
 import { getSupportedTireSizes } from '@/utils/filter';
-import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { MouseEvent, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 const useFilterFooter = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const selectedYear = useTypedSelector(
     (state) => state.mainFilter.filters.byVehicle.current.year
   );
@@ -111,8 +116,15 @@ const useFilterFooter = () => {
     }
   }, [selectedYear, selectedMake, selectedModel, allBodyTypes, allSubModels]);
 
+  const submitFilter = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    router.push('/collections/product-category/tire');
+    dispatch(closeMainFilterModal());
+  };
+
   return {
     allTireSizes,
+    submitFilter,
   };
 };
 
