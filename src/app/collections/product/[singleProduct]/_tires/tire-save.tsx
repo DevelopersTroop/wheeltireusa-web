@@ -11,7 +11,7 @@ const TireSave = ({ product }: { product: TInventoryItem }) => {
           {/* Save to Email button */}
           <button
             onClick={() => {}}
-            className="group relative flex min-h-14 w-full flex-1 items-center justify-center gap-2 rounded-xl border bg-white transition duration-300 ease-in-out hover:bg-[#1F7A8C] hover:text-white"
+            className="group relative flex min-h-14 w-full flex-1 items-center justify-center gap-2 rounded-xl border bg-white transition duration-300 ease-in-out hover:bg-primary hover:text-white"
           >
             {/* <HiMiniEnvelope className="text-lg text-[#210203] group-hover:text-white" /> */}
             <img src="/Align-Horizonta-Spacing.png" alt="add to comparizon" />
@@ -25,7 +25,7 @@ const TireSave = ({ product }: { product: TInventoryItem }) => {
 
           <button
             onClick={() => {}}
-            className="group relative flex min-h-14 w-full flex-1 items-center justify-center gap-2 rounded-xl border bg-white transition duration-300 ease-in-out hover:bg-[#1F7A8C] hover:text-white"
+            className="group relative flex min-h-14 w-full flex-1 items-center justify-center gap-2 rounded-xl border bg-white transition duration-300 ease-in-out hover:bg-primary hover:text-white"
           >
             <img src="/Bookmark-Circle.png" alt="Save for later" />
 

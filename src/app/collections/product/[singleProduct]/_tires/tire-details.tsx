@@ -145,7 +145,7 @@ const TireDetails = ({ product }: { product: TInventoryItem }) => {
                     </div>
                     <p className="text-base leading-[19px] text-[#210203]">
                       <span className="line-clamp-1 text-base font-normal text-[#210203]">
-                        {product?.spoke_style ? product?.spoke_style : 'N/A'}
+                        {product.spoke_style ? product?.spoke_style : 'N/A'}
                       </span>
                     </p>
                   </div>

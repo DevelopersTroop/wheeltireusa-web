@@ -34,7 +34,7 @@ const QuantityInput = ({
         className={className}
         id={id}
         inputName={name}
-        inputValue={1}
+        inputValue={4}
         maxInputValue={maxQuantity}
         minInputValue={4}
         onDecrease={() => {}}
