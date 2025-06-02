@@ -8,11 +8,11 @@ const initialState: TMainFilter = {
   filters: {
     byVehicle: {
       list: {
-        years: [],
-        makes: [],
-        models: [],
-        bodyTypes: [],
-        subModels: [],
+        years: null,
+        makes: null,
+        models: null,
+        bodyTypes: null,
+        subModels: null,
       },
       current: {
         year: '',
@@ -31,7 +31,7 @@ const initialState: TMainFilter = {
           frontCenterBore: '',
           rearCenterBore: '',
           maxWheelLoad: '',
-          tireSizes: [],
+          tireSizes: null,
           supportedWheels: [],
         },
       },
@@ -77,10 +77,18 @@ const mainFilterSlice = createSlice({
             list: {
               ...state.filters.byVehicle.list,
               ...(action.payload?.filters?.byVehicle?.list ?? {}),
-              subModels: [
-                ...(state.filters.byVehicle.list.subModels ?? []),
-                ...(action.payload?.filters?.byVehicle?.list?.subModels ?? []),
-              ],
+              subModels:
+                [
+                  // ...(state.filters.byVehicle.list.subModels ?? []),
+                  ...(action.payload?.filters?.byVehicle?.list?.subModels ??
+                    []),
+                ].length > 0
+                  ? [
+                      // ...(state.filters.byVehicle.list.subModels ?? []),
+                      ...(action.payload?.filters?.byVehicle?.list?.subModels ??
+                        []),
+                    ]
+                  : null,
             },
             current: {
               ...state.filters.byVehicle.current,

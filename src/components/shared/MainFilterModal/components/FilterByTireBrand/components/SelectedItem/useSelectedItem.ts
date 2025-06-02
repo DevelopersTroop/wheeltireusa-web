@@ -12,7 +12,7 @@ const useSelectedItem = () => {
         filters: {
           byTireBrand: {
             current: {
-              brand: undefined,
+              brand: '',
             },
           },
         },

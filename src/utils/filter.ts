@@ -1,5 +1,31 @@
+import { TDriverightData } from '@/types/main-filter';
 import { TFilters, TPriceFilter, TSingleFilter } from '../types/filter';
 // import defaultLipSizeData from "../../public/default-lip.json";
+
+export function getSupportedTireSizes(
+  data?: TDriverightData | null
+): Record<'front' | 'rear', string>[] | null {
+  if (!data) return null;
+
+  const result = new Set<string>();
+
+  const collect = (front?: string, rear?: string) => {
+    const f = front?.trim();
+    const r = rear?.trim() || f;
+    if (f) result.add(JSON.stringify({ front: f, rear: r }));
+  };
+
+  const primary = data.DRDModelReturn?.PrimaryOption;
+  if (primary) {
+    collect(primary.TireSize, primary.TireSize_R);
+  }
+
+  for (const opt of data.DRDModelReturn?.Options ?? []) {
+    collect(opt.TireSize, opt.TireSize_R);
+  }
+
+  return Array.from(result).map((item) => JSON.parse(item));
+}
 
 export const getPriceFilter = (filters: TFilters) => {
   return 'min' in filters?.price ? filters?.price : { min: 0, max: 0 };

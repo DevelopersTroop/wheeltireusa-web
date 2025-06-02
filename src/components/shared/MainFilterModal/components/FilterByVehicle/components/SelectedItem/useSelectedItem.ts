@@ -11,8 +11,28 @@ const useSelectedItem = () => {
       setMainFilter({
         filters: {
           byVehicle: {
+            list: {
+              bodyTypes: null,
+              subModels: null,
+            },
             current: {
-              model: undefined,
+              model: '',
+              bodyType: '',
+              subModel: {
+                SubModel: '',
+                DRChassisID: '',
+                DRModelID: '',
+              },
+              vehicleInformation: {
+                boltPattern: '',
+                frontRimSize: '',
+                rearRimSize: '',
+                frontCenterBore: '',
+                rearCenterBore: '',
+                maxWheelLoad: '',
+                tireSizes: null,
+                supportedWheels: [],
+              },
             },
           },
         },
@@ -24,9 +44,30 @@ const useSelectedItem = () => {
       setMainFilter({
         filters: {
           byVehicle: {
+            list: {
+              models: null,
+              bodyTypes: null,
+              subModels: null,
+            },
             current: {
-              make: undefined,
-              model: undefined,
+              make: '',
+              model: '',
+              bodyType: '',
+              subModel: {
+                SubModel: '',
+                DRChassisID: '',
+                DRModelID: '',
+              },
+              vehicleInformation: {
+                boltPattern: '',
+                frontRimSize: '',
+                rearRimSize: '',
+                frontCenterBore: '',
+                rearCenterBore: '',
+                maxWheelLoad: '',
+                tireSizes: null,
+                supportedWheels: [],
+              },
             },
           },
         },
@@ -38,10 +79,32 @@ const useSelectedItem = () => {
       setMainFilter({
         filters: {
           byVehicle: {
+            list: {
+              makes: null,
+              models: null,
+              bodyTypes: null,
+              subModels: null,
+            },
             current: {
-              year: undefined,
-              model: undefined,
-              make: undefined,
+              year: '',
+              make: '',
+              model: '',
+              bodyType: '',
+              subModel: {
+                SubModel: '',
+                DRChassisID: '',
+                DRModelID: '',
+              },
+              vehicleInformation: {
+                boltPattern: '',
+                frontRimSize: '',
+                rearRimSize: '',
+                frontCenterBore: '',
+                rearCenterBore: '',
+                maxWheelLoad: '',
+                tireSizes: null,
+                supportedWheels: [],
+              },
             },
           },
         },

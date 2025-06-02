@@ -1,4 +1,5 @@
 import BrickBox from '../../../BrickBox/BrickBox';
+import ListSkeleton from '../../../ListSkeleton/ListSkeleton';
 import Search from '../../../Search/Search';
 import useSelectModel from './useSelectModel';
 
@@ -13,18 +14,26 @@ const SelectModel = () => {
       <div className="text-muted-dark text-[20px] px-6 order-2">
         Select Model
       </div>
-      <div className="grid grid-cols-4 gap-3 px-6 order-4">
-        {filteredModels.map((model) => (
-          <BrickBox
-            showTooltip={true}
-            onClick={setModel}
-            key={model}
-            text={model}
-            filterType="byVehicle"
-            fieldName="model"
-          />
-        ))}
-      </div>
+      {filteredModels ? (
+        <>
+          <div className="grid grid-cols-4 gap-3 px-6 order-4">
+            {filteredModels.map((model) => (
+              <BrickBox
+                showTooltip={true}
+                onClick={setModel}
+                key={model}
+                text={model}
+                filterType="byVehicle"
+                fieldName="model"
+              />
+            ))}
+          </div>
+        </>
+      ) : (
+        <>
+          <ListSkeleton onlyItem={true} />
+        </>
+      )}
     </>
   );
 };

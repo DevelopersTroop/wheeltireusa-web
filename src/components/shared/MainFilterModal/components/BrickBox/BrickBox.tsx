@@ -38,7 +38,6 @@ const BrickBoxWithoutTooltip = ({
 }: BrickBoxProps) => {
   const [isCheckedState, setIsCheckedState] = useState(checked);
   const mainFilterState = useTypedSelector((state) => state.mainFilter);
-  console.log('Rendered');
 
   useEffect(() => {
     // @ts-expect-error Hasib will fix this TS error

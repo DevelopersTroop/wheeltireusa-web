@@ -1,4 +1,5 @@
 import BrickBox from '../../../BrickBox/BrickBox';
+import ListSkeleton from '../../../ListSkeleton/ListSkeleton';
 import Search from '../../../Search/Search';
 import useSelectMake from './useSelectMake';
 const SelectMake = () => {
@@ -19,18 +20,26 @@ const SelectMake = () => {
       <div className="text-muted-dark text-[20px] px-6 order-3">
         Select Make
       </div>
-      <div className="grid grid-cols-5 gap-3 px-6 order-4">
-        {filteredMakes.map((make) => (
-          <BrickBox
-            showTooltip={true}
-            onClick={setMake}
-            key={make}
-            text={make}
-            filterType="byVehicle"
-            fieldName="make"
-          />
-        ))}
-      </div>
+      {filteredMakes ? (
+        <>
+          <div className="grid grid-cols-5 gap-3 px-6 order-4">
+            {filteredMakes?.map((make) => (
+              <BrickBox
+                showTooltip={true}
+                onClick={setMake}
+                key={make}
+                text={make}
+                filterType="byVehicle"
+                fieldName="make"
+              />
+            ))}
+          </div>
+        </>
+      ) : (
+        <>
+          <ListSkeleton onlyItem={true} />
+        </>
+      )}
     </>
   );
 };

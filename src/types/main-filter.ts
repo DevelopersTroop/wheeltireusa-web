@@ -1,13 +1,15 @@
 export type TMainFilterList = {
-  years: string[];
-  makes: string[];
-  models: string[];
-  bodyTypes: string[];
-  subModels: {
-    SubModel: string;
-    DRChassisID: string;
-    DRModelID: string;
-  }[];
+  years: string[] | null;
+  makes: string[] | null;
+  models: string[] | null;
+  bodyTypes: string[] | null;
+  subModels:
+    | {
+        SubModel: string;
+        DRChassisID: string;
+        DRModelID: string;
+      }[]
+    | null;
 };
 
 export type TMainFilterSubModel = {
@@ -32,7 +34,7 @@ export type TMainFilterVehicleInformation = {
   frontCenterBore: string;
   rearCenterBore: string;
   maxWheelLoad: string;
-  tireSizes: Record<'front' | 'rear', string>[];
+  tireSizes: Record<'front' | 'rear', string>[] | null;
 };
 
 export type TMainFilter = {
@@ -72,5 +74,18 @@ export type TMainFilter = {
         rearTireAspectRatio: string;
       };
     };
+  };
+};
+
+export type TDriverightData = {
+  DRDModelReturn?: {
+    PrimaryOption?: {
+      TireSize?: string;
+      TireSize_R?: string;
+    };
+    Options?: {
+      TireSize?: string;
+      TireSize_R?: string;
+    }[];
   };
 };

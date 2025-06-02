@@ -1,4 +1,5 @@
 import BrickBox from '../../../BrickBox/BrickBox';
+import ListSkeleton from '../../../ListSkeleton/ListSkeleton';
 import Search from '../../../Search/Search';
 import useSelectYear from './useSelectYear';
 
@@ -13,18 +14,26 @@ const SelectYear = () => {
       <div className="text-muted-dark text-[20px] px-6 order-3">
         Select Year
       </div>
-      <div className="grid grid-cols-5 gap-3 px-6 order-5">
-        {filteredYears.map((year) => (
-          <BrickBox
-            showTooltip={true}
-            onClick={setYear}
-            key={year}
-            text={year}
-            filterType="byVehicle"
-            fieldName="year"
-          />
-        ))}
-      </div>
+      {filteredYears ? (
+        <>
+          <div className="grid grid-cols-5 gap-3 px-6 order-5">
+            {filteredYears?.map((year) => (
+              <BrickBox
+                showTooltip={true}
+                onClick={setYear}
+                key={year}
+                text={year}
+                filterType="byVehicle"
+                fieldName="year"
+              />
+            ))}
+          </div>
+        </>
+      ) : (
+        <>
+          <ListSkeleton onlyItem={true} />
+        </>
+      )}
     </>
   );
 };

@@ -1,72 +1,105 @@
 import { setMainFilter } from '@/redux/features/mainFilterSlice';
+import { useTypedSelector } from '@/redux/store';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-const makeData = {
-  statusCode: 200,
-  response: true,
-  message: 'Get makes successfully',
-  data: {
-    makes: [
-      'Acura',
-      'Alfa Romeo',
-      'Aston Martin',
-      'Audi',
-      'Bentley',
-      'BMW',
-      'BrightDrop',
-      'Buick',
-      'Cadillac',
-      'Chevrolet',
-      'Chrysler',
-      'Dodge',
-      'Ferrari',
-      'Fiat',
-      'Fisker',
-      'Ford',
-      'Genesis',
-      'GMC',
-      'Honda',
-      'Hyundai',
-      'INEOS',
-      'INFINITI',
-      'Jaguar',
-      'Jeep',
-      'Karma',
-      'Kia',
-      'Lamborghini',
-      'Land Rover',
-      'Lexus',
-      'Lincoln',
-      'Lotus',
-      'Lucid',
-      'Maserati',
-      'Mazda',
-      'McLaren',
-      'Mercedes-Benz',
-      'Mini',
-      'Mitsubishi',
-      'Nissan',
-      'Polestar',
-      'Porsche',
-      'Ram',
-      'Rivian',
-      'Rolls-Royce',
-      'Subaru',
-      'Tesla',
-      'Toyota',
-      'VinFast',
-      'Volkswagen',
-      'Volvo',
-    ],
-  },
-};
+// const makeData = {
+//   statusCode: 200,
+//   response: true,
+//   message: 'Get makes successfully',
+//   data: {
+//     makes: [
+//       'Acura',
+//       'Alfa Romeo',
+//       'Aston Martin',
+//       'Audi',
+//       'Bentley',
+//       'BMW',
+//       'BrightDrop',
+//       'Buick',
+//       'Cadillac',
+//       'Chevrolet',
+//       'Chrysler',
+//       'Dodge',
+//       'Ferrari',
+//       'Fiat',
+//       'Fisker',
+//       'Ford',
+//       'Genesis',
+//       'GMC',
+//       'Honda',
+//       'Hyundai',
+//       'INEOS',
+//       'INFINITI',
+//       'Jaguar',
+//       'Jeep',
+//       'Karma',
+//       'Kia',
+//       'Lamborghini',
+//       'Land Rover',
+//       'Lexus',
+//       'Lincoln',
+//       'Lotus',
+//       'Lucid',
+//       'Maserati',
+//       'Mazda',
+//       'McLaren',
+//       'Mercedes-Benz',
+//       'Mini',
+//       'Mitsubishi',
+//       'Nissan',
+//       'Polestar',
+//       'Porsche',
+//       'Ram',
+//       'Rivian',
+//       'Rolls-Royce',
+//       'Subaru',
+//       'Tesla',
+//       'Toyota',
+//       'VinFast',
+//       'Volkswagen',
+//       'Volvo',
+//     ],
+//   },
+// };
 // Custom hook
 const useSelectMake = () => {
   const dispatch = useDispatch();
+  const allMakes = useTypedSelector(
+    (state) => state.mainFilter.filters.byVehicle.list.makes
+  );
+  const selectedYear = useTypedSelector(
+    (state) => state.mainFilter.filters.byVehicle.current.year
+  );
   const [search, setSearch] = useState('');
   const [alphabets, setAlphabets] = useState<string[]>([]);
-  const [filteredMakes, setFilteredMakes] = useState(makeData.data.makes);
+  const [filteredMakes, setFilteredMakes] = useState<string[] | null>(null);
+
+  useEffect(() => {
+    if (!allMakes) {
+      fetch(
+        `https://api.driverightdata.com/eu/api/aaia/GetAAIAManufacturers?username=Tire_Wheel_Experts&securityToken=0b035d5ccecc43f2a9adce9849c7024e&year=${selectedYear}&regionID=1`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          // set all makes to the state
+          dispatch(
+            setMainFilter({
+              filters: {
+                byVehicle: {
+                  list: {
+                    makes: data.map(
+                      (make: { Manufacturer: string }) => make.Manufacturer
+                    ),
+                  },
+                },
+              },
+            })
+          );
+        });
+    }
+  }, [allMakes, selectedYear]);
+
   const setMake = (e: React.MouseEvent<HTMLButtonElement>) => {
     dispatch(
       setMainFilter({
@@ -87,19 +120,19 @@ const useSelectMake = () => {
         if (search || alphabets.length > 0) {
           const searchedWithText =
             search !== ''
-              ? makeData.data.makes.filter((make) =>
+              ? allMakes?.filter((make) =>
                   make.toLowerCase().includes(search.toLowerCase())
                 )
-              : makeData.data.makes;
+              : (allMakes ?? null);
           const searchedWithAlphabet =
             alphabets.length > 0
-              ? searchedWithText.filter((make) =>
+              ? searchedWithText?.filter((make) =>
                   alphabets.includes(make.charAt(0).toLowerCase())
                 )
-              : searchedWithText;
-          return searchedWithAlphabet;
+              : (searchedWithText ?? null);
+          return searchedWithAlphabet ?? null;
         }
-        return makeData.data.makes;
+        return allMakes ?? null;
       });
     }, 300); // debounce delay in ms
 
@@ -107,7 +140,7 @@ const useSelectMake = () => {
     return () => {
       clearTimeout(handler);
     };
-  }, [search, alphabets, makeData.data.makes]);
+  }, [search, alphabets, allMakes]);
 
   return { search, filteredMakes, setSearch, setMake, alphabets, setAlphabets };
 };
