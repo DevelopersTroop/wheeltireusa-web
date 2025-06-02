@@ -46,7 +46,7 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
       </Container>
       <div className="max-w-[1450px] mx-auto w-full px-5 lg:px-16 pb-20 lg:pb-30 pt-3">
         {/* Mobile filter sidebar */}
-        <div className="w-full lg:hidden pb-3 pt-1 lg:pt-3">
+        <div className="w-full min-[1300px]:hidden pb-3 pt-1 lg:pt-3">
           <SidebarTireFilters>
             <TireFilters />
           </SidebarTireFilters>
@@ -54,7 +54,7 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
         {/* Main content layout */}
         <div className="flex w-full gap-8 pt-2 lg:pt-0">
           {/* Filters section (visible on large screens) */}
-          <div className={'hidden lg:block lg:w-[304px]'}>
+          <div className={'hidden min-[1300px]:block min-[1300px]:w-[304px]'}>
             <div className="pt-[22px] pb-5">
               <p className="text-base leading-[19px] text-[#504949]">
                 <span className="text-[#504949] text-base font-normal">
@@ -68,7 +68,7 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
           {isLoading ? (
             <div
               className={
-                'w-full lg:w-3/4 grid gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 auto-rows-min pt-16'
+                'w-full min-[1300px]:w-3/4 grid gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 auto-rows-min pt-16'
               }
             >
               {Array(12)
@@ -81,7 +81,7 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
             <>
               {/* Display message when no products are found */}
               <div className="w-full flex flex-col">
-                <div className="hidden lg:block py-3">
+                <div className="hidden min-[1300px]:block py-3">
                   <TireFilterAndSort />
                 </div>
                 <NoProductsFound />{' '}
@@ -92,7 +92,7 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
             <>
               <div className="w-full">
                 {/* Display products if available */}
-                <div className="hidden lg:block py-3">
+                <div className="hidden min-[1300px]:block py-3">
                   <TireFilterAndSort />
                 </div>
                 <div className={'w-full flex flex-col gap-y-4'}>
@@ -122,7 +122,7 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
         {/* Pagination */}
         {data?.products && (
           <div className={'flex flex-row-reverse w-full pt-8'}>
-            <div className={'w-full lg:w-3/4 text-center'}>
+            <div className={'w-full min-[1300px]:w-3/4 text-center'}>
               <ProductPagination
                 searchParams={new URLSearchParams(searchParams)}
                 categorySlug={categorySlug}

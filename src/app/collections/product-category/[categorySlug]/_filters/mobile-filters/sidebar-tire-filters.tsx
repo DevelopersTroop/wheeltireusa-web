@@ -20,19 +20,20 @@ const SidebarTireFilters = ({ children }: SidebarProps) => {
   const [isOpenFilter, setIsOpenFilter] = useState(false);
 
   // const toggleFilter = () => setIsOpenFilter((prev) => !prev);
-  const openFilter = () => setIsOpenFilter(true);
-  const closeFilter = () => setIsOpenFilter(false);
+  // const openFilter = () => setIsOpenFilter(true);
+  // const closeFilter = () => setIsOpenFilter(false);
 
   return (
-    <div>
+    <div id="filter">
       {/* Filter Button: Toggles the off-canvas filter menu visibility */}
       <div className="flex justify-between">
         <button
           className="rounded-xl border border-[#CFCFCF] px-4 w-[93px]  h-[41px]"
           // onClick={() => dispatch(toggleFilter())}
+          onClick={() => setIsOpenFilter((prev) => !prev)}
         >
           <p className="flex gap-1 items-center text-[#210203]">
-            <img src="filterIcon.png" alt="icon" className="w-4 h-4" />
+            <img src="/filterIcon.png" alt="icon" className="w-4 h-4" />
             <span className="font-normal text-sm">Filter</span>
           </p>
         </button>
@@ -47,16 +48,16 @@ const SidebarTireFilters = ({ children }: SidebarProps) => {
       {/* Off-Canvas Menu: Displays the filter menu as an off-canvas sliding panel */}
       <Menu
         isOpen={isOpenFilter}
-        onOpen={() => openFilter()}
-        onClose={() => closeFilter()}
+        onOpen={() => setIsOpenFilter(true)}
+        onClose={() => setIsOpenFilter(false)}
         customCrossIcon={<MdOutlineClose />}
         styles={{
           bmMenuWrap: {
-            top: '85px',
+            top: '81px',
             left: '0px',
           },
           bmOverlay: {
-            top: '85px',
+            top: '81px',
             left: '0px',
           },
           bmCross: {

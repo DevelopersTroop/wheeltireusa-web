@@ -1,18 +1,17 @@
 import DeliveryWithStock from '@/app/cart/_components/delivery-with-stock';
 import PaymentMessaging from '@/components/shared/payment-method-messaging';
 import { TInventoryItem } from '@/types/product';
-import { s3BucketUrl } from '@/utils/api';
 import { getPrice } from '@/utils/price';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useMemo } from 'react';
+import ComparisonWithFavorite from './comparisonwithfavorite';
 import PriceSet from './price-set';
 import TireAttributes from './tire-attributes';
 import TireCardButton from './tire-card-button';
 import TireCardPrice from './tire-card-price';
 import TireQuantity from './tire-quantity';
 import TireRating from './tire-rating';
-import ComparisonWithFavorite from './comparisonwithfavorite';
 
 const TireCard = ({
   products,
@@ -84,7 +83,7 @@ const TireCard = ({
         <TireRating />
         <ComparisonWithFavorite />
       </div>
-      <div className="pl-5 pr-0 flex flex-col sm:flex-row gap-6 self-stretch w-full">
+      <div className="pl-5 pr-0 flex flex-col md:flex-row gap-6 self-stretch w-full">
         <div className="w-full h-full sm:w-auto my-auto flex justify-center items-center  ">
           {/* <div className='flex flex-row justify-between w-full'>
             <TireRating />
@@ -122,18 +121,20 @@ const TireCard = ({
                 <TireAttributes product={products[0] as TInventoryItem} />
               </Link>
             </div>
-            <div className="flex flex-row justify-between items-center w-full pr-4">
+            <div className="flex flex-col lg:flex-row justify-between items-start gap-4 w-full pr-4">
               <div>
                 {/* <StockBadge /> */}
                 <DeliveryWithStock deliveryTime="Monday, 05/22" />
               </div>
-
-              <TireQuantity quantity={frontTireQuantity} />
-              <TireCardPrice
-                price={getPrice(products[0]?.msrp, products[0]?.price)?.toFixed(
-                  2
-                )}
-              />
+              <div className="flex flex-row items-center w-full">
+                <TireQuantity quantity={frontTireQuantity} />
+                <TireCardPrice
+                  price={getPrice(
+                    products[0]?.msrp,
+                    products[0]?.price
+                  )?.toFixed(2)}
+                />
+              </div>
             </div>
           </div>
 
@@ -159,19 +160,20 @@ const TireCard = ({
                   </Link>
                 </div>
 
-                <div className="flex flex-row justify-between items-center w-full pr-4">
+                <div className="flex flex-col lg:flex-row justify-between items-start gap-4 w-full pr-4">
                   <div>
                     {/* <StockBadge /> */}
                     <DeliveryWithStock deliveryTime="Monday, 05/22" />
                   </div>
-
-                  <TireQuantity quantity={frontTireQuantity} />
-                  <TireCardPrice
-                    price={getPrice(
-                      products[0]?.msrp,
-                      products[0]?.price
-                    )?.toFixed(2)}
-                  />
+                  <div className="flex flex-row items-center w-full">
+                    <TireQuantity quantity={frontTireQuantity} />
+                    <TireCardPrice
+                      price={getPrice(
+                        products[1]?.msrp,
+                        products[1]?.price
+                      )?.toFixed(2)}
+                    />
+                  </div>
                 </div>
               </div>
             </>

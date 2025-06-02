@@ -38,7 +38,7 @@ const TireFilterAndSort = () => {
     <div className="w-full flex justify-between gap-8">
       {/* Filter display section (only visible if there are active filters) */}
       <div
-        className={`hidden lg:w-2/3 lg:flex flex-wrap gap-2 ${filterOptions.length > 0 && 'pb-5'}  `}
+        className={`hidden min-[1300px]:w-2/3 min-[1300px]:flex flex-wrap gap-2 ${filterOptions.length > 0 && 'pb-5'}  `}
       >
         {/* Display each filter option as a button */}
         {filterOptions.length > 0
@@ -92,7 +92,7 @@ const TireFilterAndSort = () => {
         )}
       </div>
       {/* Sorting section */}
-      <div className="w-full lg:w-1/3 flex flex-row gap-3 items-start justify-end -mt-1.5">
+      <div className="w-full min-[1300px]:w-1/3 flex flex-row gap-3 items-start justify-end -mt-1.5">
         <p className="pt-1 text-base leading-[19px] flex items-center text-[#504949]">
           <span className="text-[#504949] text-base font-normal whitespace-nowrap">
             Sort by

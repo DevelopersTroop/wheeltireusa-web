@@ -22,8 +22,8 @@ const TireAttributes = ({ product }: { product: TInventoryItem }) => {
             </small>
           </div>
           <p className="text-base leading-[19px] text-[#210203]">
-            <span className="text-[#210203] text-base font-semibold group-hover:text-[#ffffff]">
-              {product?.tire_size}
+            <span className="text-[#212227] text-base font-normal group-hover:text-[#ffffff]">
+              {product?.tire_size ? product?.tire_size : 'N/A'}
             </span>
           </p>
         </div>
@@ -48,8 +48,8 @@ const TireAttributes = ({ product }: { product: TInventoryItem }) => {
             </small>
           </div>
           <p className="text-base leading-[19px] text-[#210203]">
-            <span className="text-[#210203] text-base font-semibold group-hover:text-[#ffffff]">
-              {product?.sidewall}
+            <span className="text-[#212227] text-base font-normal group-hover:text-[#ffffff]">
+              {product?.sidewall ? product?.sidewall : 'N/A'}
             </span>
           </p>
         </div>
@@ -72,8 +72,8 @@ const TireAttributes = ({ product }: { product: TInventoryItem }) => {
             </small>
           </div>
           <p className="text-base leading-[19px] text-[#210203]">
-            <span className="text-[#210203] text-base font-semibold group-hover:text-[#ffffff]">
-              {product?.load_rating}
+            <span className="text-[#212227] text-base font-normal group-hover:text-[#ffffff]">
+              {product?.load_rating ? product?.load_rating : 'N/A'}
             </span>
           </p>
         </div>
@@ -98,9 +98,10 @@ const TireAttributes = ({ product }: { product: TInventoryItem }) => {
               </small>
             </div>
             <p className="text-base leading-[19px] text-[#210203]">
-              <span className="text-[#210203] text-base font-semibold group-hover:text-[#ffffff]">
-                {product?.tire_load_index}
-                {product?.speed_rating}
+              <span className="text-[#212227] text-base font-normal group-hover:text-[#ffffff]">
+                {product?.tire_load_index && product?.speed_rating
+                  ? `${product.tire_load_index}${product.speed_rating}`
+                  : 'N/A'}
               </span>
             </p>
           </div>

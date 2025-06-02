@@ -1,6 +1,38 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+[class^="icon-"],
+[class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: "icomoon" !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-bolt-pattern:before {
+  content: "\e900";
+}
+
+.icon-finish:before {
+  content: "\e901";
+}
+
+.icon-lip-size:before {
+  content: "\e902";
+}
+
+.icon-size:before {
+  content: "\e903";
+}
+
 @theme inline {
   --breakpoint-2xl: 110rem;
   --spacing-sm: 1rem;
