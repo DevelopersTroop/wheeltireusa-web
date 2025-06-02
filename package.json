@@ -9,7 +9,7 @@
     "start": "next start -p 3001",
     "lint": "next lint",
     "prepare": "husky",
-    "lint-staged": "lint-staged && dotenv -e ./.env.production -- next build"
+    "lint-staged": "lint-staged"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",

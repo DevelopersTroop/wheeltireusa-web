@@ -10,7 +10,10 @@ const products = baseApi.injectEndpoints({
     >({
       query: (params) => ({ params, url: '/products/list' }),
     }),
+    getProduct: builder.query<{ product: TInventoryItem }, string>({
+      query: (slug) => ({ url: `/products/${slug}` }),
+    }),
   }),
 });
 
-export const { useGetProductsQuery } = products;
+export const { useGetProductsQuery, useGetProductQuery } = products;

@@ -110,7 +110,6 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
                           hasDually: false,
                           hasOffRoad: false,
                         }}
-                        cartPackage={searchParams.get('cartPackage') || null}
                       />
                     );
                   })}

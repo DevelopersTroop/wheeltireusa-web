@@ -16,7 +16,6 @@ import TireRating from './tire-rating';
 const TireCard = ({
   products,
   wheelInfo,
-  cartPackage,
 }: {
   products: TInventoryItem[];
   wheelInfo: {
@@ -25,7 +24,6 @@ const TireCard = ({
     hasDually: boolean;
     hasOffRoad: boolean;
   };
-  cartPackage: string | null;
 }) => {
   const isSquare = products.length === 1; // Check if the tire set is square (all tires same size)
   const frontTireQuantity =
@@ -33,12 +31,12 @@ const TireCard = ({
   const rearTireQuantity =
     wheelInfo.rearForging === 'Dually' && !isSquare ? 4 : !isSquare ? 2 : 0; // Determine rear tire quantity based on the wheel type
 
-  let singleTirePageLink = `/collections/product/${products[0]?.slug}?cartPackage=${cartPackage}`; // Link to the tire's product page
+  const singleTirePageLink = `/collections/product/${products[0]?.slug}`; // Link to the tire's product page
 
-  if (products[1]) {
-    // If a second tire exists (for non-square sets)
-    singleTirePageLink += `&rearTire=${products[1].slug}`;
-  }
+  // if (products[1]) {
+  //   // If a second tire exists (for non-square sets)
+  //   singleTirePageLink += `&rearTire=${products[1].slug}`;
+  // }
 
   const totalPrice = useMemo(() => {
     const frontPrice = getPrice(products[0]?.msrp, products[0]?.price)?.toFixed(
@@ -68,8 +66,7 @@ const TireCard = ({
         <h4 className="text-2xl leading-[29px] text-[#210203]">
           <span className="text-[#210203] text-2xl font-bold uppercase">
             <Link href={singleTirePageLink}>
-              {products[0]?.brand} {products[0]?.model_group}{' '}
-              {products[0]?.tire_size}{' '}
+              {products[0]?.brand} {products[0]?.model} {products[0]?.tire_size}{' '}
               {products[0]?.tire_size !== products[1]?.tire_size &&
               typeof products[1]?.tire_size !== 'undefined'
                 ? `AND ${products[1]?.tire_size}`

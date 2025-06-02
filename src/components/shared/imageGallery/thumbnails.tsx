@@ -12,7 +12,7 @@ export const Thumbnail: React.FC<{ src: string; active: boolean }> = ({
       <Image
         priority={active ? true : false}
         className="z-10"
-        src={src}
+        src={src?.length > 0 ? src : '/not-available.webp'}
         alt=""
         width={100}
         height={100}

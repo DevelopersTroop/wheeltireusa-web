@@ -18,7 +18,7 @@ const CardDescription = ({
     <div className="flex flex-col gap-4 justify-center items-start self-stretch relative w-full">
       <div className="inline-block">
         <h4 className="text-2xl leading-[29px] font-bold text-[#210203] line-clamp-1 lg:line-clamp-2">
-          {product?.model_group}
+          {product?.model}
         </h4>
       </div>
       {/* Show inventory status and details only if showOnlyPrice is false */}

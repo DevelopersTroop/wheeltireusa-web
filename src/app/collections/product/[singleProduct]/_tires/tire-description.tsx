@@ -1,7 +1,9 @@
 import { TInventoryItem } from '@/types/product';
 import React, { useState } from 'react';
 
-const TireDescription: React.FC<{ product: TInventoryItem }> = () => {
+const TireDescription: React.FC<{ product: TInventoryItem }> = ({
+  product,
+}) => {
   const [activeTab, setActiveTab] = useState('Description');
 
   const renderContent = () => {
@@ -9,12 +11,7 @@ const TireDescription: React.FC<{ product: TInventoryItem }> = () => {
       case 'Description':
         return (
           <div className="space-y-6">
-            <p>
-              Looking for a tire that delivers year-round confidence? The [Tire
-              Brand and Model] is an all-season tire designed for passenger
-              vehicles, built to handle changing road conditions with ease and
-              comfort.
-            </p>
+            <p>{product?.description}</p>
 
             <h2 className="font-semibold text-lg">
               Key Features Youll Appreciate:

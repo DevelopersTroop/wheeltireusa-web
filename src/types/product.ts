@@ -9,9 +9,10 @@ export type TInventoryItem = {
   item_type?: string;
   item_class?: string;
   brand?: string;
-  model_group?: string;
+  model?: string;
   category?: TCategory;
   forging_style?: string;
+  spoke_style?: string;
   wheel_size?: string;
   wheel_diameter?: string;
   wheel_width?: string;
