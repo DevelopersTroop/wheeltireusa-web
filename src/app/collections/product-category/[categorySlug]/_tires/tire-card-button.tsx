@@ -1,10 +1,12 @@
 'use client';
+import { addToCart } from '@/redux/features/cartSlice';
+import { useAppDispatch } from '@/redux/store';
 // import { addToCart, removeTireFromCart } from '@/app/globalRedux/features/cart/cart-slice'; // Import Redux actions to add/remove items from the cart
 // import { RootState } from '@/app/globalRedux/store'; // Import RootState to access the Redux store's state
 // import { TCartProduct } from '@/app/types/cart'; // Import type for cart product
 // import { getPrice } from '@/app/utils/price'; // Utility function to format price
 import { TInventoryItem } from '@/types/product';
-// import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 const TireCardButton = ({
   products,
@@ -22,69 +24,21 @@ const TireCardButton = ({
   frontTireQuantity: number;
   rearTireQuantity: number;
 }) => {
-  // const dispatch = useDispatch() // Redux dispatch hook for dispatching actions
-  // const router = useRouter(); // Next.js router for navigating between pages
-  // const searchParams = useSearchParams();
-  // const cart: { [sku: string]: TCartProduct } = useSelector((state: RootState) => state.persisted.cart.products);
+  const dispatch = useAppDispatch();
+  const handleAddToCart = () => {
+    console.log(products);
+    const cartPackage = uuidv4();
+    const cartProducts = products.map((p, id) => ({
+      ...p,
+      cartPackage,
+      quantity: id === 0 ? frontTireQuantity : rearTireQuantity,
+    }));
 
-  console.log('wheelInfo', wheelInfo);
-  console.log('products', products);
-  console.log('frontTireQuantity', frontTireQuantity);
-  console.log('rearTireQuantity', rearTireQuantity);
-
-  // Access vehicle information from the store
-  // const { year, make, model, bodyType, subModel } = useSelector((state: RootState) => state.persisted.yearMakeModel)
-
-  // Function to add tire to the cart
-  // const addTireToCart = async (product: TInventoryItem, inventoryQuantity: number, cartPackage: string, isFrontTire: boolean) => {
-  //     //remove all tire (where cartProduct.item_class = "Tire") first if any tire contain the same cartPackage;
-  //     Object.keys(cart).forEach((cartSerial) => {
-  //         if (cart[cartSerial].cartPackage === cartPackage && cart[cartSerial].item_class === "Tire") {
-  //             dispatch(removeTireFromCart(cartPackage))
-  //         }
-  //     })
-
-  //     // Dispatch action to add tire to cart
-  //     dispatch(addToCart({
-  //         product: {
-  //             ...product,
-  //             _id: product._id,
-  //             slug: product.slug,
-  //             image: product.item_image,
-  //             title: product.title,
-  //             maxInventory: inventoryQuantity,
-  //             inventoryStep: inventoryQuantity,
-  //             minInventory: inventoryQuantity,
-  //             sku: product.sku,
-  //             singleQuantityPrice: getPrice(product.msrp, product.price),
-  //             totalPrice: getPrice(product.msrp, product.price) * inventoryQuantity,
-  //             // vehicleInformation: `${year} ${make} ${model} ${bodyType} ${subModel}`,
-  //             quantity: inventoryQuantity,
-  //             cartPackage: cartPackage,
-  //             cartSerial: uuidv4(),
-  //             isFrontTire: isFrontTire,
-  //             isRearTire: !isFrontTire
-  //         }
-  //     }))
-  // }
-
-  // Handle button click event
-  // const onClick = (_e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-  //     addTireToCart(products[0], frontTireQuantity, searchParams.get("cartPackage")!, true).then(() => {
-  //         if (products.length > 1 && rearTireQuantity > 0) {
-  //             addTireToCart(products[1], rearTireQuantity, searchParams.get("cartPackage")!, false).then(() => {
-  //                 router.push(`/collections/product-category/accessories?cartPackage=${searchParams.get("cartPackage")!}`)
-  //             })
-  //         }
-  //     }).finally(() => {
-  //         if (!(products.length > 1 && rearTireQuantity > 0)) {
-  //             router.push(`/collections/product-category/accessories?cartPackage=${searchParams.get("cartPackage")!}`)
-  //         }
-  //     })
-  // }
+    dispatch(addToCart(cartProducts));
+  };
   return (
     <button
-      //   onClick={onClick} // Attach the onClick handler to the button
+      onClick={handleAddToCart} // Attach the onClick handler to the button
       className="rounded-md px-6 flex gap-2 justify-center items-center relative w-[204px] h-14 bg-[#F6511D] hover:bg-[#f6501df3] hover:text-white transition duration-300 ease-in-out"
     >
       <svg

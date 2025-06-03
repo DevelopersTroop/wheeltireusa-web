@@ -10,7 +10,7 @@ export const apiInstance = axios.create({
 
 apiInstance.interceptors.request.use((req) => {
   if (typeof window !== 'undefined') {
-    const storedData = localStorage.getItem('persist:amani-forged-store');
+    const storedData = localStorage.getItem('persist:tirematic-store');
     if (storedData) {
       const parsedData = JSON.parse(storedData);
       if (!parsedData?.user?.length) return req;

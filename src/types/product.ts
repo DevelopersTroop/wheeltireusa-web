@@ -19,6 +19,7 @@ export type TInventoryItem = {
   wheel_width?: string;
   finish?: string;
   lip_size?: string;
+  partnumber: string;
   offset?: string;
   description: string;
   bolt_pattern_1?: string;

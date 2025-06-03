@@ -49,10 +49,10 @@ const TireWishlist = ({ product }: { product: TInventoryItem }) => {
         saveToLater({
           slug: product?.slug,
           data: {
-            title: product?.title,
+            title: product?.title || product?.description,
             category: product?.category,
-            item_image: product?.item_image,
-            sku: product?.sku,
+            image_url: product?.image_url,
+            part_number: product?.partnumber,
           },
         });
       }}

@@ -9,9 +9,10 @@ export type WishList = {
   slug: string;
   data: {
     title: string;
+    image_url: string;
+    part_number: string;
     category: TCategory;
-    sku: string;
-    item_image: string;
+    slug: string;
     // currentCustomWheel: RootState["persisted"]["customWheel"]["customWheels"][string];
   };
 };
@@ -20,7 +21,8 @@ export type WishList = {
 export type TWishListData = {
   wishlist_id: string;
   title: string;
-  item_image: string;
+  image_url: string;
+  part_number: string;
   category: TCategory;
   slug: string;
 };
@@ -50,7 +52,8 @@ export type TWishlistItem = {
 
 export type TWishlistItemData = {
   title: string;
+  image_url: string;
+  part_number: string;
   category: TCategory;
-  item_image: string;
-  sku: string;
+  slug: string;
 };

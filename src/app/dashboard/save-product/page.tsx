@@ -1,8 +1,15 @@
 'use client'; // Enables client-side rendering for this component
 
+import LoadingSpinner from '@/components/shared/loading/spinner';
+import useAuth from '@/hooks/useAuth';
+import {
+  useGetWishlistQuery,
+  useRemoveWishlistMutation,
+} from '@/redux/apis/wishlist';
 import { s3BucketUrl } from '@/utils/api';
 import Image from 'next/image';
 import Link from 'next/link'; // Next.js Link for navigation
+import { useRouter } from 'next/navigation';
 
 // Demo data for wishlist
 type WishlistCategory = {
@@ -21,58 +28,18 @@ type WishlistData = {
   wishlists: WishlistItem[];
 };
 
-const data: WishlistData = {
-  wishlists: [
-    {
-      wishlist_id: '1',
-      title: 'All-Season Radial Tire',
-      slug: 'all-season-radial-tire',
-      item_image: 'ns-products/tire.webp',
-      category: { title: 'Tires' },
-    },
-    {
-      wishlist_id: '2',
-      title: 'Performance Brake Pads',
-      slug: 'performance-brake-pads',
-      item_image: 'ns-products/tire.webp',
-      category: { title: 'Tires' },
-    },
-  ],
-};
-
 const SaveProduct = () => {
-  // const router = useRouter();
-  // const { user } = useAuth();
+  const router = useRouter();
+  const { user } = useAuth();
 
-  // // Fetch wishlist data
-  // const { isLoading: loading, data } = useGetWishlistQuery();
+  // Fetch wishlist data
+  const { isLoading: loading, data } = useGetWishlistQuery();
 
-  // // Function to handle wishlist item deletion
-  // const [removeWishlist] = useRemoveWishlistMutation();
-  // const handleOnclick = async (wishlist_id: string) => {
-  //   // setLoading(true);
-  //   const response = await fetch(
-  //     `${apiBaseUrl}/wishlists/${wishlist_id}?force=true`,
-  //     {
-  //       method: "DELETE",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${user?.accessToken}`,
-  //       },
-  //     }
-  //   );
-  //   const result = await response.json();
+  // Function to handle wishlist item deletion
+  const [removeWishlist] = useRemoveWishlistMutation();
+  console.log('Wishlist', data);
 
-  //   // setLoading(false);
-
-  //   // Update wishlist data after deletion
-  //   // if (result?.statusCode === 200) {
-  //   //   const updatedWishList = wishListData.filter((wishlist) => wishlist.wishlist_id !== wishlist_id);
-  //   //   setWishListData(updatedWishList);
-  //   // }
-  // };
-
-  // if (loading) return <LoadingSpinner />; // Show loading spinner while fetching data
+  if (loading) return <LoadingSpinner />; // Show loading spinner while fetching data
 
   return (
     <div>
@@ -100,10 +67,10 @@ const SaveProduct = () => {
                     <div className="flex flex-col md:flex-row items-center gap-4">
                       <div
                         className="w-[66px] overflow-hidden whitespace-nowrap text-ellipsis hover:cursor-pointer"
-                        title={product?.item_image}
+                        title={product?.title}
                       >
                         <Image
-                          src={`${s3BucketUrl}/${product?.item_image}`}
+                          src={product?.image_url}
                           alt={product?.title ?? ''}
                           width={66}
                           height={66}
@@ -120,7 +87,7 @@ const SaveProduct = () => {
                     {product?.category?.title}
                   </td>
                   <td className="py-5 px-4 border-b">
-                    <button>
+                    <button onClick={() => removeWishlist(product.wishlist_id)}>
                       <p className="text-primary"> Remove </p>
                     </button>
                   </td>
@@ -155,7 +122,7 @@ const SaveProduct = () => {
               <div className="flex justify-center mb-2">
                 <Image
                   className="w-[150px]"
-                  src={`${s3BucketUrl}/${product?.item_image}`}
+                  src={product.image_url}
                   alt={product?.title ?? ''}
                   width={150}
                   height={150}

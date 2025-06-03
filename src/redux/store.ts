@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import mailFilterReducer from './features/mainFilterSlice';
 import userReducer from './features/userSlice';
 import checkoutReducer from './features/checkoutSlice';
+import cartReducer from './features/cartSlice';
 
 import {
   FLUSH,
@@ -25,6 +26,7 @@ const rootPersistConfig = {
 const persistingReducer = combineReducers({
   user: userReducer,
   checkout: checkoutReducer,
+  cart: cartReducer,
 });
 
 const persistedReducer = persistReducer(rootPersistConfig, persistingReducer);

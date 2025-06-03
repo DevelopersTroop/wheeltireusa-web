@@ -9,9 +9,6 @@ import { UserCircle } from 'lucide-react';
 const UserAccountLink = () => {
   const [link, setLink] = React.useState('/login'); // State to manage the link destination
   const { user } = useAuth(); // Access the authenticated user
-
-  console.log('user ==== ', user);
-
   // Update the link destination based on the user's authentication status
   useEffect(() => {
     if (user) {

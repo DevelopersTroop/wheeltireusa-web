@@ -25,16 +25,18 @@ const wishlist = baseApi.injectEndpoints({
           wishlists: TWishlistItem[];
         }>
       ): TPaginatedResponse<{ wishlists: TWishListData[] }> {
+        console.log('🚀 ~ baseQueryReturnValue:', baseQueryReturnValue);
         return {
           pages: baseQueryReturnValue.pages,
           total: baseQueryReturnValue.total,
           wishlists: baseQueryReturnValue.wishlists.map((wishlist) => {
             return {
               wishlist_id: wishlist._id,
-              title: wishlist.data.title,
-              item_image: wishlist.data.item_image,
-              category: wishlist.data.category,
+              title: wishlist.data?.title || '',
+              image_url: wishlist.data?.image_url || '',
+              category: wishlist.data?.category || {},
               slug: wishlist.slug,
+              part_number: wishlist.data?.part_number || '',
             };
           }),
         };
@@ -54,13 +56,15 @@ const wishlist = baseApi.injectEndpoints({
       transformResponse(
         baseQueryReturnValue: TResponse<{ wishlist: TWishlistItem }>
       ): TResponse<{ wishlist: TWishListData }> {
+        console.log(baseQueryReturnValue);
         return {
           wishlist: {
             wishlist_id: baseQueryReturnValue.wishlist._id,
             title: baseQueryReturnValue.wishlist.data.title,
-            item_image: baseQueryReturnValue.wishlist.data.item_image,
+            image_url: baseQueryReturnValue.wishlist.data.image_url,
             category: baseQueryReturnValue.wishlist.data.category,
             slug: baseQueryReturnValue.wishlist.slug,
+            part_number: baseQueryReturnValue.wishlist.data.part_number,
           },
         };
       },

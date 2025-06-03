@@ -1,3 +1,4 @@
+'use client';
 import { Search, ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
 import Navbar from '../Navbar/Navbar';
@@ -7,8 +8,10 @@ import MobileMenuButton from './mobile-menu/mobile-menu-button';
 import HeaderProvider from './context/header-provider';
 import MobileMenuWrapper from './mobile-menu/mobile-menu-wrapper';
 import UserAccountLink from './user-account-link/user-account-link';
+import { useTypedSelector } from '@/redux/store';
 
 export const Header = () => {
+  const { products } = useTypedSelector((state) => state.persisted.cart);
   return (
     <>
       <HeaderProvider>
@@ -41,7 +44,7 @@ export const Header = () => {
                 <Link href={'/cart'} className="relative">
                   <ShoppingCart />
                   <span className="absolute w-5 h-5 flex items-center justify-center font-semibold bg-primary text-white rounded-full text-[12px] z-0 firefox-badge chrome-badge">
-                    {1}
+                    {products.reduce((a, p) => a + p.quantity, 0)}
                   </span>
                 </Link>
               </div>

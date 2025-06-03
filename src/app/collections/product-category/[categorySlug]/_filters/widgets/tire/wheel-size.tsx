@@ -13,7 +13,6 @@ const Wheelsize = ({
   filterKey: string;
   size: TSingleFilter[];
 }) => {
-  console.log('🚀 ~ size:', size);
   const searchParams = useSearchParams();
   const sizeGroupToggle = searchParams.get(filterKey);
   const [showFilter, setshowFilter] = useState(

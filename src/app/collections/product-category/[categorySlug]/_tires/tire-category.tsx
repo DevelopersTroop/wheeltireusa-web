@@ -23,7 +23,10 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
   const searchParams = useSearchParams(); // Accessing search parameters from the URL
   const { categorySlug } = useParams(); // Getting the category slug from the URL parameters
   const { filters } = useFilter();
-  const { data, isLoading } = useGetProductsQuery({ page, ...filters });
+  const { data, isLoading } = useGetProductsQuery(
+    { page, category: 'tire', ...filters },
+    { refetchOnMountOrArgChange: true }
+  );
 
   return (
     <>

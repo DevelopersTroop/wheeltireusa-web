@@ -3,7 +3,6 @@
 const PaymentMessaging: React.FC<{ amount: string }> = ({ amount }) => {
   // const formatted = amount.replace(/,/g, ''); // "5728.99"
   // const amountInCents = Math.round(parseFloat(formatted) * 100); // 572899
-  console.log('amount', amount);
   return (
     <>
       {/* If you plan to use Stripe Elements for other things */}
