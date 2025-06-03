@@ -1,5 +1,6 @@
 'use client'; // Use client-side rendering for this component
 import { TInventoryItem } from '@/types/product';
+import TireWishlist from './tire-wish-list';
 
 const TireSave = ({ product }: { product: TInventoryItem }) => {
   console.log('product', product);
@@ -23,18 +24,7 @@ const TireSave = ({ product }: { product: TInventoryItem }) => {
             </p>
           </button>
 
-          <button
-            onClick={() => {}}
-            className="group relative flex min-h-14 w-full flex-1 items-center justify-center gap-2 rounded-xl border bg-white transition duration-300 ease-in-out hover:bg-primary hover:text-white"
-          >
-            <img src="/Bookmark-Circle.png" alt="Save for later" />
-
-            <p className="text-lg leading-[22px] text-[#210203] group-hover:text-white">
-              <span className="text-lg font-semibold text-[#210203] group-hover:text-white">
-                Save for later
-              </span>
-            </p>
-          </button>
+          <TireWishlist product={product} />
         </div>
       </div>
     </>

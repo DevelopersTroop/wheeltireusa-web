@@ -4,6 +4,7 @@ export type TInventoryItem = {
   _id: string;
   internal_id?: string;
   slug: string;
+  sku?: string;
   name?: string;
   title?: string;
   item_type?: string;
