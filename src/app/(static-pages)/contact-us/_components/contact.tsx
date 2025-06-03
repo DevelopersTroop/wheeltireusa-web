@@ -193,7 +193,7 @@ const Contact: React.FC = () => {
               <div className="flex flex-col px-10 gap-4">
                 <div className="flex items-center gap-2">
                   <a
-                    href="mailto:warranty@amaniforged.com"
+                    href="mailto:warranty@tirematic.com"
                     className="flex items-center gap-2"
                   >
                     <IoMdMail className="text-xl" />
@@ -210,7 +210,7 @@ const Contact: React.FC = () => {
               <div className="flex flex-col px-10 gap-4">
                 <div className="flex items-center gap-2">
                   <a
-                    href="mailto:sales@amaniforged.com"
+                    href="mailto:sales@tirematic.com"
                     className="flex items-center gap-2"
                   >
                     <IoMdMail className="text-xl" />
@@ -227,7 +227,7 @@ const Contact: React.FC = () => {
               <div className="flex flex-col px-10 gap-4">
                 <div className="flex items-center gap-2">
                   <a
-                    href="mailto:sponsorships@amaniforged.com "
+                    href="mailto:sponsorships@tirematic.com "
                     className="flex items-center gap-2"
                   >
                     <IoMdMail className="text-xl" />

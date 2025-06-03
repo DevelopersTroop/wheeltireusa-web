@@ -64,9 +64,9 @@ export const DeliveryDetails: React.FC<{
             <div className="p-4 rounded-xs flex gap-2 bg-[#F7F7F7]">
               <InfoIcon className="fill-black stroke-white" />
               <p className="text-muted-foreground">
-                Dealer setup will begin after checkout. An Amani representative
-                will confirm once the dealer is onboarded, and shippling will
-                proceed afterward.
+                Dealer setup will begin after checkout. An Tirematic
+                representative will confirm once the dealer is onboarded, and
+                shippling will proceed afterward.
               </p>
             </div>
             <p className="text-lg text-muted-foreground">

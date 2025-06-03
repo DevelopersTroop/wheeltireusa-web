@@ -330,7 +330,7 @@ export const Footer = () => {
           </div>
           <div className={'flex flex-col gap-8  text-center mt-4'}>
             <div className="flex flex-row gap-6 justify-center underline">
-              <Link href={'#'}>Privacy Policy </Link>
+              <Link href={'/privacy-policy'}>Privacy Policy </Link>
               <Link href={'#'}>Terms of Use</Link>
               <Link href={'#'}>Warranty</Link>
             </div>
