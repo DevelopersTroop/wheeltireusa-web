@@ -251,6 +251,16 @@ const MainMenuMobile = ({
                 className={
                   'text-black tracking-wider inline-block w-full border-b pl-3 py-3.5 border-[#F1F1F1]'
                 }
+                href="/frequently-asked-questions"
+              >
+                FAQ
+              </Link>
+            </li>
+            <li>
+              <Link
+                className={
+                  'text-black tracking-wider inline-block w-full border-b pl-3 py-3.5 border-[#F1F1F1]'
+                }
                 href="#"
               >
                 Sponsorship

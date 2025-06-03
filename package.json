@@ -35,6 +35,7 @@
     "debounce": "^2.2.0",
     "dotenv": "^16.5.0",
     "dotenv-cli": "^8.0.0",
+    "formik": "^2.4.6",
     "lucide-react": "^0.509.0",
     "next": "15.3.1",
     "postcss": "^8.5.3",
@@ -52,6 +53,7 @@
     "tw-animate-css": "^1.2.8",
     "uuid": "^11.1.0",
     "yet-another-react-lightbox": "^3.23.0",
+    "yup": "^1.6.1",
     "zod": "^3.24.3",
     "zustand": "^5.0.4"
   },

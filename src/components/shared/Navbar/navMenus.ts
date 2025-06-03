@@ -53,11 +53,15 @@ const navMenus: NavMenu[] = [
     children: [
       {
         label: 'Contact Us',
-        href: '#',
+        href: '/contact-us',
       },
       {
         label: 'About Us',
         href: '/about-us',
+      },
+      {
+        label: 'FAQ',
+        href: '/frequently-asked-questions',
       },
       {
         label: 'Sponsorship',
