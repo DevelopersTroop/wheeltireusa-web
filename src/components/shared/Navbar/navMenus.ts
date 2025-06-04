@@ -44,7 +44,7 @@ const navMenus: NavMenu[] = [
   {
     meagMenu: false,
     label: 'Financing',
-    href: '#',
+    href: '/financing',
   },
   {
     meagMenu: false,

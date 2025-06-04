@@ -97,20 +97,12 @@ export const Footer = () => {
                 }
               >
                 <li>
-                  <Link
-                    target="_blank"
-                    href={'#'}
-                    className={'text-lg font-semibold'}
-                  >
+                  <Link href={'#'} className={'text-lg font-semibold'}>
                     Shop
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    target="_blank"
-                    href={'#'}
-                    className={'text-base font-normal'}
-                  >
+                  <Link href={'#'} className={'text-base font-normal'}>
                     Tire Search
                   </Link>
                 </li>
@@ -137,7 +129,7 @@ export const Footer = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link href={'#'} className={'text-base font-normal'}>
+                  <Link href={'/financing'} className={'text-base font-normal'}>
                     Financing Options
                   </Link>
                 </li>
