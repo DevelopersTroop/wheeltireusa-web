@@ -8,6 +8,7 @@ import CardPrice from './card-price';
 import DeliveryWithStock from './delivery-with-stock';
 import Quantity from './quantity';
 import TireAttributes from './tire-attributes';
+import { normalizeImageUrl } from '@/lib/utils';
 
 const TiresCard = ({ tire }: { tire: TCartProduct }) => {
   // const dispatch = useDispatch();
@@ -56,7 +57,7 @@ const TiresCard = ({ tire }: { tire: TCartProduct }) => {
           {/* <Rating /> */}
           <div className="w-full flex justify-center relative">
             <Image
-              src={`${s3BucketUrl}/${tire.item_image}`}
+              src={normalizeImageUrl(tire.image_url || tire.item_image)}
               width={160}
               height={160}
               alt={tire?.title ?? ''}

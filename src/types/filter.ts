@@ -9,6 +9,12 @@ export type TSingleFilter = {
 
 export type TFilters = {
   [filterType: string | 'price']: TPriceFilter | TSingleFilter[];
-  model_group: TSingleFilter[];
-  tire_diameter: TSingleFilter[];
+  model: TSingleFilter[];
+  tire_size: TSingleFilter[];
+  tire_type: TSingleFilter[];
+  diameter: TSingleFilter[];
+  brand: TSingleFilter[];
+  tire_height: TSingleFilter[];
+  load_range: TSingleFilter[];
+  load_index: TSingleFilter[];
 };

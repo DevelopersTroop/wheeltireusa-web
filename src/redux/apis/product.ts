@@ -9,7 +9,27 @@ const products = baseApi.injectEndpoints({
       TPaginatedResponse<{ products: TInventoryItem[] }>,
       any
     >({
-      query: (params) => ({ params, url: '/products/list' }),
+      query: (params) => {
+        const shallowParams = { ...params };
+        console.log(shallowParams);
+        switch (shallowParams?.sort) {
+          case 'Sort by price (high to low)':
+            shallowParams.sort = [{ whom: 'price', order: 'desc' }];
+            break;
+          case 'Sort by price (low to high)':
+            shallowParams.sort = [{ whom: 'price', order: 'asc' }];
+            break;
+          case 'Sort by name (A to Z)':
+            shallowParams.sort = [{ whom: 'description', order: 'asc' }];
+            break;
+          case 'Sort by name (Z to A)':
+            shallowParams.sort = [{ whom: 'description', order: 'desc' }];
+            break;
+          default:
+            shallowParams.sort = [{ whom: '_id', order: 'desc' }];
+        }
+        return { params: shallowParams, url: '/products/list' };
+      },
     }),
     getProduct: builder.query<{ product: TInventoryItem }, string>({
       query: (slug) => ({ url: `/products/${slug}` }),

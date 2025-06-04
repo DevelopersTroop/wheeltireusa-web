@@ -23,7 +23,7 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
   const searchParams = useSearchParams(); // Accessing search parameters from the URL
   const { categorySlug } = useParams(); // Getting the category slug from the URL parameters
   const { filters } = useFilter();
-  const { data, isLoading } = useGetProductsQuery(
+  const { data, isLoading, isFetching } = useGetProductsQuery(
     { page, category: 'tire', ...filters },
     { refetchOnMountOrArgChange: true }
   );
@@ -70,7 +70,7 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
             <TireFilters />
           </div>
           {/* Product loading state or product data */}
-          {isLoading ? (
+          {isLoading || isFetching ? (
             <div
               className={
                 'w-full min-[1300px]:w-3/4 grid gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 auto-rows-min pt-16'
