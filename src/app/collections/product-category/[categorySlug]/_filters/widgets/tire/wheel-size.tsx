@@ -53,7 +53,7 @@ const Wheelsize = ({
             onChange={handleSizeSearch}
             value={sizeSearchValue}
             type="text"
-            placeholder="20 x 20"
+            placeholder="31x10.50R15LT"
             className="mb-2 bg-white w-full"
           />
           <SelectFilterTemplate

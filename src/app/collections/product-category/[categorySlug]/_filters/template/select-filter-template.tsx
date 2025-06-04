@@ -24,7 +24,7 @@ const SelectFilterTemplate = ({
   filterKey,
   disabled = false,
   acceptMultipleValues = true,
-  capitalize = true,
+  capitalize = false,
 }: SelectFilterTemplateProps) => {
   // Reference to the filter container (not used but could be useful for future enhancements)
   const ref = useRef<HTMLDivElement>(null);

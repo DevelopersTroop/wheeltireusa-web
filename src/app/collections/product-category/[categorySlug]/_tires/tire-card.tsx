@@ -1,5 +1,6 @@
 import DeliveryWithStock from '@/app/cart/_components/delivery-with-stock';
 import PaymentMessaging from '@/components/shared/payment-method-messaging';
+import { normalizeImageUrl } from '@/lib/utils';
 import { TInventoryItem } from '@/types/product';
 import { getPrice } from '@/utils/price';
 import Image from 'next/image';
@@ -91,7 +92,9 @@ const TireCard = ({
               {/* Display tire image */}
               <Image
                 className="max-w-[272px] max-h-[272px] object-contain"
-                src={products[0].image_url}
+                src={normalizeImageUrl(
+                  products[0].image_url || products[0].item_image
+                )}
                 width={272}
                 height={272}
                 alt={products[0]?.title ?? ''}
