@@ -5,7 +5,7 @@ import { TInventoryItem } from '@/types/product';
 import { getPrice } from '@/utils/price';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import ComparisonWithFavorite from './comparisonwithfavorite';
 import PriceSet from './price-set';
 import TireAttributes from './tire-attributes';
@@ -27,10 +27,8 @@ const TireCard = ({
   };
 }) => {
   const isSquare = products.length === 1; // Check if the tire set is square (all tires same size)
-  const frontTireQuantity =
-    wheelInfo.rearForging === 'Dually' && isSquare ? 6 : isSquare ? 4 : 2; // Determine front tire quantity based on the wheel type
-  const rearTireQuantity =
-    wheelInfo.rearForging === 'Dually' && !isSquare ? 4 : !isSquare ? 2 : 0; // Determine rear tire quantity based on the wheel type
+  const [frontTireQuantity, setFrontTireQuantity] = useState(2);
+  const [rearTireQuantity, setRearTireQuantity] = useState(2);
 
   const singleTirePageLink = `/collections/product/${products[0]?.slug}`; // Link to the tire's product page
 
@@ -127,7 +125,12 @@ const TireCard = ({
                 <DeliveryWithStock deliveryTime="Monday, 05/22" />
               </div>
               <div className="flex flex-row items-center w-full">
-                <TireQuantity quantity={frontTireQuantity} />
+                <TireQuantity
+                  otherQuantity={rearTireQuantity}
+                  product={products[0]}
+                  setQuantity={setFrontTireQuantity}
+                  quantity={frontTireQuantity}
+                />
                 <TireCardPrice
                   price={getPrice(
                     products[0]?.msrp,
@@ -166,7 +169,12 @@ const TireCard = ({
                     <DeliveryWithStock deliveryTime="Monday, 05/22" />
                   </div>
                   <div className="flex flex-row items-center w-full">
-                    <TireQuantity quantity={frontTireQuantity} />
+                    <TireQuantity
+                      product={products[1]}
+                      otherQuantity={frontTireQuantity}
+                      setQuantity={setRearTireQuantity}
+                      quantity={rearTireQuantity}
+                    />
                     <TireCardPrice
                       price={getPrice(
                         products[1]?.msrp,
