@@ -49,10 +49,12 @@ export const Footer = () => {
                     <h3 className={'text-2xl font-bold'}>
                       Your Road to Reliability
                     </h3>
-                    <button className="w-[320px] max-w-[384px] bg-[#F6511D] hover:bg-[#e0551b] text-white font-semibold text-lg px-6 py-3 rounded flex items-center justify-center gap-2">
-                      <img src="/images/shopCategoty/Vector.svg" />
-                      Find Your Perfect Match
-                    </button>
+                    <Link href={'/collections/product-category/tires'}>
+                      <button className="w-[320px] max-w-[384px] bg-[#F6511D] hover:bg-[#e0551b] text-white font-semibold text-lg px-6 py-3 rounded flex items-center justify-center gap-2">
+                        <img src="/images/shopCategoty/Vector.svg" />
+                        Find Your Perfect Match
+                      </button>
+                    </Link>
                     <p className={'leading-loose'}>
                       Guaranteed Best Prices on Tires and Wheels
                     </p>

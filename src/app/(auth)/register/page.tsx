@@ -140,7 +140,7 @@ const RegisterPage = () => {
           </Breadcrumb>
         </div>
       </div>
-      <div className="max-w-[416px] flex flex-col mx-auto mt-14 mb-40 gap-6">
+      <div className="max-w-[416px] flex flex-col mx-auto mt-8 mb-18 sm:mt-14 sm:mb-40 gap-6">
         <div className="flex flex-col items-center gap-5">
           <h1 className="text-[32px] font-bold text-[#210203]">
             Create Account

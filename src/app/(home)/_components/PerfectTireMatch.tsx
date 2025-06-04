@@ -1,4 +1,5 @@
 import Container from '@/components/ui/container/container';
+import Link from 'next/link';
 
 const PerfectTireMatch = () => {
   return (
@@ -24,10 +25,12 @@ const PerfectTireMatch = () => {
                 provide tailored recommendations!
               </p>
             </div>
-            <button className="w-full max-w-[384px] bg-[#F6511D] hover:bg-[#e0551b] text-white font-semibold text-lg px-6 py-3 rounded flex items-center justify-center gap-2">
-              <img src="/images/shopCategoty/Vector.svg" /> Discover the Best
-              Tires
-            </button>
+            <Link href="/collections/product-category/tires">
+              <button className="w-full max-w-[384px] bg-[#F6511D] hover:bg-[#e0551b] text-white font-semibold text-lg px-6 py-3 rounded flex items-center justify-center gap-2">
+                <img src="/images/shopCategoty/Vector.svg" /> Discover the Best
+                Tires
+              </button>
+            </Link>
           </div>
           <div className="w-full lg:w-3/5 h-[360px] lg:h-full lg:max-h-[548px] flex flex-row relative">
             <div className="w-full h-full">
