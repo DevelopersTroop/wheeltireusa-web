@@ -40,9 +40,9 @@ const YmmForm = () => {
                 <TabsTriggerMainFilter value="vehicle" className="">
                   Vehicle model
                 </TabsTriggerMainFilter>
-                {/* <TabsTriggerMainFilter value="tireSize" className="">
+                <TabsTriggerMainFilter value="tireSize" className="">
                   Tire size
-                </TabsTriggerMainFilter> */}
+                </TabsTriggerMainFilter>
                 <TabsTriggerMainFilter value="tireBrand" className="">
                   Tire brand
                 </TabsTriggerMainFilter>

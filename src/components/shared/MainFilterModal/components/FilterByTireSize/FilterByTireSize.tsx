@@ -2,46 +2,27 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import dynamic from 'next/dynamic';
 import FilterFooter from '../FilterFooter/FilterFooter';
-import SelectedItem from './components/SelectedItem/SelectedItem';
 import useFilterByTireSize from './useFilterByTireSize';
-import SelectDiameter from './components/SelectDiameter/SelectDiameter';
-
-const SelectWidth = dynamic(
-  () => import('./components/SelectWidth/SelectWidth'),
-  { ssr: false, loading: () => <div>Loading...</div> }
-);
-const SelectAspectRatio = dynamic(
-  () => import('./components/SelectAspectRatio/SelectAspectRatio'),
-  { ssr: false, loading: () => <div>Loading...</div> }
-);
+import ListSkeleton from '../ListSkeleton/ListSkeleton';
+import TireSizeSelection from './components/TireSizeSelection/TireSizeSelection';
 
 const FilterByTireSize = () => {
-  const {
-    shouldShowFooter,
-    frontTireDiameter,
-    frontTireWidth,
-    frontTireAspectRatio,
-  } = useFilterByTireSize();
+  const { setSelectedTireSizes, isDisabled, submitFilter } =
+    useFilterByTireSize();
   return (
     <div className={cn('h-[70dvh]')}>
-      <ScrollArea
-        className={cn(
-          'h-[70dvh] pb-3',
-          shouldShowFooter && 'h-[calc(70dvh-90px)] pb-0'
-        )}
-      >
-        <div className="flex flex-col gap-4">
-          <SelectedItem />
-          {!frontTireWidth && !frontTireAspectRatio && !frontTireDiameter && (
-            <SelectWidth />
-          )}
-          {frontTireWidth && !frontTireAspectRatio && !frontTireDiameter && (
-            <SelectAspectRatio />
-          )}
-          {frontTireWidth && frontTireAspectRatio && <SelectDiameter />}
+      <ScrollArea className={cn('h-[70dvh] pb-3', 'h-[calc(70dvh-90px)] pb-0')}>
+        <div className="flex flex-col gap-4 mt-4 w-4/5 mx-auto">
+          <h2 className="text-2xl font-bold">Tire Size</h2>
+          <p className="text-sm text-gray-500">
+            Select the tire size you want to filter by.
+          </p>
+        </div>
+        <div className="flex flex-col gap-4  mt-8 w-4/5 mx-auto">
+          <TireSizeSelection setSelectedTireSizes={setSelectedTireSizes} />
         </div>
       </ScrollArea>
-      {shouldShowFooter && <FilterFooter />}
+      {<FilterFooter isDisabled={isDisabled} submitFilter={submitFilter} />}
     </div>
   );
 };

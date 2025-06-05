@@ -94,7 +94,7 @@ const TireCard = ({
                 src={products[0].image_url}
                 width={272}
                 height={272}
-                alt={products[0]?.title ?? ''}
+                alt={products[0]?.partnumber ?? ''}
               />
             </div>
           </Link>

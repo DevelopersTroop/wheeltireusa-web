@@ -21,7 +21,7 @@ import { useGetFilterListQuery } from '@/redux/apis/product';
 const TireFilters: React.FC = () => {
   // Retrieve search parameters from the URL
   // const searchParams = useSearchParams();
-  const { data, isLoading } = useGetFilterListQuery();
+  const { data, isLoading } = useGetFilterListQuery({ category: 'tire' });
 
   // const { data } = useGetProductFiltersQuery({ category: "in-stock-wheels", forgingProfile: searchParams.get("forging_style") });
   return (

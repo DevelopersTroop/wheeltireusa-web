@@ -14,8 +14,8 @@ const products = baseApi.injectEndpoints({
     getProduct: builder.query<{ product: TInventoryItem }, string>({
       query: (slug) => ({ url: `/products/${slug}` }),
     }),
-    getFilterList: builder.query<{ filters: TFilters }, void>({
-      query: () => ({ url: '/products/filter-list' }),
+    getFilterList: builder.query<{ filters: TFilters }, any>({
+      query: (params) => ({ params, url: '/products/filter-list' }),
     }),
   }),
 });
@@ -24,4 +24,5 @@ export const {
   useGetProductsQuery,
   useGetProductQuery,
   useGetFilterListQuery,
+  useLazyGetFilterListQuery,
 } = products;

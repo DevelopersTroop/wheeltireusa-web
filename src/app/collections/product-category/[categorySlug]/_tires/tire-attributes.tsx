@@ -4,9 +4,10 @@ import React from 'react';
 // Component to display tire attributes
 const TireAttributes = ({ product }: { product: TInventoryItem }) => {
   return (
-    <div className="flex gap-2 items-start self-stretch flex-wrap relative w-full">
+    <>
+      {/* <div className="flex gap-2 items-start self-stretch flex-wrap relative w-full"> */}
       {/* Display tire size if available */}
-      {product?.tire_size !== '' ? (
+      {/* {product?.tire_size !== '' ? (
         <div
           className="hover:bg-[#210203] bg-white group cursor-pointer rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative"
           data-tooltip-id="my-tooltip"
@@ -29,10 +30,10 @@ const TireAttributes = ({ product }: { product: TInventoryItem }) => {
         </div>
       ) : (
         ''
-      )}
+      )} */}
 
       {/* Display sidewall style if available */}
-      {product?.sidewall !== '' ? (
+      {/* {product?.sidewall !== '' ? (
         <div
           className="hover:bg-[#210203] bg-white group cursor-pointer rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative"
           data-tooltip-id="my-tooltip"
@@ -55,9 +56,9 @@ const TireAttributes = ({ product }: { product: TInventoryItem }) => {
         </div>
       ) : (
         ''
-      )}
+      )} */}
       {/* Display load rating if available */}
-      {product?.load_rating !== '' ? (
+      {/* {product?.load_rating !== '' ? (
         <div
           className="hover:bg-[#210203] bg-white group cursor-pointer rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative"
           data-tooltip-id="my-tooltip"
@@ -79,10 +80,10 @@ const TireAttributes = ({ product }: { product: TInventoryItem }) => {
         </div>
       ) : (
         ''
-      )}
+      )} */}
 
       {/* Display service description (load index + speed rating) if both available */}
-      {product?.tire_load_index !== '' && product?.speed_rating !== '' ? (
+      {/* {product?.tire_load_index !== '' && product?.speed_rating !== '' ? (
         <>
           <div
             className="hover:bg-[#210203] bg-white group cursor-pointer rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative"
@@ -108,7 +109,7 @@ const TireAttributes = ({ product }: { product: TInventoryItem }) => {
         </>
       ) : (
         ''
-      )}
+      )} */}
 
       {/* <div
                 className="rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative w-[132px]">
@@ -121,7 +122,8 @@ const TireAttributes = ({ product }: { product: TInventoryItem }) => {
                     <span className="text-black text-base font-semibold">500 AA A</span>
                 </p>
             </div> */}
-    </div>
+      {/* </div> */}
+    </>
   );
 };
 

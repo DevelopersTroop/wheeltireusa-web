@@ -1,18 +1,20 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { Search } from 'lucide-react';
-import useFilterFooter from './useFilterFooter';
+import { MouseEvent } from 'react';
 
-const FilterFooter = () => {
-  const { allTireSizes, submitFilter } = useFilterFooter();
-
+type TFilterFooter = {
+  isDisabled: boolean;
+  submitFilter: (e: MouseEvent<HTMLButtonElement>) => void;
+};
+const FilterFooter = ({ isDisabled, submitFilter }: TFilterFooter) => {
   return (
     <>
       <div>
         <div className="p-4 border-t-1 border-muted-dark">
           <div className="flex justify-end items-center">
             <Button
-              disabled={!allTireSizes || allTireSizes?.length === 0}
+              disabled={isDisabled}
               className="bg-primary rounded !px-12 py-6 font-normal cursor-pointer disabled:cursor-not-allowed"
               onClick={submitFilter}
             >

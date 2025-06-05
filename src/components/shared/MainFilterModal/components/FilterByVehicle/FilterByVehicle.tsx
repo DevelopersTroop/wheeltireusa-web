@@ -23,7 +23,7 @@ const SelectYear = dynamic(() => import('./components/SelectYear/SelectYear'), {
 });
 
 const FilterByVehicle = () => {
-  const { year, make, model } = useFilterByVehicle();
+  const { year, make, model, isDisabled, submitFilter } = useFilterByVehicle();
 
   return (
     <div className={cn('h-[70dvh]')}>
@@ -40,7 +40,9 @@ const FilterByVehicle = () => {
           {year && make && <SelectModel />}
         </div>
       </ScrollArea>
-      {year && make && model && <FilterFooter />}
+      {year && make && model && (
+        <FilterFooter isDisabled={isDisabled} submitFilter={submitFilter} />
+      )}
     </div>
   );
 };

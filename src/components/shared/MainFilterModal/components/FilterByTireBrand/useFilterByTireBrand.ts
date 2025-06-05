@@ -1,9 +1,24 @@
+import { closeMainFilterModal } from '@/redux/features/mainFilterSlice';
 import { useTypedSelector } from '@/redux/store';
+import { MouseEvent } from 'react';
+import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/navigation';
 
 const useFilterByTireBrand = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
   const mainFilterState = useTypedSelector((state) => state.mainFilter);
+  const selectedBrand = mainFilterState.filters.byTireBrand.current.brand;
+  const isDisabled = !selectedBrand;
+  const submitFilter = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    router.push(`/collections/product-category/tire?brand=${selectedBrand}`);
+    dispatch(closeMainFilterModal());
+  };
   return {
-    brand: mainFilterState.filters.byTireBrand.current.brand,
+    brand: selectedBrand,
+    isDisabled,
+    submitFilter,
   };
 };
 
