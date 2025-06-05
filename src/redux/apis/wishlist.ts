@@ -1,9 +1,4 @@
-// import { TPaginatedResponse, TResponse } from "@/app/types/response";
 import { baseApi, TBaseQueryError } from './base';
-// import {
-//   TWishListData,
-//   TWishlistItem,
-// } from "@/app/types/wishlist";
 import { toast } from 'sonner';
 import { TPaginatedResponse, TResponse } from '@/types/response';
 import { TWishListData, TWishlistItem } from '@/types/wishlist';
@@ -78,7 +73,7 @@ const wishlist = baseApi.injectEndpoints({
             })
           );
           toast('Success', {
-            description: 'Wishlist created successfully',
+            description: 'Product added to favourite list',
           });
         } catch (error) {
           const err = error as TBaseQueryError;
@@ -112,7 +107,7 @@ const wishlist = baseApi.injectEndpoints({
             })
           );
           toast('Success', {
-            description: 'Wishlist Removed successfully',
+            description: 'Product removed from favourite list',
           });
         } catch (error) {
           console.error(error);

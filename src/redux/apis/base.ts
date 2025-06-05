@@ -8,13 +8,26 @@ export const apiInstance = axios.create({
   withCredentials: true,
 });
 
+let isRefreshing = false;
+let failedQueue: any[] = [];
+
+const processQueue = (error: any, token: string | null = null) => {
+  failedQueue.forEach((prom) => {
+    if (token) {
+      prom.resolve(token);
+    } else {
+      prom.reject(error);
+    }
+  });
+  failedQueue = [];
+};
+
 apiInstance.interceptors.request.use((req) => {
   if (typeof window !== 'undefined') {
     const storedData = localStorage.getItem('persist:tirematic-store');
     if (storedData) {
       const parsedData = JSON.parse(storedData);
-      if (!parsedData?.user?.length) return req;
-      const parsedUser = JSON.parse(parsedData?.user);
+      const parsedUser = JSON.parse(parsedData?.user || '{}');
       const accessToken = parsedUser?.accessToken;
       if (accessToken) {
         req.headers.Authorization = `Bearer ${accessToken}`;
@@ -23,6 +36,79 @@ apiInstance.interceptors.request.use((req) => {
   }
   return req;
 });
+
+apiInstance.interceptors.response.use(
+  (res) => res,
+  async (error) => {
+    const originalRequest = error.config;
+
+    // If token is expired
+    if (
+      (error.response?.status === 401 || error.response?.status === 403) &&
+      !originalRequest._retry
+    ) {
+      originalRequest._retry = true;
+
+      const storedData = localStorage.getItem('persist:tirematic-store');
+      const parsedData = storedData ? JSON.parse(storedData) : null;
+      const parsedUser = parsedData?.user ? JSON.parse(parsedData.user) : null;
+      const refreshToken = parsedUser?.refreshToken;
+
+      if (!refreshToken) return Promise.reject(error);
+
+      if (isRefreshing) {
+        return new Promise(function (resolve, reject) {
+          failedQueue.push({
+            resolve: (token: string) => {
+              console.log('🚀 ~ token:', token);
+              originalRequest.headers.Authorization = 'Bearer ' + token;
+              resolve(apiInstance(originalRequest));
+            },
+            reject: (err: any) => {
+              reject(err);
+            },
+          });
+        });
+      }
+
+      isRefreshing = true;
+
+      try {
+        const response = await apiInstance.post<{
+          data: { token: { accessToken: string; refreshToken: string } };
+        }>('/auth/refresh-token', {
+          refreshToken,
+        });
+
+        const newAccessToken = response.data.data.token.accessToken;
+
+        // Update token in localStorage
+        parsedUser.accessToken = newAccessToken;
+        parsedUser.refreshToken = response.data.data.token.refreshToken;
+        localStorage.setItem(
+          'persist:tirematic-store',
+          JSON.stringify({
+            ...parsedData,
+            user: JSON.stringify(parsedUser),
+          })
+        );
+
+        apiInstance.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
+        processQueue(null, newAccessToken);
+
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        return apiInstance(originalRequest);
+      } catch (err) {
+        processQueue(err, null);
+        return Promise.reject(err);
+      } finally {
+        isRefreshing = false;
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);
 
 apiInstance.interceptors.response.use(
   (response) => response,
@@ -34,7 +120,7 @@ apiInstance.interceptors.response.use(
 
     if (Array.isArray(errorsArray) && errorsArray.length > 0) {
       toast.error(message, {
-        description: errorsArray.map((e) => e?.message || '').join('\n'),
+        description: errorsArray.map((e) => e?.message),
       });
     } else {
       toast.error(message);
