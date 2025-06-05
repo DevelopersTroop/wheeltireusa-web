@@ -51,7 +51,7 @@ const TireWishlist = ({ product }: { product: TInventoryItem }) => {
           data: {
             title: product?.title || product?.description,
             category: product?.category,
-            image_url: product?.image_url || product.item_image,
+            image_url: product?.item_image || product.image_url,
             part_number: product?.partnumber,
           },
         });

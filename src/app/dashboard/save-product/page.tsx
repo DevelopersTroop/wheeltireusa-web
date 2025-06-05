@@ -2,6 +2,7 @@
 
 import LoadingSpinner from '@/components/shared/loading/spinner';
 import useAuth from '@/hooks/useAuth';
+import { normalizeImageUrl } from '@/lib/utils';
 import {
   useGetWishlistQuery,
   useRemoveWishlistMutation,
@@ -41,6 +42,8 @@ const SaveProduct = () => {
 
   if (loading) return <LoadingSpinner />; // Show loading spinner while fetching data
 
+  console.log('Wishlist Data', data);
+
   return (
     <div>
       {/* Wishlist table view for desktop */}
@@ -69,11 +72,12 @@ const SaveProduct = () => {
                         className="w-[66px] overflow-hidden whitespace-nowrap text-ellipsis hover:cursor-pointer"
                         title={product?.title}
                       >
-                        <Image
-                          src={product?.image_url}
+                        <img
+                          src={normalizeImageUrl(product.image_url)}
                           alt={product?.title ?? ''}
-                          width={66}
-                          height={66}
+                          // width={66}
+                          // height={66}
+                          className="w-[66px] h-[66px] object-cover rounded-md"
                         />
                       </div>
                       <Link
