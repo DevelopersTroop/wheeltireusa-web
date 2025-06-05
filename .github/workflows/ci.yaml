@@ -65,8 +65,7 @@ jobs:
               aws s3 sync public s3://$BUCKET_NAME/\$S3_PATH/public --cache-control 'public,max-age=31536000,immutable'
             fi
 
-            sudo rm -rf .next/cache &&
-            sudo rm -rf node_modules
+            sudo rm -rf .next/cache
           "
           rm private_key.pem
         shell: /usr/bin/bash -e {0}
@@ -88,7 +87,8 @@ jobs:
             else
               pm2 start ecosystem.config.js --only tiremetic-stage-web
             fi &&
-            pm2 save
+            pm2 save &&
+            sudo rm -rf node_modules
           "
           rm private_key.pem
         env:
