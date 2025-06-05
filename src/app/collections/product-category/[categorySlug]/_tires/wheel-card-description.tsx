@@ -68,11 +68,11 @@ const CardDescription = ({
                 </div>
                 <p className="text-base leading-[19px] text-[#210203]">
                   <span className="text-[#210203] text-base font-normal line-clamp-1  group-hover:text-[#ffffff]">
-                    {product?.wheel_size ? product?.wheel_size : 'N/A'}
+                    {product?.tire_size ? product?.tire_size : 'N/A'}
                   </span>
                 </p>
               </div>
-              <div className="rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative w-1/2 hover:bg-[#210203] transition duration-300 ease-in-out group cursor-pointer">
+              {/* <div className="rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative w-1/2 hover:bg-[#210203] transition duration-300 ease-in-out group cursor-pointer">
                 <div className="flex gap-1 items-center relative">
                   <i
                     className={
@@ -91,10 +91,10 @@ const CardDescription = ({
                     {product?.bolt_pattern_1 ? product?.bolt_pattern_1 : 'N/A'}
                   </span>
                 </p>
-              </div>
+              </div> */}
             </div>
             <div className="w-full flex flex-row gap-2">
-              <div className="rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative w-1/2 hover:bg-[#210203] transition duration-300 ease-in-out group cursor-pointer">
+              {/* <div className="rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative w-1/2 hover:bg-[#210203] transition duration-300 ease-in-out group cursor-pointer">
                 <div className="flex gap-1 items-center relative">
                   <i
                     className={
@@ -112,8 +112,8 @@ const CardDescription = ({
                     {product?.lip_size ? product?.lip_size : 'N/A'}
                   </span>
                 </p>
-              </div>
-              <div className="rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative w-1/2 hover:bg-[#210203] transition duration-300 ease-in-out group cursor-pointer">
+              </div> */}
+              {/* <div className="rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative w-1/2 hover:bg-[#210203] transition duration-300 ease-in-out group cursor-pointer">
                 <div className="flex gap-1 items-center relative">
                   <i
                     className={
@@ -132,7 +132,7 @@ const CardDescription = ({
                     {product?.finish ? product?.finish : 'N/A'}
                   </span>
                 </p>
-              </div>
+              </div> */}
             </div>
           </div>
         </>

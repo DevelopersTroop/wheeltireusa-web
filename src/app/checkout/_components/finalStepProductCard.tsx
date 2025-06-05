@@ -93,7 +93,7 @@ export const FinalStepProductCard: React.FC<{
 const TireAttributes: React.FC<{ product: TInventoryItem }> = ({ product }) => {
   return (
     <div className="flex gap-2 w-full">
-      {/* Wheel Size */}
+      {/* Tire Size */}
       <div className="border px-3 py-2 rounded-[6px] text-center w-fit">
         <div className="flex items-center justify-center gap-1">
           <svg
@@ -118,10 +118,10 @@ const TireAttributes: React.FC<{ product: TInventoryItem }> = ({ product }) => {
           </svg>
           <p className="text-sm font-normal text-muted-foreground">Size</p>
         </div>
-        <p>{product.wheel_size}</p>
+        <p>{product.tire_size}</p>
       </div>
 
-      <div className="border px-3 py-2 rounded-[6px] text-center w-fit">
+      {/* <div className="border px-3 py-2 rounded-[6px] text-center w-fit">
         <div className="flex items-center justify-center gap-1">
           <svg
             width="12"
@@ -178,7 +178,7 @@ const TireAttributes: React.FC<{ product: TInventoryItem }> = ({ product }) => {
           <p className="text-sm font-normal text-muted-foreground">Offset</p>
         </div>
         <p>{product.offset}mm</p>
-      </div>
+      </div> */}
     </div>
   );
 };

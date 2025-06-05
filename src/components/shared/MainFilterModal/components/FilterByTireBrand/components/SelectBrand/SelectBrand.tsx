@@ -1,4 +1,5 @@
 import BrickBox from '../../../BrickBox/BrickBox';
+import ListSkeleton from '../../../ListSkeleton/ListSkeleton';
 import Search from '../../../Search/Search';
 import useSelectBrand from './useSelectBrand';
 const SelectBrand = () => {
@@ -23,20 +24,24 @@ const SelectBrand = () => {
       </div>
 
       <div className="text-muted-dark text-[20px] px-6 order-3">
-        Select Make
+        Select Brand
       </div>
-      <div className="grid grid-cols-5 gap-3 px-6 order-4">
-        {filteredBrands.map((brand) => (
-          <BrickBox
-            showTooltip={true}
-            onClick={setBrand}
-            key={brand}
-            text={brand}
-            filterType="byTireBrand"
-            fieldName="brand"
-          />
-        ))}
-      </div>
+      {filteredBrands ? (
+        <div className="grid grid-cols-5 gap-3 px-6 order-4">
+          {filteredBrands?.map((brand) => (
+            <BrickBox
+              showTooltip={true}
+              onClick={setBrand}
+              key={brand.value}
+              text={brand.value.toString()}
+              filterType="byTireBrand"
+              fieldName="brand"
+            />
+          ))}
+        </div>
+      ) : (
+        <ListSkeleton onlyItem={true} />
+      )}
     </>
   );
 };

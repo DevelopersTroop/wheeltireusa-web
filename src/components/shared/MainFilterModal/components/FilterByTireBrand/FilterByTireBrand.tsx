@@ -3,11 +3,20 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import React from 'react';
 import useFilterByTireBrand from './useFilterByTireBrand';
 import SelectedItem from './components/SelectedItem/SelectedItem';
-import SelectBrand from './components/SelectBrand/SelectBrand';
+// import SelectBrand from './components/SelectBrand/SelectBrand';
 import FilterFooter from '../FilterFooter/FilterFooter';
+import dynamic from 'next/dynamic';
+import ListSkeleton from '../ListSkeleton/ListSkeleton';
+const SelectBrand = dynamic(
+  () => import('./components/SelectBrand/SelectBrand'),
+  {
+    ssr: false,
+    loading: () => <ListSkeleton title="Brand" />,
+  }
+);
 
 const FilterByTireBrand = () => {
-  const { brand } = useFilterByTireBrand();
+  const { brand, isDisabled, submitFilter } = useFilterByTireBrand();
   return (
     <div className={cn('h-[70dvh]')}>
       <ScrollArea
@@ -18,7 +27,9 @@ const FilterByTireBrand = () => {
           <SelectBrand />
         </div>
       </ScrollArea>
-      {brand && <FilterFooter />}
+      {brand && (
+        <FilterFooter isDisabled={isDisabled} submitFilter={submitFilter} />
+      )}
     </div>
   );
 };
