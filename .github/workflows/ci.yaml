@@ -87,8 +87,7 @@ jobs:
             else
               pm2 start ecosystem.config.js --only tiremetic-stage-web
             fi &&
-            pm2 save &&
-            sudo rm -rf node_modules
+            pm2 save
           "
           rm private_key.pem
         env:
