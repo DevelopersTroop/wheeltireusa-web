@@ -42,7 +42,7 @@ const useSelectBrand = () => {
   const dispatch = useDispatch();
   const [search, setSearch] = useState('');
   const [alphabets, setAlphabets] = useState<string[]>([]);
-  const { data, isLoading } = useGetFilterListQuery({ category: 'tire' });
+  const { data, isLoading } = useGetFilterListQuery();
   const allBrands = data?.filters?.brand as TSingleFilter[] | undefined;
   const [filteredBrands, setFilteredBrands] = useState(allBrands);
   const setBrand = (e: React.MouseEvent<HTMLButtonElement>) => {
