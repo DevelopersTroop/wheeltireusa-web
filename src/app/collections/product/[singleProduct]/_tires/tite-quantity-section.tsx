@@ -17,7 +17,6 @@ const TireQuantitySection = ({ product }: { product: TInventoryItem }) => {
           inventoryAvailable={product?.inventory_available ?? 4}
           name={'quantity'}
           id={'quantity'}
-          isDually={product?.dually ?? false}
         />
 
         <div>

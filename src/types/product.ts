@@ -50,6 +50,25 @@ export type TInventoryBase = {
 };
 export type TInventoryItem = TInventoryBase & {
   sidewall?: string;
+  load_rating?: string;
+  raw_size?: string;
+  ship_weight?: string;
+  ship_width?: string;
+  ship_height?: string;
+  ship_depth?: string;
+  spoke_style?: string[];
+  speed_rating?: string;
+  ply?: string;
+  approved_rim_contours?: string;
+  tread_depth_mm?: string;
+  std_rim?: string;
+  sort_price?: number;
+  max_air_pressure_kpa?: string;
+  max_air_pressure_psi?: string;
+  imageUploaded?: boolean;
+  transferImage?: boolean;
+  categoryId?: string;
+  stock_available?: boolean;
   inventoryId?: {
     _id: string;
     internal_id: string;

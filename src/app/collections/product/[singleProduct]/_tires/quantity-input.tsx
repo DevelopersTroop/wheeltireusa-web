@@ -8,7 +8,6 @@ type QuantityInputProps = {
   name: string;
   inventoryAvailable: number;
   id: string;
-  isDually: boolean;
   className?: string;
   [props: string]: unknown;
 };

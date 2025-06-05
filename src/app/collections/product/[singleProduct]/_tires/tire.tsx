@@ -25,9 +25,7 @@ const Tire = ({ product }: { product: TInventoryItem }) => {
           <div className="w-full">
             <ImageGallery
               images={Array.from({ length: 6 }).map(() => ({
-                src: normalizeImageUrl(
-                  product?.image_url || product?.item_image
-                ),
+                src: normalizeImageUrl(product?.image_url),
               }))}
             />
           </div>

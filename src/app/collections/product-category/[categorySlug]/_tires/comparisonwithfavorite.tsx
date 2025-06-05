@@ -34,7 +34,7 @@ const ComparisonWithFavorite = ({ product }: { product: TInventoryItem }) => {
     }
   }, [error]);
 
-  console.log('Product', product);
+  // console.log('Product', product);
 
   return (
     <div className="w-full flex flex-1 flex-row gap-4   ">
@@ -49,9 +49,9 @@ const ComparisonWithFavorite = ({ product }: { product: TInventoryItem }) => {
             saveToLater({
               slug: product?.slug,
               data: {
-                title: product?.title || product?.description,
+                title: product?.description,
                 category: product?.category,
-                image_url: product?.item_image || product.image_url,
+                image_url: product.image_url,
                 part_number: product?.partnumber,
               },
             });

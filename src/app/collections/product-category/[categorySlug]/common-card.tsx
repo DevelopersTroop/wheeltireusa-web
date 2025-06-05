@@ -59,8 +59,8 @@ export const CommonCard: React.FC<CommonCardProps> = ({
               }
               height={272}
               width={272}
-              alt={product?.title ?? ''}
-              src={normalizeImageUrl(product.image_url || product.item_image)}
+              alt={product?.description ?? ''}
+              src={normalizeImageUrl(product.image_url)}
             ></Image>
           </>
         ) : (
@@ -73,10 +73,10 @@ export const CommonCard: React.FC<CommonCardProps> = ({
               }
               height={272}
               width={272}
-              alt={product?.title ?? ''}
+              alt={product?.description ?? ''}
               src={
-                product.item_image !== ''
-                  ? `${s3BucketUrl}/${product.item_image}`
+                product?.image_url !== ''
+                  ? `${s3BucketUrl}/${product.image_url}`
                   : '/not-available.webp'
               }
             ></Image>
