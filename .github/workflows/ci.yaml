@@ -66,8 +66,7 @@ jobs:
             fi
 
             sudo rm -rf .next/cache &&
-            sudo rm -rf node_modules/.cache &&
-            npm cache clean --force
+            sudo rm -rf node_modules
           "
           rm private_key.pem
         shell: /usr/bin/bash -e {0}
