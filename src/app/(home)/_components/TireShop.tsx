@@ -4,6 +4,7 @@ import QuantityInput from '@/app/collections/product/[singleProduct]/_tires/quan
 import Container from '@/components/ui/container/container';
 import { s3BucketUrl } from '@/utils/api';
 import Image from 'next/image';
+import Link from 'next/link';
 
 type Tire = {
   id: number;
@@ -123,11 +124,12 @@ export default function TireShop() {
           ))}
         </div>
 
-        <div className="">
-          <a href="#" className="text-xl underline font-normal">
-            Shop all tires
-          </a>
-        </div>
+        <Link
+          href={'/collections/product-category/tires'}
+          className="text-xl underline font-normal"
+        >
+          Shop all tires
+        </Link>
       </div>
     </Container>
   );

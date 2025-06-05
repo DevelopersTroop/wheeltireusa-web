@@ -4,6 +4,7 @@ import Item from '@/components/ui/breadcrumb/item';
 import { TInventoryItem } from '@/types/product';
 import TireDescription from './tire-description';
 import TireDetails from './tire-details';
+import { normalizeImageUrl } from '@/lib/utils';
 
 const Tire = ({ product }: { product: TInventoryItem }) => {
   return (
@@ -24,7 +25,9 @@ const Tire = ({ product }: { product: TInventoryItem }) => {
           <div className="w-full">
             <ImageGallery
               images={Array.from({ length: 6 }).map(() => ({
-                src: product?.image_url,
+                src: normalizeImageUrl(
+                  product?.image_url || product?.item_image
+                ),
               }))}
             />
           </div>

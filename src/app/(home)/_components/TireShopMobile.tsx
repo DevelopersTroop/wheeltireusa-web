@@ -2,6 +2,7 @@
 
 import Container from '@/components/ui/container/container';
 import { MobileItemsTireShop } from './TireShopMobileItems';
+import Link from 'next/link';
 
 type Tire = {
   id: number;
@@ -37,11 +38,12 @@ export default function TireShopMobile() {
 
         <MobileItemsTireShop tires={tires} />
 
-        <div className="">
-          <a href="#" className="text-xl underline font-normal">
-            Shop all tires
-          </a>
-        </div>
+        <Link
+          href={'/collections/product-category/tires'}
+          className="text-xl underline font-normal"
+        >
+          Shop all tires
+        </Link>
       </div>
     </Container>
   );

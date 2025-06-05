@@ -49,10 +49,12 @@ export const Footer = () => {
                     <h3 className={'text-2xl font-bold'}>
                       Your Road to Reliability
                     </h3>
-                    <button className="w-[320px] max-w-[384px] bg-[#F6511D] hover:bg-[#e0551b] text-white font-semibold text-lg px-6 py-3 rounded flex items-center justify-center gap-2">
-                      <img src="/images/shopCategoty/Vector.svg" />
-                      Find Your Perfect Match
-                    </button>
+                    <Link href={'/collections/product-category/tires'}>
+                      <button className="w-[320px] max-w-[384px] bg-[#F6511D] hover:bg-[#e0551b] text-white font-semibold text-lg px-6 py-3 rounded flex items-center justify-center gap-2">
+                        <img src="/images/shopCategoty/Vector.svg" />
+                        Find Your Perfect Match
+                      </button>
+                    </Link>
                     <p className={'leading-loose'}>
                       Guaranteed Best Prices on Tires and Wheels
                     </p>
@@ -97,37 +99,24 @@ export const Footer = () => {
                 }
               >
                 <li>
-                  <Link
-                    target="_blank"
-                    href={'#'}
-                    className={'text-lg font-semibold'}
-                  >
+                  <Link href={'#'} className={'text-lg font-semibold'}>
                     Shop
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    target="_blank"
-                    href={'#'}
-                    className={'text-base font-normal'}
-                  >
+                  <Link href={'#'} className={'text-base font-normal'}>
                     Tire Search
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    target="_blank"
-                    href={'#'}
-                    className={'text-base font-normal'}
-                  >
+                  <Link href={'/services'} className={'text-base font-normal'}>
                     Services
                   </Link>
                 </li>
 
                 <li>
                   <Link
-                    target="_blank"
-                    href={'#'}
+                    href={'/deals-and-rebates'}
                     className={'text-base font-normal'}
                   >
                     Deals and Rebates
@@ -135,19 +124,14 @@ export const Footer = () => {
                 </li>
                 <li>
                   <Link
-                    target="_blank"
-                    href={'#'}
+                    href={'/military-discount'}
                     className={'text-base font-normal'}
                   >
                     Military Discount
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    target="_blank"
-                    href={'#'}
-                    className={'text-base font-normal'}
-                  >
+                  <Link href={'/financing'} className={'text-base font-normal'}>
                     Financing Options
                   </Link>
                 </li>
@@ -162,18 +146,13 @@ export const Footer = () => {
                 }
               >
                 <li>
-                  <Link
-                    target="_blank"
-                    href={'#'}
-                    className={'text-lg font-semibold'}
-                  >
+                  <Link href={'#'} className={'text-lg font-semibold'}>
                     Customer Care
                   </Link>
                 </li>
                 <li>
                   <Link
-                    target="_blank"
-                    href={'#'}
+                    href={'/customer-support'}
                     className={'text-base font-normal'}
                   >
                     Customer Support
@@ -181,8 +160,7 @@ export const Footer = () => {
                 </li>
                 <li>
                   <Link
-                    target="_blank"
-                    href={'#'}
+                    href={'/store-locator'}
                     className={'text-base font-normal'}
                   >
                     Store Locator
@@ -191,8 +169,7 @@ export const Footer = () => {
 
                 <li>
                   <Link
-                    target="_blank"
-                    href={'#'}
+                    href={'/return-policy'}
                     className={'text-base font-normal'}
                   >
                     Return Policy
@@ -200,8 +177,7 @@ export const Footer = () => {
                 </li>
                 <li>
                   <Link
-                    target="_blank"
-                    href={'#'}
+                    href={'/safety-tips'}
                     className={'text-base font-normal'}
                   >
                     Safety Tips
@@ -218,37 +194,27 @@ export const Footer = () => {
                 }
               >
                 <li>
-                  <Link
-                    target="_blank"
-                    href={'#'}
-                    className={'text-lg font-semibold'}
-                  >
+                  <Link href={'#'} className={'text-lg font-semibold'}>
                     Tips & Guidelines
                   </Link>
                 </li>
                 <li>
                   <Link
-                    target="_blank"
-                    href={'#'}
+                    href={'/safety-tips'}
                     className={'text-base font-normal'}
                   >
                     Tire Safety
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    target="_blank"
-                    href={'#'}
-                    className={'text-base font-normal'}
-                  >
+                  <Link href={'#'} className={'text-base font-normal'}>
                     Tire Size Calculator
                   </Link>
                 </li>
 
                 <li>
                   <Link
-                    target="_blank"
-                    href={'#'}
+                    href={'/tire-pressure-guide'}
                     className={'text-base font-normal'}
                   >
                     Tire Pressure Guide
@@ -256,8 +222,7 @@ export const Footer = () => {
                 </li>
                 <li>
                   <Link
-                    target="_blank"
-                    href={'#'}
+                    href={'/installation-tips'}
                     className={'text-base font-normal'}
                   >
                     Installation Tips
@@ -265,8 +230,7 @@ export const Footer = () => {
                 </li>
                 <li>
                   <Link
-                    target="_blank"
-                    href={'#'}
+                    href={'/blog-resources'}
                     className={'text-base font-normal'}
                   >
                     Blog Resources
@@ -284,17 +248,20 @@ export const Footer = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="text-base font-normal">
+                  <Link href="/about-us" className="text-base font-normal">
                     About Us
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="text-base font-normal">
+                  <Link href="/careers" className="text-base font-normal">
                     Careers
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="text-base font-normal">
+                  <Link
+                    href="/become-an-installer"
+                    className="text-base font-normal"
+                  >
                     Become an Installer
                   </Link>
                 </li>
@@ -331,8 +298,8 @@ export const Footer = () => {
           <div className={'flex flex-col gap-8  text-center mt-4'}>
             <div className="flex flex-row gap-6 justify-center underline">
               <Link href={'/privacy-policy'}>Privacy Policy </Link>
-              <Link href={'#'}>Terms of Use</Link>
-              <Link href={'#'}>Warranty</Link>
+              <Link href={'/terms-of-use'}>Terms of Use</Link>
+              <Link href={'/warranty'}>Warranty</Link>
             </div>
             <div>&copy; 2025 Tirematic Corporation. All Rights Reserved.</div>
           </div>

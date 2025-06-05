@@ -1,5 +1,6 @@
 import Container from '@/components/ui/container/container';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const deals = [
   {
@@ -84,11 +85,12 @@ const DealsAndRebates = () => {
         ))}
       </div>
 
-      <div className="text-center">
-        <a href="#" className="text-[#212227] text-xl underline font-normal">
-          View all deals
-        </a>
-      </div>
+      <Link
+        href={'/collections/product-category/tires'}
+        className="text-[#212227] text-xl underline font-normal text-center"
+      >
+        View all deals
+      </Link>
     </Container>
   );
 };
