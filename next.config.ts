@@ -55,6 +55,14 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  rewrites: async () => {
+    return [
+      {
+        source: '/sitemap.xml', // The URL you want
+        destination: '/api/sitemap', // The actual route (mapped to your `route.ts`)
+      },
+    ];
+  },
 };
 
 export default nextConfig;

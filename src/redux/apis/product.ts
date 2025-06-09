@@ -40,7 +40,10 @@ const products = baseApi.injectEndpoints({
           }
         });
 
-        return { params: shallowParams, url: '/products/list' };
+        return {
+          params: { ...shallowParams, category: 'tire' },
+          url: '/products/list',
+        };
       },
     }),
     getProduct: builder.query<{ product: TInventoryItem }, string>({

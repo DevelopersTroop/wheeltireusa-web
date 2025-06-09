@@ -300,6 +300,7 @@ export const Footer = () => {
               <Link href={'/privacy-policy'}>Privacy Policy </Link>
               <Link href={'/terms-of-use'}>Terms of Use</Link>
               <Link href={'/warranty'}>Warranty</Link>
+              <Link href={'/sitemap.xml'}>Sitemap</Link>
             </div>
             <div>&copy; 2025 Tirematic Corporation. All Rights Reserved.</div>
           </div>

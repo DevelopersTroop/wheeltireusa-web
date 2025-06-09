@@ -2,30 +2,17 @@
 
 import QuantityInput from '@/app/collections/product/[singleProduct]/_tires/quantity-input';
 import Container from '@/components/ui/container/container';
-import { s3BucketUrl } from '@/utils/api';
+import { normalizeImageUrl } from '@/lib/utils';
+import { useGetProductsQuery } from '@/redux/apis/product';
+import { getPrice } from '@/utils/price';
 import Image from 'next/image';
 import Link from 'next/link';
 
-type Tire = {
-  id: number;
-  brand: string;
-  name: string;
-  price: number;
-  discount: number;
-  image: string;
-  inventory_available: boolean;
-};
-
-const tires: Tire[] = Array(4).fill({
-  id: 1,
-  brand: 'Michelin',
-  name: 'DEFENDER T+H',
-  price: 197.0,
-  discount: -1170.0,
-  image: 'ns-products/tire.webp', // replace with actual image path
-});
-
 export default function TireShop() {
+  const { data } = useGetProductsQuery({
+    size: 4,
+    sort: 'Sort by price (high to low)',
+  });
   return (
     <Container>
       <div className="hidden sm:flex flex-col gap-6 sm:gap-8 py-16 sm:py-28 bg-white text-center">
@@ -38,7 +25,7 @@ export default function TireShop() {
           </p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8">
-          {tires.map((tire, index) => (
+          {data?.products.map((tire, index) => (
             <div
               key={index}
               className="border rounded-xl overflow-hidden bg-white text-left"
@@ -46,12 +33,8 @@ export default function TireShop() {
               <div className="w-full px-4 py-6 flex flex-col ">
                 <div className="w-full flex items-center justify-center">
                   <Image
-                    src={
-                      tire?.image !== ''
-                        ? `${s3BucketUrl}/${tire.image}`
-                        : '/not-available.webp'
-                    }
-                    alt={tire.name}
+                    src={normalizeImageUrl(tire.item_image || tire.image_url)}
+                    alt={tire.title || tire.description || ''}
                     width={304}
                     height={300}
                     className="w-[304px] h-full object-cover"
@@ -88,7 +71,7 @@ export default function TireShop() {
                     {tire.brand}
                   </p>
                   <h3 className="text-2xl font-bold text-[#210203]">
-                    {tire.name}
+                    {tire.title}
                   </h3>
                 </div>
 
@@ -106,7 +89,7 @@ export default function TireShop() {
                     <div className="flex flex-row gap-2">
                       <p className="text-[#52545B] text-xl">x</p>
                       <p className="text-xl font-semibold text-[#212227]">
-                        ${tire.price.toFixed(2)}
+                        ${getPrice(tire.msrp, tire.price)?.toFixed(2)}
                       </p>
                     </div>
                   </div>
@@ -115,7 +98,7 @@ export default function TireShop() {
                       Tire set discount
                     </p>
                     <p className="text-xl font-semibold text-[#212227]">
-                      ${tire.discount.toFixed(2)}
+                      ${(-1170).toFixed(2)}
                     </p>
                   </div>
                 </div>

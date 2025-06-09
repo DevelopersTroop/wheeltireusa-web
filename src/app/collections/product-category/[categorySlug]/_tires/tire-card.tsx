@@ -90,7 +90,9 @@ const TireCard = ({
               {/* Display tire image */}
               <Image
                 className="max-w-[272px] max-h-[272px] object-contain"
-                src={normalizeImageUrl(products[0].image_url)}
+                src={normalizeImageUrl(
+                  products[0].item_image || products[0].image_url
+                )}
                 width={272}
                 height={272}
                 alt={products[0]?.partnumber ?? ''}
