@@ -1,3 +1,4 @@
+import { TCartProduct } from '@/redux/features/cartSlice';
 import { TCheckoutState } from '@/redux/features/checkoutSlice';
 import { TInventoryItem } from '@/types/product';
 
@@ -43,9 +44,7 @@ export function getPrice(
 }
 
 export function calculateCartTotal<T = string>(
-  products: {
-    [x: string]: TInventoryItem & { quantity: number };
-  },
+  products: TCartProduct[],
   discount?: number,
   format: boolean = true
 ): T {

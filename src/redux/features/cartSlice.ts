@@ -1,7 +1,10 @@
 import { TInventoryItem } from '@/types/product';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-type TCartProduct = TInventoryItem & { cartPackage: string; quantity: number };
+export type TCartProduct = TInventoryItem & {
+  cartPackage: string;
+  quantity: number;
+};
 
 type TCartSliceState = {
   products: TCartProduct[];
@@ -35,9 +38,9 @@ const cartSlice = createSlice({
         }
       }
     },
-    removeFromCart: (state, action: PayloadAction<TCartProduct>) => {
+    removeFromCart: (state, action: PayloadAction<string>) => {
       state.products = state.products.filter(
-        (p) => p.cartPackage !== action.payload.cartPackage
+        (p) => p.cartPackage !== action.payload
       );
     },
   },
