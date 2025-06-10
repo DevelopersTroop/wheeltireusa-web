@@ -1,19 +1,28 @@
 import { TInventoryItem, TInventoryListItem } from '@/types/product';
 import { s3BucketUrl } from './api';
 import { TCartProduct } from '@/types/cart';
+import { TWishListData } from '@/types/wishlist';
 
 export const isInventoryItem = (
-  product: TInventoryItem | TInventoryListItem | TCartProduct
+  product: TInventoryItem | TInventoryListItem | TCartProduct | TWishListData
 ): product is TInventoryItem => {
   return 'image_url' in product;
 };
 
+export const isWishListData = (
+  product: TInventoryItem | TInventoryListItem | TCartProduct | TWishListData
+): product is TWishListData => {
+  return 'image_url' in product;
+};
+
 export const getProductThumbnail = (
-  product: TInventoryItem | TInventoryListItem | TCartProduct
+  product: TInventoryItem | TInventoryListItem | TCartProduct | TWishListData
 ) => {
   const imageUrl = isInventoryItem(product)
     ? product?.image_url
-    : product?.item_image;
+    : isWishListData(product)
+      ? product?.image_url
+      : product?.item_image;
   if (!imageUrl?.length) {
     return '/tire-not-available.png';
   }

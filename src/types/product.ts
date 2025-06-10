@@ -2,6 +2,7 @@ import { TCategory } from './category';
 
 export type TInventoryBase = {
   _id: string;
+  item_class?: string;
   slug: string;
   distributorName?: string;
   model_group?: string;

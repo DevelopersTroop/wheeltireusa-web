@@ -1,14 +1,13 @@
 'use client';
 
 import { TCartProduct } from '@/types/cart';
-import { s3BucketUrl } from '@/utils/api';
 import { getPrice } from '@/utils/price';
+import { getProductThumbnail } from '@/utils/product';
 import Image from 'next/image';
 import CardPrice from './card-price';
 import DeliveryWithStock from './delivery-with-stock';
 import Quantity from './quantity';
 import TireAttributes from './tire-attributes';
-import { getProductThumbnail } from '@/utils/product';
 
 const TiresCard = ({ tire }: { tire: TCartProduct }) => {
   // const dispatch = useDispatch();
@@ -60,7 +59,7 @@ const TiresCard = ({ tire }: { tire: TCartProduct }) => {
               src={getProductThumbnail(tire)}
               width={160}
               height={160}
-              alt={tire?.title ?? ''}
+              alt={tire?.tire_size ?? ''}
             />
           </div>
         </div>
