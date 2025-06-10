@@ -7,7 +7,7 @@ import { z } from 'zod';
 import GenericFormContext from './context/GenericFormContext';
 import { GenericFormRef } from './types/generic-form';
 
-type GenericFormProps<TSchema extends z.ZodType> = {
+type GenericFormProps<TSchema extends z.ZodType<any>> = {
   children: React.ReactNode;
   schema: TSchema;
   defaultValues: Partial<z.infer<TSchema>>;
