@@ -32,7 +32,7 @@ server {
     }
 
     location ~ ^/_next/static/(.*)\$ {
-        proxy_pass http://dpgcl9gapwcdl.cloudfront.net/oe-web/\$commit_sha/_next/static/\$1;
+        proxy_pass http://dpgcl9gapwcdl.cloudfront.net/tiremetic-web/\$commit_sha/_next/static/\$1;
         proxy_set_header Host dpgcl9gapwcdl.cloudfront.net;
         proxy_ssl_name dpgcl9gapwcdl.cloudfront.net;
         proxy_ssl_server_name on;
@@ -47,7 +47,7 @@ server {
     }
 
     location ~ ^/public/(.*)\$ {
-        proxy_pass http://dpgcl9gapwcdl.cloudfront.net/oe-web/\$commit_sha/public/\$1;
+        proxy_pass http://dpgcl9gapwcdl.cloudfront.net/tiremetic-web/\$commit_sha/public/\$1;
         proxy_set_header Host dpgcl9gapwcdl.cloudfront.net;
         proxy_ssl_name dpgcl9gapwcdl.cloudfront.net;
         proxy_ssl_server_name on;

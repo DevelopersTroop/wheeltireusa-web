@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import MainMenuMobile from './main-menu-mobile';
-import useHeader from '../context/useHeader';
+import useHeader from '../../context/useHeader';
 
 // MobileMenuWrapper Component
 // This component acts as a wrapper for the mobile menu, managing its open/close state using the header context.

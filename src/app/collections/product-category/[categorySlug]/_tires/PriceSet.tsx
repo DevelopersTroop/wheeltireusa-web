@@ -1,17 +1,21 @@
+import { TInventoryListItem } from '@/types/product';
+import { getPrice } from '@/utils/price';
 import React from 'react';
 
 // PriceSet component to calculate and display the total price of a set of tires
 const PriceSet = ({
-  frontPrice,
-  rearPrice,
+  front,
+  rear,
   frontQuantity,
   rearQuantity,
 }: {
-  frontPrice: string;
-  rearPrice: string;
+  front: TInventoryListItem;
+  rear: TInventoryListItem;
   frontQuantity: number;
   rearQuantity: number;
 }) => {
+  const frontPrice = getPrice(front).toFixed(2);
+  const rearPrice = getPrice(rear).toFixed(2);
   // Calculate total price by multiplying price per unit with quantity
   let totalPrice = Number(frontPrice) * frontQuantity;
   // Check if rearPrice is a valid number before adding to totalPrice

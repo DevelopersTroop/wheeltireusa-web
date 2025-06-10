@@ -1,10 +1,14 @@
 import { useCreateWishlistMutation } from '@/redux/apis/wishlist';
-import { TInventoryItem } from '@/types/product';
+import { TInventoryListItem } from '@/types/product';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-const ComparisonWithFavorite = ({ product }: { product: TInventoryItem }) => {
+const ComparisonWithFavorite = ({
+  product,
+}: {
+  product: TInventoryListItem;
+}) => {
   // Local state for managing success and error messages
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -51,7 +55,7 @@ const ComparisonWithFavorite = ({ product }: { product: TInventoryItem }) => {
               data: {
                 title: product?.description,
                 category: product?.category,
-                image_url: product.image_url,
+                image_url: product.item_image,
                 part_number: product?.partnumber,
               },
             });

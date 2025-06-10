@@ -3,7 +3,7 @@ import React from 'react';
 import { IoIosMenu } from 'react-icons/io';
 // import MainMenuMobile from './main-menu-mobile';
 import { cn } from '@/lib/utils';
-import useHeader from '../context/useHeader';
+import useHeader from '../../context/useHeader';
 
 // MobileMenuButton Component
 // This component renders a button to toggle the mobile menu's open/close state.

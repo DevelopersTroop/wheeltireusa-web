@@ -1,11 +1,11 @@
 'use client';
-import { addToCart } from '@/redux/features/cartSlice';
+import { addToCart, TCartProduct } from '@/redux/features/cartSlice';
 import { useAppDispatch } from '@/redux/store';
 // import { addToCart, removeTireFromCart } from '@/app/globalRedux/features/cart/cart-slice'; // Import Redux actions to add/remove items from the cart
 // import { RootState } from '@/app/globalRedux/store'; // Import RootState to access the Redux store's state
 // import { TCartProduct } from '@/app/types/cart'; // Import type for cart product
 // import { getPrice } from '@/app/utils/price'; // Utility function to format price
-import { TInventoryItem } from '@/types/product';
+import { TInventoryListItem } from '@/types/product';
 import { v4 as uuidv4 } from 'uuid';
 
 const TireCardButton = ({
@@ -14,7 +14,7 @@ const TireCardButton = ({
   frontTireQuantity,
   rearTireQuantity,
 }: {
-  products: TInventoryItem[];
+  products: TInventoryListItem[];
   wheelInfo: {
     frontForging: string;
     rearForging: string;
@@ -34,7 +34,7 @@ const TireCardButton = ({
       quantity: id === 0 ? frontTireQuantity : rearTireQuantity,
     }));
 
-    dispatch(addToCart(cartProducts));
+    dispatch(addToCart(cartProducts as TCartProduct[]));
   };
   return (
     <button

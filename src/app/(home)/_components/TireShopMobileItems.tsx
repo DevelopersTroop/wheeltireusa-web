@@ -1,7 +1,8 @@
 'use client';
 
 import QuantityInput from '@/app/collections/product/[singleProduct]/_tires/quantity-input';
-import { s3BucketUrl } from '@/utils/api';
+import { TInventoryListItem } from '@/types/product';
+import { getProductThumbnail } from '@/utils/product';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import { useRef } from 'react';
@@ -10,18 +11,8 @@ import 'swiper/css/pagination';
 import { Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react';
 
-type Tire = {
-  id: number;
-  brand: string;
-  name: string;
-  price: number;
-  discount: number;
-  image: string;
-  inventory_available: boolean;
-};
-
 export const MobileItemsTireShop: React.FC<{
-  tires: Tire[] | undefined;
+  tires: TInventoryListItem[] | undefined;
 }> = ({ tires }) => {
   const swiperRef = useRef<SwiperRef>(null);
 
@@ -73,12 +64,8 @@ export const MobileItemsTireShop: React.FC<{
               <div className="w-full px-4 py-6 flex flex-col ">
                 <div className="w-full flex items-center justify-center">
                   <Image
-                    src={
-                      tire?.image !== ''
-                        ? `${s3BucketUrl}/${tire.image}`
-                        : '/not-available.webp'
-                    }
-                    alt={tire.name}
+                    src={getProductThumbnail(tire)}
+                    alt={tire.title || tire.description || ''}
                     width={304}
                     height={300}
                     className="w-[304px] h-full object-cover"
@@ -115,7 +102,7 @@ export const MobileItemsTireShop: React.FC<{
                     {tire.brand}
                   </p>
                   <h3 className="text-2xl font-bold text-[#210203]">
-                    {tire.name}
+                    {tire.title || tire.description || ''}
                   </h3>
                 </div>
 
@@ -133,7 +120,7 @@ export const MobileItemsTireShop: React.FC<{
                     <div className="flex flex-row gap-2">
                       <p className="text-[#52545B] text-xl">x</p>
                       <p className="text-xl font-semibold text-[#212227]">
-                        ${tire.price.toFixed(2)}
+                        ${tire.price?.toFixed(2)}
                       </p>
                     </div>
                   </div>
@@ -142,7 +129,7 @@ export const MobileItemsTireShop: React.FC<{
                       Tire set discount
                     </p>
                     <p className="text-xl font-semibold text-[#212227]">
-                      ${tire.discount.toFixed(2)}
+                      ${(-1170).toFixed(2)}
                     </p>
                   </div>
                 </div>

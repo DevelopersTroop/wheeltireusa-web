@@ -10,8 +10,8 @@ import TireFilters from '../_filters/tire-filters';
 import ProductCardSkeleton from '../_loading/product-card-skeleton';
 import NoProductsFound from '../no-products-found';
 import ProductPagination from '../product-pagination';
-import TireCard from './tire-card';
-import TireFilterAndSort from './tire-filter-and-sort';
+import TireCard from './TireCard';
+import TireFilterAndSort from './TireFilterAndSort';
 import useFilter from '../_filters/filter-store/use-filter';
 
 // Type definition for page props, optional page parameter

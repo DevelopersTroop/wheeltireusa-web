@@ -2,12 +2,12 @@
 
 import LoadingSpinner from '@/components/shared/loading/spinner';
 import useAuth from '@/hooks/useAuth';
-import { normalizeImageUrl } from '@/lib/utils';
 import {
   useGetWishlistQuery,
   useRemoveWishlistMutation,
 } from '@/redux/apis/wishlist';
 import { s3BucketUrl } from '@/utils/api';
+import { getProductThumbnail } from '@/utils/product';
 import Image from 'next/image';
 import Link from 'next/link'; // Next.js Link for navigation
 import { useRouter } from 'next/navigation';
@@ -73,7 +73,7 @@ const SaveProduct = () => {
                         title={product?.title}
                       >
                         <img
-                          src={normalizeImageUrl(product.image_url)}
+                          src={getProductThumbnail(product)}
                           alt={product?.title ?? ''}
                           // width={66}
                           // height={66}

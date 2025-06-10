@@ -17,7 +17,7 @@ type TireSizeForm = {
 const useTireSizeSelection = (
   setSelectedTireSizes: React.Dispatch<React.SetStateAction<TTireSize | null>>
 ) => {
-  const { data, isLoading } = useGetFilterListQuery({ category: 'tire' });
+  const { data, isLoading } = useGetFilterListQuery();
   const allWidths = (data?.filters?.width as TSingleFilter[] | undefined)?.map(
     (item) => item.value
   );

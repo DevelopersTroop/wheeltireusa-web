@@ -1,17 +1,18 @@
-import { TInventoryItem } from '@/types/product';
+import { TInventoryItem, TInventoryListItem } from '@/types/product';
 import { TPaginatedResponse } from '@/types/response';
 import { baseApi } from './base';
 import { TFilters } from '@/types/filter';
 
+const shouldArray = ['model', 'tire_size', 'diameter'];
+
 const products = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getProducts: builder.query<
-      TPaginatedResponse<{ products: TInventoryItem[] }>,
+      TPaginatedResponse<{ products: TInventoryListItem[] }>,
       any
     >({
       query: (params) => {
         const shallowParams = { ...params };
-        console.log(shallowParams);
         switch (shallowParams?.sort) {
           case 'Sort by price (high to low)':
             shallowParams.sort = [{ whom: 'price', order: 'desc' }];
@@ -28,20 +29,38 @@ const products = baseApi.injectEndpoints({
           default:
             shallowParams.sort = [{ whom: '_id', order: 'desc' }];
         }
-        return { params: shallowParams, url: '/products/list' };
+
+        Object.entries(shallowParams).forEach(([key, value]) => {
+          if (
+            shouldArray.indexOf(key) !== -1 &&
+            typeof value === 'string' &&
+            value.includes(',')
+          ) {
+            shallowParams[key] = value.split(',');
+          }
+        });
+
+        return {
+          params: { ...shallowParams, category: 'tire' },
+          url: '/products/list',
+        };
       },
     }),
     getProduct: builder.query<{ product: TInventoryItem }, string>({
       query: (slug) => ({ url: `/products/${slug}` }),
     }),
-    getFilterList: builder.query<{ filters: TFilters }, any>({
-      query: (params) => ({ params, url: '/products/filter-list' }),
+    getFilterList: builder.query<{ filters: TFilters }, void>({
+      query: () => ({
+        url: '/products/filter-list',
+        params: { category: 'tire' },
+      }),
     }),
   }),
 });
 
 export const {
   useGetProductsQuery,
+  useLazyGetProductsQuery,
   useGetProductQuery,
   useGetFilterListQuery,
   useLazyGetFilterListQuery,

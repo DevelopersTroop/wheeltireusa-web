@@ -187,8 +187,7 @@ export const CheckoutProvider: React.FC<{ children: React.ReactNode }> = ({
   const subTotalCost = useMemo(() => {
     if (!productsInfo) return 0;
     return productsInfo?.reduce(
-      (acc, product) =>
-        acc + getPrice(product.msrp, product.price) * product.quantity,
+      (acc, product) => acc + getPrice(product) * product.quantity,
       0
     );
   }, [productsInfo]);

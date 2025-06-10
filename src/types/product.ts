@@ -2,14 +2,18 @@ import { TCategory } from './category';
 
 export type TInventoryBase = {
   _id: string;
+  item_class?: string;
   slug: string;
   distributorName?: string;
+  model_group?: string;
   brand?: string;
   forging_series?: string[];
   msrp?: number;
   price?: number;
   map?: number;
   inventory_available?: number;
+  item_image?: string;
+  title?: string;
   tire_size?: string;
   tire_type?: string[];
   renderedImages?: string[];
@@ -19,12 +23,10 @@ export type TInventoryBase = {
   description: string;
   diameter?: string;
   gtin?: string;
-  image_url: string;
   load_index?: string;
   m_s?: string;
   max_load_2_kg?: string;
   max_load_2_lbs?: string;
-  model?: string;
   overall_dia_in?: string;
   overall_dia_mm?: string;
   partnumber: string;
@@ -49,6 +51,7 @@ export type TInventoryBase = {
   category?: TCategory;
 };
 export type TInventoryItem = TInventoryBase & {
+  image_url?: string;
   sidewall?: string;
   load_rating?: string;
   raw_size?: string;
@@ -96,6 +99,7 @@ export type TInventoryItem = TInventoryBase & {
 };
 export type TInventoryListItem = TInventoryBase & {
   inventoryId?: string;
+  item_image?: string;
   pricingId?: string;
   inventory?: TInventoryItem['inventoryId'];
   pricing?: TInventoryItem['pricingId'];

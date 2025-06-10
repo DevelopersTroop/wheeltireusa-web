@@ -1,4 +1,4 @@
-import { TCartProduct } from '@/types/cart';
+import { TCartProduct } from '@/redux/features/cartSlice';
 import React from 'react';
 
 // Component to display tire attributes

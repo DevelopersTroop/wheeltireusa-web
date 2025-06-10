@@ -1,13 +1,12 @@
 'use client';
 
-import { normalizeImageUrl } from '@/lib/utils';
-import { TCartProduct } from '@/types/cart';
 import { getPrice } from '@/utils/price';
+import { getProductThumbnail } from '@/utils/product';
 import Image from 'next/image';
 import DeliveryWithStock from './delivery-with-stock';
 import Quantity from './quantity';
 import TireAttributes from './tire-attributes';
-import { removeFromCart } from '@/redux/features/cartSlice';
+import { removeFromCart, TCartProduct } from '@/redux/features/cartSlice';
 import { useDispatch } from 'react-redux';
 
 const TiresCard = ({ tire }: { tire: TCartProduct }) => {
@@ -58,17 +57,16 @@ const TiresCard = ({ tire }: { tire: TCartProduct }) => {
           {/* <Rating /> */}
           <div className="w-full flex justify-center relative">
             <Image
-              src={normalizeImageUrl(tire.image_url || tire.item_image)}
+              src={getProductThumbnail(tire)}
               width={160}
               height={160}
-              alt={tire?.title ?? ''}
+              alt={tire?.tire_size ?? ''}
             />
           </div>
         </div>
 
         <div className="flex flex-col justify-center items-start flex-1 relative w-full">
           <div
-            key={tire.cartSerial}
             className={`py-5 flex flex-col items-start gap-2 self-stretch relative w-full `}
           >
             {/* <div className="pl-0 pr-4 flex justify-between items-center self-stretch relative w-full">
@@ -85,10 +83,7 @@ const TiresCard = ({ tire }: { tire: TCartProduct }) => {
                           : ''}
                   </span>
                 </h5>
-                <CardPrice
-                  price={getPrice(tire?.msrp, tire?.price) ?? 0}
-                  type="tire"
-                />
+                <CardPrice price={getPrice(tire) ?? 0} type="tire" />
               </div>
             </div> */}
             <DeliveryWithStock deliveryTime={deliveryTime} />
@@ -100,7 +95,7 @@ const TiresCard = ({ tire }: { tire: TCartProduct }) => {
               <div>
                 <p className="text-base leading-[19px] text-[#210203]">
                   <span className="text-[#210203] text-base font-semibold">
-                    {getPrice(tire?.msrp, tire?.price)}
+                    {getPrice(tire)}
                   </span>{' '}
                   per tire
                 </p>
