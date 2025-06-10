@@ -1,9 +1,10 @@
 // Import necessary libraries and types for the component
 'use client'; // Indicate that this component should be rendered on the client side
 // import { s3BucketUrl } from "@/app/utils/api"
-import { cn, normalizeImageUrl } from '@/lib/utils'; // Utility function to handle className merging
+import { cn } from '@/lib/utils'; // Utility function to handle className merging
 import { TInventoryItem } from '@/types/product';
 import { s3BucketUrl } from '@/utils/api';
+import { getProductThumbnail } from '@/utils/product';
 import Image from 'next/image'; // Next.js Image component for optimized image loading
 import { useEffect, useRef, useState } from 'react'; // React hooks for component logic
 
@@ -60,7 +61,7 @@ export const CommonCard: React.FC<CommonCardProps> = ({
               height={272}
               width={272}
               alt={product?.description ?? ''}
-              src={normalizeImageUrl(product.image_url)}
+              src={getProductThumbnail(product)}
             ></Image>
           </>
         ) : (

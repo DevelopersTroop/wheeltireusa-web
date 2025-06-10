@@ -8,7 +8,7 @@ import CardPrice from './card-price';
 import DeliveryWithStock from './delivery-with-stock';
 import Quantity from './quantity';
 import TireAttributes from './tire-attributes';
-import { normalizeImageUrl } from '@/lib/utils';
+import { getProductThumbnail } from '@/utils/product';
 
 const TiresCard = ({ tire }: { tire: TCartProduct }) => {
   // const dispatch = useDispatch();
@@ -57,7 +57,7 @@ const TiresCard = ({ tire }: { tire: TCartProduct }) => {
           {/* <Rating /> */}
           <div className="w-full flex justify-center relative">
             <Image
-              src={normalizeImageUrl(tire.image_url || tire.item_image)}
+              src={getProductThumbnail(tire)}
               width={160}
               height={160}
               alt={tire?.title ?? ''}
@@ -88,10 +88,7 @@ const TiresCard = ({ tire }: { tire: TCartProduct }) => {
                           : ''}
                   </span>
                 </h5>
-                <CardPrice
-                  price={getPrice(tire?.msrp, tire?.price) ?? 0}
-                  type="tire"
-                />
+                <CardPrice price={getPrice(tire) ?? 0} type="tire" />
               </div>
             </div>
             <DeliveryWithStock deliveryTime={deliveryTime} />

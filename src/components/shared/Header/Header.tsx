@@ -1,14 +1,15 @@
 'use client';
-import { Search, ShoppingCart } from 'lucide-react';
+import FilterModals from '@/components/shared/MainFilterModal/MainFilterModal';
+import { useTypedSelector } from '@/redux/store';
+import { ShoppingCart } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import Navbar from '../Navbar/Navbar';
-import Image from 'next/image';
-import FilterModals from '@/components/shared/MainFilterModal/MainFilterModal';
-import MobileMenuButton from './mobile-menu/mobile-menu-button';
+import MobileMenuButton from './components/mobile-menu/mobile-menu-button';
+import MobileMenuWrapper from './components/mobile-menu/mobile-menu-wrapper';
+import HeaderSearchButton from './components/search/HeaderSearchButton';
+import UserAccountLink from './components/user-account-link/user-account-link';
 import HeaderProvider from './context/header-provider';
-import MobileMenuWrapper from './mobile-menu/mobile-menu-wrapper';
-import UserAccountLink from './user-account-link/user-account-link';
-import { useTypedSelector } from '@/redux/store';
 
 export const Header = () => {
   const { products } = useTypedSelector((state) => state.persisted.cart);
@@ -36,7 +37,7 @@ export const Header = () => {
                 </div>
               </div>
               <div className="flex items-center gap-4 lg:gap-8">
-                <Search />
+                <HeaderSearchButton isHomepage />
                 {/* <Link href={'/login'}>
                   <UserCircle />
                 </Link> */}

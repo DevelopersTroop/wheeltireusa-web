@@ -1,12 +1,27 @@
 import { TCheckoutState } from '@/redux/features/checkoutSlice';
-import { TInventoryItem } from '@/types/product';
+import { TCartProduct } from '@/types/cart';
+import { TProductInfo } from '@/types/order';
+import { TInventoryItem, TInventoryListItem } from '@/types/product';
 
-export function formatPrice(number: number | undefined | null): string {
-  if (typeof number === 'undefined' || number === null || isNaN(number)) {
-    return '0.00';
-  }
+export function formatPrice(
+  data?: number | null | TInventoryItem | TInventoryListItem
+): string {
   // Fix the number to 2 decimal places and add comma formatting
-  return number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+  const formatter = (price: number) =>
+    price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+
+  if (
+    typeof data === 'number' ||
+    typeof data === 'undefined' ||
+    data === null
+  ) {
+    if (typeof data === 'undefined' || data === null || isNaN(data)) {
+      return '0.00';
+    }
+  } else {
+    return formatter(getPrice(data));
+  }
+  return '0.00';
 }
 export function isSale(
   msrp: number | undefined | null,
@@ -21,9 +36,10 @@ export function isSale(
   return msrp > map && map !== 0 && msrp !== 0;
 }
 export function getPrice(
-  msrp: number | undefined | null,
-  map: number | undefined | null
+  product: TInventoryItem | TInventoryListItem | TProductInfo | TCartProduct
 ): number {
+  const msrp = product?.msrp;
+  const map = product?.price;
   if (typeof msrp === 'undefined' || msrp === null) {
     return map ?? 0;
   }
@@ -52,8 +68,7 @@ export function calculateCartTotal<T = string>(
   let totalPrice = 0;
   for (const sku in products) {
     const product = products[sku];
-    totalPrice +=
-      (getPrice(product?.msrp, product?.price) ?? 0) * (product?.quantity ?? 1);
+    totalPrice += (getPrice(product) ?? 0) * (product?.quantity ?? 1);
   }
   return format
     ? (formatPrice(totalPrice - (discount ?? 0)) as T)
@@ -67,8 +82,7 @@ export const calculateCheckoutTotal = <T = string>(
 ) => {
   let totalPrice = 0;
   for (const product of products) {
-    totalPrice +=
-      (getPrice(product?.msrp, product?.price) ?? 0) * (product?.quantity ?? 1);
+    totalPrice += (getPrice(product) ?? 0) * (product?.quantity ?? 1);
   }
   return format
     ? (formatPrice(totalPrice - (discount ?? 0)) as T)

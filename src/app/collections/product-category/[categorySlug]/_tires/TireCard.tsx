@@ -1,24 +1,24 @@
 import DeliveryWithStock from '@/app/cart/_components/delivery-with-stock';
 import PaymentMessaging from '@/components/shared/payment-method-messaging';
-import { normalizeImageUrl } from '@/lib/utils';
-import { TInventoryItem } from '@/types/product';
+import { TInventoryItem, TInventoryListItem } from '@/types/product';
 import { getPrice } from '@/utils/price';
+import { getProductThumbnail } from '@/utils/product';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
-import ComparisonWithFavorite from './comparisonwithfavorite';
-import PriceSet from './price-set';
-import TireAttributes from './tire-attributes';
-import TireCardButton from './tire-card-button';
-import TireCardPrice from './tire-card-price';
-import TireQuantity from './tire-quantity';
-import TireRating from './tire-rating';
+import ComparisonWithFavorite from './ComparisonWithFavorite';
+import PriceSet from './PriceSet';
+import TireAttributes from './TireAttributes';
+import TireCardButton from './TireCardButton';
+import TireCardPrice from './TireCardPrice';
+import TireQuantity from './TireQuantity';
+import TireRating from './tireRating';
 
 const TireCard = ({
   products,
   wheelInfo,
 }: {
-  products: TInventoryItem[];
+  products: TInventoryListItem[];
   wheelInfo: {
     frontForging: string;
     rearForging: string;
@@ -38,12 +38,8 @@ const TireCard = ({
   // }
 
   const totalPrice = useMemo(() => {
-    const frontPrice = getPrice(products[0]?.msrp, products[0]?.price)?.toFixed(
-      2
-    );
-    const rearPrice = getPrice(products[1]?.msrp, products[1]?.price)?.toFixed(
-      2
-    );
+    const frontPrice = getPrice(products[0])?.toFixed(2);
+    const rearPrice = getPrice(products[1])?.toFixed(2);
 
     let totalPrice = Number(frontPrice) * frontTireQuantity;
     // Check if rearPrice is a valid number before adding to totalPrice
@@ -65,7 +61,8 @@ const TireCard = ({
         <h4 className="text-2xl leading-[29px] text-[#210203]">
           <span className="text-[#210203] text-2xl font-bold uppercase">
             <Link href={singleTirePageLink}>
-              {products[0]?.brand} {products[0]?.model} {products[0]?.tire_size}{' '}
+              {products[0]?.brand} {products[0]?.model_group}{' '}
+              {products[0]?.tire_size}{' '}
               {products[0]?.tire_size !== products[1]?.tire_size &&
               typeof products[1]?.tire_size !== 'undefined'
                 ? `AND ${products[1]?.tire_size}`
@@ -90,7 +87,7 @@ const TireCard = ({
               {/* Display tire image */}
               <Image
                 className="max-w-[272px] max-h-[272px] object-contain"
-                src={normalizeImageUrl(products[0].image_url)}
+                src={getProductThumbnail(products[0])}
                 width={272}
                 height={272}
                 alt={products[0]?.partnumber ?? ''}
@@ -129,12 +126,7 @@ const TireCard = ({
                   setQuantity={setFrontTireQuantity}
                   quantity={frontTireQuantity}
                 />
-                <TireCardPrice
-                  price={getPrice(
-                    products[0]?.msrp,
-                    products[0]?.price
-                  )?.toFixed(2)}
-                />
+                <TireCardPrice product={products[0]} />
               </div>
             </div>
           </div>
@@ -173,12 +165,7 @@ const TireCard = ({
                       setQuantity={setRearTireQuantity}
                       quantity={rearTireQuantity}
                     />
-                    <TireCardPrice
-                      price={getPrice(
-                        products[1]?.msrp,
-                        products[1]?.price
-                      )?.toFixed(2)}
-                    />
+                    <TireCardPrice product={products[1]} />
                   </div>
                 </div>
               </div>
@@ -192,13 +179,8 @@ const TireCard = ({
         <div className="flex flex-col gap-3 justify-center items-start relative max-w-[380px]">
           {/* Display price set (front and rear) */}
           <PriceSet
-            frontPrice={getPrice(
-              products[0]?.msrp,
-              products[0]?.price
-            )?.toFixed(2)}
-            rearPrice={getPrice(products[1]?.msrp, products[1]?.price)?.toFixed(
-              2
-            )}
+            front={products[0]}
+            rear={products[1]}
             frontQuantity={frontTireQuantity}
             rearQuantity={rearTireQuantity}
           />

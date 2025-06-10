@@ -1,9 +1,10 @@
-import React from 'react';
+import { TInventoryListItem } from '@/types/product';
+import { formatPrice } from '@/utils/price';
 
 // This component displays the price of a tire, formatting it and appending a 'per tire' label.
-const TireCardPrice = ({ price }: { price: string | undefined }) => {
+const TireCardPrice = ({ product }: { product: TInventoryListItem }) => {
   // Splitting the price string into integer and decimal parts
-  const splitedPrice = price?.split('.') ?? [];
+  const splitedPrice = formatPrice(product)?.split('.') ?? [];
 
   return (
     <div className="flex gap-1 items-baseline relative">
