@@ -1,29 +1,12 @@
 'use client';
 
 import Container from '@/components/ui/container/container';
-import { MobileItemsTireShop } from './TireShopMobileItems';
+import { useGetProductsQuery } from '@/redux/apis/product';
 import Link from 'next/link';
-
-type Tire = {
-  id: number;
-  brand: string;
-  name: string;
-  price: number;
-  discount: number;
-  image: string;
-  inventory_available: boolean;
-};
-
-const tires: Tire[] = Array(4).fill({
-  id: 1,
-  brand: 'Michelin',
-  name: 'DEFENDER T+H',
-  price: 197.0,
-  discount: -1170.0,
-  image: 'ns-products/tire.webp', // replace with actual image path
-});
+import { MobileItemsTireShop } from './TireShopMobileItems';
 
 export default function TireShopMobile() {
+  const { data } = useGetProductsQuery({ size: 4 });
   return (
     <Container>
       <div className=" flex flex-col sm:hidden gap-6 sm:gap-8 py-16 sm:py-28 bg-white text-center">
@@ -36,7 +19,7 @@ export default function TireShopMobile() {
           </p>
         </div>
 
-        <MobileItemsTireShop tires={tires} />
+        <MobileItemsTireShop tires={data?.products} />
 
         <Link
           href={'/collections/product-category/tires'}

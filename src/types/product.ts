@@ -10,6 +10,8 @@ export type TInventoryBase = {
   price?: number;
   map?: number;
   inventory_available?: number;
+  item_image?: string;
+  title?: string;
   tire_size?: string;
   tire_type?: string[];
   renderedImages?: string[];
