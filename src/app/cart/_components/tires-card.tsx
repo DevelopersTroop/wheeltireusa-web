@@ -1,14 +1,13 @@
 'use client';
 
+import TireQuantity from '@/app/collections/product-category/[categorySlug]/_tires/TireQuantity';
+import { removeFromCart, TCartProduct } from '@/redux/features/cartSlice';
 import { getPrice } from '@/utils/price';
 import { getProductThumbnail } from '@/utils/product';
 import Image from 'next/image';
-import DeliveryWithStock from './delivery-with-stock';
-import Quantity from './quantity';
-import TireAttributes from './tire-attributes';
-import { removeFromCart, TCartProduct } from '@/redux/features/cartSlice';
 import { useDispatch } from 'react-redux';
-import TireQuantity from '@/app/collections/product-category/[categorySlug]/_tires/TireQuantity';
+import DeliveryWithStock from './delivery-with-stock';
+import TireAttributes from './tire-attributes';
 
 const TiresCard = ({ tire }: { tire: TCartProduct }) => {
   const dispatch = useDispatch();
@@ -42,7 +41,7 @@ const TiresCard = ({ tire }: { tire: TCartProduct }) => {
         </div>
 
         <div className="px-2 sm:px-5 pt-6 pb-3 justify-center items-end">
-          <button onClick={() => removeCartProduct(tire?.cartPackage ?? '')}>
+          <button onClick={() => removeCartProduct(tire?._id ?? '')}>
             <small className="text-sm leading-[17px] underline text-[#210203]">
               <span className="text-[#210203] text-sm font-semibold">
                 Delete
