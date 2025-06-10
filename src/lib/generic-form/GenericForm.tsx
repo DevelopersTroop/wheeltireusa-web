@@ -3,7 +3,7 @@ import { Form } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React, { Ref, useImperativeHandle } from 'react';
 import { DefaultValues, useForm } from 'react-hook-form';
-import { z } from 'zod';
+import * as z from 'zod';
 import GenericFormContext from './context/GenericFormContext';
 import { GenericFormRef } from './types/generic-form';
 
