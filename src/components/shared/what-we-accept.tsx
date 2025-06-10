@@ -353,7 +353,7 @@ export const WhatWeAccept = () => {
                 y2="11.8159"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop stopColor="#41E700" stop-opacity="0" />
+                <stop stopColor="#41E700" stopOpacity="0" />
                 <stop offset="0.736" stopColor="#3ACD00" />
                 <stop offset="0.781" stopColor="#36BE00" />
                 <stop offset="0.926" stopColor="#299100" />
@@ -367,7 +367,7 @@ export const WhatWeAccept = () => {
                 y2="14.4711"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop stopColor="#41E700" stop-opacity="0" />
+                <stop stopColor="#41E700" stopOpacity="0" />
                 <stop offset="0.736" stopColor="#3ACD00" />
                 <stop offset="0.781" stopColor="#36BE00" />
                 <stop offset="0.926" stopColor="#299100" />
@@ -381,7 +381,7 @@ export const WhatWeAccept = () => {
                 y2="17.3677"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop stopColor="#41E700" stop-opacity="0" />
+                <stop stopColor="#41E700" stopOpacity="0" />
                 <stop offset="0.736" stopColor="#3ACD00" />
                 <stop offset="0.781" stopColor="#36BE00" />
                 <stop offset="0.926" stopColor="#299100" />
