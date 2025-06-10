@@ -32,6 +32,16 @@ const cartSlice = createSlice({
         );
 
         if (existingProduct) {
+          if (
+            existingProduct.quantity + newProduct.quantity >
+            (existingProduct?.inventory_available || 4)
+          ) {
+            // If the new quantity exceeds available inventory, set it to available inventory
+            newProduct.quantity =
+              (existingProduct?.inventory_available || 4) -
+              existingProduct.quantity;
+            return;
+          }
           existingProduct.quantity += newProduct.quantity;
         } else {
           state.products.push({ ...newProduct });
@@ -43,8 +53,21 @@ const cartSlice = createSlice({
         (p) => p.cartPackage !== action.payload
       );
     },
+    updateCartQuantity: (
+      state,
+      action: PayloadAction<{ cartPackage: string; quantity: number }>
+    ) => {
+      const { cartPackage, quantity } = action.payload;
+      const existingProduct = state.products.find(
+        (p) => p.cartPackage === cartPackage
+      );
+      if (existingProduct) {
+        existingProduct.quantity += quantity;
+      }
+    },
   },
 });
 
-export const { addToCart, removeFromCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, updateCartQuantity } =
+  cartSlice.actions;
 export default cartSlice.reducer;

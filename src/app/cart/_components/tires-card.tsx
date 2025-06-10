@@ -8,6 +8,7 @@ import Quantity from './quantity';
 import TireAttributes from './tire-attributes';
 import { removeFromCart, TCartProduct } from '@/redux/features/cartSlice';
 import { useDispatch } from 'react-redux';
+import TireQuantity from '@/app/collections/product-category/[categorySlug]/_tires/TireQuantity';
 
 const TiresCard = ({ tire }: { tire: TCartProduct }) => {
   const dispatch = useDispatch();
@@ -91,7 +92,16 @@ const TiresCard = ({ tire }: { tire: TCartProduct }) => {
               <TireAttributes product={tire} />
             </div>
             <div className="flex flex-col md:flex-row gap-2 justify-between items-center w-full pr-4 mt-4">
-              <Quantity cartProduct={tire} />
+              <TireQuantity
+                otherQuantity={2}
+                quantity={tire.quantity}
+                setQuantity={(quantity) => {
+                  // Update quantity logic here
+                  console.log('Update quantity:', quantity);
+                }}
+                isCart={true}
+                cartProduct={tire}
+              />
               <div>
                 <p className="text-base leading-[19px] text-[#210203]">
                   <span className="text-[#210203] text-base font-semibold">
