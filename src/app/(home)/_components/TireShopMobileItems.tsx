@@ -1,7 +1,7 @@
 'use client';
 
 import QuantityInput from '@/app/collections/product/[singleProduct]/_tires/quantity-input';
-import { TInventoryListItem } from '@/types/product';
+import { TInventoryItem } from '@/types/product';
 import { getProductThumbnail } from '@/utils/product';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
@@ -12,7 +12,7 @@ import { Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react';
 
 export const MobileItemsTireShop: React.FC<{
-  tires: TInventoryListItem[] | undefined;
+  tires: TInventoryItem[] | undefined;
 }> = ({ tires }) => {
   const swiperRef = useRef<SwiperRef>(null);
 

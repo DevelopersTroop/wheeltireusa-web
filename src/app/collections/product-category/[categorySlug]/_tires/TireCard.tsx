@@ -1,6 +1,6 @@
 import DeliveryWithStock from '@/app/cart/_components/delivery-with-stock';
 import PaymentMessaging from '@/components/shared/payment-method-messaging';
-import { TInventoryItem, TInventoryListItem } from '@/types/product';
+import { TInventoryItem } from '@/types/product';
 import { getPrice } from '@/utils/price';
 import { getProductThumbnail } from '@/utils/product';
 import Image from 'next/image';
@@ -18,7 +18,7 @@ const TireCard = ({
   products,
   wheelInfo,
 }: {
-  products: TInventoryListItem[];
+  products: TInventoryItem[];
   wheelInfo: {
     frontForging: string;
     rearForging: string;

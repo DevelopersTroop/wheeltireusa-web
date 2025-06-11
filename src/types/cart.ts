@@ -1,4 +1,3 @@
-import { TCategory } from './category';
 import { TInventoryItem, TInventoryListItem } from './product';
 
 export type TCartProduct = TInventoryItem &

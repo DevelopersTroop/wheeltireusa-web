@@ -1,23 +1,37 @@
 'use client';
 
+import { addToCart, TCartProduct } from '@/redux/features/cartSlice';
+import { useAppDispatch } from '@/redux/store';
 // Import necessary dependencies and utilities
 
 import { TInventoryItem } from '@/types/product';
-import React from 'react';
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
 import { PiShoppingCartLight } from 'react-icons/pi';
+import { v4 as uuidv4 } from 'uuid';
 
 const TireActionButtons = ({ product }: { product: TInventoryItem }) => {
   // Redux dispatch and router hooks
 
   // State for managing modal visibility
+  const dispatch = useAppDispatch();
+  const router = useRouter();
 
   // Function to add the product to the cart
   const addProductToCart = async () => {
     // Check if the product is already in the cart
+    const cartPackage = uuidv4();
+    const cartProducts = {
+      ...product,
+      cartPackage,
+      quantity: 4,
+    };
+
+    dispatch(addToCart(cartProducts as TCartProduct));
   };
 
   // State for managing the "Add to Cart" button text
-  const [addToCartText, setAddToCartText] = React.useState('Add To Cart');
+  const [addToCartText, setAddToCartText] = useState('Add To Cart');
 
   return (
     <>
@@ -38,6 +52,10 @@ const TireActionButtons = ({ product }: { product: TInventoryItem }) => {
       <div className="flex flex-col min-[400px]:flex-row lg:flex-col xl:flex-row justify-between items-baseline self-stretch relative w-full gap-4 mt-4">
         <button
           onClick={() => {
+            if (addToCartText === 'View Cart') {
+              router.push('/cart');
+              return;
+            }
             setAddToCartText('Adding to cart...');
             addProductToCart().then(() => {
               setAddToCartText('View Cart');

@@ -1,12 +1,12 @@
 // Importing necessary components from 'lucide-react' and React
-import { TInventoryListItem } from '@/types/product';
+import { TInventoryItem } from '@/types/product';
 import { Minus, Plus } from 'lucide-react';
 import React, { useMemo } from 'react';
 
 interface TireQuantityProps {
   quantity: number;
   setQuantity: React.Dispatch<React.SetStateAction<number>>;
-  product: TInventoryListItem;
+  product: TInventoryItem;
   otherQuantity: number;
   quantityStep?: number;
 }

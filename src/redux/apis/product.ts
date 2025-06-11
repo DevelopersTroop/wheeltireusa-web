@@ -1,4 +1,4 @@
-import { TInventoryItem, TInventoryListItem } from '@/types/product';
+import { TInventoryItem } from '@/types/product';
 import { TPaginatedResponse } from '@/types/response';
 import { baseApi } from './base';
 import { TFilters } from '@/types/filter';
@@ -8,7 +8,7 @@ const shouldArray = ['model', 'tire_size', 'diameter'];
 const products = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getProducts: builder.query<
-      TPaginatedResponse<{ products: TInventoryListItem[] }>,
+      TPaginatedResponse<{ products: TInventoryItem[] }>,
       any
     >({
       query: (params) => {
