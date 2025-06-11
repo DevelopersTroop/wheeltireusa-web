@@ -37,15 +37,15 @@ const SearchSuggestion = ({
             style={{ maxHeight: 'calc(100dvh - 80px)' }}
           >
             {result?.data?.products?.map((product) => {
-              const imageURL = getProductThumbnail(product);
+              const imageURL = getProductThumbnail(product[0]);
               const handleClick = () => {
                 setOpen(false);
-                router.push(`/collections/product/${product.slug}`);
+                router.push(`/collections/product/${product[0].slug}`);
               };
               return (
                 <button
                   type="button"
-                  key={product._id}
+                  key={product[0]._id}
                   onClick={handleClick}
                   className="block border-b py-1 border-gray-300 bg-white hover:bg-gray-100 text-left"
                 >
@@ -54,14 +54,14 @@ const SearchSuggestion = ({
                       <Image
                         className="rounded w-full"
                         src={imageURL ?? ''}
-                        alt={product?.model_group ?? ''}
+                        alt={product[0]?.model_group ?? ''}
                         width={60}
                         height={60}
                       />
                     </div>
                     <div className="flex w-full flex-col gap-1 justify-start">
                       {/* Product Title */}
-                      <h3 className="text-black">{product?.model_group}</h3>
+                      <h3 className="text-black">{product[0]?.model_group}</h3>
                       {/* Finish */}
                       {/* {!isCustomProduct(product?.category) && product?.finish ? (
                                                     <div className="text-[#666666] text-sm leading-[20px]">
@@ -75,7 +75,9 @@ const SearchSuggestion = ({
                                                     </div>
                                                 ) : <></>} */}
                       {/* Price */}
-                      <p className="text-black">Price: ${getPrice(product)}</p>
+                      <p className="text-black">
+                        Price: ${getPrice(product[0])}
+                      </p>
                     </div>
                   </div>
                 </button>

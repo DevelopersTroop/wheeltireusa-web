@@ -6,7 +6,10 @@ import Link from 'next/link';
 import { MobileItemsTireShop } from './TireShopMobileItems';
 
 export default function TireShopMobile() {
-  const { data } = useGetProductsQuery({ size: 4 });
+  const { data } = useGetProductsQuery({
+    size: 4,
+    sort: 'Sort by price (high to low)',
+  });
   return (
     <Container>
       <div className=" flex flex-col sm:hidden gap-6 sm:gap-8 py-16 sm:py-28 bg-white text-center">

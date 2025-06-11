@@ -1,7 +1,7 @@
 'use client';
 
 import QuantityInput from '@/app/collections/product/[singleProduct]/_tires/quantity-input';
-import { TInventoryItem } from '@/types/product';
+import { TInventoryItem, TInventoryListItem } from '@/types/product';
 import { getProductThumbnail } from '@/utils/product';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
@@ -12,7 +12,7 @@ import { Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react';
 
 export const MobileItemsTireShop: React.FC<{
-  tires: TInventoryItem[] | undefined;
+  tires: TInventoryItem[][] | undefined;
 }> = ({ tires }) => {
   const swiperRef = useRef<SwiperRef>(null);
 
@@ -64,8 +64,8 @@ export const MobileItemsTireShop: React.FC<{
               <div className="w-full px-4 py-6 flex flex-col ">
                 <div className="w-full flex items-center justify-center">
                   <Image
-                    src={getProductThumbnail(tire)}
-                    alt={tire.title || tire.description || ''}
+                    src={getProductThumbnail(tire[0])}
+                    alt={tire[0].title || tire[0].description || ''}
                     width={304}
                     height={300}
                     className="w-[304px] h-full object-cover"
@@ -99,10 +99,10 @@ export const MobileItemsTireShop: React.FC<{
               <div className="flex flex-col gap-6 bg-[#F5F4F6] py-6 px-4">
                 <div className="flex flex-col items-start gap-2">
                   <p className="text-base text-[#464853] font-normal">
-                    {tire.brand}
+                    {tire[0].brand}
                   </p>
                   <h3 className="text-2xl font-bold text-[#210203]">
-                    {tire.title || tire.description || ''}
+                    {tire[0].title || tire[0].description || ''}
                   </h3>
                 </div>
 
@@ -111,7 +111,7 @@ export const MobileItemsTireShop: React.FC<{
                     <div className="">
                       <QuantityInput
                         product={tire}
-                        inventoryAvailable={tire.inventory_available ? 4 : 0}
+                        inventoryAvailable={tire[0].inventory_available ? 4 : 0}
                         name={`quantity-${i}`}
                         id={`quantity-${i}`}
                         isDually={false} // Assuming not dually for simplicity
@@ -120,7 +120,7 @@ export const MobileItemsTireShop: React.FC<{
                     <div className="flex flex-row gap-2">
                       <p className="text-[#52545B] text-xl">x</p>
                       <p className="text-xl font-semibold text-[#212227]">
-                        ${tire.price?.toFixed(2)}
+                        ${tire[0].price?.toFixed(2)}
                       </p>
                     </div>
                   </div>

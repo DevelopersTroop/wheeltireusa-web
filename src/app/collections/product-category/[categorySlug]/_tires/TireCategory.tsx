@@ -4,7 +4,9 @@ import Breadcrumb from '@/components/ui/breadcrumb/breadcrumb';
 import Item from '@/components/ui/breadcrumb/item';
 import Container from '@/components/ui/container/container';
 import { useGetProductsQuery } from '@/redux/apis/product';
+import { TInventoryItem } from '@/types/product';
 import { useParams, useSearchParams } from 'next/navigation';
+import useFilter from '../_filters/filter-store/use-filter';
 import SidebarTireFilters from '../_filters/mobile-filters/sidebar-tire-filters';
 import TireFilters from '../_filters/tire-filters';
 import ProductCardSkeleton from '../_loading/product-card-skeleton';
@@ -12,7 +14,6 @@ import NoProductsFound from '../no-products-found';
 import ProductPagination from '../product-pagination';
 import TireCard from './TireCard';
 import TireFilterAndSort from './TireFilterAndSort';
-import useFilter from '../_filters/filter-store/use-filter';
 
 // Type definition for page props, optional page parameter
 type ProductsPageProps = {
@@ -104,11 +105,11 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
                   {/* {data?.products.map((product) => (
                     <ProductCard product={products} key={product.slug} />
                   ))} */}
-                  {data?.products?.map((product) => {
+                  {data?.products?.map((product, index) => {
                     return (
                       <TireCard
-                        key={product._id}
-                        products={[{ ...product }, { ...product }]}
+                        key={index}
+                        products={product}
                         wheelInfo={{
                           frontForging: '',
                           rearForging: '',

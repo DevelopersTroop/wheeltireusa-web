@@ -1,21 +1,21 @@
 'use client';
-import { addToCart } from '@/redux/features/cartSlice';
+import { addToCart, TCartProduct } from '@/redux/features/cartSlice';
 import { useAppDispatch } from '@/redux/store';
-import { TCartProduct } from '@/types/cart';
 // import { addToCart, removeTireFromCart } from '@/app/globalRedux/features/cart/cart-slice'; // Import Redux actions to add/remove items from the cart
 // import { RootState } from '@/app/globalRedux/store'; // Import RootState to access the Redux store's state
 // import { TCartProduct } from '@/app/types/cart'; // Import type for cart product
 // import { getPrice } from '@/app/utils/price'; // Utility function to format price
-import { TInventoryItem, TInventoryListItem } from '@/types/product';
+import { TInventoryItem } from '@/types/product';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 const TireCardButton = ({
   products,
-  wheelInfo,
   frontTireQuantity,
   rearTireQuantity,
 }: {
-  products: TInventoryListItem[];
+  products: TInventoryItem[];
   wheelInfo: {
     frontForging: string;
     rearForging: string;
@@ -26,7 +26,8 @@ const TireCardButton = ({
   rearTireQuantity: number;
 }) => {
   const dispatch = useAppDispatch();
-  const handleAddToCart = () => {
+  const router = useRouter();
+  const handleAddToCart = async () => {
     console.log(products);
     const cartPackage = uuidv4();
     const cartProducts = products.map((p, id) => ({
@@ -37,9 +38,22 @@ const TireCardButton = ({
 
     dispatch(addToCart(cartProducts as TCartProduct[]));
   };
+
+  // State for managing the "Add to Cart" button text
+  const [addToCartText, setAddToCartText] = useState('Add To Cart');
+
   return (
     <button
-      onClick={handleAddToCart} // Attach the onClick handler to the button
+      onClick={() => {
+        if (addToCartText === 'View Cart') {
+          router.push('/cart');
+          return;
+        }
+        setAddToCartText('Adding to cart...');
+        handleAddToCart().then(() => {
+          setAddToCartText('View Cart');
+        });
+      }} // Attach the onClick handler to the button
       className="rounded-md px-6 flex gap-2 justify-center items-center relative w-[204px] h-14 bg-[#F6511D] hover:bg-[#f6501df3] hover:text-white transition duration-300 ease-in-out"
     >
       <svg
@@ -64,7 +78,9 @@ const TireCardButton = ({
       </svg>
 
       <p className="text-lg leading-[22px] text-white">
-        <span className="text-white text-lg font-semibold">Add to cart</span>
+        <span className="text-white text-lg font-semibold">
+          {addToCartText}
+        </span>
       </p>
     </button>
   );

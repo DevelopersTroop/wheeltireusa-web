@@ -96,7 +96,13 @@ export type TInventoryItem = TInventoryBase & {
       map: number;
     };
   };
+  // inventoryId?: string;
+  item_image?: string;
+  // pricingId?: string;
+  inventory?: TInventoryItem['inventoryId'];
+  pricing?: TInventoryItem['pricingId'];
 };
+
 export type TInventoryListItem = TInventoryBase & {
   inventoryId?: string;
   item_image?: string;

@@ -5,6 +5,9 @@ import { FaShippingFast } from 'react-icons/fa';
 import { WhatWeAccept } from '@/components/shared/what-we-accept';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
+import { calculateCartTotal, formatPrice } from '@/utils/price';
 
 const CartSummary = () => {
   // const { couponCode, isCouponApplied, discount, productBasedDiscount, affiliateDiscount } = useTypedSelector(state => state.persisted.checkout)
@@ -17,10 +20,22 @@ const CartSummary = () => {
     // dispatch(initiateCheckout())
     router.push('/checkout');
   };
-  // const cart = useSelector((state: RootState) => state.persisted.cart);
-  // const subTotalCost = calculateCartTotal(cart.products);
+  const cart = useSelector((state: RootState) => state.persisted.cart);
+  const subTotalCost = calculateCartTotal(cart.products);
 
   // const netCost = calculateCartTotal(cart.products, discount)
+  const requiredStateFee = 4;
+  const salesTax = 109.24;
+  const setDiscount = 180;
+
+  // Remove commas before parsing to float
+  const netCost =
+    parseFloat(String(subTotalCost).replace(/,/g, '')) +
+    Number(requiredStateFee) +
+    Number(salesTax) -
+    Number(setDiscount);
+
+  const netCostString = formatPrice(netCost);
 
   // const numericValue = parseFloat(netCost.replace(/,/g, ""));
   // const result = numericValue;
@@ -60,9 +75,11 @@ const CartSummary = () => {
           <div className="flex gap-0 items-baseline relative">
             <p className="text-2xl leading-[29px] text-[#210203]">
               <span className="text-[#210203] text-2xl font-normal">
-                {/* ${String(subTotalCost).split(".")[0] || "0"}. */} {'0.'}
+                ${String(subTotalCost).split('.')[0] || '0'}.
               </span>
-              <span className="text-[#210203] text-sm font-normal">{'00'}</span>
+              <span className="text-[#210203] text-sm font-normal">
+                {String(subTotalCost).split('.')[1] || '00'}
+              </span>
             </p>
           </div>
         </div>
@@ -236,9 +253,11 @@ const CartSummary = () => {
           <div className="flex gap-0 items-baseline relative">
             <p className="text-[32px] leading-[38px] text-[#210203]">
               <span className="text-[#210203] text-[32px] font-bold">
-                ${'0'}.
+                ${String(netCostString).split('.')[0] || '0'}.
               </span>
-              <span className="text-[#210203] text-xl font-bold">{'00'}</span>
+              <span className="text-[#210203] text-xl font-bold">
+                {String(netCostString).split('.')[1] || '00'}
+              </span>
             </p>
           </div>
         </div>

@@ -1,21 +1,22 @@
 'use client';
 
-import { TCartProduct } from '@/types/cart';
+import TireQuantity from '@/app/collections/product-category/[categorySlug]/_tires/TireQuantity';
+import { removeFromCart, TCartProduct } from '@/redux/features/cartSlice';
 import { getPrice } from '@/utils/price';
 import { getProductThumbnail } from '@/utils/product';
 import Image from 'next/image';
-import CardPrice from './card-price';
+import { useDispatch } from 'react-redux';
 import DeliveryWithStock from './delivery-with-stock';
-import Quantity from './quantity';
 import TireAttributes from './tire-attributes';
 
 const TiresCard = ({ tire }: { tire: TCartProduct }) => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   // const { products: cartProducts } = useTypedSelector((state) => state.persisted.cart)
 
-  // const removeCartProduct = (cartSerial: string) => {
-  //   dispatch(removeFromCart({ cartSerial }));
-  // };
+  const removeCartProduct = (cartPackage: string) => {
+    dispatch(removeFromCart(cartPackage));
+  };
+  // console.log('Tire Card', tire);
 
   const deliveryTime = 'Monday, 05/22 to 83756';
   return (
@@ -40,7 +41,7 @@ const TiresCard = ({ tire }: { tire: TCartProduct }) => {
         </div>
 
         <div className="px-2 sm:px-5 pt-6 pb-3 justify-center items-end">
-          <button>
+          <button onClick={() => removeCartProduct(tire?._id ?? '')}>
             <small className="text-sm leading-[17px] underline text-[#210203]">
               <span className="text-[#210203] text-sm font-semibold">
                 Delete
@@ -66,18 +67,13 @@ const TiresCard = ({ tire }: { tire: TCartProduct }) => {
 
         <div className="flex flex-col justify-center items-start flex-1 relative w-full">
           <div
-            key={tire.cartSerial}
-            className={`py-5 flex flex-col items-start self-stretch relative w-full `}
+            className={`py-5 flex flex-col items-start gap-2 self-stretch relative w-full `}
           >
-            <div className="pl-0 pr-4 flex justify-between items-center self-stretch relative w-full">
+            {/* <div className="pl-0 pr-4 flex justify-between items-center self-stretch relative w-full">
               <div className="flex flex-col gap-2 items-start relative">
                 <h5 className="text-xl leading-6 bg-[#F6511D] text-white px-2 py-1 rounded ">
                   <span className="text-xl font-semibold">
-                    {/* {tires.length <= 1
-                          ? 'Front & Rear'
-                          : tire.isFrontTire
-                            ? 'Front'
-                            : 'Rear'} */}
+                    
                     {tire.isFrontTire && tire.isRearTire
                       ? 'Front & Rear'
                       : tire.isFrontTire
@@ -89,17 +85,26 @@ const TiresCard = ({ tire }: { tire: TCartProduct }) => {
                 </h5>
                 <CardPrice price={getPrice(tire) ?? 0} type="tire" />
               </div>
-            </div>
+            </div> */}
             <DeliveryWithStock deliveryTime={deliveryTime} />
             <div className="flex flex-col md:flex-row gap-2 items-start relative w-full">
               <TireAttributes product={tire} />
             </div>
             <div className="flex flex-col md:flex-row gap-2 justify-between items-center w-full pr-4 mt-4">
-              <Quantity cartProduct={tire} />
+              <TireQuantity
+                otherQuantity={2}
+                quantity={tire.quantity}
+                setQuantity={(quantity) => {
+                  // Update quantity logic here
+                  console.log('Update quantity:', quantity);
+                }}
+                isCart={true}
+                cartProduct={tire}
+              />
               <div>
                 <p className="text-base leading-[19px] text-[#210203]">
                   <span className="text-[#210203] text-base font-semibold">
-                    {tire?.singleQuantityPrice}
+                    {getPrice(tire)}
                   </span>{' '}
                   per tire
                 </p>

@@ -1,11 +1,9 @@
+import { TCartProduct } from '@/redux/features/cartSlice';
 import { TCheckoutState } from '@/redux/features/checkoutSlice';
-import { TCartProduct } from '@/types/cart';
 import { TProductInfo } from '@/types/order';
-import { TInventoryItem, TInventoryListItem } from '@/types/product';
+import { TInventoryItem } from '@/types/product';
 
-export function formatPrice(
-  data?: number | null | TInventoryItem | TInventoryListItem
-): string {
+export function formatPrice(data?: number | null | TInventoryItem): string {
   // Fix the number to 2 decimal places and add comma formatting
   const formatter = (price: number) =>
     price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
@@ -36,7 +34,7 @@ export function isSale(
   return msrp > map && map !== 0 && msrp !== 0;
 }
 export function getPrice(
-  product: TInventoryItem | TInventoryListItem | TProductInfo | TCartProduct
+  product: TInventoryItem | TProductInfo | TCartProduct
 ): number {
   const msrp = product?.msrp;
   const map = product?.price;
@@ -59,9 +57,7 @@ export function getPrice(
 }
 
 export function calculateCartTotal<T = string>(
-  products: {
-    [x: string]: TInventoryItem & { quantity: number };
-  },
+  products: TCartProduct[],
   discount?: number,
   format: boolean = true
 ): T {
