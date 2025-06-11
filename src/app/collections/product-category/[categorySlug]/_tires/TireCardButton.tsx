@@ -5,7 +5,7 @@ import { useAppDispatch } from '@/redux/store';
 // import { RootState } from '@/app/globalRedux/store'; // Import RootState to access the Redux store's state
 // import { TCartProduct } from '@/app/types/cart'; // Import type for cart product
 // import { getPrice } from '@/app/utils/price'; // Utility function to format price
-import { TInventoryListItem } from '@/types/product';
+import { TInventoryItem } from '@/types/product';
 import { v4 as uuidv4 } from 'uuid';
 
 const TireCardButton = ({
@@ -14,7 +14,7 @@ const TireCardButton = ({
   frontTireQuantity,
   rearTireQuantity,
 }: {
-  products: TInventoryListItem[];
+  products: TInventoryItem[];
   wheelInfo: {
     frontForging: string;
     rearForging: string;

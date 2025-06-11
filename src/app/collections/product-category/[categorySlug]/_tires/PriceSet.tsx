@@ -1,4 +1,4 @@
-import { TInventoryListItem } from '@/types/product';
+import { TInventoryItem, TInventoryListItem } from '@/types/product';
 import { getPrice } from '@/utils/price';
 import React from 'react';
 
@@ -9,8 +9,8 @@ const PriceSet = ({
   frontQuantity,
   rearQuantity,
 }: {
-  front: TInventoryListItem;
-  rear: TInventoryListItem;
+  front: TInventoryItem;
+  rear: TInventoryItem;
   frontQuantity: number;
   rearQuantity: number;
 }) => {

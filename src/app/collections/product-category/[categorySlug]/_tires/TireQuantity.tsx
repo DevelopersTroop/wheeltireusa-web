@@ -1,14 +1,14 @@
 // Importing necessary components from 'lucide-react' and React
 import { TCartProduct, updateCartQuantity } from '@/redux/features/cartSlice';
 import { useAppDispatch } from '@/redux/store';
-import { TInventoryListItem } from '@/types/product';
+import { TInventoryItem } from '@/types/product';
 import { Minus, Plus } from 'lucide-react';
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 interface TireQuantityProps {
   quantity: number;
   setQuantity: React.Dispatch<React.SetStateAction<number>>;
-  product?: TInventoryListItem;
+  product?: TInventoryItem;
   otherQuantity: number;
   quantityStep?: number;
   isCart?: boolean;

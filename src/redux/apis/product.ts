@@ -8,11 +8,19 @@ const shouldArray = ['model', 'tire_size', 'diameter'];
 const products = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getProducts: builder.query<
-      TPaginatedResponse<{ products: TInventoryListItem[] }>,
+      TPaginatedResponse<{ products: TInventoryItem[][] }>,
       any
     >({
-      query: (params) => {
+      // Custom serialization to support caching with POST
+      serializeQueryArgs: ({ endpointName, queryArgs }) => {
+        const normalized = JSON.stringify(queryArgs ?? {});
+        return `${endpointName}(${normalized})`;
+      },
+
+      // Using queryFn to POST data but keep query behavior
+      queryFn: async (params, _queryApi, _extraOptions, baseQuery) => {
         const shallowParams = { ...params };
+
         switch (shallowParams?.sort) {
           case 'Sort by price (high to low)':
             shallowParams.sort = [{ whom: 'price', order: 'desc' }];
@@ -32,7 +40,7 @@ const products = baseApi.injectEndpoints({
 
         Object.entries(shallowParams).forEach(([key, value]) => {
           if (
-            shouldArray.indexOf(key) !== -1 &&
+            shouldArray.includes(key) &&
             typeof value === 'string' &&
             value.includes(',')
           ) {
@@ -40,9 +48,17 @@ const products = baseApi.injectEndpoints({
           }
         });
 
-        return {
-          params: { ...shallowParams, category: 'tire' },
+        const result = await baseQuery({
           url: '/products/list',
+          method: 'POST',
+          data: { ...shallowParams, category: 'tire' },
+        });
+
+        if (result.error) return { error: result.error };
+        return {
+          data: result.data as TPaginatedResponse<{
+            products: TInventoryItem[][];
+          }>,
         };
       },
     }),

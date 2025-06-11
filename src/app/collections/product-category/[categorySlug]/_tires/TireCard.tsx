@@ -18,7 +18,7 @@ const TireCard = ({
   products,
   wheelInfo,
 }: {
-  products: TInventoryListItem[];
+  products: TInventoryItem[];
   wheelInfo: {
     frontForging: string;
     rearForging: string;

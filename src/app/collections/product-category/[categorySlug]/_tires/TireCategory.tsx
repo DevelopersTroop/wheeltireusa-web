@@ -104,11 +104,11 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
                   {/* {data?.products.map((product) => (
                     <ProductCard product={products} key={product.slug} />
                   ))} */}
-                  {data?.products?.map((product) => {
+                  {data?.products?.map((product, index) => {
                     return (
                       <TireCard
-                        key={product._id}
-                        products={[{ ...product }, { ...product }]}
+                        key={index}
+                        products={product}
                         wheelInfo={{
                           frontForging: '',
                           rearForging: '',

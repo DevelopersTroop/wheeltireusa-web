@@ -1,8 +1,8 @@
-import { TInventoryListItem } from '@/types/product';
+import { TInventoryItem, TInventoryListItem } from '@/types/product';
 import { formatPrice } from '@/utils/price';
 
 // This component displays the price of a tire, formatting it and appending a 'per tire' label.
-const TireCardPrice = ({ product }: { product: TInventoryListItem }) => {
+const TireCardPrice = ({ product }: { product: TInventoryItem }) => {
   // Splitting the price string into integer and decimal parts
   const splitedPrice = formatPrice(product)?.split('.') ?? [];
 
