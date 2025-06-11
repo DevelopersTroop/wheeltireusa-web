@@ -19,6 +19,8 @@ const initialState: TMainFilter = {
         make: '',
         model: '',
         bodyType: '',
+        frontTireSize: null,
+        rearTireSize: null,
         subModel: {
           SubModel: '',
           DRChassisID: '',

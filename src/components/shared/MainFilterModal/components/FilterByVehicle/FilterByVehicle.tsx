@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 
 // Dynamic imports
 import dynamic from 'next/dynamic';
+import SelectSize from './components/SelectSize/SelectSize';
 const SelectMake = dynamic(() => import('./components/SelectMake/SelectMake'), {
   ssr: false,
   loading: () => <ListSkeleton title="Make" />,
@@ -37,7 +38,8 @@ const FilterByVehicle = () => {
           {(year || make || model) && <SelectedItem />}
           {!year && <SelectYear />}
           {year && !make && <SelectMake />}
-          {year && make && <SelectModel />}
+          {year && make && !model && <SelectModel />}
+          {year && make && model && <SelectSize />}
         </div>
       </ScrollArea>
       {year && make && model && (
