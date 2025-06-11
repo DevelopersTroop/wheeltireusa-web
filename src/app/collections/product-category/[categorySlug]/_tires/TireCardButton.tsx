@@ -6,6 +6,8 @@ import { useAppDispatch } from '@/redux/store';
 // import { TCartProduct } from '@/app/types/cart'; // Import type for cart product
 // import { getPrice } from '@/app/utils/price'; // Utility function to format price
 import { TInventoryItem } from '@/types/product';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 const TireCardButton = ({
