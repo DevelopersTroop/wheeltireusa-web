@@ -1,8 +1,8 @@
 'use client';
 
 import QuantityInput from '@/app/collections/product/[singleProduct]/_tires/quantity-input';
-import { normalizeImageUrl } from '@/lib/utils';
 import { TInventoryItem } from '@/types/product';
+import { getProductThumbnail } from '@/utils/product';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import { useRef } from 'react';
@@ -64,7 +64,7 @@ export const MobileItemsTireShop: React.FC<{
               <div className="w-full px-4 py-6 flex flex-col ">
                 <div className="w-full flex items-center justify-center">
                   <Image
-                    src={normalizeImageUrl(tire.item_image || tire.image_url)}
+                    src={getProductThumbnail(tire)}
                     alt={tire.title || tire.description || ''}
                     width={304}
                     height={300}

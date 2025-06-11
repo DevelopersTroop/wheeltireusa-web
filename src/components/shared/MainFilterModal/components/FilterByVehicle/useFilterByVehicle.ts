@@ -3,7 +3,7 @@ import {
   setMainFilter,
 } from '@/redux/features/mainFilterSlice';
 import { useTypedSelector } from '@/redux/store';
-import { TDriverightData } from '@/types/main-filter';
+import { TDriverightData, TMainFilterTireSize } from '@/types/main-filter';
 import { getSupportedTireSizes } from '@/utils/filter';
 import { useRouter } from 'next/navigation';
 import { MouseEvent, useEffect } from 'react';
@@ -86,11 +86,11 @@ const useFilterByVehicle = () => {
           vehicleDataPromises.push(response.json());
         });
         Promise.all(vehicleDataPromises).then((vehicleData) => {
-          const allTireSizesTemp: Record<'front' | 'rear', string>[] = [];
+          const allTireSizesTemp: TMainFilterTireSize[] = [];
           vehicleData.forEach((data) => {
             const tireSizes = getSupportedTireSizes(data);
             if (tireSizes) {
-              allTireSizesTemp.push(...tireSizes);
+              allTireSizesTemp.push(tireSizes);
             }
           });
           dispatch(
@@ -99,7 +99,7 @@ const useFilterByVehicle = () => {
                 byVehicle: {
                   current: {
                     vehicleInformation: {
-                      tireSizes: allTireSizesTemp,
+                      tireSizes: Array.from(new Set(allTireSizesTemp)),
                     },
                   },
                 },

@@ -2,9 +2,9 @@
 
 import QuantityInput from '@/app/collections/product/[singleProduct]/_tires/quantity-input';
 import Container from '@/components/ui/container/container';
-import { normalizeImageUrl } from '@/lib/utils';
 import { useGetProductsQuery } from '@/redux/apis/product';
 import { getPrice } from '@/utils/price';
+import { getProductThumbnail } from '@/utils/product';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -33,7 +33,7 @@ export default function TireShop() {
               <div className="w-full px-4 py-6 flex flex-col ">
                 <div className="w-full flex items-center justify-center">
                   <Image
-                    src={normalizeImageUrl(tire.item_image || tire.image_url)}
+                    src={getProductThumbnail(tire)}
                     alt={tire.title || tire.description || ''}
                     width={304}
                     height={300}
@@ -89,7 +89,7 @@ export default function TireShop() {
                     <div className="flex flex-row gap-2">
                       <p className="text-[#52545B] text-xl">x</p>
                       <p className="text-xl font-semibold text-[#212227]">
-                        ${getPrice(tire.msrp, tire.price)?.toFixed(2)}
+                        ${getPrice(tire)?.toFixed(2)}
                       </p>
                     </div>
                   </div>

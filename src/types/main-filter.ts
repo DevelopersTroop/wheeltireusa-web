@@ -26,6 +26,14 @@ export type TMainFilterSuportedWheel = {
   maxOffset: number;
   comments: string;
 };
+export type TMainFilterTireSize = {
+  DRDChassisID: string;
+  DRModelID: string;
+  factory: Record<'front' | 'rear', string> | null;
+  optional:
+    | Record<'front' | 'rear' | 'DRDChassisID' | 'DRModelID', string>[]
+    | null;
+};
 export type TMainFilterVehicleInformation = {
   supportedWheels: TMainFilterSuportedWheel[];
   boltPattern: string;
@@ -34,7 +42,7 @@ export type TMainFilterVehicleInformation = {
   frontCenterBore: string;
   rearCenterBore: string;
   maxWheelLoad: string;
-  tireSizes: Record<'front' | 'rear', string>[] | null;
+  tireSizes: TMainFilterTireSize[] | null;
 };
 
 export type TMainFilter = {
@@ -49,6 +57,8 @@ export type TMainFilter = {
         bodyType: string;
         subModel: Partial<TMainFilterSubModel>;
         vehicleInformation: Partial<TMainFilterVehicleInformation>;
+        frontTireSize: string | null;
+        rearTireSize: string | null;
       };
     };
     byTireBrand: {
@@ -78,12 +88,21 @@ export type TMainFilter = {
 };
 
 export type TDriverightData = {
+  DRDChassisReturn_NA: {
+    DRDChassisID?: string;
+    TireSize: string;
+    TireSize_R: string;
+  };
   DRDModelReturn?: {
     PrimaryOption?: {
+      DRDChassisID?: string;
+      DRDModelID?: string;
       TireSize?: string;
       TireSize_R?: string;
     };
     Options?: {
+      DRDChassisID?: string;
+      DRDModelID?: string;
       TireSize?: string;
       TireSize_R?: string;
     }[];

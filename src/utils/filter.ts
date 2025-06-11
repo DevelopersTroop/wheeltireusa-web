@@ -1,30 +1,46 @@
-import { TDriverightData } from '@/types/main-filter';
+import { TDriverightData, TMainFilterTireSize } from '@/types/main-filter';
 import { TFilters, TPriceFilter, TSingleFilter } from '../types/filter';
 // import defaultLipSizeData from "../../public/default-lip.json";
 
 export function getSupportedTireSizes(
   data?: TDriverightData | null
-): Record<'front' | 'rear', string>[] | null {
-  if (!data) return null;
+): TMainFilterTireSize | null {
+  if (!data) {
+    return null;
+  }
 
-  const result = new Set<string>();
+  const factoryTireSize = data.DRDModelReturn?.PrimaryOption?.TireSize || '';
+  const factoryTireSizeR =
+    data.DRDModelReturn?.PrimaryOption?.TireSize_R || factoryTireSize;
+  const factoryDRChassisID =
+    data.DRDModelReturn?.PrimaryOption?.DRDChassisID || '';
+  const factoryDRModelID = data.DRDModelReturn?.PrimaryOption?.DRDModelID || '';
 
-  const collect = (front?: string, rear?: string) => {
-    const f = front?.trim();
-    const r = rear?.trim() || f;
-    if (f) result.add(JSON.stringify({ front: f, rear: r }));
+  const optionalTireSizes = new Set<
+    NonNullable<TMainFilterTireSize['optional']>[number]
+  >();
+
+  for (const option of data.DRDModelReturn?.Options ?? []) {
+    const tireSize = option?.TireSize || '';
+    const tireSizeR = option?.TireSize_R || tireSize;
+    const DRDChassisID = option?.DRDChassisID || '';
+    const DRModelID = option?.DRDModelID || '';
+    const optionalSize = {
+      front: tireSize,
+      rear: tireSizeR,
+      DRDChassisID,
+      DRModelID,
+    } as NonNullable<TMainFilterTireSize['optional']>[number];
+
+    optionalTireSizes.add(optionalSize);
+  }
+
+  return {
+    DRDChassisID: factoryDRChassisID,
+    DRModelID: factoryDRModelID,
+    factory: { front: factoryTireSize, rear: factoryTireSizeR },
+    optional: Array.from(optionalTireSizes),
   };
-
-  const primary = data.DRDModelReturn?.PrimaryOption;
-  if (primary) {
-    collect(primary.TireSize, primary.TireSize_R);
-  }
-
-  for (const opt of data.DRDModelReturn?.Options ?? []) {
-    collect(opt.TireSize, opt.TireSize_R);
-  }
-
-  return Array.from(result).map((item) => JSON.parse(item));
 }
 
 const defaultLipSizeData = [

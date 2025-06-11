@@ -5,7 +5,20 @@ import { useDispatch } from 'react-redux';
 const useSelectedItem = () => {
   const dispatch = useDispatch();
   const mainFilterState = useTypedSelector((state) => state.mainFilter);
-
+  const clearSize = () => {
+    dispatch(
+      setMainFilter({
+        filters: {
+          byVehicle: {
+            current: {
+              frontTireSize: null,
+              rearTireSize: null,
+            },
+          },
+        },
+      })
+    );
+  };
   const clearModel = () => {
     dispatch(
       setMainFilter({
@@ -23,6 +36,8 @@ const useSelectedItem = () => {
                 DRChassisID: '',
                 DRModelID: '',
               },
+              frontTireSize: null,
+              rearTireSize: null,
               vehicleInformation: {
                 boltPattern: '',
                 frontRimSize: '',
@@ -53,6 +68,8 @@ const useSelectedItem = () => {
               make: '',
               model: '',
               bodyType: '',
+              frontTireSize: null,
+              rearTireSize: null,
               subModel: {
                 SubModel: '',
                 DRChassisID: '',
@@ -90,6 +107,8 @@ const useSelectedItem = () => {
               make: '',
               model: '',
               bodyType: '',
+              frontTireSize: null,
+              rearTireSize: null,
               subModel: {
                 SubModel: '',
                 DRChassisID: '',
@@ -115,9 +134,12 @@ const useSelectedItem = () => {
     clearModel,
     clearMake,
     clearYear,
+    clearSize,
     model: mainFilterState.filters.byVehicle.current.model,
     make: mainFilterState.filters.byVehicle.current.make,
     year: mainFilterState.filters.byVehicle.current.year,
+    frontTireSize: mainFilterState.filters.byVehicle.current.frontTireSize,
+    rearTireSize: mainFilterState.filters.byVehicle.current.rearTireSize,
   };
 };
 
