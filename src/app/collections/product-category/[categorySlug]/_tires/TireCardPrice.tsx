@@ -1,4 +1,4 @@
-import { TInventoryItem } from '@/types/product';
+import { TInventoryItem, TInventoryListItem } from '@/types/product';
 import { formatPrice } from '@/utils/price';
 
 // This component displays the price of a tire, formatting it and appending a 'per tire' label.

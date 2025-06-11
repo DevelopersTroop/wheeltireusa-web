@@ -33,8 +33,8 @@ export default function TireShop() {
               <div className="w-full px-4 py-6 flex flex-col ">
                 <div className="w-full flex items-center justify-center">
                   <Image
-                    src={getProductThumbnail(tire)}
-                    alt={tire.title || tire.description || ''}
+                    src={getProductThumbnail(tire[0])}
+                    alt={tire[0].title || tire[0].description || ''}
                     width={304}
                     height={300}
                     className="w-[304px] h-full object-cover"
@@ -68,10 +68,10 @@ export default function TireShop() {
               <div className="flex flex-col gap-6 bg-[#F5F4F6] py-6 px-4">
                 <div className="flex flex-col items-start gap-2">
                   <p className="text-base text-[#464853] font-normal">
-                    {tire.brand}
+                    {tire[0].brand}
                   </p>
                   <h3 className="text-2xl font-bold text-[#210203]">
-                    {tire.title}
+                    {tire[0].title}
                   </h3>
                 </div>
 
@@ -80,7 +80,7 @@ export default function TireShop() {
                     <div className="">
                       <QuantityInput
                         product={tire}
-                        inventoryAvailable={tire.inventory_available ? 4 : 0}
+                        inventoryAvailable={tire[0].inventory_available ? 4 : 0}
                         name={`quantity-${index}`}
                         id={`quantity-${index}`}
                         isDually={false} // Assuming not dually for simplicity
@@ -89,7 +89,7 @@ export default function TireShop() {
                     <div className="flex flex-row gap-2">
                       <p className="text-[#52545B] text-xl">x</p>
                       <p className="text-xl font-semibold text-[#212227]">
-                        ${getPrice(tire)?.toFixed(2)}
+                        ${getPrice(tire[0])?.toFixed(2)}
                       </p>
                     </div>
                   </div>

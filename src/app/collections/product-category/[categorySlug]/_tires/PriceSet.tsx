@@ -1,4 +1,4 @@
-import { TInventoryItem } from '@/types/product';
+import { TInventoryItem, TInventoryListItem } from '@/types/product';
 import { getPrice } from '@/utils/price';
 import React from 'react';
 
