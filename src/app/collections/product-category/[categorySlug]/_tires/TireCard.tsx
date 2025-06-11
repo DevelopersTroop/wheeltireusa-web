@@ -5,7 +5,7 @@ import { getPrice } from '@/utils/price';
 import { getProductThumbnail } from '@/utils/product';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import ComparisonWithFavorite from './comparisonwithfavorite';
 import PriceSet from './PriceSet';
 import TireAttributes from './TireAttributes';
@@ -29,6 +29,12 @@ const TireCard = ({
   const isSquare = products.length === 1; // Check if the tire set is square (all tires same size)
   const [frontTireQuantity, setFrontTireQuantity] = useState(2);
   const [rearTireQuantity, setRearTireQuantity] = useState(2);
+
+  useEffect(() => {
+    // Reset quantities if the products change
+    setFrontTireQuantity(isSquare ? 4 : 2);
+    setRearTireQuantity(isSquare ? 0 : 2);
+  }, [products, isSquare]);
 
   const singleTirePageLink = `/collections/product/${products[0]?.slug}`; // Link to the tire's product page
 
@@ -100,11 +106,20 @@ const TireCard = ({
             <div className="flex flex-col gap-4 justify-center items-start self-stretch relative w-full">
               <div className="pl-0 pr-4 flex justify-between gap-4 items-center self-stretch relative w-full">
                 <div className="flex flex-col gap-2 items-start relative">
-                  <h5 className="text-xl leading-6 bg-[#F6511D] px-3 py-1 rounded-md text-white">
+                  {!isSquare ? (
+                    <h5 className="text-xl leading-6 bg-[#F6511D] px-3 py-1 rounded-md text-white">
+                      <span className="text-white text-xl font-semibold">
+                        {'Front'}
+                      </span>
+                    </h5>
+                  ) : (
+                    <></>
+                  )}
+                  {/* <h5 className="text-xl leading-6 bg-[#F6511D] px-3 py-1 rounded-md text-white">
                     <span className="text-white text-xl font-semibold">
                       {isSquare ? 'Front & Rear' : 'Front'}
                     </span>
-                  </h5>
+                  </h5> */}
                   {/* <StockBadge /> */}
                 </div>
                 {/* <TireQuantity quantity={frontTireQuantity} /> */}
@@ -124,6 +139,7 @@ const TireCard = ({
                   otherQuantity={rearTireQuantity}
                   product={products[0]}
                   setQuantity={setFrontTireQuantity}
+                  quantityStep={4}
                   quantity={frontTireQuantity}
                 />
                 <TireCardPrice product={products[0]} />

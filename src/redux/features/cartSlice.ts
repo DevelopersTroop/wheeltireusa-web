@@ -1,5 +1,6 @@
 import { TInventoryItem } from '@/types/product';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { toast } from 'sonner';
 
 export type TCartProduct = TInventoryItem & {
   cartPackage: string;
@@ -32,6 +33,19 @@ const cartSlice = createSlice({
         );
 
         if (existingProduct) {
+          if (
+            existingProduct.quantity + newProduct.quantity >
+            (existingProduct?.inventory_available || 4)
+          ) {
+            // If the new quantity exceeds available inventory, set it to available inventory
+            newProduct.quantity =
+              (existingProduct?.inventory_available || 4) -
+              existingProduct.quantity;
+            toast.error(
+              `You can only add ${newProduct.quantity} more of this product to your cart.`
+            );
+            return;
+          }
           existingProduct.quantity += newProduct.quantity;
         } else {
           state.products.push({ ...newProduct });
@@ -39,12 +53,21 @@ const cartSlice = createSlice({
       }
     },
     removeFromCart: (state, action: PayloadAction<string>) => {
-      state.products = state.products.filter(
-        (p) => p.cartPackage !== action.payload
-      );
+      state.products = state.products.filter((p) => p._id !== action.payload);
+    },
+    updateCartQuantity: (
+      state,
+      action: PayloadAction<{ id: string; quantity: number }>
+    ) => {
+      const { id, quantity } = action.payload;
+      const existingProduct = state.products.find((p) => p._id === id);
+      if (existingProduct) {
+        existingProduct.quantity += quantity;
+      }
     },
   },
 });
 
-export const { addToCart, removeFromCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, updateCartQuantity } =
+  cartSlice.actions;
 export default cartSlice.reducer;
