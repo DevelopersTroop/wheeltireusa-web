@@ -4,7 +4,6 @@ import Breadcrumb from '@/components/ui/breadcrumb/breadcrumb';
 import Item from '@/components/ui/breadcrumb/item';
 import Container from '@/components/ui/container/container';
 import { useGetProductsQuery } from '@/redux/apis/product';
-import { TInventoryItem } from '@/types/product';
 import { useParams, useSearchParams } from 'next/navigation';
 import useFilter from '../_filters/filter-store/use-filter';
 import SidebarTireFilters from '../_filters/mobile-filters/sidebar-tire-filters';
@@ -28,6 +27,8 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
     { page, category: 'tire', ...filters },
     { refetchOnMountOrArgChange: true }
   );
+
+  // console.log('data ===== ', data);
 
   return (
     <>

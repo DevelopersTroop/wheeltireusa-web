@@ -5,6 +5,7 @@ import { TInventoryItem } from '@/types/product';
 import TireDescription from './tire-description';
 import TireDetails from './tire-details';
 import { getProductThumbnail } from '@/utils/product';
+import TireSpecifications from './tire-specifications';
 
 const Tire = ({ product }: { product: TInventoryItem }) => {
   return (
@@ -33,7 +34,9 @@ const Tire = ({ product }: { product: TInventoryItem }) => {
         </div>
 
         <div className="mt-6 w-full lg:mt-0 lg:w-2/6">
-          <div>
+          <div className="mt-8 rounded-lg bg-[#F7F7F7] py-1">
+            <TireSpecifications product={product} tire={'Front'} />
+            <TireSpecifications product={product} tire={'Rear'} />
             <TireDetails product={product} />
           </div>
         </div>
