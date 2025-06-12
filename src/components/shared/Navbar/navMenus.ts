@@ -13,12 +13,12 @@ const navMenus: NavMenu[] = [
     label: 'Shop tires', // Main menu item
     href: '/collections/product-category/tires', // Link to the wheels category
     meagMenu: false, // Indicates this is part of a mega menu
-    children: [
-      {
-        label: 'Shop tires',
-        href: '/collections/product-category/tires',
-      },
-    ],
+    // children: [
+    //   {
+    //     label: 'Shop tires',
+    //     href: '/collections/product-category/tires',
+    //   },
+    // ],
   },
   {
     label: 'Delivery and Installation',
@@ -34,12 +34,12 @@ const navMenus: NavMenu[] = [
     meagMenu: false,
     label: 'Tire Advice',
     href: '#',
-    children: [
-      {
-        label: 'Tire Advice',
-        href: '#',
-      },
-    ],
+    // children: [
+    //   {
+    //     label: 'Tire Advice',
+    //     href: '#',
+    //   },
+    // ],
   },
   {
     meagMenu: false,
@@ -63,10 +63,10 @@ const navMenus: NavMenu[] = [
         label: 'FAQ',
         href: '/frequently-asked-questions',
       },
-      {
-        label: 'Sponsorship',
-        href: '#',
-      },
+      // {
+      //   label: 'Sponsorship',
+      //   href: '#',
+      // },
     ],
   },
 ];
