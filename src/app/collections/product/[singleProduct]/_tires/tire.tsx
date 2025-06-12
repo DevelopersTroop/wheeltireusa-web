@@ -7,7 +7,9 @@ import TireDetails from './tire-details';
 import { getProductThumbnail } from '@/utils/product';
 import TireSpecifications from './tire-specifications';
 
-const Tire = ({ product }: { product: TInventoryItem }) => {
+const Tire = ({ product }: { product: TInventoryItem[] }) => {
+  console.log('tire component', product);
+
   return (
     <div className="container mx-auto px-0 sm:px-4">
       <div className="py-4">
@@ -15,8 +17,8 @@ const Tire = ({ product }: { product: TInventoryItem }) => {
           <Item href={'/'}>Home</Item>
           <Item href={'/'}>Collection</Item>
           <Item href={`/`}>Tire</Item>
-          <Item isEnd={true} href={`/collections/product/${product?.slug}`}>
-            {product?.model_group}
+          <Item isEnd={true} href={`/collections/product/${product[0]?.slug}`}>
+            {product[0]?.model_group} & {product[1]?.model_group}
           </Item>
         </Breadcrumb>
       </div>
@@ -26,18 +28,23 @@ const Tire = ({ product }: { product: TInventoryItem }) => {
           <div className="w-full">
             <ImageGallery
               images={Array.from({ length: 6 }).map(() => ({
-                src: getProductThumbnail(product),
+                src: getProductThumbnail(product[0]),
               }))}
             />
           </div>
-          <TireDescription product={product} />
+          <TireDescription product={product[0]} />
         </div>
 
         <div className="mt-6 w-full lg:mt-0 lg:w-2/6">
           <div className="mt-8 rounded-lg bg-[#F7F7F7] py-1">
-            <TireSpecifications product={product} tire={'Front'} />
-            <TireSpecifications product={product} tire={'Rear'} />
-            <TireDetails product={product} />
+            <TireSpecifications
+              product={product[0]}
+              tire={product[1] !== null ? 'Front' : ''}
+            />
+            {product[1] !== null && (
+              <TireSpecifications product={product[1]} tire={'Rear'} />
+            )}
+            <TireDetails product={product[0]} />
           </div>
         </div>
       </div>

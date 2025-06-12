@@ -7,8 +7,19 @@ import { SingleProductSkeleton } from '@/components/shared/SingleProductSkeleton
  * SingleProductClient Component
  * Fetches product details based on the route params and displays the corresponding product component.
  */
-const SingleProductClient = ({ singleProduct }: { singleProduct: string }) => {
-  const { data, isLoading } = useGetProductQuery(singleProduct); // Fetch product data using the singleProduct slug.
+const SingleProductClient = ({
+  slugOne,
+  slugTwo,
+}: {
+  slugOne: string;
+  slugTwo?: string;
+}) => {
+  const { data, isLoading } = useGetProductQuery({
+    slugOne,
+    slugTwo: slugTwo ?? '',
+  }); // Fetch product data using the singleProduct slug.
+
+  console.log('SingleProductClient', data, isLoading);
 
   if (isLoading) {
     return <SingleProductSkeleton />;

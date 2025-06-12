@@ -62,8 +62,33 @@ const products = baseApi.injectEndpoints({
         };
       },
     }),
-    getProduct: builder.query<{ product: TInventoryItem }, string>({
-      query: (slug) => ({ url: `/products/${slug}` }),
+    getProduct: builder.query<
+      TPaginatedResponse<{ product: TInventoryItem[] }>,
+      { slugOne: string; slugTwo: string }
+    >({
+      // Custom serialization to support caching with POST
+      serializeQueryArgs: ({ endpointName, queryArgs }) => {
+        const normalized = JSON.stringify(queryArgs ?? {});
+        return `${endpointName}(${normalized})`;
+      },
+
+      // Using queryFn to POST data but keep query behavior
+      queryFn: async (params, _queryApi, _extraOptions, baseQuery) => {
+        const shallowParams = { ...params };
+
+        const result = await baseQuery({
+          url: '/products/pair-details',
+          method: 'POST',
+          data: { ...shallowParams },
+        });
+
+        if (result.error) return { error: result.error };
+        return {
+          data: result.data as TPaginatedResponse<{
+            product: TInventoryItem[];
+          }>,
+        };
+      },
     }),
     getFilterList: builder.query<{ filters: TFilters }, void>({
       query: () => ({

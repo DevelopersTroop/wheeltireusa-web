@@ -99,7 +99,7 @@ const TireSpecifications = ({
                   </div>
                   <p className="text-base leading-[19px] text-[#210203]">
                     <span className="line-clamp-1 text-base font-normal text-[#210203]">
-                      {product.raw_size ? product.raw_size : 'N/A'}
+                      {product?.raw_size ? product?.raw_size : 'N/A'}
                     </span>
                   </p>
                 </div>
@@ -138,7 +138,7 @@ const TireSpecifications = ({
                     </div>
                     <p className="text-base leading-[19px] text-[#210203]">
                       <span className="line-clamp-1 text-base font-normal text-[#210203]">
-                        {product.spoke_style ? product?.spoke_style : 'N/A'}
+                        {product?.spoke_style ? product?.spoke_style : 'N/A'}
                       </span>
                     </p>
                   </div>
@@ -166,7 +166,7 @@ const TireSpecifications = ({
                     </div>
                     <p className="text-base leading-[19px] text-[#210203]">
                       <span className="line-clamp-1 text-base font-normal text-[#210203]">
-                        {product.load_rating ? product.load_rating : 'N/A'}
+                        {product?.load_rating ? product?.load_rating : 'N/A'}
                       </span>
                     </p>
                   </div>
@@ -197,7 +197,7 @@ const TireSpecifications = ({
                     </div>
                     <p className="text-base leading-[19px] text-[#210203]">
                       <span className="line-clamp-1 text-base font-normal text-[#210203]">
-                        {product.std_rim ? product.std_rim : 'N/A'}
+                        {product?.std_rim ? product.std_rim : 'N/A'}
                       </span>
                     </p>
                   </div>
@@ -225,7 +225,7 @@ const TireSpecifications = ({
                     </div>
                     <p className="text-base leading-[19px] text-[#210203]">
                       <span className="line-clamp-1 text-base font-normal text-[#210203]">
-                        {product.load_rating ? product.load_rating : 'N/A'}
+                        {product?.load_rating ? product?.load_rating : 'N/A'}
                       </span>
                     </p>
                   </div>

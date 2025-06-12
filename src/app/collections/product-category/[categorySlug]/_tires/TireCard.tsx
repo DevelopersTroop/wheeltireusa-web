@@ -36,7 +36,10 @@ const TireCard = ({
     setRearTireQuantity(isSquare ? 0 : 2);
   }, [products, isSquare]);
 
-  const singleTirePageLink = `/collections/product/${products[0]?.slug}`; // Link to the tire's product page
+  let singleTirePageLink = `/collections/product/${products[0]?.slug}`; // Link to the tire's product page
+  if (products.length > 1) {
+    singleTirePageLink += `?slug=${products[1]?.slug}`; // Add front tire slug to the link
+  }
 
   // if (products[1]) {
   //   // If a second tire exists (for non-square sets)
