@@ -5,6 +5,7 @@ import {
   TOrder,
   TOrderData,
   TOrderInfo,
+  TProductInfo,
   TRequestedDealer,
 } from '@/types/order';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
@@ -136,7 +137,7 @@ const checkoutSlice = createSlice({
     },
     setSelectedOptionTitle: (
       state: TCheckoutState,
-      action: PayloadAction<string>
+      action: PayloadAction<TCheckoutState['selectedOptionTitle']>
     ) => {
       state.selectedOptionTitle = action.payload;
     },
@@ -148,7 +149,10 @@ const checkoutSlice = createSlice({
     },
     setShippingMethod: (
       state: TCheckoutState,
-      action: PayloadAction<{ option: number; title: string }>
+      action: PayloadAction<{
+        option: number;
+        title: TCheckoutState['selectedOptionTitle'];
+      }>
     ) => {
       state.shippingMethod = action.payload;
     },
@@ -163,7 +167,7 @@ const checkoutSlice = createSlice({
         state.discount = action.payload;
       }
     },
-    updateProductFromCart: (state, action: PayloadAction<any[]>) => {
+    updateProductFromCart: (state, action: PayloadAction<TProductInfo[]>) => {
       state.productsInfo = action.payload;
     },
     initiateCheckout: (state) => {},

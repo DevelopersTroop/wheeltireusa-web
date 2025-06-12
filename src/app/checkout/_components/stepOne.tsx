@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { InfoIcon } from 'lucide-react';
 import React, { useState } from 'react';
+import { DeliveryOptions } from './deliveryOptions';
 
 // Interface for checkout step props
 export interface ICheckoutStepProps {
@@ -135,7 +136,7 @@ export const StepOne: React.FC<ICheckoutStepProps> = ({
           <h2 className="text-black font-bold text-2xl mb-4">
             Select an Installer
           </h2>
-          {/* <DeliveryOptions setStep={setStep!} /> */}
+          <DeliveryOptions setStep={setStep!} />
         </div>
         <div className="col-span-10 lg:col-span-6 z-10 rounded-xl overflow-hidden h-fit border border-border">
           <div className="flex justify-between items-start md:items-center py-xs px-smx">

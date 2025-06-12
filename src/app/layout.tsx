@@ -1,4 +1,5 @@
 import { Footer } from '@/components/shared/Footer/Footer';
+import { GoogleMapScriptLoader } from '@/components/shared/googleMapScriptLoader';
 import { Header } from '@/components/shared/Header/Header';
 import { CheckoutProvider } from '@/context/checkoutContext';
 import ReduxWrapper from '@/redux/ReduxWrapper';
@@ -27,14 +28,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${dmSans.variable} antialiased`}>
-        <ReduxWrapper>
-          <CheckoutProvider>
-            <Header />
-            <main>{children}</main>
-            <Footer />
-          </CheckoutProvider>
-        </ReduxWrapper>
-        <Toaster richColors />
+        <GoogleMapScriptLoader>
+          <ReduxWrapper>
+            <CheckoutProvider>
+              <Header />
+              <main>{children}</main>
+              <Footer />
+            </CheckoutProvider>
+          </ReduxWrapper>
+          <Toaster richColors />
+        </GoogleMapScriptLoader>
       </body>
     </html>
   );
