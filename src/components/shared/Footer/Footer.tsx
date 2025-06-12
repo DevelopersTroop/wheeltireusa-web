@@ -115,10 +115,7 @@ export const Footer = () => {
                 </li>
 
                 <li>
-                  <Link
-                    href={'/deals-and-rebates'}
-                    className={'text-base font-normal'}
-                  >
+                  <Link href={'/deals'} className={'text-base font-normal'}>
                     Deals and Rebates
                   </Link>
                 </li>
