@@ -26,7 +26,15 @@ const FilterByTireBrand = () => {
         <div className="flex flex-col gap-4">
           {brand && <SelectedItem />}
           {!brand && <SelectBrand />}
-          {brand && <AddZipCode />}
+          {brand && (
+            <>
+              <div className="text-muted-dark text-[20px] px-6 order-3">
+                Enter your zip code to get best shipping and installation
+                options
+              </div>
+              <AddZipCode />
+            </>
+          )}
         </div>
       </ScrollArea>
       {brand && (

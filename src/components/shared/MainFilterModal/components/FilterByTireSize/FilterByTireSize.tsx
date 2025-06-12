@@ -20,7 +20,10 @@ const FilterByTireSize = () => {
         <div className="flex flex-col gap-4  mt-8 w-4/5 mx-auto">
           <TireSizeSelection setSelectedTireSizes={setSelectedTireSizes} />
         </div>
-        <div className="flex flex-col gap-4  mt-8 w-4/5 mx-auto">
+        <div className="flex flex-col gap-4  mt-10 w-4/5 mx-auto">
+          <div className="text-center text-lg">
+            Enter your zip code to get best shipping and installation options
+          </div>
           <AddZipCode />
         </div>
       </ScrollArea>

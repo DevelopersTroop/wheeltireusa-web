@@ -3,8 +3,8 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Badge from '@/components/ui/badge/badge';
 import { isSale } from '@/utils/price';
-import { CommonCard } from '../common-card';
-import CardDescription from './wheel-card-description';
+import { CommonCard } from '../CommonCard';
+import CardDescription from './CardDescription';
 import { TInventoryItem } from '@/types/product';
 
 // Props: Accepts a `product` object and an optional `showOnlyPrice` flag

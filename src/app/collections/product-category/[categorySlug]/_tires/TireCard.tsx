@@ -6,13 +6,13 @@ import { getProductThumbnail } from '@/utils/product';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
-import ComparisonWithFavorite from './comparisonwithfavorite';
+import ComparisonWithFavorite from './ComparisonWithFavorite';
 import PriceSet from './PriceSet';
 import TireAttributes from './TireAttributes';
 import TireCardButton from './TireCardButton';
 import TireCardPrice from './TireCardPrice';
 import TireQuantity from './TireQuantity';
-import TireRating from './tireRating';
+import TireRating from './TireRating';
 
 const TireCard = ({
   products,

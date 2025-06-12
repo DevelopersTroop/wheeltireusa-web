@@ -55,7 +55,13 @@ const FilterByVehicle = () => {
             <SelectSize />
           )}
           {year && make && model && frontTireSize && rearTireSize && (
-            <AddZipCode />
+            <>
+              <div className="text-muted-dark text-[20px] px-6 order-3">
+                Enter your zip code to get best shipping and installation
+                options
+              </div>
+              <AddZipCode />
+            </>
           )}
         </div>
       </ScrollArea>
