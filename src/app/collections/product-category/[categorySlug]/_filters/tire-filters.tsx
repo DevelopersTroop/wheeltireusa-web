@@ -5,11 +5,9 @@
 import { useGetFilterListQuery } from '@/redux/apis/product';
 import { getFiltersExceptPriceFilterBy, getPriceFilter } from '@/utils/filter';
 import FilterLoadingSkeleton from '../_loading/filter-loading-skeleton';
-import { SaleFilter } from './sale-filter';
-import WheelDiameter from './widgets/tire/wheel-diameter';
-import WheelModel from './widgets/tire/wheel-model';
-import WheelPriceRange from './widgets/tire/wheel-price-range';
-import Wheelsize from './widgets/tire/wheel-size';
+import { SaleFilter } from './widgets/shared/sale-filter';
+import TireModel from './widgets/tire/TireModel';
+import TirePriceRange from './widgets/tire/TIrePriceRange';
 
 //InStockWheelFilters Component
 const TireFilters: React.FC = () => {
@@ -25,17 +23,9 @@ const TireFilters: React.FC = () => {
         <FilterLoadingSkeleton />
       ) : (
         <div className={'w-[304px] filter-shadow rounded-2xl bg-[#F7F7F7]'}>
-          {/* Wheel Size Filter */}
+          {/* Tire Model Filter */}
           <div className={'px-5 py-3 border-b'}>
-            <Wheelsize
-              filterKey={'tire_size'}
-              size={getFiltersExceptPriceFilterBy(data.filters, 'tire_size')}
-            />
-          </div>
-
-          {/* Wheel Model Filter */}
-          <div className={'px-5 py-3 border-b'}>
-            <WheelModel
+            <TireModel
               filterKey={'model'}
               model={getFiltersExceptPriceFilterBy(data.filters, 'model')}
             />
@@ -43,19 +33,12 @@ const TireFilters: React.FC = () => {
 
           {/* Price Range Filter */}
           <div>
-            <WheelPriceRange price={getPriceFilter(data.filters)} />
+            <TirePriceRange price={getPriceFilter(data.filters)} />
           </div>
 
           {/* Sale Filter (Toggle for filtering products on sale) */}
           <div>
             <SaleFilter />
-          </div>
-          {/* Wheel Diameter Filter */}
-          <div className={'px-5 py-3 border-b'}>
-            <WheelDiameter
-              filterKey={'diameter'}
-              diameter={getFiltersExceptPriceFilterBy(data.filters, 'diameter')}
-            />
           </div>
         </div>
       )}

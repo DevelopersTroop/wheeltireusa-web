@@ -18,12 +18,31 @@ import useFilter from '../_filters/filter-store/use-filter';
 const TireFilterAndSort = () => {
   // Access the URL search parameters to extract current filters and sorting options
   const searchParams = useSearchParams();
+  const getCustomTireSizeLabel = (key: string) => {
+    const hasFrontParams = searchParams.get('frontParams') !== null;
+    const hasRearParams = searchParams.get('rearParams') !== null;
+    const isDifferentOnRear =
+      hasFrontParams && hasRearParams && hasFrontParams !== null ? true : false;
+    if (key === 'frontParams' && isDifferentOnRear) {
+      return 'Front Tire Size: ';
+    } else if (key === 'rearParams' && isDifferentOnRear) {
+      return 'Rear Tire Size: ';
+    } else if (key === 'frontParams' && !isDifferentOnRear) {
+      return 'Tire Size: ';
+    } else if (key === 'rearParams' && !isDifferentOnRear) {
+      return 'Tire Size: ';
+    }
+    return '';
+  };
 
   // const filterOptions = Array.from(searchParams.entries());
 
   const filterOptions = Array.from(searchParams.entries())
     .filter(([key]) => key !== 'page')
     .flatMap(([key, value]) => {
+      if (key === 'frontParams' || key === 'rearParams') {
+        return [[key, value]];
+      }
       return value.split(',').map((v) => [key, v]);
     });
 
@@ -56,7 +75,10 @@ const TireFilterAndSort = () => {
                   ) : key === 'sale' ? (
                     <span className="text-[#210203] text-base font-normal">{`On Sale`}</span>
                   ) : (
-                    <span className="text-[#210203] text-base font-normal">{`${formatFilterValue(value)}`}</span>
+                    <span className="text-[#210203] text-base font-normal">
+                      {getCustomTireSizeLabel(key)}
+                      {`${formatFilterValue(value, key)}`}
+                    </span>
                   )}
                   <div className="text-btext ml-2">
                     <svg

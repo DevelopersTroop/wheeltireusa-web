@@ -5,18 +5,17 @@ import { useState } from 'react';
 import FilterHeading from '../../template/filter-heading';
 import SelectFilterTemplate from '../../template/select-filter-template';
 
-const WheelDesign = ({
-  design,
+const TireModel = ({
+  model,
   filterKey,
 }: {
   filterKey: string;
-  design: TSingleFilter[];
+  model: TSingleFilter[];
 }) => {
   const searchParams = useSearchParams();
-  const designTypeToggle = searchParams.get(filterKey);
-
+  const modelGroupToggle = searchParams.get(filterKey);
   const [showFilter, setshowFilter] = useState(
-    designTypeToggle === null ? false : true
+    modelGroupToggle === null ? false : true
   );
 
   const toggleFilter = () => {
@@ -28,14 +27,14 @@ const WheelDesign = ({
       <FilterHeading
         showFilter={showFilter}
         toggleFilter={toggleFilter}
-        title="Design Type"
-        disabled={design.length === 0}
+        title="Model"
+        disabled={model.length === 0}
       />
-      {showFilter && design.length > 0 && (
-        <SelectFilterTemplate filterKey={filterKey} filterData={design} />
+      {showFilter && model.length > 0 && (
+        <SelectFilterTemplate filterKey={filterKey} filterData={model} />
       )}
     </>
   );
 };
 
-export default WheelDesign;
+export default TireModel;

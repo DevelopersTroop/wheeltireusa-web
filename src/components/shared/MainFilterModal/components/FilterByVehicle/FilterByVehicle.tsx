@@ -1,8 +1,8 @@
 import { ScrollArea } from '@/components/ui/scroll-area';
-import SelectedItem from './components/SelectedItem/SelectedItem';
-import ListSkeleton from '../ListSkeleton/ListSkeleton';
-import useFilterByVehicle from './useFilterByVehicle';
 import { cn } from '@/lib/utils';
+import ListSkeleton from '../ListSkeleton/ListSkeleton';
+import SelectedItem from './components/SelectedItem/SelectedItem';
+import useFilterByVehicle from './useFilterByVehicle';
 
 // Dynamic imports
 import dynamic from 'next/dynamic';
@@ -22,9 +22,21 @@ const SelectYear = dynamic(() => import('./components/SelectYear/SelectYear'), {
   ssr: false,
   loading: () => <ListSkeleton title="Year" />,
 });
+const AddZipCode = dynamic(() => import('../AddZipCode/AddZipCode'), {
+  ssr: false,
+  loading: () => <ListSkeleton title="Add Zip Code" />,
+});
 
 const FilterByVehicle = () => {
-  const { year, make, model, isDisabled, submitFilter } = useFilterByVehicle();
+  const {
+    year,
+    make,
+    model,
+    frontTireSize,
+    rearTireSize,
+    isDisabled,
+    submitFilter,
+  } = useFilterByVehicle();
 
   return (
     <div className={cn('h-[70dvh]')}>
@@ -39,7 +51,12 @@ const FilterByVehicle = () => {
           {!year && <SelectYear />}
           {year && !make && <SelectMake />}
           {year && make && !model && <SelectModel />}
-          {year && make && model && <SelectSize />}
+          {year && make && model && !frontTireSize && !rearTireSize && (
+            <SelectSize />
+          )}
+          {year && make && model && frontTireSize && rearTireSize && (
+            <AddZipCode />
+          )}
         </div>
       </ScrollArea>
       {year && make && model && (

@@ -17,7 +17,6 @@ type BrickBoxProps = {
     'className' | 'name'
   >]?: React.ComponentProps<'button'>[K];
 } & {
-  boxId?: string;
   text: React.ReactNode;
   className?: string;
   checked?: boolean;
@@ -27,7 +26,6 @@ type BrickBoxProps = {
 };
 
 const BrickBoxWithoutTooltip = ({
-  boxId,
   text,
   onClick,
   type = 'button',
@@ -49,7 +47,7 @@ const BrickBoxWithoutTooltip = ({
       setIsCheckedState(false);
     }
     // @ts-expect-error Hasib will fix this TS error
-  }, [mainFilterState?.filters?.[filterType]?.current?.[fieldName], boxId]);
+  }, [mainFilterState?.filters?.[filterType]?.current?.[fieldName]]);
 
   const isMerged = useMergedBrickBoxContext();
 

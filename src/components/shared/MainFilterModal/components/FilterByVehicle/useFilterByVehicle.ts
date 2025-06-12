@@ -18,6 +18,11 @@ const useFilterByVehicle = () => {
   const selectedYear = mainFilterState.filters.byVehicle.current.year;
   const selectedMake = mainFilterState.filters.byVehicle.current.make;
   const selectedModel = mainFilterState.filters.byVehicle.current.model;
+  const selectedFrontTireSize =
+    mainFilterState.filters.byVehicle.current.frontTireSize;
+  const selectedRearTireSize =
+    mainFilterState.filters.byVehicle.current.rearTireSize;
+  const selectedZipCode = mainFilterState.filters.byVehicle.current.zipCode;
   const allBodyTypes = mainFilterState.filters.byVehicle.list.bodyTypes;
   const allSubModels = mainFilterState.filters.byVehicle.list.subModels;
   const allTireSizes =
@@ -111,7 +116,8 @@ const useFilterByVehicle = () => {
     }
   }, [selectedYear, selectedMake, selectedModel, allBodyTypes, allSubModels]);
 
-  const isDisabled = !allTireSizes || allTireSizes?.length === 0;
+  const isDisabled =
+    !allTireSizes || allTireSizes?.length === 0 || !selectedZipCode;
   const submitFilter = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     router.push('/collections/product-category/tire');
@@ -121,6 +127,8 @@ const useFilterByVehicle = () => {
     year: selectedYear,
     make: selectedMake,
     model: selectedModel,
+    frontTireSize: selectedFrontTireSize,
+    rearTireSize: selectedRearTireSize,
     allBodyTypes,
     allSubModels,
     allTireSizes,

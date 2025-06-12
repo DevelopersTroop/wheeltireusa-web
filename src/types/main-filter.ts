@@ -59,6 +59,7 @@ export type TMainFilter = {
         vehicleInformation: Partial<TMainFilterVehicleInformation>;
         frontTireSize: string | null;
         rearTireSize: string | null;
+        zipCode: string | null;
       };
     };
     byTireBrand: {

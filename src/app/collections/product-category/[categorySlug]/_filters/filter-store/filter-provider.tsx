@@ -17,7 +17,7 @@ export type TFilter = {
   clearAllFilters: () => void;
   removeSpecificFilters: (key: string[]) => void;
   addFilterValue: (key: string, value: string | string[]) => void;
-  formatFilterValue: (value: string) => string;
+  formatFilterValue: (value: string, key?: string) => string;
 };
 
 // Creating a context to manage filter states
@@ -27,8 +27,20 @@ const FilterProvider = ({ children }: { children: React.ReactNode }) => {
   const [shouldPaginationRemove, setShouldPaginationRemove] =
     React.useState(false); // Tracks if pagination needs reset
 
+  useEffect(() => {
+    console.log('filters', filters);
+  }, [filters]);
   // Formats filter values by replacing separators (used for multi-value filters)
-  const formatFilterValue = (value: string) => {
+  const formatFilterValue = (
+    value: string,
+    key?: string,
+    getFrontRearParamsJSON: boolean = false
+  ) => {
+    if (key === 'frontParams' || key === 'rearParams') {
+      return getFrontRearParamsJSON
+        ? value
+        : `${JSON.parse(value).width}/${JSON.parse(value).ratio}-${JSON.parse(value).diameter}`;
+    }
     return value.includes('|')
       ? value.replaceAll('|', ',')
       : value.replaceAll(',', '|');
@@ -60,14 +72,25 @@ const FilterProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [searchParams]);
 
+  // get splited values from the state
+  const getSplitedValues = (
+    state: { [k: string]: string | undefined },
+    key: string
+  ) => {
+    if (key === 'frontParams' || key === 'rearParams') {
+      return state[key] ? [state[key]] : [];
+    }
+    return state[key] ? state[key].split(',') : [];
+  };
+
   // Removes a specific filter value or multiple values from the state
   const removeFilterValue = (key: string, value: string | string[]) => {
     setShouldPaginationRemove(true);
     setFilters((prev) => {
-      const prevValues = prev[key] ? prev[key].split(',') : [];
+      const prevValues = getSplitedValues(prev, key);
       const finalValue = prevValues
         .filter((val) => {
-          val = formatFilterValue(val);
+          val = formatFilterValue(val, key, true);
           // for string, single value
           if (typeof value === 'string') {
             // if key === forging_style and value === passenger, remove all passenger forging
@@ -88,6 +111,7 @@ const FilterProvider = ({ children }: { children: React.ReactNode }) => {
           }
         })
         .join(',');
+      // console.log("finalValue", finalValue)
       if (finalValue === '') {
         delete prev[key];
         return {
@@ -109,12 +133,12 @@ const FilterProvider = ({ children }: { children: React.ReactNode }) => {
   ) => {
     setShouldPaginationRemove(true);
     setFilters((prev) => {
-      const prevValues = prev[key] ? prev[key].split(',') : [];
+      const prevValues = getSplitedValues(prev, key);
       let finalValue = prev[key] ?? '';
 
       // For Single Value
       if (typeof value === 'string') {
-        value = formatFilterValue(value);
+        value = formatFilterValue(value, key, true);
         if (acceptMultipleValue) {
           if (prevValues.includes(value)) {
             finalValue = prevValues.filter((val) => val !== value).join(',');
@@ -135,7 +159,7 @@ const FilterProvider = ({ children }: { children: React.ReactNode }) => {
           const haveToBeRemoved: string[] = [];
           const haveToBeAdded: string[] = [];
           for (let item of value) {
-            item = formatFilterValue(item);
+            item = formatFilterValue(item, key);
             if (prevValues.includes(item)) {
               haveToBeRemoved.push(item);
             } else {
@@ -176,7 +200,7 @@ const FilterProvider = ({ children }: { children: React.ReactNode }) => {
   const addFilterValue = (key: string, value: string | string[]) => {
     setShouldPaginationRemove(true);
     setFilters((prev) => {
-      const prevValues = prev[key] ? prev[key].split(',') : [];
+      const prevValues = getSplitedValues(prev, key);
       let finalValue = prev[key] ?? '';
 
       if (typeof value === 'string') {

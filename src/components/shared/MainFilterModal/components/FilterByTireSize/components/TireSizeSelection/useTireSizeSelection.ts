@@ -100,9 +100,9 @@ const useTireSizeSelection = (
         diameter: frontDiameter,
       },
       rear: {
-        width: differentOnRear ? rearWidth : frontWidth,
-        aspectRatio: differentOnRear ? rearAspectRatio : frontAspectRatio,
-        diameter: differentOnRear ? rearDiameter : frontDiameter,
+        width: differentOnRear ? (rearWidth ?? '') : '',
+        aspectRatio: differentOnRear ? (rearAspectRatio ?? '') : '',
+        diameter: differentOnRear ? (rearDiameter ?? '') : '',
       },
     });
   }, [

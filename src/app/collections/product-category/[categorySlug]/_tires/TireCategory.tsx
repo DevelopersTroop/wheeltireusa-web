@@ -108,7 +108,7 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
                   {data?.products?.map((product, index) => {
                     return (
                       <TireCard
-                        key={index}
+                        key={`${product?.[0]?._id}-${product?.[1]?._id}`}
                         products={product}
                         wheelInfo={{
                           frontForging: '',

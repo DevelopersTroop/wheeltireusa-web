@@ -41,8 +41,33 @@ const useFilterByTireSize = () => {
     }
   }
   const submitFilter = (e: MouseEvent<HTMLButtonElement>) => {
+    const frontParams = encodeURIComponent(
+      JSON.stringify({
+        diameter: selectedTireSizes?.front.diameter,
+        width: selectedTireSizes?.front.width,
+        ratio: selectedTireSizes?.front.aspectRatio,
+      })
+    );
+
+    let rearParams = '';
+    if (
+      selectedTireSizes?.rear.diameter &&
+      selectedTireSizes?.rear.width &&
+      selectedTireSizes?.rear.aspectRatio
+    ) {
+      rearParams = encodeURIComponent(
+        JSON.stringify({
+          diameter: selectedTireSizes?.rear.diameter,
+          width: selectedTireSizes?.rear.width,
+          ratio: selectedTireSizes?.rear.aspectRatio,
+        })
+      );
+    }
+
     e.preventDefault();
-    // router.push(`/collections/product-category/tire?aspect_ratio=${selectedAspectRatio}&diameter=${selectedDiameter}&width=${selectedWidth}`);
+    router.push(
+      `/collections/product-category/tire?frontParams=${frontParams}&rearParams=${rearParams}`
+    );
     dispatch(closeMainFilterModal());
   };
 

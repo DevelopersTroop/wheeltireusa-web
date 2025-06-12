@@ -19,7 +19,6 @@ const SelectSize = () => {
                 onClick={() => {
                   setTireSize(size.front, size.rear);
                 }}
-                boxId={`${size.front}-${size.rear}`}
                 key={`${size.front}-${size.rear}`}
                 text={
                   <>

@@ -8,7 +8,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import debounce from 'debounce';
 import MultiRangeSlider from '@/components/ui/multi-range-slider/multi-range-slider';
 
-const WheelPriceRange = ({ price }: { price: TPriceFilter }) => {
+const TirePriceRange = ({ price }: { price: TPriceFilter }) => {
   const { filters, toggleFilterValue } = useFilter();
   const router = useRouter();
   const pathname = usePathname();
@@ -104,4 +104,4 @@ const WheelPriceRange = ({ price }: { price: TPriceFilter }) => {
   );
 };
 
-export default WheelPriceRange;
+export default TirePriceRange;
