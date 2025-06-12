@@ -69,7 +69,7 @@ const MainMenuMobile = ({
         {subMenuStatus.mainMenu && (
           <ul>
             {/*  submenu */}
-            <li>
+            {/* <li>
               <div
                 onClick={() => openSubMenu('megaMenu')}
                 className={
@@ -83,6 +83,16 @@ const MainMenuMobile = ({
                   </button>{' '}
                 </div>
               </div>
+            </li> */}
+            <li>
+              <Link
+                className={
+                  'text-black tracking-wider inline-block w-full border-b pl-3 py-3.5 border-[#F1F1F1]'
+                }
+                href="/collections/product-category/tires"
+              >
+                Shop Tires
+              </Link>
             </li>
             <li>
               <Link
@@ -115,7 +125,7 @@ const MainMenuMobile = ({
             </li>
 
             {/* Tire Advice submenu */}
-            <li>
+            {/* <li>
               <div
                 onClick={() => openSubMenu('tireAdvice')}
                 className={
@@ -129,6 +139,16 @@ const MainMenuMobile = ({
                   </button>{' '}
                 </div>
               </div>
+            </li> */}
+            <li>
+              <Link
+                className={
+                  'text-black tracking-wider inline-block w-full border-b pl-3 py-3.5 border-[#F1F1F1]'
+                }
+                href="#"
+              >
+                Tire Advice
+              </Link>
             </li>
             <li>
               <Link
@@ -256,7 +276,7 @@ const MainMenuMobile = ({
                 FAQ
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link
                 className={
                   'text-black tracking-wider inline-block w-full border-b pl-3 py-3.5 border-[#F1F1F1]'
@@ -265,7 +285,7 @@ const MainMenuMobile = ({
               >
                 Sponsorship
               </Link>
-            </li>
+            </li> */}
             {/* <li><Link className={'text-black tracking-wider inline-block w-full border-b pl-3 py-3.5 border-[#F1F1F1]'} href="#">Forgings</Link></li> */}
             {/* <li><Link className={'text-black tracking-wider inline-block w-full border-b pl-3 py-3.5 border-[#F1F1F1]'} href="#">Affiliate Program</Link></li> */}
           </ul>
