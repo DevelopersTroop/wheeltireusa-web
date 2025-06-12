@@ -7,6 +7,7 @@ import SelectedItem from './components/SelectedItem/SelectedItem';
 import FilterFooter from '../FilterFooter/FilterFooter';
 import dynamic from 'next/dynamic';
 import ListSkeleton from '../ListSkeleton/ListSkeleton';
+import AddZipCode from '../AddZipCode/AddZipCode';
 const SelectBrand = dynamic(
   () => import('./components/SelectBrand/SelectBrand'),
   {
@@ -24,7 +25,8 @@ const FilterByTireBrand = () => {
       >
         <div className="flex flex-col gap-4">
           {brand && <SelectedItem />}
-          <SelectBrand />
+          {!brand && <SelectBrand />}
+          {brand && <AddZipCode />}
         </div>
       </ScrollArea>
       {brand && (

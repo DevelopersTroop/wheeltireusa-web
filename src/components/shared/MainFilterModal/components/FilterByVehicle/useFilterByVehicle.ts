@@ -22,7 +22,7 @@ const useFilterByVehicle = () => {
     mainFilterState.filters.byVehicle.current.frontTireSize;
   const selectedRearTireSize =
     mainFilterState.filters.byVehicle.current.rearTireSize;
-  const selectedZipCode = mainFilterState.filters.byVehicle.current.zipCode;
+  const selectedZipCode = mainFilterState.zipCode;
   const allBodyTypes = mainFilterState.filters.byVehicle.list.bodyTypes;
   const allSubModels = mainFilterState.filters.byVehicle.list.subModels;
   const allTireSizes =

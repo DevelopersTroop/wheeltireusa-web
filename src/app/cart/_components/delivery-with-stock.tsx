@@ -1,5 +1,8 @@
+import { useTypedSelector } from '@/redux/store';
+
 const DeliveryWithStock = ({ deliveryTime }: { deliveryTime: string }) => {
   // const deliveryTimeString = getFormatedDeliveryTimeString(deliveryTime)
+  const zipCode = useTypedSelector((state) => state.mainFilter.zipCode);
   return (
     <div className="pl-0 pr-5 flex flex-col gap-2 items-start  flex-1 relative w-full">
       <div className="flex gap-1 items-center relative">
@@ -36,8 +39,14 @@ const DeliveryWithStock = ({ deliveryTime }: { deliveryTime: string }) => {
           <span className="text-[#212227] text-base font-semibold">
             {deliveryTime}
           </span>{' '}
-          to
-          <span className="underline text-base text-[#61636B]"> 07286</span>
+          {zipCode ? (
+            <span className="underline text-base text-[#61636B]">
+              to
+              {zipCode}
+            </span>
+          ) : (
+            <></>
+          )}
         </h5>
       </div>
     </div>

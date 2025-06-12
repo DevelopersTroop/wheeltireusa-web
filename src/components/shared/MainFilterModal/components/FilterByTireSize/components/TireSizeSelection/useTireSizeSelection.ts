@@ -1,8 +1,8 @@
-import { useForm, Controller, useWatch } from 'react-hook-form';
-import { TTireSize } from '../../useFilterByTireSize';
-import React, { useEffect } from 'react';
 import { useGetFilterListQuery } from '@/redux/apis/product';
 import { TSingleFilter } from '@/types/filter';
+import React, { useEffect } from 'react';
+import { useForm, useWatch } from 'react-hook-form';
+import { TTireSize } from '../../useFilterByTireSize';
 
 type TireSizeForm = {
   frontWidth: string;
@@ -99,6 +99,7 @@ const useTireSizeSelection = (
         aspectRatio: frontAspectRatio,
         diameter: frontDiameter,
       },
+      differentSizeInRear: differentOnRear,
       rear: {
         width: differentOnRear ? (rearWidth ?? '') : '',
         aspectRatio: differentOnRear ? (rearAspectRatio ?? '') : '',

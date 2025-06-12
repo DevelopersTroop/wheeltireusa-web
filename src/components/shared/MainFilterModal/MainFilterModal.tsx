@@ -15,13 +15,16 @@ import { useDispatch } from 'react-redux';
 import FilterByTireBrand from './components/FilterByTireBrand/FilterByTireBrand';
 import FilterByVehicle from './components/FilterByVehicle/FilterByVehicle';
 import FilterByTireSize from './components/FilterByTireSize/FilterByTireSize';
+import { useTypedSelector } from '@/redux/store';
 
 const YmmForm = () => {
   const dispatch = useDispatch();
   const { isFilterModalOpen } = useMainFilterModal();
 
+  const activeTab = useTypedSelector((state) => state.mainFilter.activeTab);
+
   const handleDialogChange = (isOpen: boolean) => {
-    dispatch(openMainFilterModal());
+    dispatch(openMainFilterModal({ tab: 'Vehicle' }));
     if (!isOpen) {
       dispatch(closeMainFilterModal());
     }
@@ -31,31 +34,49 @@ const YmmForm = () => {
     <>
       <Dialog open={isFilterModalOpen} onOpenChange={handleDialogChange}>
         <DialogContent className="sm:max-w-1/2 bg-muted p-0 lg:max-w-2/3">
-          <Tabs defaultValue="vehicle">
+          <Tabs value={activeTab ?? 'Vehicle'}>
             <TabsList className="p-6 bg-muted border-b-1 border-muted-dark rounded-none w-full flex justify-start pb-[30px] mt-4">
               <div className="flex items-center space-x-6">
                 <DialogTitle className="text-lg">
                   Select your vehicle
                 </DialogTitle>
-                <TabsTriggerMainFilter value="vehicle" className="">
+                <TabsTriggerMainFilter
+                  onClick={() =>
+                    dispatch(openMainFilterModal({ tab: 'Vehicle' }))
+                  }
+                  value="Vehicle"
+                  className=""
+                >
                   Vehicle model
                 </TabsTriggerMainFilter>
-                <TabsTriggerMainFilter value="tireSize" className="">
+                <TabsTriggerMainFilter
+                  onClick={() =>
+                    dispatch(openMainFilterModal({ tab: 'TireSize' }))
+                  }
+                  value="TireSize"
+                  className=""
+                >
                   Tire size
                 </TabsTriggerMainFilter>
-                <TabsTriggerMainFilter value="tireBrand" className="">
+                <TabsTriggerMainFilter
+                  onClick={() =>
+                    dispatch(openMainFilterModal({ tab: 'TireBrand' }))
+                  }
+                  value="TireBrand"
+                  className=""
+                >
                   Tire brand
                 </TabsTriggerMainFilter>
               </div>
             </TabsList>
 
-            <TabsContent value="vehicle">
+            <TabsContent value="Vehicle">
               <FilterByVehicle />
             </TabsContent>
-            <TabsContent value="tireSize">
+            <TabsContent value="TireSize">
               <FilterByTireSize />
             </TabsContent>
-            <TabsContent value="tireBrand">
+            <TabsContent value="TireBrand">
               <FilterByTireBrand />
             </TabsContent>
           </Tabs>

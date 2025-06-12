@@ -10,6 +10,7 @@ export type TTireSize = {
     aspectRatio: string;
     width: string;
   };
+  differentSizeInRear: boolean;
   rear: {
     diameter: string;
     aspectRatio: string;
@@ -22,20 +23,25 @@ const useFilterByTireSize = () => {
   const [selectedTireSizes, setSelectedTireSizes] = useState<TTireSize | null>(
     null
   );
-  console.log(selectedTireSizes);
+  const selectedZipCode = useTypedSelector((state) => state.mainFilter.zipCode);
 
   // Check if the tire sizes are valid
   let isDisabled = true;
-  if (!selectedTireSizes) {
+  if (!selectedTireSizes || !selectedZipCode) {
     isDisabled = true;
   } else {
     if (
-      selectedTireSizes.front.diameter &&
-      selectedTireSizes.front.aspectRatio &&
-      selectedTireSizes.front.width &&
-      selectedTireSizes.rear.diameter &&
-      selectedTireSizes.rear.aspectRatio &&
-      selectedTireSizes.rear.width
+      (selectedTireSizes.front.diameter &&
+        selectedTireSizes.front.aspectRatio &&
+        selectedTireSizes.front.width &&
+        !selectedTireSizes.differentSizeInRear) ||
+      (selectedTireSizes.front.diameter &&
+        selectedTireSizes.front.aspectRatio &&
+        selectedTireSizes.front.width &&
+        selectedTireSizes.differentSizeInRear &&
+        selectedTireSizes.rear.diameter &&
+        selectedTireSizes.rear.aspectRatio &&
+        selectedTireSizes.rear.width)
     ) {
       isDisabled = false;
     }
