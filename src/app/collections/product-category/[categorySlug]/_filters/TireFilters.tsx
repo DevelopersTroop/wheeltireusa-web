@@ -5,9 +5,10 @@
 import { useGetFilterListQuery } from '@/redux/apis/product';
 import { getFiltersExceptPriceFilterBy, getPriceFilter } from '@/utils/filter';
 import FilterLoadingSkeleton from '../_loading/filter-loading-skeleton';
-import { SaleFilter } from './widgets/shared/sale-filter';
+import { SaleFilter } from './widgets/shared/SaleFilter';
 import TireModel from './widgets/tire/TireModel';
 import TirePriceRange from './widgets/tire/TIrePriceRange';
+import TireBrand from './widgets/tire/TireBrand';
 
 //InStockWheelFilters Component
 const TireFilters: React.FC = () => {
@@ -23,6 +24,13 @@ const TireFilters: React.FC = () => {
         <FilterLoadingSkeleton />
       ) : (
         <div className={'w-[304px] filter-shadow rounded-2xl bg-[#F7F7F7]'}>
+          {/* Tire Brand Filter */}
+          <div className={'px-5 py-3 border-b'}>
+            <TireBrand
+              filterKey={'brand'}
+              brand={getFiltersExceptPriceFilterBy(data.filters, 'brand')}
+            />
+          </div>
           {/* Tire Model Filter */}
           <div className={'px-5 py-3 border-b'}>
             <TireModel

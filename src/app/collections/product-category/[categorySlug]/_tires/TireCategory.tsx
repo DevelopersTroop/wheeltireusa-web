@@ -8,7 +8,7 @@ import { TInventoryItem } from '@/types/product';
 import { useParams, useSearchParams } from 'next/navigation';
 import useFilter from '../_filters/filter-store/use-filter';
 import SidebarTireFilters from '../_filters/mobile-filters/sidebar-tire-filters';
-import TireFilters from '../_filters/tire-filters';
+import TireFilters from '../_filters/TireFilters';
 import ProductCardSkeleton from '../_loading/product-card-skeleton';
 import NoProductsFound from '../no-products-found';
 import ProductPagination from '../product-pagination';

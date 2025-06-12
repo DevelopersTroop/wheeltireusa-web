@@ -120,7 +120,12 @@ const useFilterByVehicle = () => {
     !allTireSizes || allTireSizes?.length === 0 || !selectedZipCode;
   const submitFilter = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    router.push('/collections/product-category/tire');
+    if (isDisabled) {
+      return;
+    }
+    router.push(
+      `/collections/product-category/tire?frontTireSize=${encodeURIComponent(selectedFrontTireSize ?? '')}&rearTireSize=${encodeURIComponent(selectedRearTireSize ?? '')}`
+    );
     dispatch(closeMainFilterModal());
   };
   return {
