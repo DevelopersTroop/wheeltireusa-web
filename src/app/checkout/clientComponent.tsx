@@ -73,15 +73,7 @@ export const CheckoutClientComponent: React.FC = () => {
 
   // Render the checkout page
   return (
-    <LoadScript
-      loadingElement={
-        <div className="w-full h-screen flex items-center justify-center">
-          <LoadingSpinner />
-        </div>
-      }
-      googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}
-      libraries={['places']}
-    >
+    <>
       <LocationAccess />
       <div className="w-full my-10">
         <div className="container mx-auto px-6 w-full">
@@ -93,6 +85,6 @@ export const CheckoutClientComponent: React.FC = () => {
           </div>
         </div>
       </div>
-    </LoadScript>
+    </>
   );
 };

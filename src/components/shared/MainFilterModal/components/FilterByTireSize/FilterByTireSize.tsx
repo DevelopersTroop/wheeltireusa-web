@@ -1,10 +1,9 @@
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
-import dynamic from 'next/dynamic';
+import AddZipCode from '../AddZipCode/AddZipCode';
 import FilterFooter from '../FilterFooter/FilterFooter';
-import useFilterByTireSize from './useFilterByTireSize';
-import ListSkeleton from '../ListSkeleton/ListSkeleton';
 import TireSizeSelection from './components/TireSizeSelection/TireSizeSelection';
+import useFilterByTireSize from './useFilterByTireSize';
 
 const FilterByTireSize = () => {
   const { setSelectedTireSizes, isDisabled, submitFilter } =
@@ -20,6 +19,12 @@ const FilterByTireSize = () => {
         </div>
         <div className="flex flex-col gap-4  mt-8 w-4/5 mx-auto">
           <TireSizeSelection setSelectedTireSizes={setSelectedTireSizes} />
+        </div>
+        <div className="flex flex-col gap-4  mt-10 w-4/5 mx-auto">
+          <div className="text-center text-lg">
+            Enter your zip code to get best shipping and installation options
+          </div>
+          <AddZipCode />
         </div>
       </ScrollArea>
       {<FilterFooter isDisabled={isDisabled} submitFilter={submitFilter} />}

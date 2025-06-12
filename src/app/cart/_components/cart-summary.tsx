@@ -6,27 +6,25 @@ import { WhatWeAccept } from '@/components/shared/what-we-accept';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
-import { RootState } from '@/redux/store';
+import { RootState, useAppDispatch } from '@/redux/store';
 import { calculateCartTotal, formatPrice } from '@/utils/price';
+import { initiateCheckout } from '@/redux/features/checkoutSlice';
 
 const CartSummary = () => {
-  // const { couponCode, isCouponApplied, discount, productBasedDiscount, affiliateDiscount } = useTypedSelector(state => state.persisted.checkout)
-  // const [coupon, setCoupon] = useState(couponCode)
-  // const dispatch = useDispatch()
-  // const { applyCoupon, isLoading } = useApplyCoupon()
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
   const handleCheckout = () => {
-    // dispatch(initiateCheckout())
+    dispatch(initiateCheckout());
     router.push('/checkout');
   };
   const cart = useSelector((state: RootState) => state.persisted.cart);
   const subTotalCost = calculateCartTotal(cart.products);
 
   // const netCost = calculateCartTotal(cart.products, discount)
-  const requiredStateFee = 4;
-  const salesTax = 109.24;
-  const setDiscount = 180;
+  const requiredStateFee = 0;
+  const salesTax = 0;
+  const setDiscount = 0;
 
   // Remove commas before parsing to float
   const netCost =
@@ -37,9 +35,6 @@ const CartSummary = () => {
 
   const netCostString = formatPrice(netCost);
 
-  // const numericValue = parseFloat(netCost.replace(/,/g, ""));
-  // const result = numericValue;
-  // const totalCost = formatPrice(result);
   return (
     <div className="w-full sm:w-[415px] xl:mt-10 space-y-6">
       <div className="w-full rounded-xl py-5 flex flex-col gap-0 items-start  bg-[#f7f7f7]">
@@ -186,7 +181,7 @@ const CartSummary = () => {
           </p>
           <div className="flex gap-0 items-baseline relative">
             <h4 className="text-2xl leading-[29px] text-[#210203]">
-              <span className="text-[#210203] text-2xl font-normal">$4.</span>
+              <span className="text-[#210203] text-2xl font-normal">$0.</span>
             </h4>
 
             <small className="text-sm leading-[17px] text-[#210203]">
@@ -202,11 +197,11 @@ const CartSummary = () => {
           </p>
           <div className="flex gap-0 items-baseline relative">
             <h4 className="text-2xl leading-[29px] text-[#210203]">
-              <span className="text-[#210203] text-2xl font-normal">$109.</span>
+              <span className="text-[#210203] text-2xl font-normal">$0.</span>
             </h4>
 
             <small className="text-sm leading-[17px] text-[#210203]">
-              <span className="text-[#210203] text-sm font-normal">24</span>
+              <span className="text-[#210203] text-sm font-normal">0</span>
             </small>
           </div>
         </div>
@@ -219,9 +214,7 @@ const CartSummary = () => {
           </p>
           <div className="flex gap-0 items-baseline relative">
             <h4 className="text-2xl leading-[29px] text-[#210203]">
-              <span className="text-[#210203] text-2xl font-normal">
-                -$180.
-              </span>
+              <span className="text-[#210203] text-2xl font-normal">-$0.</span>
             </h4>
 
             <small className="text-sm leading-[17px] text-[#210203]">

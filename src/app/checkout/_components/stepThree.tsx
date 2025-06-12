@@ -1,13 +1,9 @@
-import { revokeCouponCode, setOrderInfo } from '@/redux/features/checkoutSlice';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
+import { ApplyCoupon } from '@/components/shared/applyCoupon';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
+import { useCheckout } from '@/context/checkoutContext';
+import { setOrderInfo } from '@/redux/features/checkoutSlice';
+import { useTypedSelector } from '@/redux/store';
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -15,9 +11,7 @@ import { DeliveryDetails } from './deliveryDetails';
 import { ProductCard } from './productCard';
 import { ShippingDetails } from './shippingDetails';
 import { ICheckoutStepProps } from './stepOne';
-import { useTypedSelector } from '@/redux/store';
-import { ApplyCoupon } from '@/components/shared/applyCoupon';
-import { useCheckout } from '@/context/checkoutContext';
+import { calculateCheckoutTotal } from '@/utils/price';
 
 // StepThree Component
 export const StepThree: React.FC<ICheckoutStepProps> = ({ setStep }) => {
@@ -45,7 +39,7 @@ export const StepThree: React.FC<ICheckoutStepProps> = ({ setStep }) => {
   // const { applyCoupon, isLoading } = useApplyCoupon()
   const dispatch = useDispatch();
 
-  const { cartType, subTotalCost, totalCost } = useCheckout();
+  const { cartType, subTotalCost, netCost } = useCheckout();
 
   /**
    * Handle newsletter validation
@@ -271,10 +265,10 @@ export const StepThree: React.FC<ICheckoutStepProps> = ({ setStep }) => {
               <div className="flex gap-0 items-baseline relative">
                 <p className="text-2xl leading-[29px] text-[#210203]">
                   <span className="text-[#210203] text-2xl font-bold">
-                    ${Math.floor(20.0)}.
+                    ${Math.floor(subTotalCost)}.
                   </span>
                   <span className="text-[#210203] text-sm font-bold">
-                    {(200).toFixed(2).split('.')[1]}
+                    {subTotalCost.toFixed(2).split('.')[1]}
                   </span>
                 </p>
               </div>
@@ -325,91 +319,13 @@ export const StepThree: React.FC<ICheckoutStepProps> = ({ setStep }) => {
               <div className="flex gap-0 items-baseline relative">
                 <p className="text-[32px] leading-[38px] text-[#210203]">
                   <span className="text-[#210203] text-[32px] font-bold">
-                    ${(200).toFixed(2)}
+                    ${netCost.toFixed(2)}
                   </span>
                 </p>
               </div>
             </div>
           </div>
           <div className="space-y-4 py-5 px-md">
-            {/* <div ref={phoneNumberRef} className="grid gap-y-4">
-              <h2 className="font-bold text-[20px]">Let's stay in touch!</h2>
-              <div
-                className="flex items-start gap-2 cursor-pointer"
-                onClick={() =>
-                  setOrderInfo((prev: any) => ({
-                    ...prev,
-                    orderInfoText: !orderInfo.orderInfoText,
-                  }))
-                }
-              >
-                <Checkbox
-                  checked={orderInfo.orderInfoText}
-                  className="rounded-[6px] border border-[#AAAAAA] bg-white h-6 w-6 mt-1"
-                />
-                <p className="text-lg m-0 p-0">
-                  Receive <span className="font-bold">order-related</span> text
-                  message
-                </p>
-              </div>
-              <div
-                onClick={() => {
-                  if (orderInfo.orderInfoText) {
-                    setOrderInfo((prev: any) => ({
-                      ...prev,
-                      newsLetterText: !orderInfo.newsLetterText,
-                    }));
-                  }
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    if (orderInfo.orderInfoText) {
-                      setOrderInfo((prev: any) => ({
-                        ...prev,
-                        newsLetterText: !orderInfo.newsLetterText,
-                      }));
-                    }
-                  }
-                }}
-                className={cn(
-                  "mt-2 flex items-start gap-2 font-normal ml-6 cursor-pointer",
-                  !orderInfo.orderInfoText &&
-                    "cursor-not-allowed text-[#B1AAAA]"
-                )}
-              >
-                <Checkbox
-                  checked={orderInfo.newsLetterText}
-                  className="rounded-[6px] border border-[#AAAAAA] bg-white h-6 w-6 mt-1"
-                />
-                <p className="text-lg m-0 p-0">
-                  Receive deals and promotions text messages
-                </p>
-              </div>
-              <div className="grid gap-y-3 error-wrapper">
-                <Label
-                  className={cn(
-                    "font-medium text-lg",
-                    !orderInfo.orderInfoText && "text-[#B1AAAA]"
-                  )}
-                >
-                  Phone Number
-                </Label>
-                <Input
-                  disabled={!orderInfo.orderInfoText}
-                  value={orderInfo.phone}
-                  type="tel"
-                  onChange={(e) =>
-                    setOrderInfo((prev: any) => ({
-                      ...prev,
-                      phone: e.target.value,
-                    }))
-                  }
-                  className="rounded-[10px] h-14 placeholder:text-[#B1AAAA] bg-white"
-                  placeholder="+1 (000) 0000 00 00"
-                />
-              </div>
-            </div> */}
             <div ref={newsLetterRef} className="grid gap-y-3">
               <p className="text-lg">
                 Would you like to recive emails with special offers and new

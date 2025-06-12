@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 const CartSubtotal = () => {
   const cart = useSelector((state: RootState) => state.persisted.cart);
   const subTotalCost = calculateCartTotal(cart.products);
-  // const subTotalCost = '10000.12';
+  console.log(subTotalCost);
   return (
     <div className="overflow-hidden px-2 sm:px-5 py-5 flex justify-between items-baseline self-stretch relative w-full bg-white">
       <p className="text-base leading-[19px] text-[#210203]">

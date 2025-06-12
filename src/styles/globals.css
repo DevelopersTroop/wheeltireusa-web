@@ -1,6 +1,18 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+@font-face {
+  font-family: "icomoon";
+  src: url("/fonts/icomoon.eot?8ypwuy");
+  src: url("/fonts/icomoon.eot?8ypwuy#iefix") format("embedded-opentype"),
+    url("/fonts/icomoon.ttf?8ypwuy") format("truetype"),
+    url("/fonts/icomoon.woff?8ypwuy") format("woff"),
+    url("/fonts/icomoon.svg?8ypwuy#icomoon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
 [class^="icon-"],
 [class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
@@ -15,6 +27,22 @@
   /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-bolt-pattern:before {
+  content: "\e900";
+}
+
+.icon-finish:before {
+  content: "\e901";
+}
+
+.icon-lip-size:before {
+  content: "\e902";
+}
+
+.icon-size:before {
+  content: "\e903";
 }
 
 .icon-bolt-pattern:before {
@@ -80,6 +108,7 @@
   --spacing-xs: 0.75rem;
   --spacing-smx: 1.25rem;
 }
+
 @theme {
   --animate-shimmer: shimmer 1.5s infinite linear;
   --animate-color-pulse: color-pulse 2s ease-in-out infinite;
@@ -88,15 +117,19 @@
     0% {
       background-position: -200% 0;
     }
+
     100% {
       background-position: 200% 0;
     }
   }
+
   @keyframes color-pulse {
+
     0%,
     100% {
       background-color: var(--color-gray-200);
     }
+
     50% {
       background-color: var(--color-gray-300);
     }
@@ -175,6 +208,7 @@
   body {
     @apply bg-background text-foreground;
   }
+
   button {
     @apply cursor-pointer;
   }

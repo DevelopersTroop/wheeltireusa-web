@@ -14,7 +14,7 @@ const SelectedItem = () => {
     clearSize,
   } = useSelectedItem();
   return (
-    <div className="flex gap-2 px-6 order-2">
+    <div className="flex gap-2 px-6 order-2 overflow-y-auto">
       {year && (
         <BrickBox
           checked={true}

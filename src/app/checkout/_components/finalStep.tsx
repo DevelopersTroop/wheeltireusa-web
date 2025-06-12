@@ -115,13 +115,12 @@ export const FinalStep: React.FC = () => {
         const result = response;
 
         // Handle successful payment verification
-        if (response.status && result.data?.order) {
-          const order = result.data.order as TOrder;
+        if (response.status && result.data?.data?.order) {
+          const order = result.data.data.order as TOrder;
           setProgress(100);
-
           // Update Redux state with order success data
-          dispatch(updateOrderSuccessData(result.data.order));
-          setPaymentData(result.data.payment);
+          dispatch(updateOrderSuccessData(order));
+          setPaymentData(result.data?.data?.payment);
 
           // Trigger Google Analytics purchase event
           // triggerGaPurchaseEvent({
@@ -182,8 +181,8 @@ export const FinalStep: React.FC = () => {
   // Render loading state while verifying payment
   if (verifying) {
     return (
-      <div className="min-h-[60vh] flex items-center justify-center p-4">
-        <div className="w-full max-w-md space-y-4">
+      <div className="min-h-[60vh] flex items-center justify-center p-4 w-full">
+        <div className="w-full max-w-xl space-y-4">
           <div className="text-center pb-2">
             <div className="mx-auto mb-4 bg-blue-50 w-16 h-16 rounded-full flex items-center justify-center">
               <Clock className="h-8 w-8 text-blue-500 animate-pulse" />

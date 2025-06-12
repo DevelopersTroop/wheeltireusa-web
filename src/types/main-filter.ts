@@ -47,6 +47,8 @@ export type TMainFilterVehicleInformation = {
 
 export type TMainFilter = {
   isFilterModalOpen: boolean;
+  activeTab: 'Vehicle' | 'TireBrand' | 'TireSize' | null;
+  zipCode: string | null;
   filters: {
     byVehicle: {
       list: Partial<TMainFilterList>;
@@ -59,7 +61,6 @@ export type TMainFilter = {
         vehicleInformation: Partial<TMainFilterVehicleInformation>;
         frontTireSize: string | null;
         rearTireSize: string | null;
-        zipCode: string | null;
       };
     };
     byTireBrand: {

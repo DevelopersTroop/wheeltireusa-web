@@ -5,6 +5,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState: TMainFilter = {
   isFilterModalOpen: false,
+  activeTab: null,
+  zipCode: null,
   filters: {
     byVehicle: {
       list: {
@@ -21,7 +23,6 @@ const initialState: TMainFilter = {
         bodyType: '',
         frontTireSize: null,
         rearTireSize: null,
-        zipCode: null,
         subModel: {
           SubModel: '',
           DRChassisID: '',
@@ -139,8 +140,14 @@ const mainFilterSlice = createSlice({
     clearMainFilter: (state) => {
       Object.assign(state, initialState);
     },
-    openMainFilterModal: (state) => {
+    openMainFilterModal: (
+      state,
+      action: PayloadAction<{
+        tab: 'Vehicle' | 'TireBrand' | 'TireSize' | null;
+      }>
+    ) => {
       state.isFilterModalOpen = true;
+      state.activeTab = action.payload.tab ?? null;
     },
     closeMainFilterModal: (state) => {
       state.isFilterModalOpen = false;

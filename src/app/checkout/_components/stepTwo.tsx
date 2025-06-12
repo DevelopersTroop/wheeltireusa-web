@@ -47,7 +47,9 @@ export const Input = ({
 );
 
 // Main component for the shipping address form
-const ShippingAddressForm = () => {
+const ShippingAddressForm: React.FC<{ setStep: (step: number) => void }> = ({
+  setStep,
+}) => {
   /**
    * Redux Store & Dispatch Hook
    */
@@ -155,37 +157,37 @@ const ShippingAddressForm = () => {
       setShippingAddress({ ...data, name: `${data.fname} ${data.lname}` })
     ); // Save the shipping address to Redux
 
-    // if (data.password?.length && !isAccountCreated) {
-    //     try {
-    //         const res = await signUp({
-    //             firstName: data.fname,
-    //             lastName: data.lname,
-    //             email: data.email,
-    //             password: data.password,
-    //         }); // Attempt to create an account
-    //         if (res.user) {
-    //             dispatch(setIsAccountCreated(true))
-    //             toast.success("Account created successfully", {
-    //                 description: "You can now proceed to payment options",
-    //             });
-    //             // Proceed to next step only after successful account creation
-    //             setStep(3); // Proceed to the next step
-    //             setTimeout(() => {
-    //                 window.scrollTo({ top: 0, behavior: "smooth" });
-    //             }, 100);
-    //         }
-    //     } catch (error) {
-    //         toast.error("Account creation failed", {
-    //             description: "Please try again or continue as guest",
-    //         });
-    //     }
-    // } else {
-    //     // If no account creation is needed, proceed directly
-    //     setStep(3);
-    //     setTimeout(() => {
-    //         window.scrollTo({ top: 0, behavior: "smooth" });
-    //     }, 100);
-    // }
+    if (data.password?.length && !isAccountCreated) {
+      // try {
+      //   const res = await signUp({
+      //     firstName: data.fname,
+      //     lastName: data.lname,
+      //     email: data.email,
+      //     password: data.password,
+      //   }); // Attempt to create an account
+      //   if (res.user) {
+      //     dispatch(setIsAccountCreated(true))
+      //     toast.success("Account created successfully", {
+      //       description: "You can now proceed to payment options",
+      //     });
+      //     // Proceed to next step only after successful account creation
+      //     setStep(3); // Proceed to the next step
+      //     setTimeout(() => {
+      //       window.scrollTo({ top: 0, behavior: "smooth" });
+      //     }, 100);
+      //   }
+      // } catch (error) {
+      //   toast.error("Account creation failed", {
+      //     description: "Please try again or continue as guest",
+      //   });
+      // }
+    } else {
+      // If no account creation is needed, proceed directly
+      setStep(3);
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 100);
+    }
   };
 
   return (
@@ -410,6 +412,8 @@ const ShippingAddressForm = () => {
               onClick={() => {
                 if (!validateForm()) {
                   setShowRequiredAlert(true);
+                } else {
+                  handleSubmit(onSubmit)();
                 }
               }}
             >

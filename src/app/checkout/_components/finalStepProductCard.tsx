@@ -2,39 +2,17 @@ import { TInventoryItem } from '@/types/product';
 import { Input } from '@/components/ui/input';
 import { Minus, Plus } from 'lucide-react';
 import React from 'react';
+import { TProductInfo } from '@/types/order';
+import TiresCard from '@/app/cart/_components/tires-card';
+import CartSummary from './cartSummary';
 
 {
   /* Order Details Section */
 }
 export const FinalStepProductCard: React.FC<{
-  products?: any[]; // Array of products to display
+  products?: TProductInfo[]; // Array of products to display
   totalCost?: any; // Total cost of the products
 }> = ({ products, totalCost }) => {
-  // Group products by package ID
-  // const groupedProducts = products?.reduce(
-  //     (acc, product) => {
-  //         const packageId = product?.cartPackage || "no-package";
-  //         if (!acc[packageId]) {
-  //             acc[packageId] = { wheels: product, tires: [] };
-  //         } else {
-  //             // Filter accessories and add them to the group
-  //             const accessories = products.filter(p => (isAccessories(p.category) || isCustomSteeringWheel(p.category) || isInStockSteeringWheel(p.category)) && p.cartPackage === packageId) || []
-  //             acc[packageId].tires.push({ ...product, accessories });
-  //         }
-  //         return acc;
-  //     },
-  //     {} as Record<
-  //         string,
-  //         {
-  //             wheels: TCartProduct; tires: Tire[]
-  //         }
-  //     >
-  // ) as Record<
-  //     string,
-  //     {
-  //         wheels: TCartProduct; tires: Tire[]
-  //     }
-  // > || {};
   return (
     <div className=" flex flex-col xl:flex-row mt-4 md:mt-8 gap-8">
       {/* Left Section: Cart Details */}
@@ -44,36 +22,9 @@ export const FinalStepProductCard: React.FC<{
         <div className="overflow-hidden rounded-xl border border-[#cfcfcf] flex flex-col gap-0 items-start self-stretch relative w-full bg-white">
           {/* <CartYMM /> */}
 
-          {/* {Object.entries(groupedProducts).map(
-                        ([packageId, { wheels, tires }], index) => {
-                            return (
-                                <div key={`${packageId}-${index}`} className="w-full">
-                                    <WheelCard
-                                        key={wheels.cartSerial}
-                                        cartProduct={wheels}
-                                        isTirePackage={tires.some(t => t?.category?.title === 'Tire')}
-                                        dbProducts={products}
-                                    />
-                                    {tires.some(t => t?.category?.title === 'Tire') && (
-                                        <TiresCard
-                                            key={tires[0].cartSerial}
-                                            tires={tires?.filter(t => t?.category?.title === 'Tire')}
-                                            dbProducts={products}
-                                        />
-                                    )}
-                                    {
-                                        tires[0]?.accessories?.length > 0 && (
-                                            <AccessoriesCard
-                                                key={tires[0].accessories[0].cartSerial}
-                                                accessories={tires[0].accessories}
-                                                dbProducts={products}
-                                            />
-                                        )
-                                    }
-                                </div>
-                            )
-                        }
-                    )} */}
+          {products?.map((product) => (
+            <TiresCard key={product._id} tire={product} />
+          ))}
           <div className="w-full items-center flex justify-between px-4 py-5 border-t">
             <p>SUB-TOTAL:</p>
             <p className="text-[32px] leading-[38px] text-[#210203]">

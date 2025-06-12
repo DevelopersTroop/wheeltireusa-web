@@ -35,7 +35,7 @@ interface CheckoutContextType {
   subTotalCost: any;
   discount: any;
   salesTax: any;
-  totalCost: any;
+  netCost: any;
   validatedZipCode: any;
   setValidatedZipCode: React.Dispatch<React.SetStateAction<any>>;
   isValidZipCode: any;
@@ -168,17 +168,7 @@ export const CheckoutProvider: React.FC<{ children: React.ReactNode }> = ({
     setZipCodeAddress(address);
     saveState({ zipCodeAddress: address });
   };
-
-  const categories = productsInfo?.reduce(
-    (acc, next) => {
-      acc.push({
-        category: next?.category,
-      });
-      return acc;
-    },
-    [] as { category: TCategory }[]
-  );
-  const cartType = 'CENTER_CAP_ONLY';
+  const cartType = () => 'TIRES'; // Assuming cartType is always 'TIRES' for this context
   /**
    * Getting Products Cost From Redux Store
    */
@@ -193,7 +183,7 @@ export const CheckoutProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [productsInfo]);
 
   // Define the delivery charge, sales tax, and total cost based on the cart type
-  const deliveryCharge = cartType === 'CENTER_CAP_ONLY' ? 14.99 : 0;
+  const deliveryCharge = cartType() === 'CENTER_CAP_ONLY' ? 14.99 : 0;
   const salesTax = 0;
   const totalCost = subTotalCost - discount + salesTax + deliveryCharge;
 
@@ -236,7 +226,7 @@ export const CheckoutProvider: React.FC<{ children: React.ReactNode }> = ({
     subTotalCost,
     discount,
     salesTax,
-    totalCost,
+    netCost: totalCost,
     validatedZipCode,
     setValidatedZipCode: handleSetValidatedZipCode,
     isValidZipCode,

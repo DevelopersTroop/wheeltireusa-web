@@ -6,13 +6,7 @@ const useAddZipCode = () => {
   const onChangeZipCode = (zipCode: string) => {
     dispatch(
       setMainFilter({
-        filters: {
-          byVehicle: {
-            current: {
-              zipCode: zipCode.trim().length === 5 ? zipCode : null,
-            },
-          },
-        },
+        zipCode: zipCode.trim().length === 5 ? zipCode : null,
       })
     );
   };
