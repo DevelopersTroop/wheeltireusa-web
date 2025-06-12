@@ -27,7 +27,7 @@ const navMenus: NavMenu[] = [
   },
   {
     label: 'Deals',
-    href: '#',
+    href: '/deals',
     meagMenu: false,
   },
   {
