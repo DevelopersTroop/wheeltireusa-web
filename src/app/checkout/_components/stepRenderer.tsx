@@ -34,7 +34,7 @@ export const Renderer: React.FC<RendererProps> = ({ step, setStep }) => {
     case 1:
       return <StepOne handleContinue={handleContinue} setStep={setStep} />; // Render step one
     case 2:
-      return <ShippingAddressForm />; // Render the shipping address form (step two)
+      return <ShippingAddressForm setStep={setStep} />; // Render the shipping address form (step two)
     case 3:
       return <StepThree setStep={setStep} />; // Render step three
     case 4:

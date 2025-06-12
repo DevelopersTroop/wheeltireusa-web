@@ -118,6 +118,10 @@ apiInstance.interceptors.response.use(
     const message = err?.response?.data?.message || 'Something went wrong';
     const errorsArray = err?.response?.data?.errors;
 
+    if (err.request?.resposneURL.includes('subscriptions')) {
+      return Promise.reject(error);
+    }
+
     if (Array.isArray(errorsArray) && errorsArray.length > 0) {
       toast.error(message, {
         description: errorsArray.map((e) => e?.message),

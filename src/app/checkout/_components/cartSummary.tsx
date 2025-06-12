@@ -2,6 +2,7 @@
 
 import { ShoppingCart } from 'lucide-react';
 import { FinalStepProductCard } from './finalStepProductCard';
+import { TProductInfo } from '@/types/order';
 
 // Interface for individual product details
 interface Product {
@@ -15,7 +16,7 @@ interface Product {
 
 // Props interface for the CartSummary component
 interface CartSummaryProps {
-  productsInfo?: Product[];
+  productsInfo?: TProductInfo[];
   totalCost: string;
 }
 

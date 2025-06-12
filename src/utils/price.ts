@@ -4,21 +4,17 @@ import { TProductInfo } from '@/types/order';
 import { TInventoryItem } from '@/types/product';
 
 export function formatPrice(data?: number | null | TInventoryItem): string {
-  // Fix the number to 2 decimal places and add comma formatting
   const formatter = (price: number) =>
     price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 
-  if (
-    typeof data === 'number' ||
-    typeof data === 'undefined' ||
-    data === null
-  ) {
-    if (typeof data === 'undefined' || data === null || isNaN(data)) {
-      return '0.00';
-    }
-  } else {
+  if (typeof data === 'number') {
+    return isNaN(data) ? '0.00' : formatter(data);
+  }
+
+  if (data && typeof data === 'object') {
     return formatter(getPrice(data));
   }
+
   return '0.00';
 }
 export function isSale(
@@ -33,27 +29,22 @@ export function isSale(
   }
   return msrp > map && map !== 0 && msrp !== 0;
 }
+
 export function getPrice(
   product: TInventoryItem | TProductInfo | TCartProduct
 ): number {
-  const msrp = product?.msrp;
-  const map = product?.price;
-  if (typeof msrp === 'undefined' || msrp === null) {
-    return map ?? 0;
+  const msrp = product?.msrp ?? 0;
+  const map = product?.price ?? 0;
+
+  if (map === 0 && msrp === 0) {
+    return 0;
   }
-  if (typeof map === 'undefined' || map === null) {
-    return msrp;
-  }
-  if (isSale(msrp, map)) {
+
+  if (isSale(msrp, map) || msrp === 0) {
     return map;
   }
-  if (msrp === 0) {
-    return map;
-  }
-  if (map === 0) {
-    return msrp;
-  }
-  return map;
+
+  return msrp;
 }
 
 export function calculateCartTotal<T = string>(
@@ -62,8 +53,7 @@ export function calculateCartTotal<T = string>(
   format: boolean = true
 ): T {
   let totalPrice = 0;
-  for (const sku in products) {
-    const product = products[sku];
+  for (const product of products) {
     totalPrice += (getPrice(product) ?? 0) * (product?.quantity ?? 1);
   }
   return format

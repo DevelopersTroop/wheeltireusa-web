@@ -3,6 +3,7 @@
 import Breadcrumb from '@/components/ui/breadcrumb/breadcrumb';
 import Item from '@/components/ui/breadcrumb/item';
 import Container from '@/components/ui/container/container';
+import { useGroupedProducts } from '@/hooks/useGroupedProducts';
 import { RootState } from '@/redux/store';
 import { useSelector } from 'react-redux';
 import CartSubtotal from './_components/cart-subtotal';
@@ -15,9 +16,9 @@ const Cart = () => {
   //   const searchParams = useSearchParams(); // Get cart products from Redux
   const cart = useSelector((state: RootState) => state.persisted.cart);
 
-  // const dispatch = useAppDispatch(); // Redux dispatch function
-  // const router = useRouter(); // Next.js router
-  //   const { user } = useAuth(); // Get authenticated user
+  const groupedProducts = useGroupedProducts(cart?.products || []);
+
+  console.log('Grouped Products:', groupedProducts);
 
   return (
     <>

@@ -65,7 +65,8 @@ export const Stepper: React.FC<StepperProps> = ({
                     if (searchParams.get('order_id')?.length) return;
                     if (currentStep > 4) return; // Prevent navigation if the current step is beyond step 4
                     if (
-                      selectedOptionTitle !== 'Direct To Customer' &&
+                      selectedOptionTitle &&
+                      selectedOptionTitle !== 'Direct to Customer' &&
                       index + 1 === 2
                     )
                       return; // Prevent navigation to step 2 if the selected option is not "Direct To Customer"

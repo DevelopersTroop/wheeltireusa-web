@@ -1,5 +1,6 @@
 'use client';
 
+import { useCheckout } from '@/context/checkoutContext';
 import { apiInstance } from '@/redux/apis/base';
 import { useTypedSelector } from '@/redux/store';
 import { AxiosError } from 'axios';
@@ -32,6 +33,7 @@ export const useStripeCheckout = () => {
     affiliateDiscount,
     cartType,
   } = useTypedSelector((state) => state.persisted.checkout);
+  const { netCost, subTotalCost } = useCheckout();
   const initiateCheckout = async (paymentMethod: string) => {
     try {
       const orderData = {
@@ -40,8 +42,8 @@ export const useStripeCheckout = () => {
         shippingAddress,
         billingAddress,
         discount,
-        totalCost: parseFloat('200').toFixed(2),
-        netCost: parseFloat('200').toFixed(2),
+        totalCost: parseFloat(netCost).toFixed(2),
+        netCost: parseFloat(subTotalCost).toFixed(2),
         selectedDealer,
         selectedOptionTitle,
         requestedDealer,
@@ -66,11 +68,15 @@ export const useStripeCheckout = () => {
 
       const response = await apiInstance.post(
         '/payments/stripe/create-checkout-session',
-        orderData
+        {
+          orderData,
+        }
       );
 
       const result = response;
-      window.location.href = result.data.data.sessionUrl;
+      if (result.data.data.data.sessionUrl) {
+        window.location.href = result.data.data.data.sessionUrl;
+      }
     } catch (err) {
       const error = err as AxiosError<{ errors: string[]; message: string }>;
       toast('Error', {

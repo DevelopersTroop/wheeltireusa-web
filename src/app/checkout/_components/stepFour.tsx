@@ -49,7 +49,7 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
   /**
    * Checkout Context
    */
-  const { totalCost, subTotalCost, discount, cartType } = useCheckout();
+  const { netCost, subTotalCost, discount, cartType } = useCheckout();
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -97,7 +97,7 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
   const {
     register,
     getValues,
-    formState: { errors, isValid },
+    formState: { errors },
     trigger,
     watch,
     setValue,
@@ -207,9 +207,13 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
           });
         })
         .finally(async () => {
-          await apiInstance.post('/subscriptions', {
-            email: billingAddress.email,
-          });
+          apiInstance
+            .post('/subscriptions', {
+              email: billingAddress.email,
+            })
+            .catch(() => {
+              setIsLoading(false);
+            });
           setIsLoading(false);
           setTriggerPayment(false); // Reset trigger
         });
@@ -255,13 +259,13 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
   }, [isLoading, activeAccordion, formValues, orderInfo.termsAndConditions]);
 
   // Watch for form changes and validate
-  useEffect(() => {
-    const subscription = watch(() => {
-      trigger();
-    });
+  // useEffect(() => {
+  //   const subscription = watch(() => {
+  //     trigger();
+  //   });
 
-    return () => subscription.unsubscribe();
-  }, [watch, trigger]);
+  //   return () => subscription.unsubscribe();
+  // }, [watch, trigger]);
 
   // Sync shipping and billing addresses
   useEffect(() => {
@@ -416,18 +420,18 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
                 </div>
               </div>
 
-              <div
+              {/**
+                 * <div
                 onClick={() => toggleAccordion('paypal')}
                 className="relative border rounded-lg p-2.5 cursor-pointer"
               >
                 <div className="flex items-center">
                   <div className="absolute left-2.5 top-1/2 -translate-y-1/2">
                     <span
-                      className={`inline-block w-5 h-5 rounded-full border ${
-                        activeAccordion === 'paypal'
-                          ? 'border-4 border-black'
-                          : 'border-gray-600'
-                      }`}
+                      className={`inline-block w-5 h-5 rounded-full border ${activeAccordion === 'paypal'
+                        ? 'border-4 border-black'
+                        : 'border-gray-600'
+                        }`}
                     />
                   </div>
                   <div className="flex items-center pl-10">
@@ -441,6 +445,7 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
                   </div>
                 </div>
               </div>
+                 */}
             </div>
 
             <div className="mt-2">
@@ -457,18 +462,19 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
 
             <div className="flex flex-col gap-y-8 pt-8">
               <h2 className="text-xl font-bold">Billing Info</h2>
-              {selectedOptionTitle === 'Direct To Customer' && (
-                <div
-                  className="flex items-center gap-1 cursor-pointer py-2"
-                  onClick={() => setShippingSameAsBilling((prev) => !prev)}
-                >
-                  <Checkbox
-                    checked={shippingSameAsBilling}
-                    className="data-[state=checked]:bg-black border-black w-5 h-5"
-                  />
-                  <span className="text-lg">Same as shipping address</span>
-                </div>
-              )}
+              {selectedOptionTitle &&
+                selectedOptionTitle === 'Direct to Customer' && (
+                  <div
+                    className="flex items-center gap-1 cursor-pointer py-2"
+                    onClick={() => setShippingSameAsBilling((prev) => !prev)}
+                  >
+                    <Checkbox
+                      checked={shippingSameAsBilling}
+                      className="data-[state=checked]:bg-black border-black w-5 h-5"
+                    />
+                    <span className="text-lg">Same as shipping address</span>
+                  </div>
+                )}
               <div className="space-y-8 max-w-xl">
                 <div className="flex flex-col gap-y-8">
                   <div className="flex gap-4">
@@ -639,7 +645,7 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
                     <div className="flex gap-0 items-baseline relative">
                       <p className="text-xl leading-[38px] text-[#210203]">
                         <span className="font-bold">
-                          ${totalCost?.toFixed(2)}
+                          ${netCost?.toFixed(2)}
                         </span>
                       </p>
                     </div>
