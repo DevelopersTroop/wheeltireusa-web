@@ -41,7 +41,7 @@ const TiresCard = ({ tire }: { tire: TCartProduct }) => {
         </div>
 
         <div className="px-2 sm:px-5 pt-6 pb-3 justify-center items-end">
-          <button onClick={() => removeCartProduct(tire?._id ?? '')}>
+          <button onClick={() => removeCartProduct(tire?.cartPackage ?? '')}>
             <small className="text-sm leading-[17px] underline text-[#210203]">
               <span className="text-[#210203] text-sm font-semibold">
                 Delete

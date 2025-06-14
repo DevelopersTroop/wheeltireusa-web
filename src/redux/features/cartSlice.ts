@@ -26,6 +26,7 @@ const cartSlice = createSlice({
       const productsToAdd = Array.isArray(action.payload)
         ? action.payload
         : [action.payload];
+      console.log(productsToAdd);
 
       for (const newProduct of productsToAdd) {
         const existingProduct = state.products.find(
@@ -53,7 +54,12 @@ const cartSlice = createSlice({
       }
     },
     removeFromCart: (state, action: PayloadAction<string>) => {
-      state.products = state.products.filter((p) => p._id !== action.payload);
+      state.products = state.products.filter(
+        (p) => p.cartPackage !== action.payload
+      );
+    },
+    emptyCart: (state) => {
+      state.products = [];
     },
     updateCartQuantity: (
       state,
@@ -68,6 +74,6 @@ const cartSlice = createSlice({
   },
 });
 
-export const { addToCart, removeFromCart, updateCartQuantity } =
+export const { addToCart, removeFromCart, updateCartQuantity, emptyCart } =
   cartSlice.actions;
 export default cartSlice.reducer;
