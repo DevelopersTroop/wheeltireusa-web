@@ -29,18 +29,17 @@ const PrivacyPolicy = () => {
             <h2 className="text-3xl font-semibold text-btext">
               Privacy Policy
             </h2>
-            <p>Last Updated: June 3, 2025</p>
+            <p>Last Updated: June 14, 2025</p>
             <p>
-              At <span className="font-semibold text-btext">Tirematic</span>{' '}
-              (we, our, or us) we are committed to protecting your privacy and
-              ensuring a safe user experience. This Privacy Policy outlines how
-              we collect, use, disclose, and safeguard your information across
-              our services.
-            </p>
-            <p>
-              By accessing or using our website, purchasing our products, or
-              interacting with our services, you consent to the data practices
-              described in this policy.
+              At <span className="font-semibold text-btext">Tirematic</span>we
+              value your privacy and strive to be transparent about how we
+              handle your information. This Privacy Policy for Tirematic
+              explains what information we collect from you, how we use and
+              share it, how we protect it, and the choices and rights you have
+              regarding your personal data. By using our website or services,
+              you agree to the practices described in this policy. We want you
+              to feel confident that your data is safe with us and that we use
+              it responsibly in line with our customer-first values.
             </p>
           </div>
           {/* Section 1: Information We Collect */}

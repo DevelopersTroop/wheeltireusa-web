@@ -1,10 +1,19 @@
+import { metaDataHelper } from '@/utils/metadata';
 import FAQs from './_components/faqs'; // Import the FAQs component to display the list of frequently asked questions
 
-export const metadata = {
-  title: 'Frequently Asked Questions | Tirematic',
-  description:
-    'Find answers to common questions about our products, services, and policies.',
-};
+// Metadata for the page
+export const metadata = metaDataHelper({
+  title: 'Frequently Asked Questions - Tirematic',
+  keywords: '',
+  description: '',
+  openGraph: {
+    title: '',
+    description: '',
+  },
+  alternates: {
+    canonical: 'https://tirematic.com/frequently-asked-questions',
+  },
+});
 
 // Component to render the Frequently Asked Questions page
 const FrequentlyAskedQuestions = () => {

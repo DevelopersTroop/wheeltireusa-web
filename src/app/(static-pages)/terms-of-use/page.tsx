@@ -1,12 +1,20 @@
 // Import the Privacy Policy component
+import { metaDataHelper } from '@/utils/metadata';
 import TermsOfUse from './_components/terms-of-use';
 
 // Metadata for the page
-export const metadata = {
-  title: 'Terms of Use | Tirematic',
-  description:
-    'Read the Terms of Use for Tirematic. Understand your rights, responsibilities, and the conditions for using our services.',
-};
+export const metadata = metaDataHelper({
+  title: 'Terms Of Use - Tirematic',
+  keywords: '',
+  description: '',
+  openGraph: {
+    title: '',
+    description: '',
+  },
+  alternates: {
+    canonical: 'https://tirematic.com/terms-of-use',
+  },
+});
 
 // Component to render the Privacy Policy page
 export default function Page() {

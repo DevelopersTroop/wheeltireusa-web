@@ -6,7 +6,6 @@ import {
   useGetWishlistQuery,
   useRemoveWishlistMutation,
 } from '@/redux/apis/wishlist';
-import { s3BucketUrl } from '@/utils/api';
 import { getProductThumbnail } from '@/utils/product';
 import Image from 'next/image';
 import Link from 'next/link'; // Next.js Link for navigation

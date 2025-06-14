@@ -5,6 +5,21 @@
 import { PageProps } from '@/types/page';
 import FilterProvider from './_filters/filter-store/filter-provider';
 import TireCategory from './_tires/TireCategory';
+import { metaDataHelper } from '@/utils/metadata';
+
+// Metadata for the page
+export const metadata = metaDataHelper({
+  title: 'Tires - Tirematic',
+  keywords: '',
+  description: '',
+  openGraph: {
+    title: '',
+    description: '',
+  },
+  alternates: {
+    canonical: 'https://tirematic.com/tires',
+  },
+});
 
 // Main Collection component that renders the appropriate category collection based on categorySlug
 const Collection = async ({
@@ -16,6 +31,7 @@ const Collection = async ({
 }>) => {
   // Extracting categorySlug from params
   const { categorySlug } = await params;
+  console.log('Category Slug:', categorySlug);
   const { page } = await searchParams;
   // Variable to hold the collection component to render based on category
   const collection = <TireCategory page={Number(page) || 1} />;

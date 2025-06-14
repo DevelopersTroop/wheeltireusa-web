@@ -3,7 +3,7 @@ import { CheckoutClientComponent } from './clientComponent';
 
 // Metadata for the page
 export const metadata = metaDataHelper({
-  title: 'Checkout - Amani Forged Wheels',
+  title: 'Checkout - Tirematic',
   keywords: '',
   description: '',
   openGraph: {
@@ -11,7 +11,7 @@ export const metadata = metaDataHelper({
     description: '',
   },
   alternates: {
-    // canonical: "https://amaniforged.com/checkout"
+    canonical: 'https://tirematic.com/return-policy',
   },
 });
 

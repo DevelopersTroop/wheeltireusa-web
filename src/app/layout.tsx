@@ -4,7 +4,7 @@ import { Header } from '@/components/shared/Header/Header';
 import { CheckoutProvider } from '@/context/checkoutContext';
 import ReduxWrapper from '@/redux/ReduxWrapper';
 import '@/styles/globals.css';
-import type { Metadata } from 'next';
+import { metaDataHelper } from '@/utils/metadata';
 import { DM_Sans } from 'next/font/google';
 import { Toaster } from 'sonner';
 
@@ -14,11 +14,19 @@ const dmSans = DM_Sans({
   weight: ['300', '400', '500', '700'],
 });
 
-export const metadata: Metadata = {
-  title: 'Tirematic',
-  description:
-    'Tirematic is a platform for tire dealers to manage their inventory.',
-};
+// Metadata for the page
+export const metadata = metaDataHelper({
+  title: 'Home - Tirematic',
+  keywords: '',
+  description: '',
+  openGraph: {
+    title: '',
+    description: '',
+  },
+  alternates: {
+    canonical: 'https://tirematic.com',
+  },
+});
 
 export default function RootLayout({
   children,

@@ -1,4 +1,19 @@
+import { metaDataHelper } from '@/utils/metadata';
 import Contact from './_components/contact';
+
+// Metadata for the page
+export const metadata = metaDataHelper({
+  title: 'Contact Us - Tirematic',
+  keywords: '',
+  description: '',
+  openGraph: {
+    title: '',
+    description: '',
+  },
+  alternates: {
+    canonical: 'https://tirematic.com/contact-us',
+  },
+});
 
 // Component to render the Contact Us page
 const ContactUs = () => {

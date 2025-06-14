@@ -1,12 +1,20 @@
 // Import the Privacy Policy component
+import { metaDataHelper } from '@/utils/metadata';
 import Careers from './_components/careers';
 
 // Metadata for the page
-export const metadata = {
-  title: 'Careers | Tirematic',
-  description:
-    'Explore exciting career opportunities at Tirematic. Join our team and help shape the future of tire services with innovation, dedication, and growth.',
-};
+export const metadata = metaDataHelper({
+  title: 'Careers - Tirematic',
+  keywords: '',
+  description: '',
+  openGraph: {
+    title: '',
+    description: '',
+  },
+  alternates: {
+    canonical: 'https://tirematic.com/careers',
+  },
+});
 
 // Component to render the Services page
 export default function Page() {

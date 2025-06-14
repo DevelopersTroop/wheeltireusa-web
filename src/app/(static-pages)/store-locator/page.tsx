@@ -1,12 +1,20 @@
 // Import the Privacy Policy component
+import { metaDataHelper } from '@/utils/metadata';
 import StoreLocator from './_components/store-locator';
 
 // Metadata for the page
-export const metadata = {
-  title: 'Store Locator | Tirematic',
-  description:
-    'Find the nearest Tirematic store location. Use our store locator to discover addresses, contact details, and operating hours for all Tirematic outlets near you.',
-};
+export const metadata = metaDataHelper({
+  title: 'Store Location - Tirematic',
+  keywords: '',
+  description: '',
+  openGraph: {
+    title: '',
+    description: '',
+  },
+  alternates: {
+    canonical: 'https://tirematic.com/store-locator',
+  },
+});
 
 // Component to render the store-locator page
 export default function Page() {

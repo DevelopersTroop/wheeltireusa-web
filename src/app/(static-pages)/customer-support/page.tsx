@@ -1,12 +1,20 @@
 // Import the Privacy Policy component
+import { metaDataHelper } from '@/utils/metadata';
 import CustomerSupport from './_components/customer-support';
 
 // Metadata for the page
-export const metadata = {
-  title: 'Customer Support | Tirematic',
-  description:
-    'Get dedicated customer support from Tirematic. Contact us for assistance with your orders, services, or any inquiries. Our team is here to help you with prompt and reliable solutions.',
-};
+export const metadata = metaDataHelper({
+  title: 'Customer Support - Tirematic',
+  keywords: '',
+  description: '',
+  openGraph: {
+    title: '',
+    description: '',
+  },
+  alternates: {
+    canonical: 'https://tirematic.com/customer-support',
+  },
+});
 
 // Component to render the Customer Support page
 export default function Page() {

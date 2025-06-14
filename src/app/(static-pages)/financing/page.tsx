@@ -6,6 +6,21 @@ import { FaPhone } from 'react-icons/fa6';
 import FinancingHero2 from './_components/financing-hero2';
 import { FinancingMobile } from './_components/financing-mobile';
 import PaymentTable from './_components/financing-table';
+import { metaDataHelper } from '@/utils/metadata';
+
+// Metadata for the page
+export const metadata = metaDataHelper({
+  title: 'Financing - Tirematic',
+  keywords: '',
+  description: '',
+  openGraph: {
+    title: '',
+    description: '',
+  },
+  alternates: {
+    canonical: 'https://tirematic.com/financing',
+  },
+});
 
 // Component to render the Financing page
 const Financing = () => {
