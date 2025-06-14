@@ -12,7 +12,7 @@ const PaymentMessaging: React.FC<{ amount: string }> = ({ amount }) => {
   const formatted = amount.replace(/,/g, ''); // "5728.99"
   const amountInCents = Math.round(parseFloat(formatted) * 100); // 572899
   return (
-    <>
+    <div className="flex flex-col items-start gap-1">
       {/* If you plan to use Stripe Elements for other things */}
       <Elements stripe={stripePromise}>
         <PaymentMethodMessagingElement
@@ -26,8 +26,8 @@ const PaymentMessaging: React.FC<{ amount: string }> = ({ amount }) => {
       </Elements>
       <div className="flex flex-col gap-2 items-start relative">
         <p className="text-[14px] text-[#61636B] font-normal">
-          $32.86 / mo suggested payment with 6-month promotional financing on
-          your Credit Card{' '}
+          ${(parseInt(formatted) / 6 + 0.5).toFixed(2)} / mo suggested payment
+          with 6-month promotional financing on your Credit Card{' '}
           <Link href={'/financing'}>
             <span className="text-[#210203] text-sm font-semibold">
               Learn how
@@ -35,7 +35,7 @@ const PaymentMessaging: React.FC<{ amount: string }> = ({ amount }) => {
           </Link>
         </p>
       </div>
-    </>
+    </div>
   );
 };
 
