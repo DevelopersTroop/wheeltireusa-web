@@ -18,7 +18,7 @@ const StoreLocatorHero = () => {
           {/* Hero subtitle */}
           <h5 className="text-xl text-white">
             <span className="text-white text-base sm:text-xl font-normal [text-shadow:2px_2px_4px_black]">
-              Find your nearest Tiremetic store and get directions, hours, and
+              Find your nearest Tirematic store and get directions, hours, and
               contact details.
             </span>
           </h5>
