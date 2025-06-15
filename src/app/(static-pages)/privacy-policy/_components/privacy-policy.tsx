@@ -42,79 +42,88 @@ const PrivacyPolicy = () => {
               it responsibly in line with our customer-first values.
             </p>
           </div>
+
           {/* Section 1: Information We Collect */}
           <div className="flex flex-col gap-[10px] items-start justify-center w-full">
             <h3 className="text-2xl font-semibold text-btext">
               Information We Collect
             </h3>
-
-            {/* Personal Information */}
-            <h4 className="text-lg font-semibold text-btext">
-              Personal Information
-            </h4>
-            <p>We may collect the following information when you:</p>
-            <ul className="list-disc pl-5">
-              <li>Register for an account</li>
-              <li>Place an order</li>
-              <li>Submit an inquiry or use support services</li>
-              <li>Sign up for promotions or marketing</li>
-            </ul>
-
-            {/* Examples include */}
-            <h4 className="text-lg font-semibold text-btext">
-              Examples include:
-            </h4>
-            <ul className="list-disc pl-5">
-              <li>First and last name</li>
-              <li>Email address</li>
-              <li>Phone number</li>
-              <li>Mailing/billing/shipping address</li>
-              <li>Payment information (not stored on our servers)</li>
-              <li>Vehicle specifications for custom wheels</li>
-              <li>Account preferences and settings</li>
-            </ul>
             <p>
-              We do not collect personal information unless you voluntarily
-              provide it.
+              We collect only the information we need to serve you better. This
+              includes:
             </p>
-
-            {/* Usage Information */}
-            <h4 className="text-lg font-semibold text-btext">
-              Usage and Device Information
-            </h4>
-            <p>When you visit our site, we automatically collect:</p>
             <ul className="list-disc pl-5">
-              <li>IP address</li>
-              <li>Browser type</li>
-              <li>Device and operating system</li>
-              <li>Pages visited and referring URLs</li>
-              <li>Site interaction (clicks, scrolls, time spent)</li>
-            </ul>
-            <p>
-              This information helps us improve performance and tailor your
-              experience.
-            </p>
-
-            {/* Cookies and Tracking Technologies */}
-            <h4 className="text-lg font-semibold text-btext">
-              Cookies and Tracking Technologies
-            </h4>
-            <p>
-              We use cookies and similar technologies to enhance functionality,
-              analyze traffic, and personalize content.
-            </p>
-
-            <h4 className="text-lg font-semibold text-btext">
-              For full details, please see our{' '}
-              <Link href="#">
+              <li>
                 {' '}
-                <span className="text-primary">Cookie Policy</span>{' '}
-              </Link>{' '}
-              .
-            </h4>
+                <span className="font-semibold">
+                  {' '}
+                  Personal Information:{' '}
+                </span>{' '}
+                Details you provide to us when you create an account, make a
+                purchase, or contact us. For example, we ask for your name,
+                shipping address, billing address, email, and phone number so we
+                can process orders and communicate with you as needed.
+              </li>
+              <li>
+                {' '}
+                <span className="font-semibold">
+                  {' '}
+                  Payment Information:{' '}
+                </span>{' '}
+                When you make a purchase, you provide payment details (such as
+                credit card information). For your security, Tirematic does not
+                store your full credit card data on our servers – payment
+                details are handled securely by our third-party payment
+                processor. This means your card information is transmitted
+                securely to the payment provider and not kept by us after the
+                transaction.{' '}
+              </li>
+              <li>
+                {' '}
+                <span className="font-semibold">
+                  {' '}
+                  Order and Transaction Information:{' '}
+                </span>{' '}
+                We maintain records of your purchases (e.g. which tires you
+                bought, when, and any promotions applied) to fulfill your orders
+                and assist with returns or warranty claims.{' '}
+              </li>
+              <li>
+                {' '}
+                <span className="font-semibold">
+                  {' '}
+                  Website Usage Data:{' '}
+                </span>{' '}
+                Like most websites, we automatically collect some technical data
+                when you visit Tirematic. This includes your IP address, browser
+                type, device information, and browsing actions on our site (such
+                as pages viewed and links clicked). We may use cookies or
+                similar technologies to remember your preferences, keep you
+                logged in, and understand how you use our site so we can improve
+                it. You can control cookies through your browser settings;
+                however, disabling cookies may affect site functionality (like
+                the shopping cart).{' '}
+              </li>
+              <li>
+                {' '}
+                <span className="font-semibold"> Communication Data: </span> If
+                you email us, chat with customer service, or fill out any forms
+                (for example, a contact form or a newsletter signup), we will
+                collect the information you choose to give us (such as your
+                inquiries, feedback, and any contact details you provide). This
+                helps us respond to you and improve our services.{' '}
+              </li>
+            </ul>
             <p>
-              You may control cookie settings via your browser. Note that
-              disabling cookies may affect site functionality.
+              Why we collect this information: It allows us to process your
+              orders, provide customer support, improve our website, and offer
+              you a more personalized experience. We avoid collecting any
+              sensitive personal data that we do not need. For instance, we do
+              not intentionally collect information about your race, religion,
+              or health, as it’s not necessary for tire sales. If we ever need
+              optional information (like your vehicle details to recommend the
+              right tires), we will make it clear and you can decide whether to
+              share it.
             </p>
           </div>
 
@@ -123,252 +132,129 @@ const PrivacyPolicy = () => {
             <h3 className="text-2xl font-semibold text-btext">
               How We Use Your Information
             </h3>
-            <p>We use your data to:</p>
+            <p>
+              We use the information we collect to serve you and make your
+              experience with Tirematic great – always in a lawful and fair
+              manner. Here are the main purposes for which Tirematic uses your
+              personal information:
+            </p>
             <ul className="list-disc pl-5">
-              <li>Process and fulfill orders (including custom products)</li>
-              <li>Provide customer support</li>
               <li>
-                Communicate about purchases, product updates, and promotions
+                {' '}
+                <span className="font-semibold">
+                  {' '}
+                  To Process Orders and Provide Services:{' '}
+                </span>{' '}
+                We use your personal and payment details to process
+                transactions, fulfill your tire orders, arrange delivery, and
+                provide any services you request. For example, we’ll use your
+                address to ship your tires and your email to send you order
+                confirmations and tracking information.
               </li>
-              <li>Improve website performance, products, and services</li>
-              <li>Analyze user behavior for business insights</li>
-            </ul>
-            <p>
-              You may opt out of marketing communications anytime by clicking
-              unsubscribe or adjusting your account settings.
-            </p>
-          </div>
-
-          {/* Section 3: Sharing Your Information */}
-          <div className="flex flex-col gap-[10px] items-start justify-center w-full">
-            <h3 className="text-2xl font-semibold text-btext">
-              Sharing Your Information
-            </h3>
-            <p>
-              We do not sell or lease your data. We may share your information
-              with:
-            </p>
-
-            {/* Trusted Third-Party Service Providers */}
-            <h4 className="text-lg font-semibold text-btext">
-              Trusted Third-Party Service Providers:
-            </h4>
-            <ul className="list-disc pl-5">
-              <li>Payment processors</li>
-              <li>Shipping and logistics providers</li>
-              <li>Customer support platforms</li>
-              <li>Analytics and marketing partners</li>
-            </ul>
-            <p>
-              All partners are contractually obligated to protect your
-              information.
-            </p>
-
-            {/* Internal Entities */}
-            <h4 className="text-lg font-semibold text-btext">
-              Internal Entities:
-            </h4>
-            <p>
-              We share necessary information between our Florida and California
-              facilities for operations, customer service, and fulfillment.
-            </p>
-
-            {/* Legal Compliance */}
-            <h4 className="text-lg font-semibold text-btext">
-              Legal Compliance:
-            </h4>
-            <p>We may disclose information:</p>
-            <ul className="list-disc pl-5">
-              <li>As required by law or legal process</li>
               <li>
-                To protect rights, property, or safety of users, our business,
-                or others
+                {' '}
+                <span className="font-semibold">
+                  {' '}
+                  To Communicate with You:{' '}
+                </span>{' '}
+                We may contact you via email, phone, or text to update you on
+                your order status, respond to your questions, inform you of any
+                issues, or collect feedback after a purchase. We also send
+                critical service messages (like important updates to our
+                policies or product recall notices) when necessary. We’ll never
+                spam you – communications are typically tied to your orders or
+                direct requests.{' '}
+              </li>
+              <li>
+                {' '}
+                <span className="font-semibold">
+                  {' '}
+                  To Provide Customer Support:{' '}
+                </span>{' '}
+                If you reach out with a question, concern, or warranty claim, we
+                will use your information to investigate and resolve the issue.
+                Knowing your order history or account info helps us give you
+                quick, personalized support.
+              </li>
+              <li>
+                {' '}
+                <span className="font-semibold">
+                  {' '}
+                  To Improve Our Website and Services:{' '}
+                </span>{' '}
+                We analyze how users navigate our site and use our products so
+                we can make Tirematic better. For example, usage data (like
+                which tire models are viewed most) helps us optimize our product
+                selection and website layout. We might use analytics tools to
+                see overall trends, like which pages are popular or where users
+                might encounter errors, in order to enhance site performance and
+                usability.{' '}
+              </li>
+              <li>
+                {' '}
+                <span className="font-semibold">
+                  {' '}
+                  For Marketing (With Your Consent):{' '}
+                </span>{' '}
+                If you opt in to receive marketing communications, we will use
+                your email or contact info to send you news about Tirematic –
+                such as special offers, new tire launches, or helpful tire care
+                tips. These communications are meant to be useful, and you can
+                unsubscribe at any time if you no longer wish to receive
+                promotional emails. (If you don’t opt in, we won’t use your
+                information for marketing.){' '}
+              </li>
+              <li>
+                {' '}
+                <span className="font-semibold">
+                  {' '}
+                  For Marketing (With Your Consent):{' '}
+                </span>{' '}
+                We may use certain data (like IP addresses or purchase history)
+                to protect our website and you, our customers. This includes
+                detecting and preventing fraud, unauthorized transactions, or
+                other illegal activities. For instance, we might flag unusual
+                account activity to prevent someone from misusing your
+                account.{' '}
+              </li>
+              <li>
+                {' '}
+                <span className="font-semibold">
+                  {' '}
+                  For Marketing (With Your Consent):{' '}
+                </span>{' '}
+                In some cases we must use or disclose information to meet legal
+                and regulatory requirements. For example, maintaining
+                transaction records for accounting and tax purposes, or
+                providing information if required by a lawful government request
+                or to enforce our legal rights.{' '}
               </li>
             </ul>
-          </div>
-
-          {/* number 4 Data Security */}
-          <div className="flex flex-col gap-[10px] items-start justify-center w-full">
-            <h3 className="text-2xl font-semibold text-btext">Data Security</h3>
             <p>
-              We implement technical and organizational measures to safeguard
-              your data:
+              Why we collect this information: It allows us to process your
+              orders, provide customer support, improve our website, and offer
+              you a more personalized experience. We avoid collecting any
+              sensitive personal data that we do not need. For instance, we do
+              not intentionally collect information about your race, religion,
+              or health, as it’s not necessary for tire sales. If we ever need
+              optional information (like your vehicle details to recommend the
+              right tires), we will make it clear and you can decide whether to
+              share it.
             </p>
-            <ul className="list-disc pl-5">
-              <li>SSL encryption for all data transmissions</li>
-              <li>Secure servers and industry-standard access controls</li>
-            </ul>
-            <p>
-              While we work to protect your data, no system is 100% secure. We
-              encourage you to use strong passwords and protect your login
-              credentials.
-            </p>
-          </div>
-
-          {/* number 5 Your Rights & Choices */}
-          <div className="flex flex-col gap-[10px] items-start justify-center w-full">
-            <h3 className="text-2xl font-semibold text-btext">
-              Your Rights & Choices
-            </h3>
-
-            {/* Access and Deletion */}
-            <h4 className="text-lg font-semibold text-btext">
-              Access and Deletion
-            </h4>
-            <p>You have the right to:</p>
-            <ul className="list-disc pl-5">
-              <li>Request access to the personal data we hold about you.</li>
-              <li>Request correction or deletion of your data</li>
-            </ul>
-            <p>To make a request, please email us at: sales@tirematic.com</p>
-            <p>
-              We may retain certain data if required by law, for fraud
-              prevention, or for business continuity.
-            </p>
-
-            {/* Opt-Out of Marketing Communications */}
-            <h4 className="text-lg font-semibold text-btext">
-              Opt-Out of Communications
-            </h4>
-            <p>
-              You can unsubscribe from marketing emails by clicking the
-              unsubscribe link in our emails or updating your profile
-              preferences.
-            </p>
-
-            {/* Cookies */}
-            <h4 className="text-lg font-semibold text-btext">Cookies</h4>
-            <p>
-              See{' '}
-              <Link href="#">
-                {' '}
-                <span className="text-primary">Cookie Policy </span>{' '}
-              </Link>{' '}
-              for your cookie preferences and controls.
-            </p>
-          </div>
-
-          {/* number 6 Children’s Privacy */}
-          <div className="flex flex-col gap-[10px] items-start justify-center w-full">
-            <h3 className="text-2xl font-semibold text-btext">
-              Children’s Privacy
-            </h3>
-            <p>
-              Our site is not intended for users under 18 years of age. We do
-              not knowingly collect information from children. If you are under
-              18, please do not use our services without guardian consent.
-            </p>
-          </div>
-
-          {/* number 7 International Data Transfers */}
-          <div className="flex flex-col gap-[10px] items-start justify-center w-full">
-            <h3 className="text-2xl font-semibold text-btext">
-              International Data Transfers
-            </h3>
-            <p>
-              If you are visiting from outside the United States, be aware your
-              information may be transferred to, stored in, and processed in the
-              U.S. By using our services, you consent to this transfer and data
-              handling.
-            </p>
-          </div>
-
-          {/* number 8 California Privacy Rights (CCPA) */}
-          <div className="flex flex-col gap-[10px] items-start justify-center w-full">
-            <h3 className="text-2xl font-semibold text-btext">
-              California Privacy Rights (CCPA)
-            </h3>
-            <p>
-              If you are a California resident, you may have additional rights
-              under the California Consumer Privacy Act:
-            </p>
-            <ul className="list-disc pl-5">
-              <li>Right to know what personal data is collected</li>
-              <li>Right to request deletion</li>
-              <li>Right to opt-out of sale (note: we do not sell your data)</li>
-            </ul>
-            <p>
-              For CCPA-related requests, please contact: sales@tirematic.com
-            </p>
-          </div>
-
-          {/* number 9 External Links */}
-          <div className="flex flex-col gap-[10px] items-start justify-center w-full">
-            <h3 className="text-2xl font-semibold text-btext">
-              External Links
-            </h3>
-            <p>
-              Our site may contain links to third-party websites. We are not
-              responsible for their content or privacy practices. We encourage
-              users to read the privacy policies of those sites before engaging
-              with them.
-            </p>
-          </div>
-
-          {/* number 10  Changes to This Privacy Policy*/}
-          <div className="flex flex-col gap-[10px] items-start justify-center w-full">
-            <h3 className="text-2xl font-semibold text-btext">
-              Changes to This Privacy Policy
-            </h3>
-            <p>
-              We may update this Privacy Policy as needed. When changes are
-              made, we will revise the Last Updated date. For significant
-              updates, we may notify users via email or website notice.
-            </p>
-          </div>
-
-          {/* number 11 Related Policies & Links */}
-          <div className="flex flex-col gap-[10px] items-start justify-center w-full">
-            <h3 className="text-2xl font-semibold text-btext">
-              Related Policies & Links
-            </h3>
-            <ul className="list-disc pl-5">
-              <li className="text-primary">
-                {' '}
-                <Link href="#"> Cookie Policy </Link>
-              </li>
-              <li className="text-primary">
-                {' '}
-                <Link href="#"> Terms & Conditions </Link>{' '}
-              </li>
-              <li className="text-primary">
-                {' '}
-                <Link href="#"> Return Policy </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* number 12 Contact Information */}
-          <div className="flex flex-col gap-[10px] items-start justify-center w-full">
-            <h3 className="text-2xl font-semibold text-btext">
-              Contact Information
-            </h3>
-            <div>
-              <p>
-                If you have any questions or concerns about this Privacy Policy
-                or your personal data, contact us:{' '}
-              </p>
-              <p>
-                Email:{' '}
-                <a href="mailto:sales@tirematic.com" className="text-primary">
-                  sales@tirematic.com
-                </a>
-              </p>
-              <p>
-                Phone:{' '}
-                <a href="tel:18663447857" className="text-primary">
-                  1 (866) 344-7857
-                </a>
-              </p>
-            </div>
           </div>
 
           {/* footer */}
           <div className="flex flex-col gap-[10px] items-start justify-center w-full">
             <p>
-              This Privacy Policy reflects our commitment to transparency,
-              security, and trust. We’re here to provide the best possible
-              experience while respecting your rights and data privacy.
+              Thank you for choosing Tirematic. We appreciate your business and
+              your confidence in us to handle your information responsibly. This
+              Privacy Policy may be updated from time to time (for example, if
+              we add new features or as laws change), and we will post any
+              changes on this page with a new effective date. We encourage you
+              to review it occasionally. By continuing to use Tirematic after
+              changes to the Privacy Policy, you acknowledge and agree to those
+              changes. Rest assured, we will not materially change our privacy
+              commitments without informing you.
             </p>
           </div>
         </div>
