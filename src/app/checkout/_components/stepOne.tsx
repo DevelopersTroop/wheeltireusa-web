@@ -11,6 +11,8 @@ import { Label } from '@/components/ui/label';
 import { InfoIcon } from 'lucide-react';
 import React, { useState } from 'react';
 import { DeliveryOptions } from './deliveryOptions';
+import { useTypedSelector } from '@/redux/store';
+import useAddZipCode from '@/components/shared/MainFilterModal/components/AddZipCode/useAddZipCode';
 
 // Interface for checkout step props
 export interface ICheckoutStepProps {
@@ -27,8 +29,13 @@ export const StepOne: React.FC<ICheckoutStepProps> = ({
 }) => {
   // Access checkout-related state and functions from the context
   // Component state
-  const [code, setCode] = useState(''); // State to store the ZIP code input
+  const { validateZipCode, loading } = useAddZipCode();
+  const { validatedZipCode } = useTypedSelector(
+    (state) => state.persisted.checkout
+  );
+  const [code, setCode] = useState(validatedZipCode || ''); // State to store the ZIP code input
   const [dealerDialog, setDealerDialog] = useState(false); // State to manage the dealer request dialog
+
   return (
     <div className="flex flex-col gap-y-6">
       {/* ZIP Code and Delivery Options Section */}
@@ -51,7 +58,13 @@ export const StepOne: React.FC<ICheckoutStepProps> = ({
                 className="h-12 bg-white w-full"
               />
               {/* Validate Button */}
-              <Button className="flex h-12 items-center justify-center gap-2">
+              <Button
+                disabled={loading}
+                onClick={() => {
+                  validateZipCode(code, true);
+                }}
+                className="flex h-12 items-center justify-center gap-2 w-[180px]"
+              >
                 <svg
                   width="21"
                   height="20"
@@ -78,7 +91,9 @@ export const StepOne: React.FC<ICheckoutStepProps> = ({
                     fill="white"
                   />
                 </svg>
-                <span className="text-[18px]">View installers</span>
+                <span className="text-[18px]">
+                  {loading ? 'Validating' : 'View installers'}
+                </span>
               </Button>
             </div>
           </div>

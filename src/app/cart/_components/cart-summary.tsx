@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '@/redux/store';
 import { calculateCartTotal, formatPrice } from '@/utils/price';
 import { initiateCheckout } from '@/redux/features/checkoutSlice';
+import PaymentMessaging from '@/components/shared/payment-method-messaging';
 
 const CartSummary = () => {
   const dispatch = useAppDispatch();
@@ -276,20 +277,10 @@ const CartSummary = () => {
           </button>
         </div>
         <div className="px-2 sm:px-6 pt-3 pb-0 flex flex-col gap-1 justify-center items-start self-stretch relative w-full">
-          {/* <PaymentMessaging amount={totalCost} /> */}
-          <p>
+          <PaymentMessaging amount={subTotalCost} />
+          {/* <p>
             <span className="font-medium">$116.00</span> per month
-          </p>
-          <small className="text-sm leading-[17px]">
-            <span className="text-[#504949] text-sm font-normal">
-              suggested payments with 6-month promotional financing.{' '}
-            </span>
-            <Link href={'/financing'}>
-              <span className="text-[#210203] text-sm font-semibold">
-                Learn how
-              </span>{' '}
-            </Link>
-          </small>
+          </p> */}
         </div>
       </div>
       <WhatWeAccept />

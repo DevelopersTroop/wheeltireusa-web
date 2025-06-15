@@ -5,6 +5,7 @@ import {
 } from '../features/checkoutSlice';
 import {
   addToCart,
+  emptyCart,
   removeFromCart,
   updateCartQuantity,
 } from '../features/cartSlice';
@@ -18,7 +19,8 @@ checkoutMiddleware.startListening({
     initiateCheckout,
     updateCartQuantity,
     addToCart,
-    removeFromCart
+    removeFromCart,
+    emptyCart
   ),
   effect: async (action, listenerApi) => {
     const state = listenerApi.getState() as RootState;

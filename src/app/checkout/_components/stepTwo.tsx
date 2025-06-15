@@ -53,9 +53,8 @@ const ShippingAddressForm: React.FC<{ setStep: (step: number) => void }> = ({
   /**
    * Redux Store & Dispatch Hook
    */
-  const { shippingAddress, isAccountCreated } = useTypedSelector(
-    (state) => state.persisted.checkout
-  ); // Access shipping address and account creation state from Redux
+  const { shippingAddress, isAccountCreated, validatedZipCode } =
+    useTypedSelector((state) => state.persisted.checkout); // Access shipping address and account creation state from Redux
   const dispatch = useDispatch(); // Redux dispatch hook
   // Access checkout context
   const [createAccount, setCreateAccount] = useState(false); // State to track if the user wants to create an account
@@ -76,7 +75,7 @@ const ShippingAddressForm: React.FC<{ setStep: (step: number) => void }> = ({
     defaultValues: {
       ...shippingAddress, // Pre-fill form with existing shipping address
       isPrimaryPhone: true,
-      // zipCode: validatedZipCode,
+      zipCode: validatedZipCode,
       country: 'US',
     },
   });

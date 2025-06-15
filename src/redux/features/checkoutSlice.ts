@@ -13,6 +13,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export type TCheckoutState = TOrderData & {
   orderSuccessData: TOrder | undefined;
   newCoupon: string | undefined | null;
+  validatedZipCode: string;
 };
 
 const initialState: TCheckoutState = {
@@ -81,6 +82,7 @@ const initialState: TCheckoutState = {
   existingOrderId: '',
   newCoupon: null,
   affiliateDiscount: 0,
+  validatedZipCode: '',
 };
 
 const checkoutSlice = createSlice({
@@ -315,6 +317,12 @@ const checkoutSlice = createSlice({
       }
       state.affiliateDiscount = 0;
     },
+    updateValidatedZipCode: (state, action: PayloadAction<string>) => {
+      return {
+        ...state,
+        validatedZipCode: action.payload,
+      };
+    },
   },
 });
 
@@ -346,4 +354,5 @@ export const {
   addReferralCode,
   updateAffiliateDiscount,
   clearAffiliateDiscount,
+  updateValidatedZipCode,
 } = checkoutSlice.actions;

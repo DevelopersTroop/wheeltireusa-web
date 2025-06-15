@@ -29,6 +29,8 @@ import { DeliveryDetails } from './deliveryDetails';
 import { apiInstance } from '@/redux/apis/base';
 import { toast } from 'sonner';
 import Image from 'next/image';
+import { emptyCart } from '@/redux/features/cartSlice';
+import { triggerGaPurchaseEvent } from '@/utils/analytics';
 
 // Interface for checkout step props
 
@@ -123,32 +125,31 @@ export const FinalStep: React.FC = () => {
           setPaymentData(result.data?.data?.payment);
 
           // Trigger Google Analytics purchase event
-          // triggerGaPurchaseEvent({
-          //     transaction_id: order.orderId,                     // required
-          //     value: order.data.totalWithTax,                    // required
-          //     currency: "USD",                                   // required
-          //     tax: order.data.taxAmount,                         // optional
-          //     shipping: order.data.deliveryCharge,               // optional
-          //     coupon: order.data.couponCode,                     // optional
+          triggerGaPurchaseEvent({
+            transaction_id: order.orderId, // required
+            value: order.data.totalWithTax, // required
+            currency: 'USD', // required
+            tax: order.data.taxAmount, // optional
+            shipping: order.data.deliveryCharge, // optional
+            coupon: order.data.couponCode, // optional
 
-          //     items: order.data.productsInfo.map((product, index) => ({
-          //         item_id: product.sku,                            // required
-          //         item_name: product.title,                        // required
-          //         price: product.price,                            // optional but recommended
-          //         quantity: product.quantity,                      // optional but recommended
-          //         item_brand: product.brand,                       // optional
-          //         item_category: product.category?.title,          // optional
-          //         item_variant: `Front:${product?.metaData?.frontForging || "N/A"} | Rear: ${product?.metaData?.rearForging || "N/A"}`,
-          //         index,                                            // optional
-          //     })),
-          // });
+            items: order.data.productsInfo.map((product, index) => ({
+              item_id: product.partnumber || product._id, // required
+              item_name: product.title, // required
+              price: product.price, // optional but recommended
+              quantity: product.quantity, // optional but recommended
+              item_brand: product.brand, // optional
+              item_category: product.category?.title, // optional
+              index, // optional
+            })),
+          });
           toast('Order Confirmed!', {
             description: 'Your payment has been processed successfully.',
           });
 
           clearCheckoutState();
           setStep(5);
-          // dispatch(emptyCart());
+          dispatch(emptyCart());
           dispatch(revokeCouponCode());
         } else {
           // throw new Error(result.message || "Payment verification failed");

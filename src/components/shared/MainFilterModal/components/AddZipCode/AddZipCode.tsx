@@ -1,22 +1,25 @@
-import React from 'react';
-import useAddZipCode from './useAddZipCode';
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
 } from '@/components/ui/input-otp';
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from 'input-otp';
+import useAddZipCode from './useAddZipCode';
 
-const AddZipCode = () => {
-  const { onChangeZipCode } = useAddZipCode();
+const AddZipCode: React.FC<{ title?: string }> = ({ title }) => {
+  const { onChangeZipCode, zipCode, handleDetectZipCode, loading } =
+    useAddZipCode();
+
   return (
     <>
       <div className="px-6 order-4">
+        {title ? <h2>{title}</h2> : ''}
         <div className="flex justify-center items-center">
           <InputOTP
+            value={zipCode}
             maxLength={5}
             pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
-            onChange={onChangeZipCode}
+            onChange={(value) => onChangeZipCode(value, true)}
           >
             <InputOTPGroup>
               <InputOTPSlot index={0} />
@@ -31,11 +34,9 @@ const AddZipCode = () => {
         <div className="my-4 flex justify-center">
           <button
             className="text-primary underline"
-            onClick={() => {
-              console.log('Zip Code submitted');
-            }}
+            onClick={handleDetectZipCode}
           >
-            Detect Zip Code
+            {loading ? 'Detecting' : 'Detect'} Zip Code
           </button>
         </div>
       </div>

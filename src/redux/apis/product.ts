@@ -46,6 +46,9 @@ const products = baseApi.injectEndpoints({
           ) {
             shallowParams[key] = value.split(',');
           }
+          if (key === 'sale') {
+            shallowParams[key] = value === 'true' ? true : false;
+          }
         });
 
         const result = await baseQuery({
