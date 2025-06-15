@@ -1,9 +1,12 @@
 import { setMainFilter } from '@/redux/features/mainFilterSlice';
 import { useTypedSelector } from '@/redux/store';
+import { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 
 const useSelectedItem = () => {
   const dispatch = useDispatch();
+  const selectedItemRef = useRef<HTMLDivElement>(null);
+
   const mainFilterState = useTypedSelector((state) => state.mainFilter);
   const clearSize = () => {
     dispatch(
@@ -130,6 +133,13 @@ const useSelectedItem = () => {
       })
     );
   };
+
+  useEffect(() => {
+    if (selectedItemRef.current) {
+      selectedItemRef.current.scrollLeft =
+        selectedItemRef.current.scrollWidth - 100;
+    }
+  }, [mainFilterState.filters.byVehicle.current]);
   return {
     clearModel,
     clearMake,
@@ -140,6 +150,7 @@ const useSelectedItem = () => {
     year: mainFilterState.filters.byVehicle.current.year,
     frontTireSize: mainFilterState.filters.byVehicle.current.frontTireSize,
     rearTireSize: mainFilterState.filters.byVehicle.current.rearTireSize,
+    selectedItemRef,
   };
 };
 

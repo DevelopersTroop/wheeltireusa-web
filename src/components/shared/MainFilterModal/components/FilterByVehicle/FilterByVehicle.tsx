@@ -6,7 +6,10 @@ import useFilterByVehicle from './useFilterByVehicle';
 
 // Dynamic imports
 import dynamic from 'next/dynamic';
-import SelectSize from './components/SelectSize/SelectSize';
+const SelectSize = dynamic(() => import('./components/SelectSize/SelectSize'), {
+  ssr: false,
+  loading: () => <ListSkeleton title="Size" />,
+});
 const SelectMake = dynamic(() => import('./components/SelectMake/SelectMake'), {
   ssr: false,
   loading: () => <ListSkeleton title="Make" />,
@@ -42,7 +45,7 @@ const FilterByVehicle = () => {
     <div className={cn('h-[70dvh]')}>
       <ScrollArea
         className={cn(
-          'h-[70dvh] pb-3',
+          'h-[70dvh] pb-3 block',
           year && make && model && 'h-[calc(70dvh-90px)] pb-0'
         )}
       >

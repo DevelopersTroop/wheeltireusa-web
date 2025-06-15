@@ -234,3 +234,14 @@
     right: -10px;
   }
 }
+
+[data-radix-scroll-area-viewport]>div {
+  display: block !important;
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+.selected-item-scrollbar::-webkit-scrollbar-button {
+  display: none;
+}
