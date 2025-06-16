@@ -39,18 +39,15 @@ const products = baseApi.injectEndpoints({
         }
 
         Object.entries(shallowParams).forEach(([key, value]) => {
-          if (
-            shouldArray.includes(key) &&
-            typeof value === 'string' &&
-            value.includes(',')
-          ) {
+          console.log(value, typeof value === 'string' && value?.split(','));
+          if (shouldArray.includes(key) && typeof value === 'string') {
             shallowParams[key] = value.split(',');
-          }
-          if (key === 'sale') {
+          } else if (key === 'sale') {
             shallowParams[key] = value === 'true' ? true : false;
           }
         });
 
+        console.log('Shallow params', shallowParams);
         const result = await baseQuery({
           url: '/products/list',
           method: 'POST',
