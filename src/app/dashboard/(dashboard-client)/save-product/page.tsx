@@ -123,12 +123,12 @@ const SaveProduct = () => {
               className="bg-white text-sm min-[380px]:text-base border border-gray-200 rounded-lg mb-4 p-2 min-[380px]:p-4 shadow-sm"
             >
               <div className="flex justify-center mb-2">
-                <Image
+                <img
                   className="w-[150px]"
-                  src={product.image_url}
+                  src={getProductThumbnail(product)}
                   alt={product?.title ?? ''}
-                  width={150}
-                  height={150}
+                  // width={150}
+                  // height={150}
                 />
               </div>
               <div className="flex justify-between mb-2">

@@ -1,38 +1,39 @@
-'use client'; // Enables client-side rendering for this component
-import Container from '@/components/ui/container/container';
-import React, { useEffect } from 'react';
-import DashbaordSidebar from './_components/dashbaord-sidebar'; // Sidebar component for dashboard
-import DashboardBreadcrumb from './_components/dashboard-breadcrumb'; // Breadcrumb navigation for dashboard
-import useAuth from '@/hooks/useAuth';
-import { useRouter } from 'next/navigation';
+import { metaDataHelper } from '@/utils/metadata';
+import { cookies } from 'next/headers';
 
-// Dashboard layout component that wraps the dashboard pages
-const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
-  const { user } = useAuth(); // Get user authentication status
-  const router = useRouter(); // Initialize Next.js router
+export async function generateMetadata() {
+  const cookieStore = await cookies();
+  const path = cookieStore.get('__path')?.value || 'unknown';
+  console.log('Path from cookies:', path);
 
-  // Redirect to login page if the user is not authenticated
-  useEffect(() => {
-    if (user === null) {
-      router.push('/login');
-    }
-  }, [user, router]);
+  let customTitle = 'Orders';
 
-  return (
-    <>
-      <Container>
-        <DashboardBreadcrumb />
-        <div className="flex flex-col lg:flex-row w-full gap-7 pt-6 mb-16">
-          <div className={'w-full lg:w-1/4 border-x border-b '}>
-            <DashbaordSidebar />
-          </div>
-          <div className={'w-full lg:w-3/4 '}>
-            {children} {/* Render dynamic dashboard content */}
-          </div>
-        </div>
-      </Container>
-    </>
-  );
-};
+  if (path === '/dashboard/orders') {
+    customTitle = 'Orders';
+  } else if (path === '/dashboard/save-product') {
+    customTitle = 'Save Product';
+  } else if (path === '/dashboard/account-details') {
+    customTitle = 'Account Details';
+  } else if (path === '/dashboard/change-password') {
+    customTitle = 'Change Password';
+  } else if (path === '/dashboard/logout') {
+    customTitle = 'Logout';
+  } else customTitle = 'Orders';
 
-export default DashboardLayout;
+  return metaDataHelper({
+    title: `${customTitle} - Tirematic`,
+    keywords: '',
+    description: '',
+    openGraph: {
+      title: '',
+      description: '',
+    },
+    alternates: {
+      canonical: `https://tirematic.com/${customTitle}`,
+    },
+  });
+}
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return <>{children}</>;
+}

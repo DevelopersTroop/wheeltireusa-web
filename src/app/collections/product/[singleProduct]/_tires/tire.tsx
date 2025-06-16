@@ -18,7 +18,8 @@ const Tire = ({ product }: { product: TInventoryItem[] }) => {
           <Item href={'/'}>Collection</Item>
           <Item href={`/`}>Tire</Item>
           <Item isEnd={true} href={`/collections/product/${product[0]?.slug}`}>
-            {product[0]?.model_group} & {product[1]?.model_group}
+            {product[0]?.model_group} {product[1]?.model_group ? '&' : ''}{' '}
+            {product[1]?.model_group}
           </Item>
         </Breadcrumb>
       </div>

@@ -118,7 +118,7 @@ apiInstance.interceptors.response.use(
     const message = err?.response?.data?.message || 'Something went wrong';
     const errorsArray = err?.response?.data?.errors;
 
-    if (err.request?.resposneURL.includes('subscriptions')) {
+    if (err.request?.resposneURL?.includes('subscriptions')) {
       return Promise.reject(error);
     }
 
