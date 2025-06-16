@@ -36,7 +36,8 @@ const FilterProvider = ({ children }: { children: React.ReactNode }) => {
     key?: string,
     getFrontRearParamsJSON: boolean = false
   ) => {
-    if (key === 'frontParams' || key === 'rearParams') {
+    if ((key === 'frontParams' || key === 'rearParams') && value) {
+      console.log('value', value);
       return getFrontRearParamsJSON
         ? value
         : `${JSON.parse(value).width}/${JSON.parse(value).ratio}-${JSON.parse(value).diameter}`;
