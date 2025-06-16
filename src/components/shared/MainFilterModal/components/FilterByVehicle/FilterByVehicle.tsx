@@ -68,7 +68,7 @@ const FilterByVehicle = () => {
           )}
         </div>
       </ScrollArea>
-      {year && make && model && (
+      {year && make && model && frontTireSize && rearTireSize && (
         <FilterFooter isDisabled={isDisabled} submitFilter={submitFilter} />
       )}
     </div>
