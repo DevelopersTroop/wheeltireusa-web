@@ -2,9 +2,9 @@
 
 COMMIT_SHA=$1
 
-sudo tee /etc/nginx/conf.d/tiremetic-web.conf > /dev/null <<EOF
+sudo tee /etc/nginx/conf.d/tirematic-web.conf > /dev/null <<EOF
 server {
-    server_name tiremetic.stage.developertroop.com;
+    server_name tirematic.stage.developertroop.com;
 
     gzip on;
     gzip_vary on;
@@ -32,7 +32,7 @@ server {
     }
 
     location ~ ^/_next/static/(.*)\$ {
-        proxy_pass http://dpgcl9gapwcdl.cloudfront.net/tiremetic-web/\$commit_sha/_next/static/\$1;
+        proxy_pass http://dpgcl9gapwcdl.cloudfront.net/tirematic-web/\$commit_sha/_next/static/\$1;
         proxy_set_header Host dpgcl9gapwcdl.cloudfront.net;
         proxy_ssl_name dpgcl9gapwcdl.cloudfront.net;
         proxy_ssl_server_name on;
@@ -47,7 +47,7 @@ server {
     }
 
     location ~ ^/public/(.*)\$ {
-        proxy_pass http://dpgcl9gapwcdl.cloudfront.net/tiremetic-web/\$commit_sha/public/\$1;
+        proxy_pass http://dpgcl9gapwcdl.cloudfront.net/tirematic-web/\$commit_sha/public/\$1;
         proxy_set_header Host dpgcl9gapwcdl.cloudfront.net;
         proxy_ssl_name dpgcl9gapwcdl.cloudfront.net;
         proxy_ssl_server_name on;
@@ -67,18 +67,18 @@ server {
     }
 
     listen 443 ssl; # managed by Certbot
-    ssl_certificate /etc/letsencrypt/live/tiremetic.stage.developertroop.com/fullchain.pem; # managed by Certbot
-    ssl_certificate_key /etc/letsencrypt/live/tiremetic.stage.developertroop.com/privkey.pem; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/tirematic.stage.developertroop.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/tirematic.stage.developertroop.com/privkey.pem; # managed by Certbot
     include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
 }
 
 server {
-    if (\$host = tiremetic.stage.developertroop.com) {
+    if (\$host = tirematic.stage.developertroop.com) {
         return 301 https://\$host\$request_uri;
     } # managed by Certbot
 
-    server_name tiremetic.stage.developertroop.com;
+    server_name tirematic.stage.developertroop.com;
     listen 80;
     return 404; # managed by Certbot
 }

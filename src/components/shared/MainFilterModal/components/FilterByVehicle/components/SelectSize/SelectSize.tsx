@@ -10,7 +10,7 @@ const SelectSize = () => {
       <div className="text-muted-dark text-[20px] px-6 order-2">
         Select Size
       </div>
-      {tireSizes ? (
+      {tireSizes && tireSizes.length > 0 ? (
         <>
           <div className="grid grid-cols-2 gap-3 px-6 order-4">
             {tireSizes.map((size) => (

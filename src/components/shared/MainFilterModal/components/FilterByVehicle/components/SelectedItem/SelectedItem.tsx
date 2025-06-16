@@ -12,9 +12,13 @@ const SelectedItem = () => {
     clearMake,
     clearModel,
     clearSize,
+    selectedItemRef,
   } = useSelectedItem();
   return (
-    <div className="flex gap-2 px-6 order-2 overflow-y-auto">
+    <div
+      ref={selectedItemRef}
+      className="flex gap-2 px-6 py-2 order-2 overflow-x-auto selected-item-scrollbar"
+    >
       {year && (
         <BrickBox
           checked={true}
