@@ -52,7 +52,11 @@ const SearchWithAlphabet = ({
     'Z',
   ];
   return (
-    <div className={cn('flex items-center justify-between w-[calc(75%-40px)]')}>
+    <div
+      className={cn(
+        'flex flex-wrap md:flex-nowrap md:items-center md:justify-between w-full md:w-[calc(75%-40px)] gap-3 md:gap-0'
+      )}
+    >
       {alphabetList.map((alphabet) => (
         <button
           key={alphabet}

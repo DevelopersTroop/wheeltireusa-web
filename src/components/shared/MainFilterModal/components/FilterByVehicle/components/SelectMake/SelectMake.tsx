@@ -22,7 +22,7 @@ const SelectMake = () => {
       </div>
       {filteredMakes ? (
         <>
-          <div className="grid grid-cols-5 gap-3 px-6 order-4">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-3 px-6 order-4">
             {filteredMakes?.map((make) => (
               <BrickBox
                 showTooltip={true}

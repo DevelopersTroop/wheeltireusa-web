@@ -78,7 +78,7 @@ const BrickBoxWithoutTooltip = ({
         {text}
       </div>
       {isDismissable && (
-        <div className={cn(!isMerged ? 'ml-10' : 'ml-0')}>
+        <div className={cn(!isMerged ? 'md:ml-10 ml-auto' : 'ml-0')}>
           <X size={16} />
         </div>
       )}

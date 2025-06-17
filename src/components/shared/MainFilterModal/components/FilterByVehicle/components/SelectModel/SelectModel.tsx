@@ -16,7 +16,7 @@ const SelectModel = () => {
       </div>
       {filteredModels ? (
         <>
-          <div className="grid grid-cols-4 gap-3 px-6 order-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-3 px-6 order-4">
             {filteredModels.map((model) => (
               <BrickBox
                 showTooltip={true}

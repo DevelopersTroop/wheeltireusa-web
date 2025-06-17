@@ -26,7 +26,7 @@ const FilterFooter = dynamic(() => import('../FilterFooter/FilterFooter'), {
 });
 const SelectYear = dynamic(() => import('./components/SelectYear/SelectYear'), {
   ssr: false,
-  loading: () => <ListSkeleton title="Year" />,
+  loading: () => <ListSkeleton title="Year" mobile={2} />,
 });
 const AddZipCode = dynamic(() => import('../AddZipCode/AddZipCode'), {
   ssr: false,
@@ -46,15 +46,24 @@ const FilterByVehicle = () => {
   } = useFilterByVehicle();
 
   return (
-    <div className={cn('h-[70dvh]')}>
+    <div
+      className={cn(
+        'h-[calc(100dvh-110px)] md:h-[70dvh] md:block flex flex-col justify-between'
+      )}
+    >
       <ScrollArea
         ref={ref}
         className={cn(
-          'h-[70dvh] pb-3 block',
-          year && make && model && 'h-[calc(70dvh-90px)] pb-0'
+          'h-full md:h-[70dvh] pb-3 block',
+          year &&
+            make &&
+            model &&
+            frontTireSize &&
+            rearTireSize &&
+            'h-full md:h-[calc(70dvh-90px)] pb-0'
         )}
       >
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 relative">
           {Boolean(year) && <SelectedItem />}
           {!year && <SelectYear />}
           {year && !make && <SelectMake />}

@@ -24,6 +24,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import { isMdScreenOrBigger } from '@/lib/utils';
 
 const YmmForm = () => {
   const dispatch = useDispatch();
@@ -40,57 +41,112 @@ const YmmForm = () => {
 
   return (
     <>
-      <Dialog open={isFilterModalOpen} onOpenChange={handleDialogChange}>
-        <DialogContent className="sm:max-w-1/2 bg-muted p-0 lg:max-w-2/3">
-          <Tabs value={activeTab ?? 'Vehicle'}>
-            <TabsList className="p-6 bg-muted border-b-1 border-muted-dark rounded-none w-full flex justify-start pb-[30px] mt-4">
-              <div className="flex items-center space-x-6">
-                <DialogTitle className="text-lg">
-                  Select your vehicle
-                </DialogTitle>
-                <TabsTriggerMainFilter
-                  onClick={() =>
-                    dispatch(openMainFilterModal({ tab: 'Vehicle' }))
-                  }
-                  value="Vehicle"
-                  className=""
-                >
-                  Vehicle model
-                </TabsTriggerMainFilter>
-                <TabsTriggerMainFilter
-                  onClick={() =>
-                    dispatch(openMainFilterModal({ tab: 'TireSize' }))
-                  }
-                  value="TireSize"
-                  className=""
-                >
-                  Tire size
-                </TabsTriggerMainFilter>
-                <TabsTriggerMainFilter
-                  onClick={() =>
-                    dispatch(openMainFilterModal({ tab: 'TireBrand' }))
-                  }
-                  value="TireBrand"
-                  className=""
-                >
-                  Tire brand
-                </TabsTriggerMainFilter>
-              </div>
-            </TabsList>
+      {isMdScreenOrBigger() ? (
+        <>
+          <Dialog open={isFilterModalOpen} onOpenChange={handleDialogChange}>
+            <DialogContent className="sm:max-w-1/2 bg-muted p-0 lg:max-w-2/3">
+              <Tabs value={activeTab ?? 'Vehicle'}>
+                <TabsList className="p-6 bg-muted border-b-1 border-muted-dark rounded-none w-full flex justify-start pb-[30px] mt-4">
+                  <div className="flex items-center space-x-6">
+                    <DialogTitle className="text-lg">
+                      Select your vehicle
+                    </DialogTitle>
+                    <TabsTriggerMainFilter
+                      onClick={() =>
+                        dispatch(openMainFilterModal({ tab: 'Vehicle' }))
+                      }
+                      value="Vehicle"
+                      className=""
+                    >
+                      Vehicle model
+                    </TabsTriggerMainFilter>
+                    <TabsTriggerMainFilter
+                      onClick={() =>
+                        dispatch(openMainFilterModal({ tab: 'TireSize' }))
+                      }
+                      value="TireSize"
+                      className=""
+                    >
+                      Tire size
+                    </TabsTriggerMainFilter>
+                    <TabsTriggerMainFilter
+                      onClick={() =>
+                        dispatch(openMainFilterModal({ tab: 'TireBrand' }))
+                      }
+                      value="TireBrand"
+                      className=""
+                    >
+                      Tire brand
+                    </TabsTriggerMainFilter>
+                  </div>
+                </TabsList>
 
-            <TabsContent value="Vehicle">
-              <FilterByVehicle />
-            </TabsContent>
-            <TabsContent value="TireSize">
-              <FilterByTireSize />
-            </TabsContent>
-            <TabsContent value="TireBrand">
-              <FilterByTireBrand />
-            </TabsContent>
-          </Tabs>
-        </DialogContent>
-      </Dialog>
-      {/* <div className="w-vw text-red-500 sm:text-green-600">hello  </div> */}
+                <TabsContent value="Vehicle">
+                  <FilterByVehicle />
+                </TabsContent>
+                <TabsContent value="TireSize">
+                  <FilterByTireSize />
+                </TabsContent>
+                <TabsContent value="TireBrand">
+                  <FilterByTireBrand />
+                </TabsContent>
+              </Tabs>
+            </DialogContent>
+          </Dialog>
+        </>
+      ) : (
+        <>
+          <Sheet open={isFilterModalOpen} onOpenChange={handleDialogChange}>
+            <SheetContent className="sm:max-w-[90%] sm:min-w-[90%] max-w-[90%] min-w-[90%] bg-muted">
+              <SheetTitle className="text-lg pt-5 px-4">
+                Select your vehicle
+              </SheetTitle>
+              <Tabs value={activeTab ?? 'Vehicle'}>
+                <TabsList className="pt-3 bg-muted border-b-1 border-muted-dark rounded-none w-full flex justify-start pb-[30px]">
+                  <div className="flex items-center space-x-2 pl-1.5">
+                    <TabsTriggerMainFilter
+                      onClick={() =>
+                        dispatch(openMainFilterModal({ tab: 'Vehicle' }))
+                      }
+                      value="Vehicle"
+                    >
+                      Vehicle model
+                    </TabsTriggerMainFilter>
+                    <TabsTriggerMainFilter
+                      onClick={() =>
+                        dispatch(openMainFilterModal({ tab: 'TireSize' }))
+                      }
+                      value="TireSize"
+                      className=""
+                    >
+                      Tire size
+                    </TabsTriggerMainFilter>
+                    <TabsTriggerMainFilter
+                      onClick={() =>
+                        dispatch(openMainFilterModal({ tab: 'TireBrand' }))
+                      }
+                      value="TireBrand"
+                      className=""
+                    >
+                      Tire brand
+                    </TabsTriggerMainFilter>
+                  </div>
+                </TabsList>
+
+                <TabsContent value="Vehicle">
+                  <FilterByVehicle />
+                </TabsContent>
+                <TabsContent value="TireSize">
+                  <FilterByTireSize />
+                </TabsContent>
+                <TabsContent value="TireBrand">
+                  <FilterByTireBrand />
+                </TabsContent>
+              </Tabs>
+            </SheetContent>
+          </Sheet>
+        </>
+      )}
     </>
   );
 };
