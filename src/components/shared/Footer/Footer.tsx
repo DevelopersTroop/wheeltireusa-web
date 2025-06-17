@@ -37,10 +37,12 @@ export const Footer = () => {
                   <div className={'flex justify-center lg:justify-start'}>
                     <Link href={'/'}>
                       <Image
-                        src="/images/header/tirematic-logo.webp"
+                        src="/images/header/TirematicLogo.png"
                         alt="Tirematic"
-                        width={100}
-                        height={100}
+                        width={160}
+                        height={29}
+                        quality={100}
+                        unoptimized={true}
                       />
                     </Link>
                   </div>
@@ -274,7 +276,10 @@ export const Footer = () => {
                     className='="w-4 h-4'
                     alt="location"
                   />
-                  <span>3901 Riga Blvd, Tampa Florida</span>
+                  <span>
+                    Customer Service 2232 Dell Range Blvd Ste 242 #5367
+                    Cheyenne, WY 82009
+                  </span>
                 </li>
                 <li className="flex flex-col text-sm">
                   <div className="flex items-center gap-2">
@@ -283,7 +288,7 @@ export const Footer = () => {
                       className="w-4 h-4"
                       alt="phone"
                     />
-                    <span>866-344-7857</span>
+                    <span>(844) 576-2842</span>
                   </div>
                   <span className="text-xs text-gray-400 ml-6">
                     (Mon–Sat, 9 AM – 6 PM)

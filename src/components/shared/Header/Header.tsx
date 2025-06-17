@@ -24,7 +24,9 @@ export const Header = () => {
                 <div className={'flex justify-center lg:justify-start'}>
                   <Link href={'/'}>
                     <Image
-                      src="/images/header/tirematic-logo.webp"
+                      src="/images/header/TirematicLogo.png"
+                      quality={100}
+                      unoptimized={true}
                       alt="Tirematic"
                       width={160}
                       height={29}
