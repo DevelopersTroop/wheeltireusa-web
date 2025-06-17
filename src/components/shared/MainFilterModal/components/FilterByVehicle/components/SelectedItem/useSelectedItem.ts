@@ -8,13 +8,26 @@ const useSelectedItem = () => {
   const selectedItemRef = useRef<HTMLDivElement>(null);
 
   const mainFilterState = useTypedSelector((state) => state.mainFilter);
-  const clearSize = () => {
+  const clearFrontTireSize = () => {
     dispatch(
       setMainFilter({
         filters: {
           byVehicle: {
             current: {
               frontTireSize: null,
+              rearTireSize: null,
+            },
+          },
+        },
+      })
+    );
+  };
+  const clearRearTireSize = () => {
+    dispatch(
+      setMainFilter({
+        filters: {
+          byVehicle: {
+            current: {
               rearTireSize: null,
             },
           },
@@ -144,7 +157,8 @@ const useSelectedItem = () => {
     clearModel,
     clearMake,
     clearYear,
-    clearSize,
+    clearFrontTireSize,
+    clearRearTireSize,
     model: mainFilterState.filters.byVehicle.current.model,
     make: mainFilterState.filters.byVehicle.current.make,
     year: mainFilterState.filters.byVehicle.current.year,

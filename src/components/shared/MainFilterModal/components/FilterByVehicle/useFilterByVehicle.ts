@@ -6,15 +6,28 @@ import { useTypedSelector } from '@/redux/store';
 import { TDriverightData, TMainFilterTireSize } from '@/types/main-filter';
 import { getSupportedTireSizes } from '@/utils/filter';
 import { useRouter } from 'next/navigation';
-import { MouseEvent, useEffect } from 'react';
+import { MouseEvent, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 
 const useFilterByVehicle = () => {
   const dispatch = useDispatch();
 
   const router = useRouter();
-
   const mainFilterState = useTypedSelector((state) => state.mainFilter);
+  const ref = useRef<HTMLDivElement>(null);
+
+  // scroll to top when main filter state changes
+  useEffect(() => {
+    if (ref?.current) {
+      const scrollArea = ref.current.querySelector(
+        '[data-radix-scroll-area-viewport]'
+      );
+      if (scrollArea) {
+        scrollArea.scrollTo({ left: 0, top: 0, behavior: 'instant' });
+      }
+    }
+  }, [JSON.stringify(mainFilterState.filters.byVehicle.current), ref?.current]);
+
   const selectedYear = mainFilterState.filters.byVehicle.current.year;
   const selectedMake = mainFilterState.filters.byVehicle.current.make;
   const selectedModel = mainFilterState.filters.byVehicle.current.model;
@@ -139,6 +152,7 @@ const useFilterByVehicle = () => {
     allTireSizes,
     isDisabled,
     submitFilter,
+    ref,
   };
 };
 

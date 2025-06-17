@@ -16,30 +16,10 @@ export function getSupportedTireSizes(
     data.DRDModelReturn?.PrimaryOption?.DRDChassisID || '';
   const factoryDRModelID = data.DRDModelReturn?.PrimaryOption?.DRDModelID || '';
 
-  const optionalTireSizes = new Set<
-    NonNullable<TMainFilterTireSize['optional']>[number]
-  >();
-
-  for (const option of data.DRDModelReturn?.Options ?? []) {
-    const tireSize = option?.TireSize || '';
-    const tireSizeR = option?.TireSize_R || tireSize;
-    const DRDChassisID = option?.DRDChassisID || '';
-    const DRModelID = option?.DRDModelID || '';
-    const optionalSize = {
-      front: tireSize,
-      rear: tireSizeR,
-      DRDChassisID,
-      DRModelID,
-    } as NonNullable<TMainFilterTireSize['optional']>[number];
-
-    optionalTireSizes.add(optionalSize);
-  }
-
   return {
     DRDChassisID: factoryDRChassisID,
     DRModelID: factoryDRModelID,
     factory: { front: factoryTireSize, rear: factoryTireSizeR },
-    optional: Array.from(optionalTireSizes),
   };
 }
 

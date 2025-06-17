@@ -1,5 +1,17 @@
 import { TCategory } from './category';
 
+export type TTireSpec = {
+  tireWidth: number | null; // in mm or inches (depends on format)
+  tireAspectRatio: number | null; // in percentage (null for flotation)
+  tireConstruction: string | null; // e.g. 'R'
+  wheelDiameterInch: number | null; // rim diameter in inches
+  tireOverallDiameterInch: number | null; // full outer diameter in inches
+  afterMarketTireDiameterRange: {
+    plusTireDiameterInch: number | null; // +3% overall diameter
+    minusTireDiameterInch: number | null; // -3% overall diameter
+  };
+};
+
 export type TInventoryBase = {
   _id: string;
   item_class?: string;

@@ -30,9 +30,6 @@ export type TMainFilterTireSize = {
   DRDChassisID: string;
   DRModelID: string;
   factory: Record<'front' | 'rear', string> | null;
-  optional:
-    | Record<'front' | 'rear' | 'DRDChassisID' | 'DRModelID', string>[]
-    | null;
 };
 export type TMainFilterVehicleInformation = {
   supportedWheels: TMainFilterSuportedWheel[];

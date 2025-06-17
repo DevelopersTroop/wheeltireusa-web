@@ -11,7 +11,8 @@ const SelectedItem = () => {
     clearYear,
     clearMake,
     clearModel,
-    clearSize,
+    clearFrontTireSize,
+    clearRearTireSize,
     selectedItemRef,
   } = useSelectedItem();
   return (
@@ -56,7 +57,7 @@ const SelectedItem = () => {
           fieldName="frontTireSize"
           text={frontTireSize}
           isDismissable={true}
-          onClick={clearSize}
+          onClick={clearFrontTireSize}
         />
       )}
       {rearTireSize && (
@@ -66,7 +67,7 @@ const SelectedItem = () => {
           fieldName="rearTireSize"
           text={rearTireSize}
           isDismissable={true}
-          onClick={clearSize}
+          onClick={clearRearTireSize}
         />
       )}
     </div>
