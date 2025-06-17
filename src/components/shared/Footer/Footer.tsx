@@ -43,6 +43,7 @@ export const Footer = () => {
                         height={29}
                         quality={100}
                         unoptimized={true}
+                        className="h-7 lg:h-8 w-full object-contain"
                       />
                     </Link>
                   </div>
