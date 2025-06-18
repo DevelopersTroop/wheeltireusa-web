@@ -10,6 +10,7 @@ import MobileMenuWrapper from './components/mobile-menu/mobile-menu-wrapper';
 import HeaderSearchButton from './components/search/HeaderSearchButton';
 import UserAccountLink from './components/user-account-link/user-account-link';
 import HeaderProvider from './context/header-provider';
+import TopBar from './components/top-bar';
 
 export const Header = () => {
   const { products } = useTypedSelector((state) => state.persisted.cart);
@@ -24,7 +25,7 @@ export const Header = () => {
                 <div className={'flex justify-center lg:justify-start'}>
                   <Link href={'/'}>
                     <Image
-                      src="/images/header/TirematicLogo.png"
+                      src="/images/header/TirematicLogo.svg"
                       quality={100}
                       unoptimized={true}
                       alt="Tirematic"
@@ -57,6 +58,9 @@ export const Header = () => {
           <div className="bg-white">
             <MobileMenuWrapper />
           </div>
+        </div>
+        <div className={'z-[15]'}>
+          <TopBar />
         </div>
       </HeaderProvider>
       <FilterModals />
