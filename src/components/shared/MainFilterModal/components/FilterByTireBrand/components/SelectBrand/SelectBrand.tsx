@@ -27,7 +27,7 @@ const SelectBrand = () => {
         Select Brand
       </div>
       {filteredBrands ? (
-        <div className="grid grid-cols-5 gap-3 px-6 order-4">
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 px-6 order-4">
           {filteredBrands?.map((brand) => (
             <BrickBox
               showTooltip={true}
@@ -40,7 +40,7 @@ const SelectBrand = () => {
           ))}
         </div>
       ) : (
-        <ListSkeleton onlyItem={true} />
+        <ListSkeleton onlyItem={true} mobile={2} />
       )}
     </>
   );

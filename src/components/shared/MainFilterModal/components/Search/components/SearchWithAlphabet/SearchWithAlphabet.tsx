@@ -54,7 +54,7 @@ const SearchWithAlphabet = ({
   return (
     <div
       className={cn(
-        'flex flex-wrap md:flex-nowrap md:items-center md:justify-between w-full md:w-[calc(75%-40px)] gap-3 md:gap-0'
+        'flex flex-wrap lg:flex-nowrap lg:items-center lg:justify-between w-full lg:w-[calc(75%-40px)] gap-3 lg:gap-0'
       )}
     >
       {alphabetList.map((alphabet) => (

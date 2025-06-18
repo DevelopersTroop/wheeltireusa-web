@@ -16,7 +16,7 @@ const SelectYear = () => {
       </div>
       {filteredYears ? (
         <>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3 px-6 order-5">
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 px-6 order-5">
             {filteredYears?.map((year) => (
               <BrickBox
                 showTooltip={true}

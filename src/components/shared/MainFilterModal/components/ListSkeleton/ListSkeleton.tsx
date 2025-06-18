@@ -16,8 +16,9 @@ const ListSkeleton = ({
     <>
       {!onlyItem ? (
         <>
+          {/* Search Skeleton */}
           <div className="pb-5 pt-3 px-6 border-b border-muted-dark order-1">
-            <BrickBoxSkeleton className="w-1/4" />
+            <BrickBoxSkeleton className="w-full lg:w-1/4" />
           </div>
 
           <div className="text-muted-dark text-[20px] px-6 order-3">
@@ -29,7 +30,7 @@ const ListSkeleton = ({
       )}
       <div
         className={cn(
-          `grid grid-cols-${mobile} md:grid-cols-${desktop} gap-3 px-6 order-5`
+          `grid grid-cols-${mobile} lg:grid-cols-${desktop} gap-3 px-6 order-5`
         )}
       >
         {Array.from({ length: 50 }).map((_, index) => (

@@ -13,3 +13,12 @@ export function isMdScreenOrBigger(): boolean {
 
   return window.matchMedia('(min-width: 48rem)').matches;
 }
+
+export function isLgScreenOrBigger(): boolean {
+  if (typeof window === 'undefined') {
+    // Can't evaluate on server-side
+    return false;
+  }
+
+  return window.matchMedia('(min-width: 64rem)').matches;
+}

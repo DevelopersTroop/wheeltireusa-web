@@ -18,7 +18,7 @@ const SelectedItem = () => {
   return (
     <div
       ref={selectedItemRef}
-      className="flex flex-col md:flex-row gap-2 px-6 py-2 order-2 md:overflow-x-auto md:selected-item-scrollbar"
+      className="flex flex-col lg:flex-row gap-2 px-6 py-2 order-2 lg:overflow-x-auto lg:selected-item-scrollbar"
     >
       {year && (
         <BrickBox
