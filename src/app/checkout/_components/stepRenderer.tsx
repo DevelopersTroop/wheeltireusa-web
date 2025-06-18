@@ -1,3 +1,4 @@
+'use client';
 import { FinalStep } from './finalStep'; // Component for the final step of the checkout process
 import { StepFour } from './stepFour'; // Component for step four of the checkout process
 import { StepOne } from './stepOne'; // Component for step one of the checkout process

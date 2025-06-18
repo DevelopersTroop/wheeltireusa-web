@@ -3,7 +3,6 @@
 import LoadingSpinner from '@/components/shared/loading/spinner';
 import { LocationAccess } from '@/components/shared/locationAccess';
 import { useCheckout } from '@/context/checkoutContext'; // Custom context for managing checkout state
-import { LoadScript } from '@react-google-maps/api';
 import { useRouter, useSearchParams } from 'next/navigation'; // Next.js router for navigation
 import { useEffect, useRef, useState } from 'react'; // React hooks for managing state and side effects
 import { Stepper } from './_components/stepper'; // Stepper component to display the checkout steps

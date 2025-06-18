@@ -1,4 +1,6 @@
+'use client';
 export function isTextOverflowed(el: HTMLElement | null): boolean {
+  if (typeof window === 'undefined') return false;
   if (!el || !(el instanceof HTMLElement)) {
     return false;
   }

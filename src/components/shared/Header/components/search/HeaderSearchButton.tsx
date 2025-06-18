@@ -37,6 +37,9 @@ const HeaderSearchButton: React.FC<{
       }
       // press esc to close the search bar
       document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
     }
   }, [open]);
 

@@ -1,3 +1,4 @@
+'use client';
 import { TCartProduct } from '@/redux/features/cartSlice';
 import { TInventoryItem, TTireSpec } from '@/types/product';
 import { TWishListData } from '@/types/wishlist';
@@ -162,6 +163,6 @@ export function isTireAfterMarketTireSizePossible(
   );
 }
 // for testing
-if (window) {
+if (typeof window !== 'undefined') {
   window.isTireAfterMarketTireSizePossible = isTireAfterMarketTireSizePossible;
 }
