@@ -1,5 +1,5 @@
 'use client';
-import { Search, X } from 'lucide-react';
+import { Search, SearchIcon, X } from 'lucide-react';
 import React, { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import SearchSuggestion from './SearchSuggestion';
@@ -49,17 +49,17 @@ const HeaderSearchButton: React.FC<{
   const searchInput = watch('search');
 
   return (
-    <>
+    <div>
       {/* Render the search bar if `open` is true */}
       {open && (
-        <div>
+        <div className="">
           {/* Overlay to close the search bar when clicked */}
           <button
             onClick={() => setOpen(false)}
             className="bg-gray-900/20 border-none cursor-default h-dvh w-full fixed left-0"
           ></button>
           {/* Search bar container */}
-          <div className="bg-white h-20 z-[150] fixed top-0 w-full left-0">
+          <div className="bg-white h-20 z-[150] fixed top-0  left-1/2 -translate-x-1/2 w-full max-w-7xl">
             <form
               className=" h-full flex items-center border-b border-gray-300"
               onSubmit={handleSubmit(onSubmit)}
@@ -79,13 +79,16 @@ const HeaderSearchButton: React.FC<{
                 />
               </div>
               {/* Submit button */}
-              <div className="w-max h-full">
+              <div className="w-max h-full flex gap-4 items-center px-10">
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
-                  className="h-full flex items-center px-10"
+                  className="h-full flex items-center"
                 >
                   <X className="text-3xl h-full text-black" />
+                </button>
+                <button type="button" className="h-full flex items-center">
+                  <SearchIcon className="text-3xl h-full text-black" />
                 </button>
               </div>
             </form>
@@ -99,7 +102,7 @@ const HeaderSearchButton: React.FC<{
         {' '}
         <Search />
       </button>
-    </>
+    </div>
   );
 };
 

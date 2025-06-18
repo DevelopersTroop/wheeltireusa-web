@@ -27,7 +27,7 @@ export const getProductThumbnail = (
 
   let imageUrl: string | undefined;
   if (isInventoryItem(product)) {
-    imageUrl = product.image_url;
+    imageUrl = product.image_url || product.item_image;
   } else if (isWishListData(product)) {
     imageUrl = product.image_url;
   }

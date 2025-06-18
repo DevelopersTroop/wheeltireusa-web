@@ -1,5 +1,5 @@
 import { TInventoryItem } from '@/types/product';
-import { TPaginatedResponse } from '@/types/response';
+import { TPaginatedResponse, TResponse } from '@/types/response';
 import { baseApi } from './base';
 import { TFilters } from '@/types/filter';
 
@@ -96,6 +96,15 @@ const products = baseApi.injectEndpoints({
         params: { category: 'tire' },
       }),
     }),
+    searchProduct: builder.query<
+      TResponse<{ products: TInventoryItem[] }>,
+      string
+    >({
+      query: (q) => ({
+        url: '/products/search',
+        params: { q },
+      }),
+    }),
   }),
 });
 
@@ -105,4 +114,5 @@ export const {
   useGetProductQuery,
   useGetFilterListQuery,
   useLazyGetFilterListQuery,
+  useLazySearchProductQuery,
 } = products;

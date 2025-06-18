@@ -63,6 +63,7 @@ export type TInventoryBase = {
   category?: TCategory;
 };
 export type TInventoryItem = TInventoryBase & {
+  model?: string;
   image_url?: string;
   sidewall?: string;
   load_rating?: string;
