@@ -48,19 +48,19 @@ const FilterByVehicle = () => {
   return (
     <div
       className={cn(
-        'h-[calc(100dvh-110px)] md:h-[70dvh] md:block flex flex-col justify-between'
+        'h-[calc(100dvh-110px)] lg:h-[70dvh] lg:block flex flex-col justify-between'
       )}
     >
       <ScrollArea
         ref={ref}
         className={cn(
-          'h-full md:h-[70dvh] pb-3 block',
+          'h-full lg:h-[70dvh] pb-3 block',
           year &&
             make &&
             model &&
             frontTireSize &&
             rearTireSize &&
-            'h-full md:h-[calc(70dvh-90px)] pb-0'
+            'lg:h-[calc(70dvh-90px)] pb-0'
         )}
       >
         <div className="flex flex-col gap-4 relative">

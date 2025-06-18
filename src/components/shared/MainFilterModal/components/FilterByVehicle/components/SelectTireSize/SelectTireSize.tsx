@@ -12,7 +12,7 @@ const SelectTireSize = ({ direction }: { direction: 'front' | 'rear' }) => {
       </div>
       {tireSizes && tireSizes.length > 0 ? (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-3 px-6 order-4">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-3 px-6 order-4">
             {tireSizes.map((size) => (
               <BrickBox
                 showTooltip={true}

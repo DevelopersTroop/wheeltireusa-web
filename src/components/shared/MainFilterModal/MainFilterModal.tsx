@@ -1,30 +1,23 @@
 'use client';
 import useMainFilterModal from '@/components/shared/MainFilterModal/useMainFilterModal.';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
+import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet';
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTriggerMainFilter,
 } from '@/components/ui/tabs';
+import { isLgScreenOrBigger } from '@/lib/utils';
 import {
   closeMainFilterModal,
   openMainFilterModal,
 } from '@/redux/features/mainFilterSlice';
+import { useTypedSelector } from '@/redux/store';
 import { useDispatch } from 'react-redux';
 import FilterByTireBrand from './components/FilterByTireBrand/FilterByTireBrand';
-import FilterByVehicle from './components/FilterByVehicle/FilterByVehicle';
 import FilterByTireSize from './components/FilterByTireSize/FilterByTireSize';
-import { useTypedSelector } from '@/redux/store';
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet';
-import { isMdScreenOrBigger } from '@/lib/utils';
+import FilterByVehicle from './components/FilterByVehicle/FilterByVehicle';
 
 const YmmForm = () => {
   const dispatch = useDispatch();
@@ -41,7 +34,7 @@ const YmmForm = () => {
 
   return (
     <>
-      {isMdScreenOrBigger() ? (
+      {isLgScreenOrBigger() ? (
         <>
           <Dialog open={isFilterModalOpen} onOpenChange={handleDialogChange}>
             <DialogContent className="sm:max-w-1/2 bg-muted p-0 lg:max-w-2/3">

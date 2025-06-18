@@ -32,7 +32,7 @@ const TireSizeSelection = ({
           <Form {...form}>
             <form className="flex flex-col gap-12 items-center ">
               {/* Front Tire */}
-              <div className="flex justify-between w-full">
+              <div className="flex sm:flex-col lg:flex-row lg:justify-between w-full sm:gap-4 lg:gap-0">
                 <SelectProperty
                   name="frontWidth"
                   label="Width"
@@ -75,7 +75,7 @@ const TireSizeSelection = ({
               </div>
               {/* Rear Tire */}
               {differentOnRear && (
-                <div className="flex justify-between w-full">
+                <div className="flex sm:flex-col lg:flex-row lg:justify-between w-full sm:gap-4 lg:gap-0">
                   <SelectProperty
                     name="rearWidth"
                     label="Width"

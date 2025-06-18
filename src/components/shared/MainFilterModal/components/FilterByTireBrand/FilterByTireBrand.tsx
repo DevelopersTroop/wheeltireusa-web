@@ -12,16 +12,23 @@ const SelectBrand = dynamic(
   () => import('./components/SelectBrand/SelectBrand'),
   {
     ssr: false,
-    loading: () => <ListSkeleton title="Brand" />,
+    loading: () => <ListSkeleton title="Brand" mobile={2} />,
   }
 );
 
 const FilterByTireBrand = () => {
   const { brand, isDisabled, submitFilter } = useFilterByTireBrand();
   return (
-    <div className={cn('h-[70dvh]')}>
+    <div
+      className={cn(
+        'h-[calc(100dvh-110px)] lg:h-[70dvh] lg:block flex flex-col justify-between'
+      )}
+    >
       <ScrollArea
-        className={cn('h-[70dvh] pb-3', brand && 'h-[calc(70dvh-90px)] pb-0')}
+        className={cn(
+          'h-[calc(100dvh-110px)] lg:h-[70dvh] pb-3',
+          brand && 'lg:h-[calc(70dvh-90px)] pb-0'
+        )}
       >
         <div className="flex flex-col gap-4">
           {brand && <SelectedItem />}
