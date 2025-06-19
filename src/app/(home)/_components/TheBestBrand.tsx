@@ -41,7 +41,10 @@ const TheBestBrand = () => {
             </p>
           </div>
 
-          <Link href={'#'} className="underline text-xl font-normal">
+          <Link
+            href={'/collections/product-category/tires'}
+            className="underline text-xl font-normal"
+          >
             View All Brands
           </Link>
         </div>
@@ -73,7 +76,10 @@ const TheBestBrand = () => {
             </p>
           </div>
 
-          <Link href={'#'} className="underline text-xl font-normal">
+          <Link
+            href={'/collections/product-category/tires'}
+            className="underline text-xl font-normal"
+          >
             View All Brands
           </Link>
         </div>

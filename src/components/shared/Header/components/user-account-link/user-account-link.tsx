@@ -24,7 +24,7 @@ const UserAccountLink = () => {
   if (user) {
     content = 'My Account';
   } else {
-    content = 'User Login';
+    content = 'Customer Login';
   }
 
   return (

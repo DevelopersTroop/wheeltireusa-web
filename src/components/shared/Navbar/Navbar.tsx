@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 // Navbar Component
 // This component renders the main navigation bar with support for mega menus and dropdowns
-export default function Navbar({ isHomePage }: { isHomePage: boolean }) {
+export default function Navbar() {
   // State to manage the currently open menu
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   // State to manage the currently hovered submenu
@@ -30,9 +30,9 @@ export default function Navbar({ isHomePage }: { isHomePage: boolean }) {
   };
 
   return (
-    <nav className={cn('bg-transparent w-full', isHomePage && 'text-white')}>
+    <nav className={cn('bg-transparent w-full')}>
       {/* Navigation menu list */}
-      <ul className="flex space-x-6 p-4 items-center">
+      <ul className="flex gap-4 xl:space-x-6 lg:gap-0 items-center">
         {navMenus.map((menu) => (
           <li
             key={menu.label}
@@ -45,8 +45,7 @@ export default function Navbar({ isHomePage }: { isHomePage: boolean }) {
               target={menu.target}
               href={menu.href}
               className={cn(
-                'p-2 flex items-center transition-all duration-300 hover:text-primary relative after:absolute after:left-0 after:bottom-0 after:w-full after:h-[2px] after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300',
-                isHomePage && 'hover:text-white after:bg-white'
+                'p-2 flex items-center transition-all duration-300 hover:text-primary relative after:absolute after:left-0 after:bottom-0 after:w-full after:h-[2px] after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300'
                 //after:bg-transparent hover:underline
               )}
             >

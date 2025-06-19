@@ -92,7 +92,7 @@ const TireCard = ({
             <ComparisonWithFavorite/>
           </div> */}
           <Link href={singleTirePageLink}>
-            <div className=" w-full flex justify-center items-center relative">
+            <div className=" w-full flex justify-center items-center relative my-2">
               {/* Display tire image */}
               <Image
                 className="max-w-[272px] max-h-[272px] object-contain"
@@ -132,12 +132,12 @@ const TireCard = ({
                 <TireAttributes product={products[0] as TInventoryItem} />
               </Link>
             </div>
-            <div className="flex flex-col lg:flex-row justify-between items-start gap-4 w-full pr-4">
-              <div>
+            <div className="flex flex-col lg:flex-row justify-between items-start space-y-4 w-full pr-4">
+              <div className="w-full">
                 {/* <StockBadge /> */}
                 <DeliveryWithStock deliveryTime="Monday, 05/22" />
               </div>
-              <div className="flex flex-row items-center w-full">
+              <div className="flex flex-row justify-between items-center w-full">
                 <TireQuantity
                   otherQuantity={rearTireQuantity}
                   product={products[0]}
@@ -172,12 +172,12 @@ const TireCard = ({
                   </Link>
                 </div>
 
-                <div className="flex flex-col lg:flex-row justify-between items-start gap-4 w-full pr-4">
-                  <div>
+                <div className="flex flex-col lg:flex-row justify-between items-start space-y-4 w-full pr-4">
+                  <div className="w-full">
                     {/* <StockBadge /> */}
                     <DeliveryWithStock deliveryTime="Monday, 05/22" />
                   </div>
-                  <div className="flex flex-row items-center w-full">
+                  <div className="flex flex-row justify-between items-center w-full">
                     <TireQuantity
                       product={products[1]}
                       otherQuantity={frontTireQuantity}

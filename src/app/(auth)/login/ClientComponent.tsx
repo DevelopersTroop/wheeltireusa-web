@@ -115,7 +115,9 @@ const ClientComponent = () => {
       </div>
       <div className="max-w-[416px] flex flex-col mx-auto mt-8 mb-18 sm:mt-14 sm:mb-40 gap-6">
         <div className="flex flex-col items-center gap-5">
-          <h1 className="text-[32px] font-bold text-[#210203]">My Account</h1>
+          <h1 className="text-[32px] font-bold text-[#210203]">
+            Customer Login
+          </h1>
           <div className="flex flex-col items-center gap-2">
             <p className="text-lg font-normal text-[#464853]">
               Dont have an account yet?

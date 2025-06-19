@@ -37,7 +37,7 @@ const CartSummary = () => {
   const netCostString = formatPrice(netCost);
 
   return (
-    <div className="w-full sm:w-[415px] xl:mt-10 space-y-6">
+    <div className="w-full sm:w-[415px] space-y-6">
       <div className="w-full rounded-xl py-5 flex flex-col gap-0 items-start  bg-[#f7f7f7]">
         {/* {
           (productBasedDiscount || affiliateDiscount) ? (

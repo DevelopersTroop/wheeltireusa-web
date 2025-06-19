@@ -7,9 +7,9 @@ const TireQuantitySection = ({ product }: { product: TInventoryItem }) => {
   return (
     <>
       {/* Display total price */}
-      <div className="flex justify-between items-baseline self-stretch relative w-full">
+      {/* <div className="flex justify-between items-baseline self-stretch relative w-full">
         <h4 className="text-xl font-bold text-[#0C0F0A]">Tires</h4>
-      </div>
+      </div> */}
       {/* Quantity input and Add to Cart button */}
       <div className="flex flex-row justify-between items-baseline self-stretch relative w-full gap-4 mt-4">
         <QuantityInput

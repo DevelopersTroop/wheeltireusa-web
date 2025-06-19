@@ -7,7 +7,7 @@ const TireBrandFilter = () => {
   return (
     <>
       <button
-        className="bg-white hover:bg-gray-100 px-5 py-4 w-full rounded-[6px] cursor-pointer flex flex-row justify-between gap-5"
+        className="bg-white hover:bg-gray-100 px-5 py-5 w-full rounded-[6px] cursor-pointer flex flex-row justify-between gap-5"
         onClick={() => dispatch(openMainFilterModal({ tab: 'TireBrand' }))}
       >
         <div className="flex flex-row gap-2 items-center">

@@ -1,4 +1,4 @@
-import { TInventoryItem, TInventoryListItem } from '@/types/product';
+import { TInventoryItem } from '@/types/product';
 import { formatPrice } from '@/utils/price';
 
 // This component displays the price of a tire, formatting it and appending a 'per tire' label.
@@ -27,7 +27,9 @@ const TireCardPrice = ({ product }: { product: TInventoryItem }) => {
 
       {/* Displaying 'per tire' label */}
       <small className="text-base leading-[17px] text-[#464853]">
-        <span className="text-[#464853] text-sm font-normal">per tire</span>
+        <span className="text-[#464853] text-sm font-normal whitespace-nowrap">
+          per tire
+        </span>
       </small>
     </div>
   );

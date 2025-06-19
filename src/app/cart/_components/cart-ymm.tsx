@@ -21,8 +21,8 @@ const CartYMM = () => {
   // );
 
   return (
-    <div className="overflow-hidden rounded-b-none border-b border-[#cfcfcf] px-1 sm:px-5 py-3 w-full flex justify-between items-center  relative bg-white">
-      <div className="w-[70%] text-base leading-[19px] text-[#210203]">
+    <div className="overflow-hidden rounded-b-none border-b border-[#cfcfcf] px-3 sm:px-5 py-3 w-full flex flex-col sm:flex-row gap-2 justify-between items-center  relative bg-white">
+      <div className="w-full text-base leading-[19px] text-[#210203]">
         {yearMakeModel.year && yearMakeModel.make && yearMakeModel.model ? (
           <>
             {' '}
@@ -32,7 +32,7 @@ const CartYMM = () => {
             </span>
           </>
         ) : (
-          <div className="flex gap-2 items-center p-2 border border-[#FFC62B] rounded-md bg-[#f5f4f6]">
+          <div className="flex gap-2 items-center p-2 border border-[#FFC62B] rounded-md bg-[#f5f4f6] whitespace-nowrap">
             <div>
               {' '}
               <img src={'/InfoCircle.png'} alt="infoCircle" />{' '}
@@ -50,10 +50,15 @@ const CartYMM = () => {
 
       <small className="w-[30%] text-sm leading-[17px] underline text-[#210203] text-end">
         <button>
-          <span className="text-sm font-semibold underline">
-            {yearMakeModel.year && yearMakeModel.make && yearMakeModel.model
-              ? 'Change'
-              : 'Select vehicle'}
+          <span className="text-sm font-semibold">
+            {yearMakeModel.year && yearMakeModel.make && yearMakeModel.model ? (
+              'Change'
+            ) : (
+              <div className="flex flex-col sm:flex-row gap-2">
+                {' '}
+                <p>or</p> <p className="underline">Select vehicle</p>{' '}
+              </div>
+            )}
           </span>
         </button>
       </small>
