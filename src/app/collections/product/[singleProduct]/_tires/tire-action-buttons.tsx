@@ -61,7 +61,7 @@ const TireActionButtons = ({ product }: { product: TInventoryItem }) => {
               setAddToCartText('View Cart');
             });
           }}
-          className="rounded-xl px-3 min-[1300px]:px-6  flex gap-2 justify-center items-center flex-1 relative w-full min-h-14 bg-primary hover:text-white transition duration-300 ease-in-out cursor-pointer"
+          className="rounded-md px-3 min-[1300px]:px-6  flex gap-2 justify-center items-center flex-1 relative w-full min-h-14 bg-primary hover:bg-orange-600 hover:text-white transition duration-300 ease-in-out cursor-pointer"
         >
           <PiShoppingCartLight className="text-white text-2xl" />
 

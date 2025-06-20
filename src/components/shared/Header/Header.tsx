@@ -10,6 +10,8 @@ import MobileMenuWrapper from './components/mobile-menu/mobile-menu-wrapper';
 import HeaderSearchButton from './components/search/HeaderSearchButton';
 import UserAccountLink from './components/user-account-link/user-account-link';
 import HeaderProvider from './context/header-provider';
+import TopBar from './components/top-bar';
+import { Tooltip } from 'react-tooltip';
 
 export const Header = () => {
   const { products } = useTypedSelector((state) => state.persisted.cart);
@@ -24,7 +26,7 @@ export const Header = () => {
                 <div className={'flex justify-center lg:justify-start'}>
                   <Link href={'/'}>
                     <Image
-                      src="/images/header/TirematicLogo.png"
+                      src="/images/header/TirematicLogo.svg"
                       quality={100}
                       unoptimized={true}
                       alt="Tirematic"
@@ -35,16 +37,23 @@ export const Header = () => {
                   </Link>
                 </div>
                 <div className="hidden lg:block">
-                  <Navbar isHomePage />
+                  <Navbar />
                 </div>
               </div>
               <div className="flex items-center gap-4 lg:gap-8">
-                <HeaderSearchButton isHomepage />
+                <Tooltip id="my-tooltip" />
+                <HeaderSearchButton />
                 {/* <Link href={'/login'}>
                   <UserCircle />
                 </Link> */}
                 <UserAccountLink />
-                <Link href={'/cart'} className="relative">
+                <Link
+                  href={'/cart'}
+                  data-tooltip-id="my-tooltip"
+                  data-tooltip-content="Cart"
+                  data-tooltip-place="top"
+                  className="relative"
+                >
                   <ShoppingCart />
                   <span className="absolute w-5 h-5 flex items-center justify-center font-semibold bg-primary text-white rounded-full text-[12px] z-0 firefox-badge chrome-badge">
                     {products.reduce((a, p) => a + p.quantity, 0)}
@@ -57,6 +66,9 @@ export const Header = () => {
           <div className="bg-white">
             <MobileMenuWrapper />
           </div>
+        </div>
+        <div className={'z-[15]'}>
+          <TopBar />
         </div>
       </HeaderProvider>
       <FilterModals />

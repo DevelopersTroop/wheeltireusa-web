@@ -57,12 +57,12 @@ const TireWishlist = ({ product }: { product: TInventoryItem }) => {
         });
       }}
       //   disabled={isActionButtonDisabled}
-      className="group relative flex min-h-14 w-full flex-1 items-center justify-center gap-2 rounded-xl border bg-white transition duration-300 ease-in-out hover:bg-primary hover:text-white disabled:bg-[#e1e1e1] disabled:cursor-not-allowed"
+      className="group relative flex min-h-14 w-full flex-1 items-center justify-center gap-2 rounded-md border border-[#212227] hover:border-transparent bg-white transition duration-300 ease-in-out hover:bg-primary disabled:bg-[#e1e1e1] disabled:cursor-not-allowed"
     >
-      <img src="/Bookmark-Circle.png" alt="Save for later" />
+      <img src="/Vector.svg" alt="Save for later" />
       {/* Button text */}
-      <p className="text-lg leading-[22px] text-[#210203] group-hover:text-white">
-        <span className="text-lg font-semibold text-[#210203] group-hover:text-white">
+      <p className="text-lg leading-[22px] text-[#464853]">
+        <span className="text-lg font-semibold text-[#464853]">
           Save for later
         </span>
       </p>

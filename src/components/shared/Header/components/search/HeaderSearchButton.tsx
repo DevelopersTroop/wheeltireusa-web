@@ -6,9 +6,7 @@ import SearchSuggestion from './SearchSuggestion';
 
 // HeaderSearchButton Component
 // This component renders a search button that opens a search bar for users to search for wheels.
-const HeaderSearchButton: React.FC<{
-  isHomepage: boolean;
-}> = ({ isHomepage }) => {
+const HeaderSearchButton = () => {
   const [open, setOpen] = React.useState(false); // State to manage the visibility of the search bar
 
   const onClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -101,8 +99,13 @@ const HeaderSearchButton: React.FC<{
         </div>
       )}
       {/* Search button */}
-      <button onClick={onClick} className="border-none  foucs:outline-none">
-        {' '}
+      <button
+        onClick={onClick}
+        className="border-none  foucs:outline-none mt-1.5"
+        data-tooltip-id="my-tooltip"
+        data-tooltip-content="Search"
+        data-tooltip-place="top"
+      >
         <Search />
       </button>
     </div>

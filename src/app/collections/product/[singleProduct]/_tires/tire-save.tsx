@@ -12,13 +12,13 @@ const TireSave = ({ product }: { product: TInventoryItem }) => {
           {/* Save to Email button */}
           <button
             onClick={() => {}}
-            className="group relative flex min-h-14 w-full flex-1 items-center justify-center gap-2 rounded-xl border bg-white transition duration-300 ease-in-out hover:bg-primary hover:text-white"
+            className="group relative flex min-h-14 w-full flex-1 items-center justify-center gap-2 rounded-md border border-[#212227] hover:border-transparent bg-white transition duration-300 ease-in-out hover:bg-primary"
           >
             {/* <HiMiniEnvelope className="text-lg text-[#210203] group-hover:text-white" /> */}
-            <img src="/Align-Horizonta-Spacing.png" alt="add to comparizon" />
+            <img src="/Align-Horizonta-Spacing.svg" alt="add to comparizon" />
 
-            <p className="text-lg leading-[22px] text-[#210203] group-hover:text-white">
-              <span className="text-lg font-semibold text-[#210203] group-hover:text-white">
+            <p className="text-lg leading-[22px] text-[#464853]">
+              <span className="text-lg font-semibold text-[#464853]">
                 Add to comparison
               </span>
             </p>

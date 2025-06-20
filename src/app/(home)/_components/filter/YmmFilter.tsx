@@ -8,10 +8,18 @@ const YmmFilter = () => {
   return (
     <>
       <button
-        className="bg-white hover:bg-gray-100 p-[20px] w-full rounded-[6px] cursor-pointer"
+        className="bg-white hover:bg-gray-100 px-5 py-5 w-full rounded-[6px] cursor-pointer flex flex-row justify-between gap-5"
         onClick={() => dispatch(openMainFilterModal({ tab: 'Vehicle' }))}
       >
-        Search by Vehicle model
+        <div className="flex flex-row gap-2 items-center">
+          <img src={'/images/header/Car.svg'} alt="car" className="w-6 h-6" />
+          <span>Search by Vehicle model</span>
+        </div>
+        <img
+          src={'/images/header/ArrowRight.svg'}
+          alt="Arrow"
+          className="w-4 h-4 mt-1"
+        />
       </button>
     </>
   );
