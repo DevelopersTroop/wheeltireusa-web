@@ -3,7 +3,16 @@ import { TPaginatedResponse, TResponse } from '@/types/response';
 import { baseApi } from './base';
 import { TFilters } from '@/types/filter';
 
-const shouldArray = ['model', 'tire_size', 'diameter'];
+const shouldArray = [
+  'model',
+  'tire_size',
+  'diameter',
+  'tire_type',
+  'customer_rating',
+  'speed_index',
+  'load_index',
+  'mileage_warranty',
+];
 
 const products = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -95,6 +104,119 @@ const products = baseApi.injectEndpoints({
         url: '/products/filter-list',
         params: { category: 'tire' },
       }),
+      transformResponse(baseQueryReturnValue: { filters: TFilters }) {
+        return {
+          filters: {
+            ...baseQueryReturnValue.filters,
+            speed_index: [
+              {
+                value: 'H',
+                count: 0,
+              },
+              {
+                value: 'T',
+                count: 0,
+              },
+              {
+                value: 'V',
+                count: 0,
+              },
+              {
+                value: 'W',
+                count: 0,
+              },
+              {
+                value: 'Y',
+                count: 0,
+              },
+              {
+                value: 'Z',
+                count: 0,
+              },
+              {
+                value: 'Q',
+                count: 0,
+              },
+              {
+                value: 'S',
+                count: 0,
+              },
+            ],
+            category: [
+              {
+                value: 'Passenger',
+                count: 0,
+              },
+              {
+                value: 'Truck/SUV',
+                count: 0,
+              },
+              {
+                value: 'Truck/SUV - Sport Truck',
+                count: 0,
+              },
+            ],
+            customer_rating: [
+              {
+                value: '5 Stars',
+                count: 0,
+              },
+              {
+                value: '4 Stars',
+                count: 0,
+              },
+            ],
+            special_offers: [
+              {
+                value: 'Free Shipping',
+                count: 0,
+              },
+              {
+                value: 'Save $100',
+                count: 0,
+              },
+              {
+                value: 'Consumer Rebate',
+                count: 0,
+              },
+            ],
+            mileage_warranty: [
+              {
+                value: 'None',
+                count: 0,
+              },
+              {
+                value: '30,000 miles',
+                count: 0,
+              },
+              {
+                value: '40,000 miles',
+                count: 0,
+              },
+              {
+                value: '50,000 miles',
+                count: 0,
+              },
+              {
+                value: '60,000 miles',
+                count: 0,
+              },
+              {
+                value: '70,000 miles',
+                count: 0,
+              },
+              {
+                value: '80,000 miles',
+                count: 0,
+              },
+              {
+                value: '90,000 miles',
+                count: 0,
+              },
+            ],
+          },
+        };
+      },
     }),
     searchProduct: builder.query<
       TResponse<{ products: TInventoryItem[] }>,
