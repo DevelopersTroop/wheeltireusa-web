@@ -3,11 +3,12 @@ import { TSingleFilter } from '@/types/filter'; // Importing the type for the fi
 import { Checkbox } from '@/components/ui/checkbox';
 // import { ScrollArea } from "@/components/ui/scroll-area";
 import { useMemo, useRef, useCallback } from 'react';
-import useFilter from '../filter-store/use-filter';
+import useFilter from '../filter-store/useFilter';
 // import { capitalizeWords } from "@/app/utils/string";
 import { cn } from '@/lib/utils';
 import { capitalizeWords } from '@/utils/string';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Switch } from '@/components/ui/switch';
 
 // Props for the SelectFilterTemplate component, including filter data, the key for the filter, and options for customization
 type SelectFilterTemplateProps = {
@@ -16,6 +17,7 @@ type SelectFilterTemplateProps = {
   disabled?: boolean;
   acceptMultipleValues?: boolean;
   capitalize?: boolean;
+  isSwitch?: boolean;
 };
 
 // The SelectFilterTemplate component renders a scrollable filter with checkboxes for selecting filter values.
@@ -25,6 +27,7 @@ const SelectFilterTemplate = ({
   disabled = false,
   acceptMultipleValues = true,
   capitalize = false,
+  isSwitch = false,
 }: SelectFilterTemplateProps) => {
   // Reference to the filter container (not used but could be useful for future enhancements)
   const ref = useRef<HTMLDivElement>(null);
@@ -94,12 +97,13 @@ const SelectFilterTemplate = ({
 
   // Check if the filter list should scroll (more than 9 filter options)
   const shouldScroll = modifiedFilterData.length > 9;
-
+  const isChecked = (data: { count: number; value: string }) =>
+    currentSelectedValues.includes(formatFilterValue(data.value));
   return (
     <>
       {/* ScrollArea allows the filter options to be scrollable when there are many options */}
       <ScrollArea
-        className={shouldScroll ? 'h-[18.5rem] w-full pb-2' : 'w-full pb-2'}
+        className={cn(shouldScroll ? 'h-[18.5rem] w-full pb-2' : 'w-full pb-2')}
       >
         <div ref={ref}>
           {/* Form to handle the checkbox selections */}
@@ -119,22 +123,40 @@ const SelectFilterTemplate = ({
                   )}
                 >
                   {/* Checkbox component for each filter value */}
-                  <Checkbox
-                    id={data.value}
-                    disabled={disabled}
-                    checked={currentSelectedValues.includes(
-                      formatFilterValue(data.value)
-                    )}
-                    onCheckedChange={(checked) =>
-                      onCheckboxChange(checked as boolean, data.value)
-                    }
-                    className="border-gray-200 data-[state=checked]:bg-black data-[state=checked]:border-black rounded-sm"
-                    aria-label={`Filter option: ${data.value}`}
-                  />
+                  {isSwitch ? (
+                    <>
+                      <Switch
+                        id={data.value}
+                        disabled={disabled}
+                        checked={isChecked(data)}
+                        onCheckedChange={(checked) =>
+                          onCheckboxChange(checked as boolean, data.value)
+                        }
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <Checkbox
+                        id={data.value}
+                        disabled={disabled}
+                        checked={isChecked(data)}
+                        onCheckedChange={(checked) =>
+                          onCheckboxChange(checked as boolean, data.value)
+                        }
+                        className="border-[#CCC9CF] data-[state=checked]:bg-primary data-[state=checked]:border-primary rounded-sm"
+                        aria-label={`Filter option: ${data.value}`}
+                      />
+                    </>
+                  )}
                   {/* Label for the checkbox, displaying the filter value */}
                   <label
                     htmlFor={data.value}
-                    className="text-base cursor-pointer leading-[19px] text-[#210203] font-normal hover:text-[#1e1e1eb4]"
+                    className={cn(
+                      'text-base cursor-pointer leading-[19px] text-[#210203]',
+                      isChecked(data)
+                        ? 'font-semibold'
+                        : 'font-normal hover:text-[#1e1e1eb4]'
+                    )}
                   >
                     {capitalize ? capitalizeWords(data.value) : data.value}
                   </label>

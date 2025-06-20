@@ -2,7 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 import React from 'react';
-import useFilter from '../filter-store/use-filter';
+import useFilter from '../filter-store/useFilter';
 
 const WheelsShowFilterOption = () => {
   // Get the current search parameters from the URL (e.g., filters applied via query string)

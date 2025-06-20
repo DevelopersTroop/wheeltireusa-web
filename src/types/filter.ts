@@ -17,4 +17,9 @@ export type TFilters = {
   tire_height: TSingleFilter[];
   load_range: TSingleFilter[];
   load_index: TSingleFilter[];
+  speed_index: TSingleFilter[];
+  category: TSingleFilter[];
+  customer_rating: TSingleFilter[];
+  mileage_warranty: TSingleFilter[];
+  special_offers: TSingleFilter[];
 };

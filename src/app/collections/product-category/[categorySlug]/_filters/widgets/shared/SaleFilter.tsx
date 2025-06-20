@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import useFilter from '../../filter-store/use-filter';
-import FilterHeading from '../../template/filter-heading';
+import useFilter from '../../filter-store/useFilter';
+import FilterHeading from '../../template/FilterHeading';
 import { Switch } from '@/components/ui/switch';
 import { useSearchParams } from 'next/navigation';
 

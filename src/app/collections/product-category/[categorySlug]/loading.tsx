@@ -1,6 +1,6 @@
 // Import necessary components for the page layout and skeleton loading
-import ProductCardSkeleton from './_loading/product-card-skeleton';
-import FilterLoadingSkeleton from './_loading/filter-loading-skeleton';
+import ProductCardSkeleton from './_loading/ProductCardSkeleton';
+import FilterLoadingSkeleton from './_loading/FilterLoadingSkeleton';
 import Breadcrumb from '@/components/ui/breadcrumb/breadcrumb';
 import Item from '@/components/ui/breadcrumb/item';
 import Container from '@/components/ui/container/container';

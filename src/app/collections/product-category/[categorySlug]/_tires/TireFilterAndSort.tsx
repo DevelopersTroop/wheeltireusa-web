@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import React from 'react';
-import useFilter from '../_filters/filter-store/use-filter';
+import useFilter from '../_filters/filter-store/useFilter';
 
 //InStockWheelFilterAndSort Component
 

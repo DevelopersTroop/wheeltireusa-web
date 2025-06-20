@@ -1,6 +1,6 @@
 'use client';
 import React, { createContext, useState } from 'react';
-import ProductCardSkeleton from './product-card-skeleton';
+import ProductCardSkeleton from './ProductCardSkeleton';
 
 // Create a context to manage loading state globally
 export const LoadingProvider = createContext<{

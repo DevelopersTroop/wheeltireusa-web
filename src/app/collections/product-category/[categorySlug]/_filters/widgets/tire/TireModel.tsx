@@ -2,8 +2,8 @@
 import { TSingleFilter } from '@/types/filter';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
-import FilterHeading from '../../template/filter-heading';
-import SelectFilterTemplate from '../../template/select-filter-template';
+import FilterHeading from '../../template/FilterHeading';
+import SelectFilterTemplate from '../../template/SelectFilterTemplate';
 
 const TireModel = ({
   model,

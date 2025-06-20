@@ -4,14 +4,13 @@ import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import FilterHeading from '../../template/FilterHeading';
 import SelectFilterTemplate from '../../template/SelectFilterTemplate';
-import SearchBox from '../components/SearchBox';
 
-const TireBrand = ({
-  brand,
+const SpecialOffers = ({
+  special_offers,
   filterKey,
 }: {
   filterKey: string;
-  brand: TSingleFilter[];
+  special_offers: TSingleFilter[];
 }) => {
   const searchParams = useSearchParams();
   const sizeGroupToggle = searchParams.get(filterKey);
@@ -23,17 +22,18 @@ const TireBrand = ({
     setshowFilter(!showFilter);
   };
   const [sizeSearchValue, setSizeSearchValue] = useState('');
-  const [searchedSize, setSearchedSize] = useState<TSingleFilter[]>(brand);
+  const [searchedSize, setSearchedSize] =
+    useState<TSingleFilter[]>(special_offers);
   useEffect(() => {
     if (sizeSearchValue === '') {
-      setSearchedSize(brand);
+      setSearchedSize(special_offers);
     } else {
-      const searchedSize = brand.filter((size) =>
+      const searchedSize = special_offers.filter((size) =>
         String(size.value).toLowerCase().includes(sizeSearchValue.toLowerCase())
       );
       setSearchedSize(searchedSize);
     }
-  }, [sizeSearchValue, brand]);
+  }, [sizeSearchValue, special_offers]);
 
   const handleSizeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSizeSearchValue(e.target.value);
@@ -43,18 +43,19 @@ const TireBrand = ({
       <FilterHeading
         showFilter={showFilter}
         toggleFilter={toggleFilter}
-        title="Brand"
+        title="Special Offers"
         disabled={searchedSize.length === 0}
       />
 
       {showFilter && searchedSize.length > 0 && (
         <>
-          <SearchBox
+          {/* <SearchBox
             onChange={handleSizeSearch}
             value={sizeSearchValue}
-            placeholder="e.g., Michelin"
-          />
+            placeholder="e.g., Q"
+          /> */}
           <SelectFilterTemplate
+            isSwitch={true}
             filterKey={filterKey}
             filterData={searchedSize}
           />
@@ -64,4 +65,4 @@ const TireBrand = ({
   );
 };
 
-export default TireBrand;
+export default SpecialOffers;

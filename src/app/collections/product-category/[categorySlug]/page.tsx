@@ -3,7 +3,7 @@
 // import { Metadata } from 'next'; // Metadata handling for page SEO
 // import { PageProps } from '@/app/types/page';
 import { PageProps } from '@/types/page';
-import FilterProvider from './_filters/filter-store/filter-provider';
+import FilterProvider from './_filters/filter-store/FilterProvider';
 import TireCategory from './_tires/TireCategory';
 import { metaDataHelper } from '@/utils/metadata';
 
