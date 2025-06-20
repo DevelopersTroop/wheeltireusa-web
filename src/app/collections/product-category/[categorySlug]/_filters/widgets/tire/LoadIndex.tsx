@@ -5,12 +5,12 @@ import React, { useEffect, useState } from 'react';
 import FilterHeading from '../../template/FilterHeading';
 import SelectFilterTemplate from '../../template/SelectFilterTemplate';
 
-const SpeedIndex = ({
-  speedIndex: speedIndex,
+const LoadIndex = ({
+  loadIndex,
   filterKey,
 }: {
   filterKey: string;
-  speedIndex: TSingleFilter[];
+  loadIndex: TSingleFilter[];
 }) => {
   const searchParams = useSearchParams();
   const sizeGroupToggle = searchParams.get(filterKey);
@@ -21,37 +21,37 @@ const SpeedIndex = ({
   const toggleFilter = () => {
     setshowFilter(!showFilter);
   };
-  const [sizeSearchValue, setSizeSearchValue] = useState('');
-  const [searchedSize, setSearchedSize] = useState<TSingleFilter[]>(speedIndex);
+  const [sizeSearchValue] = useState('');
+  const [searchedSize, setSearchedSize] = useState<TSingleFilter[]>(loadIndex);
   useEffect(() => {
     if (sizeSearchValue === '') {
-      setSearchedSize(speedIndex);
+      setSearchedSize(loadIndex);
     } else {
-      const searchedSize = speedIndex.filter((size) =>
+      const searchedSize = loadIndex.filter((size) =>
         String(size.value).toLowerCase().includes(sizeSearchValue.toLowerCase())
       );
       setSearchedSize(searchedSize);
     }
-  }, [sizeSearchValue, speedIndex]);
+  }, [sizeSearchValue, loadIndex]);
 
-  const handleSizeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSizeSearchValue(e.target.value);
-  };
+  // const handleSizeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setSizeSearchValue(e.target.value);
+  // };
   return (
     <>
       <FilterHeading
         showFilter={showFilter}
         toggleFilter={toggleFilter}
-        title="Speed Index"
-        disabled={searchedSize.length === 0}
+        title="Load Index"
+        disabled={loadIndex.length === 0}
       />
 
-      {showFilter && searchedSize.length > 0 && (
+      {showFilter && loadIndex.length > 0 && (
         <>
           {/* <SearchBox
             onChange={handleSizeSearch}
             value={sizeSearchValue}
-            placeholder="e.g., Q"
+            placeholder="e.g., 100"
           /> */}
           <SelectFilterTemplate
             filterKey={filterKey}
@@ -63,4 +63,4 @@ const SpeedIndex = ({
   );
 };
 
-export default SpeedIndex;
+export default LoadIndex;

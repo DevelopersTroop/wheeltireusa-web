@@ -143,7 +143,6 @@ const SelectFilterTemplate = ({
                         onCheckedChange={(checked) =>
                           onCheckboxChange(checked as boolean, data.value)
                         }
-                        className="border-[#CCC9CF] data-[state=checked]:bg-primary data-[state=checked]:border-primary rounded-sm"
                         aria-label={`Filter option: ${data.value}`}
                       />
                     </>

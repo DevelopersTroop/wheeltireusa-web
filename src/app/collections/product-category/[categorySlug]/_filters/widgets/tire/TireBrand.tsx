@@ -1,6 +1,6 @@
 'use client';
 import { TSingleFilter } from '@/types/filter';
-import { useSearchParams } from 'next/navigation';
+// import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import FilterHeading from '../../template/FilterHeading';
 import SelectFilterTemplate from '../../template/SelectFilterTemplate';
@@ -13,10 +13,11 @@ const TireBrand = ({
   filterKey: string;
   brand: TSingleFilter[];
 }) => {
-  const searchParams = useSearchParams();
-  const sizeGroupToggle = searchParams.get(filterKey);
+  // const searchParams = useSearchParams();
+  // const sizeGroupToggle = searchParams.get(filterKey);
   const [showFilter, setshowFilter] = useState(
-    sizeGroupToggle === null ? false : true
+    // sizeGroupToggle === null ? false : true // default: if has any active filter, then open. Otherwise, close.
+    true // default: open
   );
 
   const toggleFilter = () => {
@@ -44,10 +45,10 @@ const TireBrand = ({
         showFilter={showFilter}
         toggleFilter={toggleFilter}
         title="Brand"
-        disabled={searchedSize.length === 0}
+        disabled={brand.length === 0}
       />
 
-      {showFilter && searchedSize.length > 0 && (
+      {showFilter && brand.length > 0 && (
         <>
           <SearchBox
             onChange={handleSizeSearch}

@@ -21,7 +21,7 @@ const TireType = ({
   const toggleFilter = () => {
     setshowFilter(!showFilter);
   };
-  const [sizeSearchValue, setSizeSearchValue] = useState('');
+  const [sizeSearchValue] = useState('');
   const [searchedSize, setSearchedSize] = useState<TSingleFilter[]>(tire_type);
   useEffect(() => {
     if (sizeSearchValue === '') {
@@ -34,19 +34,19 @@ const TireType = ({
     }
   }, [sizeSearchValue, tire_type]);
 
-  const handleSizeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSizeSearchValue(e.target.value);
-  };
+  // const handleSizeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setSizeSearchValue(e.target.value);
+  // };
   return (
     <>
       <FilterHeading
         showFilter={showFilter}
         toggleFilter={toggleFilter}
         title="Tire Style"
-        disabled={searchedSize.length === 0}
+        disabled={tire_type.length === 0}
       />
 
-      {showFilter && searchedSize.length > 0 && (
+      {showFilter && tire_type.length > 0 && (
         <>
           {/* <SearchBox
             onChange={handleSizeSearch}

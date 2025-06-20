@@ -11,11 +11,9 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import React from 'react';
-import useFilter from '../_filters/filter-store/useFilter';
+import useFilter from './_filters/filter-store/useFilter';
 
-//InStockWheelFilterAndSort Component
-
-const TireFilterAndSort = () => {
+const ActiveFiltersWithSorting = () => {
   // Access the URL search parameters to extract current filters and sorting options
   const searchParams = useSearchParams();
   const getCustomTireSizeLabel = (key: string) => {
@@ -66,7 +64,7 @@ const TireFilterAndSort = () => {
                 <button
                   onClick={() => removeFilterValue(key, value)}
                   key={index}
-                  className="flex justify-between items-center bg-[#F7F7F7] px-4 py-3 gap-4  rounded-[9px] text-base font-normal"
+                  className="bg-white border-black border-1 rounded px-3 py-[7.5px] inline-flex items-center space-x-2 text-lg text-muted-foreground cursor-pointer hover:text-black hover:border-black font-semibold"
                 >
                   {key === 'minPrice' ? (
                     <span className="text-[#210203] text-base font-normal">{`From $${value}`}</span>
@@ -106,7 +104,7 @@ const TireFilterAndSort = () => {
         {/* Display "Clear all" button if there are filters */}
         {filterOptions.length > 0 && (
           <button
-            className="underline text-base font-semibold text-[#210203]"
+            className="underline text-[1.125rem] ml-2 text-[#210203]"
             onClick={() => clearAllFilters()}
           >
             Clear all
@@ -121,11 +119,11 @@ const TireFilterAndSort = () => {
           value={searchParams.get('sort') || undefined}
         >
           <p className="text-base leading-[19px] flex items-center text-[#504949]">
-            <span className="text-[#504949] text-base font-normal whitespace-nowrap">
+            <span className="text-black text-base font-normal whitespace-nowrap">
               Sort by
             </span>
           </p>
-          <SelectTrigger className="w-full max-w-[180px] !h-[41px]">
+          <SelectTrigger className="w-full max-w-[180px] !h-[41px] ">
             <SelectValue placeholder="Sort options" />
           </SelectTrigger>
           <SelectContent>
@@ -151,4 +149,4 @@ const TireFilterAndSort = () => {
   );
 };
 
-export default TireFilterAndSort;
+export default ActiveFiltersWithSorting;

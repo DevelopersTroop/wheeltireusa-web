@@ -45,6 +45,7 @@ export const getFiltersExceptPriceFilterBy = (
   filters: TFilters,
   filterKey: string
 ) => {
+  console.log(filters?.[filterKey], filterKey);
   return !isPriceFilter(filters?.[filterKey])
     ? typeof filters[filterKey][0] === 'string'
       ? (filters[filterKey] as unknown as string[]).map(

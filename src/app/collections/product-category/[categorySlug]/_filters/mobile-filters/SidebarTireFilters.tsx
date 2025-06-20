@@ -3,8 +3,7 @@
 import { ReactNode, useState } from 'react';
 import { push as Menu } from 'react-burger-menu';
 import { MdOutlineClose } from 'react-icons/md';
-import WheelsShowFilterOption from './WheelShowFilterOption';
-import TireFilterAndSort from '../../_tires/TireFilterAndSort';
+import ActiveFiltersWithSorting from '../../ActiveFiltersWithSorting';
 
 type SidebarProps = {
   children: ReactNode;
@@ -39,11 +38,8 @@ const SidebarTireFilters = ({ children }: SidebarProps) => {
         </button>
 
         {/* InStockWheelFilterAndSort Component: Handles sorting and filter options */}
-        <TireFilterAndSort />
+        <ActiveFiltersWithSorting />
       </div>
-
-      {/* InStockWheelsShowFilterOption: Displays the selected filters */}
-      <WheelsShowFilterOption />
 
       {/* Off-Canvas Menu: Displays the filter menu as an off-canvas sliding panel */}
       <Menu

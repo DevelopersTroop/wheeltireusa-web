@@ -21,7 +21,7 @@ const MileageWarranty = ({
   const toggleFilter = () => {
     setshowFilter(!showFilter);
   };
-  const [sizeSearchValue, setSizeSearchValue] = useState('');
+  const [sizeSearchValue] = useState('');
   const [searchedSize, setSearchedSize] =
     useState<TSingleFilter[]>(mileage_warranty);
   useEffect(() => {
@@ -35,19 +35,19 @@ const MileageWarranty = ({
     }
   }, [sizeSearchValue, mileage_warranty]);
 
-  const handleSizeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSizeSearchValue(e.target.value);
-  };
+  // const handleSizeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setSizeSearchValue(e.target.value);
+  // };
   return (
     <>
       <FilterHeading
         showFilter={showFilter}
         toggleFilter={toggleFilter}
         title="Mileage Warranty"
-        disabled={searchedSize.length === 0}
+        disabled={mileage_warranty.length === 0}
       />
 
-      {showFilter && searchedSize.length > 0 && (
+      {showFilter && mileage_warranty.length > 0 && (
         <>
           {/* <SearchBox
             onChange={handleSizeSearch}

@@ -5,12 +5,12 @@ import React, { useEffect, useState } from 'react';
 import FilterHeading from '../../template/FilterHeading';
 import SelectFilterTemplate from '../../template/SelectFilterTemplate';
 
-const LoadIndex = ({
-  loadIndex: speedIndex,
+const SpeedIndex = ({
+  speedIndex,
   filterKey,
 }: {
   filterKey: string;
-  loadIndex: TSingleFilter[];
+  speedIndex: TSingleFilter[];
 }) => {
   const searchParams = useSearchParams();
   const sizeGroupToggle = searchParams.get(filterKey);
@@ -21,7 +21,7 @@ const LoadIndex = ({
   const toggleFilter = () => {
     setshowFilter(!showFilter);
   };
-  const [sizeSearchValue, setSizeSearchValue] = useState('');
+  const [sizeSearchValue] = useState('');
   const [searchedSize, setSearchedSize] = useState<TSingleFilter[]>(speedIndex);
   useEffect(() => {
     if (sizeSearchValue === '') {
@@ -34,24 +34,24 @@ const LoadIndex = ({
     }
   }, [sizeSearchValue, speedIndex]);
 
-  const handleSizeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSizeSearchValue(e.target.value);
-  };
+  // const handleSizeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setSizeSearchValue(e.target.value);
+  // };
   return (
     <>
       <FilterHeading
         showFilter={showFilter}
         toggleFilter={toggleFilter}
-        title="Load Index"
-        disabled={searchedSize.length === 0}
+        title="Speed Index"
+        disabled={speedIndex.length === 0}
       />
 
-      {showFilter && searchedSize.length > 0 && (
+      {showFilter && speedIndex.length > 0 && (
         <>
           {/* <SearchBox
             onChange={handleSizeSearch}
             value={sizeSearchValue}
-            placeholder="e.g., 100"
+            placeholder="e.g., Q"
           /> */}
           <SelectFilterTemplate
             filterKey={filterKey}
@@ -63,4 +63,4 @@ const LoadIndex = ({
   );
 };
 
-export default LoadIndex;
+export default SpeedIndex;

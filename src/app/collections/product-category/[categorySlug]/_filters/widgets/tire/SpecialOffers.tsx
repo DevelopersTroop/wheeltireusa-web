@@ -1,6 +1,6 @@
 'use client';
 import { TSingleFilter } from '@/types/filter';
-import { useSearchParams } from 'next/navigation';
+// import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import FilterHeading from '../../template/FilterHeading';
 import SelectFilterTemplate from '../../template/SelectFilterTemplate';
@@ -12,16 +12,17 @@ const SpecialOffers = ({
   filterKey: string;
   special_offers: TSingleFilter[];
 }) => {
-  const searchParams = useSearchParams();
-  const sizeGroupToggle = searchParams.get(filterKey);
+  // const searchParams = useSearchParams();
+  // const sizeGroupToggle = searchParams.get(filterKey);
   const [showFilter, setshowFilter] = useState(
-    sizeGroupToggle === null ? false : true
+    // sizeGroupToggle === null ? false : true // default: if has any active filter, then open. Otherwise, close.
+    true // default: open
   );
 
   const toggleFilter = () => {
     setshowFilter(!showFilter);
   };
-  const [sizeSearchValue, setSizeSearchValue] = useState('');
+  const [sizeSearchValue] = useState('');
   const [searchedSize, setSearchedSize] =
     useState<TSingleFilter[]>(special_offers);
   useEffect(() => {
@@ -35,19 +36,19 @@ const SpecialOffers = ({
     }
   }, [sizeSearchValue, special_offers]);
 
-  const handleSizeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSizeSearchValue(e.target.value);
-  };
+  // const handleSizeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setSizeSearchValue(e.target.value);
+  // };
   return (
     <>
       <FilterHeading
         showFilter={showFilter}
         toggleFilter={toggleFilter}
         title="Special Offers"
-        disabled={searchedSize.length === 0}
+        disabled={special_offers.length === 0}
       />
 
-      {showFilter && searchedSize.length > 0 && (
+      {showFilter && special_offers.length > 0 && (
         <>
           {/* <SearchBox
             onChange={handleSizeSearch}

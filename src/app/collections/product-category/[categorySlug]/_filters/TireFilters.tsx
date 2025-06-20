@@ -3,20 +3,18 @@
 // UI Components
 // import { useSearchParams } from "next/navigation";
 import { useGetFilterListQuery } from '@/redux/apis/product';
-import { getFiltersExceptPriceFilterBy, getPriceFilter } from '@/utils/filter';
-import FilterLoadingSkeleton from '../_loading/FilterLoadingSkeleton';
-import { SaleFilter } from './widgets/shared/SaleFilter';
-import TireModel from './widgets/tire/TireModel';
-import TirePriceRange from './widgets/tire/TIrePriceRange';
-import TireBrand from './widgets/tire/TireBrand';
+import { getFiltersExceptPriceFilterBy } from '@/utils/filter';
 import { useEffect, useState } from 'react';
-import LoadIndex from './widgets/tire/SpeedIndex';
-import SpeedIndex from './widgets/tire/LoadIndex';
+import FilterLoadingSkeleton from '../_loading/FilterLoadingSkeleton';
 import Category from './widgets/tire/Category';
-import TireType from './widgets/tire/TireType';
 import CustomerRating from './widgets/tire/CustomerRating';
+import LoadIndex from './widgets/tire/LoadIndex';
 import MileageWarranty from './widgets/tire/MileageWarranty';
 import SpecialOffers from './widgets/tire/SpecialOffers';
+import SpeedIndex from './widgets/tire/SpeedIndex';
+import TireBrand from './widgets/tire/TireBrand';
+import TireSize from './widgets/tire/TireSize/TireSize';
+import TireType from './widgets/tire/TireType';
 
 //InStockWheelFilters Component
 const TireFilters: React.FC = () => {
@@ -182,7 +180,19 @@ const TireFilters: React.FC = () => {
       {!data || isLoading ? (
         <FilterLoadingSkeleton />
       ) : (
-        <div className={'w-[304px] filter-shadow rounded-2xl bg-[#F7F7F7]'}>
+        <div
+          className={'w-[20.3125rem] filter-shadow rounded-2xl bg-[#F7F7F7]'}
+        >
+          <div className={'px-5 py-3 border-b'}>
+            <TireSize
+              width={getFiltersExceptPriceFilterBy(data.filters, 'width')}
+              aspectRatio={getFiltersExceptPriceFilterBy(
+                data.filters,
+                'aspect_ratio'
+              )}
+              diameter={getFiltersExceptPriceFilterBy(data.filters, 'diameter')}
+            />
+          </div>
           {/* Tire Brand Filter */}
           <div className={'px-5 py-3 border-b'}>
             <TireBrand

@@ -12,7 +12,7 @@ import ProductCardSkeleton from '../_loading/ProductCardSkeleton';
 import NoProductsFound from '../NoProductsFound';
 import ProductPagination from '../ProductPagination';
 import TireCard from './TireCard';
-import TireFilterAndSort from './TireFilterAndSort';
+import ActiveFiltersWithSorting from '../ActiveFiltersWithSorting';
 
 // Type definition for page props, optional page parameter
 type ProductsPageProps = {
@@ -51,9 +51,9 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
           </div>
         </div>
       </Container>
-      <div className="max-w-[1450px] mx-auto w-full px-5 lg:px-16 pb-20 lg:pb-30 pt-3">
+      <div className="max-w-[93.75rem] mx-auto w-full px-5 lg:px-16 pb-20 lg:pb-30 pt-3">
         {/* Mobile filter sidebar */}
-        <div className="w-full min-[1300px]:hidden pb-3 pt-1 lg:pt-3">
+        <div className="w-full min-[81.25rem]:hidden pb-3 pt-1 lg:pt-3">
           <SidebarTireFilters>
             <TireFilters />
           </SidebarTireFilters>
@@ -61,21 +61,18 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
         {/* Main content layout */}
         <div className="flex w-full gap-8 pt-2 lg:pt-0">
           {/* Filters section (visible on large screens) */}
-          <div className={'hidden min-[1300px]:block min-[1300px]:w-[304px]'}>
-            <div className="pt-[22px] pb-5">
-              <p className="text-base leading-[19px] text-[#504949]">
-                <span className="text-[#504949] text-base font-normal">
-                  Filters
-                </span>
-              </p>
-            </div>
+          <div
+            className={
+              'hidden min-[81.25rem]:block min-[81.25rem]:w-[20.3125rem] mt-3'
+            }
+          >
             <TireFilters />
           </div>
           {/* Product loading state or product data */}
           {isLoading || isFetching ? (
             <div
               className={
-                'w-full min-[1300px]:w-3/4 grid gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 auto-rows-min pt-16'
+                'w-full min-[81.25rem]:w-3/4 grid gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 auto-rows-min pt-16'
               }
             >
               {Array(12)
@@ -89,7 +86,7 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
               {/* Display message when no products are found */}
               <div className="w-full flex flex-col">
                 <div className="hidden min-[1300px]:block py-3">
-                  <TireFilterAndSort />
+                  <ActiveFiltersWithSorting />
                 </div>
                 <NoProductsFound />{' '}
                 {/* Component to show when no products are found */}
@@ -100,7 +97,7 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
               <div className="w-full">
                 {/* Display products if available */}
                 <div className="hidden min-[1300px]:block py-3">
-                  <TireFilterAndSort />
+                  <ActiveFiltersWithSorting />
                 </div>
                 <div className={'w-full flex flex-col gap-y-4'}>
                   {/* {data?.products.map((product) => (
