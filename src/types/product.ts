@@ -53,9 +53,12 @@ export type TInventoryBase = {
   tire_origin?: string;
   tread_depth_in?: string;
   tread_pattern?: string;
+  tread_width?: string;
   utqg?: string;
   vehicle_category?: string;
   width?: string;
+  serviceDescription?: string;
+  eco_focus?: string;
   createdBy?: string | null;
   createdAt?: string;
   updatedAt?: string;
@@ -85,6 +88,14 @@ export type TInventoryItem = TInventoryBase & {
   transferImage?: boolean;
   categoryId?: string;
   stock_available?: boolean;
+  load_range?: string;
+  hazard_protection?: string;
+  max_inflaction_pressure?: string;
+  rim_width?: string;
+  meas_rim_width?: string;
+  revs_per_mile?: string;
+  tire_weight?: string;
+  country_of_origin?: string;
   inventoryId?: {
     _id: string;
     internal_id: string;

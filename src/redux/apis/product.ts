@@ -53,6 +53,9 @@ const products = baseApi.injectEndpoints({
             shallowParams[key] = value.split(',');
           } else if (key === 'sale') {
             shallowParams[key] = value === 'true' ? true : false;
+          } else if (key === 'frontParams' || key === 'rearParams') {
+            shallowParams[key] =
+              typeof value === 'string' ? JSON.parse(value) : value;
           }
         });
 
