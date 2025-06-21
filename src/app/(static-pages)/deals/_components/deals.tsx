@@ -58,7 +58,7 @@ const Deals = () => {
           </div>
         </div>
       </Container>
-      {/* Hero section for the Privacy Policy page */}
+      {/* Hero section for the Deals page */}
       <DealsHero />
       <Container className="flex flex-col gap-8 mx-auto py-10">
         <div className="flex flex-col gap-3 sm:gap-4 text-start">

@@ -2,7 +2,7 @@ import Breadcrumb from '@/components/ui/breadcrumb/breadcrumb';
 import Item from '@/components/ui/breadcrumb/item';
 import Container from '@/components/ui/container/container';
 import TirePressureGuideHero from './installation-tips-hero';
-// Component to render the Privacy Policy page
+// Component to render the Installation tips page
 const TirePressureGuide = () => {
   return (
     <>
@@ -19,7 +19,7 @@ const TirePressureGuide = () => {
           </div>
         </div>
       </Container>
-      {/* Hero section for the Privacy Policy page */}
+      {/* Hero section for the Installation tips page */}
       <TirePressureGuideHero />
       <Container>
         {/* Main content section */}

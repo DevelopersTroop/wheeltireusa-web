@@ -1,4 +1,4 @@
-// Import the Privacy Policy component
+// Import the  Military Discount component
 import { metaDataHelper } from '@/utils/metadata';
 import MilitaryDiscount from './_components/military-discount';
 

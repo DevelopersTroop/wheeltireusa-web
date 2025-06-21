@@ -2,7 +2,7 @@ import Breadcrumb from '@/components/ui/breadcrumb/breadcrumb';
 import Item from '@/components/ui/breadcrumb/item';
 import Container from '@/components/ui/container/container';
 import BlogResourcesHero from './blog-resources-hero';
-// Component to render the Privacy Policy page
+// Component to render the Blog Resources page
 const BlogResources = () => {
   return (
     <>
@@ -19,7 +19,7 @@ const BlogResources = () => {
           </div>
         </div>
       </Container>
-      {/* Hero section for the Privacy Policy page */}
+      {/* Hero section for the Blog Resources page */}
       <BlogResourcesHero />
       <Container>
         {/* Main content section */}

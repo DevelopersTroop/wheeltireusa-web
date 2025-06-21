@@ -1,4 +1,4 @@
-// Import the Privacy Policy component
+// Import the Blog Resources component
 import { metaDataHelper } from '@/utils/metadata';
 import BlogResources from './_components/blog-resources';
 
@@ -16,10 +16,10 @@ export const metadata = metaDataHelper({
   },
 });
 
-// Component to render the store-locator page
+// Component to render the Blog Resources page
 export default function Page() {
   return (
-    // Render the store-locator component
+    // Render the Blog Resources component
     <BlogResources />
   );
 }

@@ -1,4 +1,4 @@
-// Import the Privacy Policy component
+// Import the Deals and rebates component
 import { metaDataHelper } from '@/utils/metadata';
 import DealsAndRebates from './_components/deals-and-rebates';
 

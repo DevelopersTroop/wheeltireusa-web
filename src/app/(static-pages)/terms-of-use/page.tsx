@@ -1,4 +1,4 @@
-// Import the Privacy Policy component
+// Import the Terms Of Use component
 import { metaDataHelper } from '@/utils/metadata';
 import TermsOfUse from './_components/terms-of-use';
 
@@ -16,10 +16,10 @@ export const metadata = metaDataHelper({
   },
 });
 
-// Component to render the Privacy Policy page
+// Component to render the Terms Of Use page
 export default function Page() {
   return (
-    // Render the PrivacyPolicy component
+    // Render the Terms Of Use component
     <TermsOfUse />
   );
 }

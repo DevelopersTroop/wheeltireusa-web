@@ -1,10 +1,10 @@
-// Import the Warranty component
+// Import the Tire Advic component
 import { metaDataHelper } from '@/utils/metadata';
-import TermsOfUse from './_components/warranty';
+import TireAdvice from './_components/tire-advice';
 
 // Metadata for the page
 export const metadata = metaDataHelper({
-  title: 'Warranty - Tirematic',
+  title: 'Tire Advice - Tirematic',
   keywords: '',
   description: '',
   openGraph: {
@@ -12,14 +12,14 @@ export const metadata = metaDataHelper({
     description: '',
   },
   alternates: {
-    canonical: 'https://tirematic.com/warranty',
+    canonical: 'https://tirematic.com/tire-advice',
   },
 });
 
-// Component to render the Warranty page
+// Component to render the Tire Advice page
 export default function Page() {
   return (
-    // Render the Warranty component
-    <TermsOfUse />
+    // Render the Tire advice component
+    <TireAdvice />
   );
 }

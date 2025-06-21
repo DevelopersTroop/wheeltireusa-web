@@ -1,7 +1,7 @@
 import Container from '@/components/ui/container/container';
 
-// Component to render the hero section for the Installation tips page
-const TirePressureGuideHero = () => {
+// Component to render the hero section for the Tire Advic page
+const TireAdviceHero = () => {
   return (
     <div className="w-full relative h-[150px] sm:h-[280px]">
       {/* Gradient overlay for the banner */}
@@ -12,14 +12,13 @@ const TirePressureGuideHero = () => {
           {/* Hero title */}
           <h1 className="text-2xl min-[400px]:text-[32px] sm:text-5xl text-white">
             <span className="text-white font-bold uppercase [text-shadow:2px_2px_4px_black]">
-              installation-tips
+              Tire Advice
             </span>
           </h1>
           {/* Hero subtitle */}
           <h5 className="text-xl text-white">
             <span className="text-white text-base sm:text-xl font-normal [text-shadow:2px_2px_4px_black]">
-              Discover essential tips and best practices for proper tire
-              installation.
+              Expert tips for choosing and caring for your tires.
             </span>
           </h5>
         </div>
@@ -28,4 +27,4 @@ const TirePressureGuideHero = () => {
   );
 };
 
-export default TirePressureGuideHero;
+export default TireAdviceHero;

@@ -22,7 +22,7 @@ const navMenus: NavMenu[] = [
   },
   {
     label: 'Delivery and Installation',
-    href: '#',
+    href: '/delivery-and-installation',
     meagMenu: false,
   },
   {
@@ -33,7 +33,7 @@ const navMenus: NavMenu[] = [
   {
     meagMenu: false,
     label: 'Tire Advice',
-    href: '#',
+    href: '/tire-advice',
     // children: [
     //   {
     //     label: 'Tire Advice',

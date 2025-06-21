@@ -1,4 +1,4 @@
-// Import the Privacy Policy component
+// Import the Careers component
 import { metaDataHelper } from '@/utils/metadata';
 import Careers from './_components/careers';
 
@@ -16,10 +16,10 @@ export const metadata = metaDataHelper({
   },
 });
 
-// Component to render the Services page
+// Component to render the Careers page
 export default function Page() {
   return (
-    // Render the Services component
+    // Render the Careers component
     <Careers />
   );
 }

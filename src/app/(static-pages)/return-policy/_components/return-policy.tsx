@@ -19,7 +19,7 @@ const ReturnPolicy = () => {
           </div>
         </div>
       </Container>
-      {/* Hero section for the Privacy Policy page */}
+      {/* Hero section for the Return Policy page */}
       <ReturnPolicyHero />
       <Container>
         {/* Main content section */}

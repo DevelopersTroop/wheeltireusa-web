@@ -2,7 +2,7 @@ import Breadcrumb from '@/components/ui/breadcrumb/breadcrumb';
 import Item from '@/components/ui/breadcrumb/item';
 import Container from '@/components/ui/container/container';
 import DealsAndRebatesHero from './deals-and-rebates-hero';
-// Component to render the Privacy Policy page
+// Component to render the Deals and rebates page
 const DealsAndRebates = () => {
   return (
     <>
@@ -19,7 +19,7 @@ const DealsAndRebates = () => {
           </div>
         </div>
       </Container>
-      {/* Hero section for the Privacy Policy page */}
+      {/* Hero section for the Deals and rebatespage */}
       <DealsAndRebatesHero />
       <Container>
         {/* Main content section */}

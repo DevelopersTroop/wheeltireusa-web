@@ -1,4 +1,4 @@
-// Import the Privacy Policy component
+// Import the Return Policy component
 import { metaDataHelper } from '@/utils/metadata';
 import ReturnPolicy from './_components/return-policy';
 
@@ -16,10 +16,10 @@ export const metadata = metaDataHelper({
   },
 });
 
-// Component to render the store-locator page
+// Component to render the sReturn Policy page
 export default function Page() {
   return (
-    // Render the store-locator component
+    // Render the Return Policy component
     <ReturnPolicy />
   );
 }

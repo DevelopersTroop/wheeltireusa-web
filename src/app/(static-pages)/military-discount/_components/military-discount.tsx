@@ -2,7 +2,7 @@ import Breadcrumb from '@/components/ui/breadcrumb/breadcrumb';
 import Item from '@/components/ui/breadcrumb/item';
 import Container from '@/components/ui/container/container';
 import MilitaryDiscountHero from './military-discount-hero';
-// Component to render the Privacy Policy page
+// Component to render the Military Discount page
 const MilitaryDiscount = () => {
   return (
     <>
@@ -19,7 +19,7 @@ const MilitaryDiscount = () => {
           </div>
         </div>
       </Container>
-      {/* Hero section for the Privacy Policy page */}
+      {/* Hero section for the Military Discount page */}
       <MilitaryDiscountHero />
       <Container>
         {/* Main content section */}

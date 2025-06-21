@@ -1,4 +1,4 @@
-// Import the Privacy Policy component
+// Import the Customer support component
 import { metaDataHelper } from '@/utils/metadata';
 import CustomerSupport from './_components/customer-support';
 

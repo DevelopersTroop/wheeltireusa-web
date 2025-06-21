@@ -2,7 +2,7 @@ import Breadcrumb from '@/components/ui/breadcrumb/breadcrumb';
 import Item from '@/components/ui/breadcrumb/item';
 import Container from '@/components/ui/container/container';
 import TermsOfUseHero from './terms-of-use-hero';
-// Component to render the Privacy Policy page
+// Component to render the Terms Of Use page
 const TermsOfUse = () => {
   return (
     <>
@@ -19,7 +19,7 @@ const TermsOfUse = () => {
           </div>
         </div>
       </Container>
-      {/* Hero section for the Privacy Policy page */}
+      {/* Hero section for the Terms Of Use page */}
       <TermsOfUseHero />
       <Container>
         {/* Main content section */}

@@ -2,7 +2,7 @@ import Breadcrumb from '@/components/ui/breadcrumb/breadcrumb';
 import Item from '@/components/ui/breadcrumb/item';
 import Container from '@/components/ui/container/container';
 import CustomerSupportHero from './customer-support-hero';
-// Component to render the Privacy Policy page
+// Component to render the Customer support page
 const CustomerSupport = () => {
   return (
     <>
@@ -19,7 +19,7 @@ const CustomerSupport = () => {
           </div>
         </div>
       </Container>
-      {/* Hero section for the Privacy Policy page */}
+      {/* Hero section for the Customer support page */}
       <CustomerSupportHero />
       <Container>
         {/* Main content section */}

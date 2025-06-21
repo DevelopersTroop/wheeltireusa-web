@@ -16,10 +16,10 @@ export const metadata = metaDataHelper({
   },
 });
 
-// Component to render the Services page
+// Component to render the Become and installer page
 export default function Page() {
   return (
-    // Render the Services component
+    // Render the  Become and installer component
     <BecomeAnInstaller />
   );
 }

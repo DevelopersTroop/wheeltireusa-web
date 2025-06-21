@@ -2,7 +2,7 @@ import Breadcrumb from '@/components/ui/breadcrumb/breadcrumb';
 import Item from '@/components/ui/breadcrumb/item';
 import Container from '@/components/ui/container/container';
 import CareersHero from './careers-hero';
-// Component to render the Privacy Policy page
+// Component to render the Careers page
 const Careers = () => {
   return (
     <>
@@ -19,7 +19,7 @@ const Careers = () => {
           </div>
         </div>
       </Container>
-      {/* Hero section for the Privacy Policy page */}
+      {/* Hero section for the Careers page */}
       <CareersHero />
       <Container>
         {/* Main content section */}

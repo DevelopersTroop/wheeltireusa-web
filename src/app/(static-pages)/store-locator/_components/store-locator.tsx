@@ -2,7 +2,7 @@ import Breadcrumb from '@/components/ui/breadcrumb/breadcrumb';
 import Item from '@/components/ui/breadcrumb/item';
 import Container from '@/components/ui/container/container';
 import StoreLocatorHero from './store-locator-hero';
-// Component to render the Privacy Policy page
+// Component to render the Store Location page
 const StoreLocator = () => {
   return (
     <>
@@ -19,7 +19,7 @@ const StoreLocator = () => {
           </div>
         </div>
       </Container>
-      {/* Hero section for the Privacy Policy page */}
+      {/* Hero section for the Store Location page */}
       <StoreLocatorHero />
       <Container>
         {/* Main content section */}

@@ -1,6 +1,6 @@
 import Container from '@/components/ui/container/container';
 
-// Component to render the hero section for the Contact Us page
+// Component to render the hero section for the Safety Tips page
 const SafetyTipsHero = () => {
   return (
     <div className="w-full relative h-[150px] sm:h-[280px]">

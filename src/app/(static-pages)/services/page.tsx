@@ -1,4 +1,4 @@
-// Import the Privacy Policy component
+// Import the Services component
 import { metaDataHelper } from '@/utils/metadata';
 import Services from './_components/services';
 

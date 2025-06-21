@@ -1,4 +1,4 @@
-// Import the Privacy Policy component
+// Import the Store Location component
 import { metaDataHelper } from '@/utils/metadata';
 import StoreLocator from './_components/store-locator';
 

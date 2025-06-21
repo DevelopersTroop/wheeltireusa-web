@@ -1,4 +1,4 @@
-// Import the Privacy Policy component
+// Import the Safety Tips component
 import { metaDataHelper } from '@/utils/metadata';
 import SafetyTips from './_components/safety-tips';
 
@@ -16,10 +16,10 @@ export const metadata = metaDataHelper({
   },
 });
 
-// Component to render the store-locator page
+// Component to render the Safety Tips page
 export default function Page() {
   return (
-    // Render the store-locator component
+    // Render the Safety Tips component
     <SafetyTips />
   );
 }

@@ -2,7 +2,7 @@ import Breadcrumb from '@/components/ui/breadcrumb/breadcrumb';
 import Item from '@/components/ui/breadcrumb/item';
 import Container from '@/components/ui/container/container';
 import BecomeAnInstallerHero from './become-an-installer-hero';
-// Component to render the Privacy Policy page
+// Component to render the  Become and installer page
 const BecomeAnInstaller = () => {
   return (
     <>
@@ -19,7 +19,7 @@ const BecomeAnInstaller = () => {
           </div>
         </div>
       </Container>
-      {/* Hero section for the Privacy Policy page */}
+      {/* Hero section for the Become and installer page */}
       <BecomeAnInstallerHero />
       <Container>
         {/* Main content section */}

@@ -1,4 +1,4 @@
-// Import the Privacy Policy component
+// Import the Installation tips component
 import { metaDataHelper } from '@/utils/metadata';
 import TirePressureGuide from './_components/installation-tips';
 
@@ -16,10 +16,10 @@ export const metadata = metaDataHelper({
   },
 });
 
-// Component to render the store-locator page
+// Component to render the Installation tips page
 export default function Page() {
   return (
-    // Render the store-locator component
+    // Render the Installation tips component
     <TirePressureGuide />
   );
 }

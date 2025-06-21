@@ -1,4 +1,4 @@
-// Import the Privacy Policy component
+// Import the Deals component
 import { metaDataHelper } from '@/utils/metadata';
 import Deals from './_components/deals';
 
@@ -16,10 +16,10 @@ export const metadata = metaDataHelper({
   },
 });
 
-// Component to render the Services page
+// Component to render the Deals page
 export default function Page() {
   return (
-    // Render the Services component
+    // Render the Deals component
     <Deals />
   );
 }
