@@ -51,6 +51,7 @@ const SidebarTireFilters = ({ children }: SidebarProps) => {
           bmMenuWrap: {
             top: '81px',
             left: '0px',
+            width: '80vw',
           },
           bmOverlay: {
             top: '81px',
