@@ -26,11 +26,17 @@ const reviews = baseApi.injectEndpoints({
       },
     }),
     getReviews: builder.query<
-      TPaginatedResponse<{ reviews: TReview[] }>,
-      string
+      TPaginatedResponse<{
+        reviews: TReview[];
+        average: number;
+        currentPage: number;
+        count: number;
+      }>,
+      { productId: string; page: number }
     >({
       query: (productId) => ({
-        url: `/reviews/${productId}`,
+        url: `/reviews/${productId.productId}`,
+        params: { page: productId.page },
       }),
     }),
   }),

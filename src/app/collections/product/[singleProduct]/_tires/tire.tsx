@@ -2,7 +2,7 @@ import { ImageGallery } from '@/components/shared/imageGallery';
 import Breadcrumb from '@/components/ui/breadcrumb/breadcrumb';
 import Item from '@/components/ui/breadcrumb/item';
 import { TInventoryItem } from '@/types/product';
-import TireDescription from './tire-description';
+import TireDescription from './TireDescription';
 import TireDetails from './tire-details';
 import { getProductThumbnail } from '@/utils/product';
 import TireSpecifications from './tire-specifications';
@@ -81,7 +81,7 @@ const Tire = ({ product }: { product: TInventoryItem[] }) => {
               </h4>
               {/* <TireTypeBadge products={products} />  */}
             </div>
-            <TireRating />
+            <TireRating productId={product[0]._id} />
           </div>
           <div className="w-full relative">
             <ImageGallery
