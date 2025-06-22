@@ -25,17 +25,17 @@ const useSelectTireSize = ({ direction }: { direction: 'front' | 'rear' }) => {
           tempTireSizes.push(tireSize.factory[direction]);
         }
 
-        if (tireSize.factory) {
-          // get all after market tire sizes
-          const optionalTireSizes = getAllPossibleTireSizes(
-            tireSize.factory[direction]
-          );
-          for (const tireSize of optionalTireSizes) {
-            if (!tempTireSizes.includes(tireSize)) {
-              tempTireSizes.push(tireSize);
-            }
-          }
-        }
+        // get all after market tire sizes
+        // if (tireSize.factory) {
+        //   const optionalTireSizes = getAllPossibleTireSizes(
+        //     tireSize.factory[direction]
+        //   );
+        //   for (const tireSize of optionalTireSizes) {
+        //     if (!tempTireSizes.includes(tireSize)) {
+        //       tempTireSizes.push(tireSize);
+        //     }
+        //   }
+        // }
       });
     }
     setTireSizes(tempTireSizes);

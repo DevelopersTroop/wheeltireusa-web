@@ -40,13 +40,21 @@ const BrickBoxWithoutTooltip = ({
   const mainFilterState = useTypedSelector((state) => state.mainFilter);
 
   useEffect(() => {
-    // @ts-expect-error Hasib will fix this TS error
-    if (mainFilterState?.filters?.[filterType]?.current?.[fieldName] === text) {
+    // TODO: Hasib will fix this TS error
+    if (
+      // @ts-expect-error can't solve this ts error now
+      mainFilterState?.filters?.[filterType]?.current?.[fieldName] === text ||
+      (fieldName === 'subModel' &&
+        // @ts-expect-error can't solve this ts error now
+        mainFilterState?.filters?.[filterType]?.current?.[fieldName]
+          ?.SubModel === text)
+    ) {
       setIsCheckedState(true);
     } else {
       setIsCheckedState(false);
     }
-    // @ts-expect-error Hasib will fix this TS error
+    //TODO: Hasib will fix this TS error
+    // @ts-expect-error  can't solve this ts error now
   }, [mainFilterState?.filters?.[filterType]?.current?.[fieldName]]);
 
   const isMerged = useMergedBrickBoxContext();
