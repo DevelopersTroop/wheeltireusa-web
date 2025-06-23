@@ -21,6 +21,20 @@ const SelectModel = dynamic(
   () => import('./components/SelectModel/SelectModel'),
   { ssr: false, loading: () => <ListSkeleton title="Model" /> }
 );
+const SelectBodytype = dynamic(
+  () => import('./components/SelectBodytype/SelectBodytype'),
+  {
+    ssr: false,
+    loading: () => <ListSkeleton title="Bodytype" />,
+  }
+);
+const SelectSubmodel = dynamic(
+  () => import('./components/SelectSubmodel/SelectSubmodel'),
+  {
+    ssr: false,
+    loading: () => <ListSkeleton title="Submodel" />,
+  }
+);
 const FilterFooter = dynamic(() => import('../FilterFooter/FilterFooter'), {
   ssr: false,
 });
@@ -38,13 +52,14 @@ const FilterByVehicle = () => {
     year,
     make,
     model,
+    bodyType,
+    subModel,
     frontTireSize,
     rearTireSize,
     isDisabled,
     submitFilter,
     ref,
   } = useFilterByVehicle();
-
   return (
     <div
       className={cn(
@@ -68,26 +83,50 @@ const FilterByVehicle = () => {
           {!year && <SelectYear />}
           {year && !make && <SelectMake />}
           {year && make && !model && <SelectModel />}
-          {year && make && model && !frontTireSize && !rearTireSize && (
-            <SelectTireSize direction="front" />
+          {year && make && model && !bodyType && <SelectBodytype />}
+          {year && make && model && bodyType && !subModel.SubModel && (
+            <SelectSubmodel />
           )}
-          {year && make && model && frontTireSize && !rearTireSize && (
-            <SelectTireSize direction="rear" />
-          )}
-          {year && make && model && frontTireSize && rearTireSize && (
-            <>
-              <div className="text-muted-dark text-[20px] px-6 order-3">
-                Enter your zip code to get best shipping and installation
-                options
-              </div>
-              <AddZipCode />
-            </>
-          )}
+          {year &&
+            make &&
+            model &&
+            bodyType &&
+            subModel.SubModel &&
+            !frontTireSize &&
+            !rearTireSize && <SelectTireSize direction="front" />}
+          {year &&
+            make &&
+            model &&
+            bodyType &&
+            subModel.SubModel &&
+            frontTireSize &&
+            !rearTireSize && <SelectTireSize direction="rear" />}
+          {year &&
+            make &&
+            model &&
+            bodyType &&
+            subModel.SubModel &&
+            frontTireSize &&
+            rearTireSize && (
+              <>
+                <div className="text-muted-dark text-[20px] px-6 order-3">
+                  Enter your zip code to get best shipping and installation
+                  options
+                </div>
+                <AddZipCode />
+              </>
+            )}
         </div>
       </ScrollArea>
-      {year && make && model && frontTireSize && rearTireSize && (
-        <FilterFooter isDisabled={isDisabled} submitFilter={submitFilter} />
-      )}
+      {year &&
+        make &&
+        model &&
+        bodyType &&
+        subModel.SubModel &&
+        frontTireSize &&
+        rearTireSize && (
+          <FilterFooter isDisabled={isDisabled} submitFilter={submitFilter} />
+        )}
     </div>
   );
 };

@@ -35,6 +35,45 @@ const useSelectedItem = () => {
       })
     );
   };
+  const clearSubModel = () => {
+    dispatch(
+      setMainFilter({
+        filters: {
+          byVehicle: {
+            current: {
+              subModel: {
+                SubModel: '',
+                DRChassisID: '',
+                DRModelID: '',
+              },
+              frontTireSize: null,
+              rearTireSize: null,
+            },
+          },
+        },
+      })
+    );
+  };
+  const clearBodyType = () => {
+    dispatch(
+      setMainFilter({
+        filters: {
+          byVehicle: {
+            current: {
+              bodyType: '',
+              frontTireSize: null,
+              rearTireSize: null,
+              subModel: {
+                SubModel: '',
+                DRChassisID: '',
+                DRModelID: '',
+              },
+            },
+          },
+        },
+      })
+    );
+  };
   const clearModel = () => {
     dispatch(
       setMainFilter({
@@ -159,9 +198,13 @@ const useSelectedItem = () => {
     clearYear,
     clearFrontTireSize,
     clearRearTireSize,
+    clearBodyType,
+    clearSubModel,
     model: mainFilterState.filters.byVehicle.current.model,
     make: mainFilterState.filters.byVehicle.current.make,
     year: mainFilterState.filters.byVehicle.current.year,
+    bodyType: mainFilterState.filters.byVehicle.current.bodyType,
+    subModel: mainFilterState.filters.byVehicle.current.subModel,
     frontTireSize: mainFilterState.filters.byVehicle.current.frontTireSize,
     rearTireSize: mainFilterState.filters.byVehicle.current.rearTireSize,
     selectedItemRef,

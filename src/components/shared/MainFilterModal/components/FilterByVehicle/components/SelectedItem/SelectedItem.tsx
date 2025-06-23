@@ -8,11 +8,15 @@ const SelectedItem = () => {
     model,
     frontTireSize,
     rearTireSize,
+    bodyType,
+    subModel,
     clearYear,
     clearMake,
     clearModel,
     clearFrontTireSize,
     clearRearTireSize,
+    clearBodyType,
+    clearSubModel,
     selectedItemRef,
   } = useSelectedItem();
   return (
@@ -48,6 +52,26 @@ const SelectedItem = () => {
           text={model}
           isDismissable={true}
           onClick={clearModel}
+        />
+      )}
+      {bodyType && (
+        <BrickBox
+          checked={true}
+          filterType="byVehicle"
+          fieldName="bodyType"
+          text={bodyType}
+          isDismissable={true}
+          onClick={clearBodyType}
+        />
+      )}
+      {subModel.SubModel && (
+        <BrickBox
+          checked={true}
+          filterType="byVehicle"
+          fieldName="subModel"
+          text={subModel.SubModel}
+          isDismissable={true}
+          onClick={clearSubModel}
         />
       )}
       {frontTireSize && (

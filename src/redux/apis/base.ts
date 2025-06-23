@@ -122,6 +122,16 @@ apiInstance.interceptors.response.use(
       return Promise.reject(error);
     }
 
+    if (
+      typeof err.response?.data === 'object' &&
+      'stack' in err?.response?.data &&
+      typeof err?.response?.data?.stack === 'string' &&
+      err?.response?.data?.stack?.includes('E11000')
+    ) {
+      toast.error('You have already submitted a review');
+      return Promise.reject(error);
+    }
+
     if (Array.isArray(errorsArray) && errorsArray.length > 0) {
       toast.error(message, {
         description: errorsArray.map((e) => e?.message),

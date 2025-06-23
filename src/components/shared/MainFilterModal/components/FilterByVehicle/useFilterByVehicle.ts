@@ -3,8 +3,6 @@ import {
   setMainFilter,
 } from '@/redux/features/mainFilterSlice';
 import { useTypedSelector } from '@/redux/store';
-import { TDriverightData, TMainFilterTireSize } from '@/types/main-filter';
-import { getSupportedTireSizes } from '@/utils/filter';
 import { useRouter } from 'next/navigation';
 import { MouseEvent, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
@@ -36,88 +34,60 @@ const useFilterByVehicle = () => {
   const selectedRearTireSize =
     mainFilterState.filters.byVehicle.current.rearTireSize;
   const selectedZipCode = mainFilterState.zipCode;
-  const allBodyTypes = mainFilterState.filters.byVehicle.list.bodyTypes;
-  const allSubModels = mainFilterState.filters.byVehicle.list.subModels;
+  const currentBodyType = mainFilterState.filters.byVehicle.current.bodyType;
+  const currentSubModel = mainFilterState.filters.byVehicle.current.subModel;
+
   const allTireSizes =
     mainFilterState.filters.byVehicle.current.vehicleInformation.tireSizes;
 
-  // Get all body types
   useEffect(() => {
-    if (!allBodyTypes) {
+    if (
+      currentBodyType &&
+      currentSubModel.DRModelID &&
+      currentSubModel.DRChassisID
+    ) {
       fetch(
-        `https://api.driverightdata.com/eu/api/aaia/GetAAIABodyTypes?username=Tire_Wheel_Experts&securityToken=0b035d5ccecc43f2a9adce9849c7024e&year=${selectedYear}&regionID=1&manufacturer=${selectedMake}&model=${selectedModel}`
+        `https://api.driverightdata.com/eu/api/vehicle-info/GetVehicleDataFromDRD_NA?username=Tire_Wheel_Experts&securityToken=0b035d5ccecc43f2a9adce9849c7024e&DRDModelID=${currentSubModel.DRModelID}&DRDChassisID=${currentSubModel.DRChassisID}`
       )
         .then((res) => res.json())
         .then((data) => {
-          // set all body types
-          dispatch(
-            setMainFilter({
-              filters: {
-                byVehicle: {
-                  list: {
-                    bodyTypes:
-                      data && Array.isArray(data)
-                        ? data?.map(
-                            (bodyType: { BodyType: string }) =>
-                              bodyType.BodyType
-                          )
-                        : null,
-                  },
-                },
-              },
-            })
-          );
-        });
-    }
-  }, [selectedYear, selectedMake, selectedModel, allBodyTypes]);
-
-  // get all sub models
-  useEffect(() => {
-    if (!allSubModels && Array.isArray(allBodyTypes)) {
-      for (const bodyType of allBodyTypes) {
-        fetch(
-          `https://api.driverightdata.com/eu/api/aaia/GetAAIASubModelsWheels?username=Tire_Wheel_Experts&securityToken=0b035d5ccecc43f2a9adce9849c7024e&year=${selectedYear}&regionID=1&manufacturer=${selectedMake}&model=${selectedModel}&bodyType=${bodyType}`
-        )
-          .then((res) => res.json())
-          .then((data) => {
-            // set all sub models
-            dispatch(
-              setMainFilter({
-                filters: { byVehicle: { list: { subModels: data ?? null } } },
-              })
-            );
-          });
-      }
-    } else if (Array.isArray(allSubModels) && allTireSizes === null) {
-      // get all tire sizes from all sub models via GetVehicleDataFromDRD_NA api
-      const vehicleDataPromises: Promise<Response>[] = [];
-      allSubModels.forEach(({ DRChassisID, DRModelID }) => {
-        vehicleDataPromises.push(
-          fetch(
-            `https://api.driverightdata.com/eu/api/vehicle-info/GetVehicleDataFromDRD_NA?username=Tire_Wheel_Experts&securityToken=0b035d5ccecc43f2a9adce9849c7024e&DRDModelID=${DRModelID}&DRDChassisID=${DRChassisID}`
-          )
-        );
-      });
-      Promise.all(vehicleDataPromises).then((responses) => {
-        const vehicleDataPromises: Promise<TDriverightData>[] = [];
-        responses.forEach(async (response) => {
-          vehicleDataPromises.push(response.json());
-        });
-        Promise.all(vehicleDataPromises).then((vehicleData) => {
-          const allTireSizesTemp: TMainFilterTireSize[] = [];
-          vehicleData.forEach((data) => {
-            const tireSizes = getSupportedTireSizes(data);
-            if (tireSizes) {
-              allTireSizesTemp.push(tireSizes);
-            }
-          });
           dispatch(
             setMainFilter({
               filters: {
                 byVehicle: {
                   current: {
                     vehicleInformation: {
-                      tireSizes: Array.from(new Set(allTireSizesTemp)),
+                      supportedWheels: [],
+                      boltPattern: data?.DRDChassisReturn_NA?.PCD ?? '',
+                      frontRimSize: data?.DRDModelReturn?.RimSize ?? '',
+                      rearRimSize:
+                        data?.DRDModelReturn?.RimSize_R ||
+                        data?.DRDModelReturn?.RimSize,
+                      frontCenterBore:
+                        data?.DRDChassisReturn_NA?.CenterBore ?? '',
+                      rearCenterBore:
+                        data?.DRDChassisReturn_NA?.CenterBore_R ||
+                        data?.DRDChassisReturn_NA?.CenterBore,
+                      maxWheelLoad:
+                        data?.DRDChassisReturn_NA?.WheelLoad_Max_Lbs ?? '',
+                      tireSizes: [
+                        {
+                          DRDChassisID:
+                            data?.DRDModelReturn?.PrimaryOption?.DRDChassisID ??
+                            '',
+                          DRModelID:
+                            data?.DRDModelReturn?.PrimaryOption?.DRDModelID ??
+                            '',
+                          factory: {
+                            front:
+                              data?.DRDModelReturn?.PrimaryOption?.TireSize ??
+                              '',
+                            rear:
+                              data?.DRDModelReturn?.PrimaryOption?.TireSize_R ||
+                              data?.DRDModelReturn?.PrimaryOption?.TireSize,
+                          },
+                        },
+                      ],
                     },
                   },
                 },
@@ -125,9 +95,8 @@ const useFilterByVehicle = () => {
             })
           );
         });
-      });
     }
-  }, [selectedYear, selectedMake, selectedModel, allBodyTypes, allSubModels]);
+  }, [JSON.stringify(currentSubModel)]);
 
   const isDisabled =
     !allTireSizes || allTireSizes?.length === 0 || !selectedZipCode;
@@ -145,10 +114,10 @@ const useFilterByVehicle = () => {
     year: selectedYear,
     make: selectedMake,
     model: selectedModel,
+    bodyType: currentBodyType,
+    subModel: currentSubModel,
     frontTireSize: selectedFrontTireSize,
     rearTireSize: selectedRearTireSize,
-    allBodyTypes,
-    allSubModels,
     allTireSizes,
     isDisabled,
     submitFilter,
