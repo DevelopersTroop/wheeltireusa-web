@@ -56,7 +56,10 @@ const CartYMM = () => {
             ) : (
               <div className="flex flex-col sm:flex-row gap-2">
                 {' '}
-                <p>or</p> <p className="underline">Select vehicle</p>{' '}
+                <p>or</p>{' '}
+                <p className="underline whitespace-nowrap">
+                  Select vehicle
+                </p>{' '}
               </div>
             )}
           </span>

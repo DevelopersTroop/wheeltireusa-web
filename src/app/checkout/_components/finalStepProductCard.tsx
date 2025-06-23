@@ -2,15 +2,16 @@ import { TInventoryItem } from '@/types/product';
 import { Input } from '@/components/ui/input';
 import { Minus, Plus } from 'lucide-react';
 import React from 'react';
-import { TProductInfo } from '@/types/order';
 import TiresCard from '@/app/cart/_components/tires-card';
-import CartSummary from './cartSummary';
+import { TCartProduct } from '@/redux/features/cartSlice';
 
 {
   /* Order Details Section */
 }
 export const FinalStepProductCard: React.FC<{
-  products?: TProductInfo[]; // Array of products to display
+  products?: {
+    tires: TCartProduct[];
+  }[]; // Array of products to display
   totalCost?: any; // Total cost of the products
 }> = ({ products, totalCost }) => {
   return (
@@ -22,9 +23,10 @@ export const FinalStepProductCard: React.FC<{
         <div className="overflow-hidden rounded-xl border border-[#cfcfcf] flex flex-col gap-0 items-start self-stretch relative w-full bg-white">
           {/* <CartYMM /> */}
 
-          {products?.map((product) => (
-            <TiresCard key={product._id} tire={product} />
+          {products?.map((product, index) => (
+            <TiresCard key={index} tires={product.tires} />
           ))}
+          {/* <TiresCard tires={products} /> */}
           <div className="w-full items-center flex justify-between px-4 py-5 border-t">
             <p>SUB-TOTAL:</p>
             <p className="text-[32px] leading-[38px] text-[#210203]">

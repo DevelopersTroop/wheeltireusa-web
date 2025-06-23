@@ -1,12 +1,19 @@
+import {
+  HybridTooltip,
+  HybridTooltipContent,
+  HybridTooltipTrigger,
+  TouchProvider,
+} from '@/components/ui/hybrid-tooltip';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { TCartProduct } from '@/redux/features/cartSlice';
 import React from 'react';
+import { BsQuestionCircleFill } from 'react-icons/bs';
 
 // Component to display tire attributes
 const TireAttributes = ({ product }: { product: TCartProduct }) => {
   return (
     <div className="flex gap-2 items-start self-stretch flex-wrap relative w-full">
       {/* Display tire size if available */}
-      {/* {product?.tire_size !== "" ? */}
       <div
         className="hover:bg-[#210203] bg-white group cursor-pointer rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative"
         data-tooltip-id="my-tooltip"
@@ -22,60 +29,82 @@ const TireAttributes = ({ product }: { product: TCartProduct }) => {
           </small>
         </div>
         <p className="text-base leading-[19px] text-[#210203]">
-          <span className="text-[#210203] text-base font-semibold group-hover:text-[#ffffff]">
+          <span className="text-[#212227] text-base font-normal group-hover:text-[#ffffff]">
             {product?.tire_size ? product?.tire_size : 'N/A'}
           </span>
         </p>
       </div>
-      {/* : ""} */}
 
-      {/* Display sidewall style if available */}
-
-      {/* <div
+      <div
         className="hover:bg-[#210203] bg-white group cursor-pointer rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative"
         data-tooltip-id="my-tooltip"
-        data-tooltip-content={product?.seo_description}
+        data-tooltip-content={product?.serviceDescription}
         data-tooltip-place="top"
       >
         <div className="flex gap-1 items-center relative">
-          <i className="icon-size text-[#504949]  group-hover:text-[#ffffff]"></i>
           <small className="text-xs leading-[14px] text-[#504949]">
             <span className="text-[#504949] text-xs font-normal group-hover:text-[#ffffff]">
               Service Description
             </span>
           </small>
+          <TooltipProvider>
+            <TouchProvider>
+              <HybridTooltip>
+                <HybridTooltipTrigger asChild>
+                  <span className="cursor-pointer">
+                    <BsQuestionCircleFill className="text-[#B1AAAA]" />
+                  </span>
+                </HybridTooltipTrigger>
+                <HybridTooltipContent>
+                  <p>View details on Service Description</p>
+                </HybridTooltipContent>
+              </HybridTooltip>
+            </TouchProvider>
+          </TooltipProvider>
         </div>
         <p className="text-base leading-[19px] text-[#210203]">
-          <span className="text-[#210203] text-base font-semibold group-hover:text-[#ffffff]">
-            {product?.seo_description
-              ? product?.seo_description
-              : 'N/A'}
+          <span className="text-[#212227] text-base font-normal group-hover:text-[#ffffff]">
+            {product?.serviceDescription ? product?.serviceDescription : 'N/A'}
           </span>
         </p>
-      </div> */}
+      </div>
 
-      {/* <div
+      {/* UTQG */}
+      <div
         className="hover:bg-[#210203] bg-white group cursor-pointer rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative"
         data-tooltip-id="my-tooltip"
         data-tooltip-content={product?.utqg}
         data-tooltip-place="top"
       >
         <div className="flex gap-1 items-center relative">
-          <i className="icon-size text-[#504949]  group-hover:text-[#ffffff]"></i>
           <small className="text-xs leading-[14px] text-[#504949]">
             <span className="text-[#504949] text-xs font-normal group-hover:text-[#ffffff]">
               UTQG
             </span>
           </small>
+          <TooltipProvider>
+            <TouchProvider>
+              <HybridTooltip>
+                <HybridTooltipTrigger asChild>
+                  <span className="cursor-pointer">
+                    <BsQuestionCircleFill className="text-[#B1AAAA]" />
+                  </span>
+                </HybridTooltipTrigger>
+                <HybridTooltipContent>
+                  <p>View details on UTQG</p>
+                </HybridTooltipContent>
+              </HybridTooltip>
+            </TouchProvider>
+          </TooltipProvider>
         </div>
         <p className="text-base leading-[19px] text-[#210203]">
-          <span className="text-[#210203] text-base font-semibold group-hover:text-[#ffffff]">
+          <span className="text-[#212227] text-base font-normal group-hover:text-[#ffffff]">
             {product?.utqg ? product?.utqg : 'N/A'}
           </span>
         </p>
-      </div> */}
+      </div>
 
-      {/* {product?.sidewall !== "" ? */}
+      {/* Display sidewall style if available */}
       <div
         className="hover:bg-[#210203] bg-white group cursor-pointer rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative"
         data-tooltip-id="my-tooltip"
@@ -91,22 +120,20 @@ const TireAttributes = ({ product }: { product: TCartProduct }) => {
           </small>
         </div>
         <p className="text-base leading-[19px] text-[#210203]">
-          <span className="text-[#210203] text-base font-semibold group-hover:text-[#ffffff]">
+          <span className="text-[#212227] text-base font-normal group-hover:text-[#ffffff]">
             {product?.sidewall ? product?.sidewall : 'N/A'}
           </span>
         </p>
       </div>
-      {/* : ""} */}
-      {/* Display load rating if available */}
 
-      {/* <div
+      {/* Display Eco Focus if available */}
+      <div
         className="hover:bg-[#210203] bg-white group cursor-pointer rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative"
         data-tooltip-id="my-tooltip"
         data-tooltip-content={product?.eco_focus}
         data-tooltip-place="top"
       >
         <div className="flex gap-1 items-center relative">
-          <i className="icon-finish text-[#504949] group-hover:text-[#ffffff]"></i>
           <small className="text-xs leading-[14px] text-[#504949]">
             <span className="text-[#504949] text-xs font-normal group-hover:text-[#ffffff]">
               Eco Focus
@@ -114,12 +141,13 @@ const TireAttributes = ({ product }: { product: TCartProduct }) => {
           </small>
         </div>
         <p className="text-base leading-[19px] text-[#210203]">
-          <span className="text-[#210203] text-base font-semibold group-hover:text-[#ffffff]">
+          <span className="text-[#212227] text-base font-normal group-hover:text-[#ffffff]">
             {product?.eco_focus ? product?.eco_focus : 'N/A'}
           </span>
         </p>
-      </div> */}
+      </div>
 
+      {/* Display load rating if available */}
       <div
         className="hover:bg-[#210203] bg-white group cursor-pointer rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative"
         data-tooltip-id="my-tooltip"
@@ -127,72 +155,53 @@ const TireAttributes = ({ product }: { product: TCartProduct }) => {
         data-tooltip-place="top"
       >
         <div className="flex gap-1 items-center relative">
-          <i className="icon-finish text-[#504949] group-hover:text-[#ffffff]"></i>
           <small className="text-xs leading-[14px] text-[#504949]">
             <span className="text-[#504949] text-xs font-normal group-hover:text-[#ffffff]">
-              Load Rang
+              Load Range
             </span>
           </small>
         </div>
         <p className="text-base leading-[19px] text-[#210203]">
-          <span className="text-[#210203] text-base font-semibold group-hover:text-[#ffffff]">
+          <span className="text-[#212227] text-base font-normal group-hover:text-[#ffffff]">
             {product?.load_rating ? product?.load_rating : 'N/A'}
           </span>
         </p>
       </div>
 
-      {/* <div
+      {/* Hazard Protection */}
+      <div
         className="hover:bg-[#210203] bg-white group cursor-pointer rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative"
         data-tooltip-id="my-tooltip"
-        data-tooltip-content={product?.hazad_production}
+        data-tooltip-content={product?.hazard_protection}
         data-tooltip-place="top"
       >
         <div className="flex gap-1 items-center relative">
-          <i className="icon-finish text-[#504949] group-hover:text-[#ffffff]"></i>
           <small className="text-xs leading-[14px] text-[#504949]">
             <span className="text-[#504949] text-xs font-normal group-hover:text-[#ffffff]">
               Hazard Protection
             </span>
           </small>
+          <TooltipProvider>
+            <TouchProvider>
+              <HybridTooltip>
+                <HybridTooltipTrigger asChild>
+                  <span className="cursor-pointer">
+                    <BsQuestionCircleFill className="text-[#B1AAAA]" />
+                  </span>
+                </HybridTooltipTrigger>
+                <HybridTooltipContent>
+                  <p>View details on Hazard Protecton</p>
+                </HybridTooltipContent>
+              </HybridTooltip>
+            </TouchProvider>
+          </TooltipProvider>
         </div>
         <p className="text-base leading-[19px] text-[#210203]">
-          <span className="text-[#210203] text-base font-semibold group-hover:text-[#ffffff]">
-            {product?.hazad_production ? product?.hazad_production : 'N/A'}
+          <span className="text-[#212227] text-base font-normal group-hover:text-[#ffffff]">
+            {product?.hazard_protection ? product?.hazard_protection : 'N/A'}
           </span>
         </p>
-      </div> */}
-
-      {/* Display service description (load index + speed rating) if both available */}
-      {/* {product?.tire_load_index !== "" && product?.speed_rating !== "" ? <>
-                <div
-                    className="hover:bg-[#210203] bg-white group cursor-pointer rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative"
-                    data-tooltip-id="my-tooltip"
-                    data-tooltip-content={`${product?.tire_load_index}${product?.speed_rating}`}
-                    data-tooltip-place="top"
-                    >
-                    <div className="flex gap-1 items-center relative">
-                        <small className="text-xs leading-[14px] text-[#504949]">
-                            <span className="text-[#504949] text-xs font-normal group-hover:text-[#ffffff]"
-                            >Serv. Desc</span>
-                        </small>
-                    </div>
-                    <p className="text-base leading-[19px] text-[#210203]">
-                        <span className="text-[#210203] text-base font-semibold group-hover:text-[#ffffff]">{product?.tire_load_index}{product?.speed_rating}</span>
-                    </p>
-                </div>
-            </> : ""} */}
-
-      {/* <div
-                className="rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative w-[132px]">
-                <div className="flex gap-1 items-center relative">
-                    <small className="text-xs leading-[14px] text-[#504949]">
-                        <span className="text-[#504949] text-xs font-normal">UTQG</span>
-                    </small>
-                </div>
-                <p className="text-base leading-[19px] text-black">
-                    <span className="text-black text-base font-semibold">500 AA A</span>
-                </p>
-            </div> */}
+      </div>
     </div>
   );
 };

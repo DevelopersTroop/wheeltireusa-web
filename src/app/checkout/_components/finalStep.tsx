@@ -31,6 +31,7 @@ import { toast } from 'sonner';
 import Image from 'next/image';
 import { emptyCart } from '@/redux/features/cartSlice';
 import { triggerGaPurchaseEvent } from '@/utils/analytics';
+import { useGroupedProducts } from '@/hooks/useGroupedProducts';
 
 // Interface for checkout step props
 
@@ -42,6 +43,10 @@ export const FinalStep: React.FC = () => {
   const { orderSuccessData, isAccountCreated } = useTypedSelector(
     (state) => state.persisted.checkout
   );
+  const groupedProducts = useGroupedProducts(
+    orderSuccessData?.data.productsInfo || []
+  );
+
   const dispatch = useDispatch(); // Redux dispatch hook
 
   // Use a ref to track if verification has already been attempted
@@ -218,9 +223,17 @@ export const FinalStep: React.FC = () => {
 
           <div className="flex flex-col gap-8">
             <CartSummary
-              productsInfo={orderSuccessData?.data?.productsInfo}
+              productsInfo={groupedProducts}
               totalCost={orderSuccessData?.data?.totalCost || '0.00'}
             />
+
+            {/* {groupedProducts?.map((tires, index) => (
+                <CartSummary
+                key={index}
+                productsInfo={tires.tires}
+                totalCost={orderSuccessData?.data?.totalCost || '0.00'}
+              />
+            ))} */}
 
             <DeliveryDetails
               requestedDealer={orderSuccessData?.data?.requestedDealer}

@@ -4,6 +4,7 @@ import React from 'react';
 import CheckoutSubTotal from './checkoutSubTotal';
 import { useTypedSelector } from '@/redux/store';
 import TiresCard from '@/app/cart/_components/tires-card';
+import { useGroupedProducts } from '@/hooks/useGroupedProducts';
 
 // ProductCard Component
 export const ProductCard: React.FC<{
@@ -13,6 +14,8 @@ export const ProductCard: React.FC<{
     (state) => state.persisted.checkout
   );
 
+  const groupedProducts = useGroupedProducts(productsInfo || []);
+
   return (
     <div className="flex flex-col xl:flex-row mt-2 md:mt-8 gap-8">
       {/* Left Section: Cart Details */}
@@ -21,9 +24,10 @@ export const ProductCard: React.FC<{
 
         <div className="overflow-hidden rounded-xl border border-[#cfcfcf] flex flex-col gap-0 items-start self-stretch relative w-full bg-white">
           {/* <CartYMM /> */}
-          {productsInfo.map((product) => (
-            <TiresCard key={product._id} tire={product} />
+          {groupedProducts?.map((tires, index) => (
+            <TiresCard key={index} tires={tires.tires} />
           ))}
+          {/* <TiresCard tires={productsInfo} /> */}
           <CheckoutSubTotal /> {/* Display cart subtotal */}
         </div>
       </div>

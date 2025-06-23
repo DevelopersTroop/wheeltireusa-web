@@ -2,7 +2,7 @@
 
 import { ShoppingCart } from 'lucide-react';
 import { FinalStepProductCard } from './finalStepProductCard';
-import { TProductInfo } from '@/types/order';
+import { TCartProduct } from '@/redux/features/cartSlice';
 
 // Interface for individual product details
 interface Product {
@@ -16,7 +16,9 @@ interface Product {
 
 // Props interface for the CartSummary component
 interface CartSummaryProps {
-  productsInfo?: TProductInfo[];
+  productsInfo?: {
+    tires: TCartProduct[];
+  }[];
   totalCost: string;
 }
 
@@ -29,10 +31,9 @@ export const CartSummary: React.FC<CartSummaryProps> = ({
   const safeProductsInfo = productsInfo || [];
 
   // Calculate the total quantity of items in the cart
-  const quantity = safeProductsInfo.reduce(
-    (sum, product) => sum + (product.quantity || 0),
-    0
-  );
+  const quantity = safeProductsInfo
+    .flatMap((tires) => tires.tires)
+    .reduce((sum, product) => sum + (product.quantity || 0), 0);
 
   return (
     <div className="flex items-start gap-4 font-bold">

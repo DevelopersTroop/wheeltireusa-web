@@ -59,8 +59,8 @@ const Cart = () => {
               {/* Vehicle Year Make Model */}
               <CartYMM />
 
-              {cart?.products.map((tire, key) => (
-                <TiresCard key={key} tire={tire} />
+              {groupedProducts?.map((tires, index) => (
+                <TiresCard key={index} tires={tires.tires} />
               ))}
 
               <CartSubtotal />

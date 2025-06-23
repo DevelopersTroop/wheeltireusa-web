@@ -129,7 +129,7 @@ export const MobileItemsTireShop: React.FC<{
                       Tire set discount
                     </p>
                     <p className="text-xl font-semibold text-[#212227]">
-                      ${(-1170).toFixed(2)}
+                      ${(0).toFixed(2)}
                     </p>
                   </div>
                 </div>
