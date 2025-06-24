@@ -1,4 +1,7 @@
-import { setMainFilter } from '@/redux/features/mainFilterSlice';
+import {
+  initialMainFilterVehicleInformation,
+  setMainFilter,
+} from '@/redux/features/mainFilterSlice';
 import { useTypedSelector } from '@/redux/store';
 import { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
@@ -16,6 +19,7 @@ const useSelectedItem = () => {
             current: {
               frontTireSize: null,
               rearTireSize: null,
+              vehicleInformation: initialMainFilterVehicleInformation,
             },
           },
         },
@@ -29,45 +33,29 @@ const useSelectedItem = () => {
           byVehicle: {
             current: {
               rearTireSize: null,
+              vehicleInformation: initialMainFilterVehicleInformation,
             },
           },
         },
       })
     );
   };
-  const clearSubModel = () => {
-    dispatch(
-      setMainFilter({
-        filters: {
-          byVehicle: {
-            current: {
-              subModel: {
-                SubModel: '',
-                DRChassisID: '',
-                DRModelID: '',
-              },
-              frontTireSize: null,
-              rearTireSize: null,
-            },
-          },
-        },
-      })
-    );
-  };
-  const clearBodyType = () => {
+  const clearBodyTypeWithSubmodel = () => {
     dispatch(
       setMainFilter({
         filters: {
           byVehicle: {
             current: {
               bodyType: '',
-              frontTireSize: null,
-              rearTireSize: null,
               subModel: {
                 SubModel: '',
                 DRChassisID: '',
                 DRModelID: '',
               },
+              bodyTypeWithSubmodel: '',
+              frontTireSize: null,
+              rearTireSize: null,
+              vehicleInformation: initialMainFilterVehicleInformation,
             },
           },
         },
@@ -80,8 +68,7 @@ const useSelectedItem = () => {
         filters: {
           byVehicle: {
             list: {
-              bodyTypes: null,
-              subModels: null,
+              bodyTypesWithSubmodels: null,
             },
             current: {
               model: '',
@@ -91,18 +78,10 @@ const useSelectedItem = () => {
                 DRChassisID: '',
                 DRModelID: '',
               },
+              bodyTypeWithSubmodel: '',
               frontTireSize: null,
               rearTireSize: null,
-              vehicleInformation: {
-                boltPattern: '',
-                frontRimSize: '',
-                rearRimSize: '',
-                frontCenterBore: '',
-                rearCenterBore: '',
-                maxWheelLoad: '',
-                tireSizes: null,
-                supportedWheels: [],
-              },
+              vehicleInformation: initialMainFilterVehicleInformation,
             },
           },
         },
@@ -116,8 +95,7 @@ const useSelectedItem = () => {
           byVehicle: {
             list: {
               models: null,
-              bodyTypes: null,
-              subModels: null,
+              bodyTypesWithSubmodels: null,
             },
             current: {
               make: '',
@@ -130,16 +108,8 @@ const useSelectedItem = () => {
                 DRChassisID: '',
                 DRModelID: '',
               },
-              vehicleInformation: {
-                boltPattern: '',
-                frontRimSize: '',
-                rearRimSize: '',
-                frontCenterBore: '',
-                rearCenterBore: '',
-                maxWheelLoad: '',
-                tireSizes: null,
-                supportedWheels: [],
-              },
+              bodyTypeWithSubmodel: '',
+              vehicleInformation: initialMainFilterVehicleInformation,
             },
           },
         },
@@ -154,8 +124,7 @@ const useSelectedItem = () => {
             list: {
               makes: null,
               models: null,
-              bodyTypes: null,
-              subModels: null,
+              bodyTypesWithSubmodels: null,
             },
             current: {
               year: '',
@@ -169,16 +138,8 @@ const useSelectedItem = () => {
                 DRChassisID: '',
                 DRModelID: '',
               },
-              vehicleInformation: {
-                boltPattern: '',
-                frontRimSize: '',
-                rearRimSize: '',
-                frontCenterBore: '',
-                rearCenterBore: '',
-                maxWheelLoad: '',
-                tireSizes: null,
-                supportedWheels: [],
-              },
+              bodyTypeWithSubmodel: '',
+              vehicleInformation: initialMainFilterVehicleInformation,
             },
           },
         },
@@ -198,8 +159,7 @@ const useSelectedItem = () => {
     clearYear,
     clearFrontTireSize,
     clearRearTireSize,
-    clearBodyType,
-    clearSubModel,
+    clearBodyTypeWithSubmodel,
     model: mainFilterState.filters.byVehicle.current.model,
     make: mainFilterState.filters.byVehicle.current.make,
     year: mainFilterState.filters.byVehicle.current.year,

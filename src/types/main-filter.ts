@@ -2,12 +2,10 @@ export type TMainFilterList = {
   years: string[] | null;
   makes: string[] | null;
   models: string[] | null;
-  bodyTypes: string[] | null;
-  subModels:
+  bodyTypesWithSubmodels:
     | {
-        SubModel: string;
-        DRChassisID: string;
-        DRModelID: string;
+        BodyType: string;
+        SubModel: (TMainFilterSubModel & { subModelWithBodyType: string })[];
       }[]
     | null;
 };
@@ -56,6 +54,7 @@ export type TMainFilter = {
         bodyType: string;
         subModel: Partial<TMainFilterSubModel>;
         vehicleInformation: Partial<TMainFilterVehicleInformation>;
+        bodyTypeWithSubmodel: string;
         frontTireSize: string | null;
         rearTireSize: string | null;
       };

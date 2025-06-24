@@ -5,7 +5,7 @@ const ListSkeleton = ({
   title = '',
   onlyItem = false,
   mobile = 1,
-  desktop = 5,
+  desktop = 4,
 }: {
   title?: string;
   onlyItem?: boolean;

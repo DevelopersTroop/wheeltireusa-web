@@ -1,7 +1,18 @@
 'use client';
-import { TMainFilter } from '@/types/main-filter';
+import { TMainFilter, TMainFilterSubModel } from '@/types/main-filter';
 import { DeepPartial } from '@/utils/shared';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+export const initialMainFilterVehicleInformation = {
+  boltPattern: '',
+  frontRimSize: '',
+  rearRimSize: '',
+  frontCenterBore: '',
+  rearCenterBore: '',
+  maxWheelLoad: '',
+  tireSizes: null,
+  supportedWheels: [],
+};
 
 const initialState: TMainFilter = {
   isFilterModalOpen: false,
@@ -13,31 +24,22 @@ const initialState: TMainFilter = {
         years: null,
         makes: null,
         models: null,
-        bodyTypes: null,
-        subModels: null,
+        bodyTypesWithSubmodels: null,
       },
       current: {
         year: '',
         make: '',
         model: '',
-        bodyType: '',
         frontTireSize: null,
         rearTireSize: null,
+        bodyType: '',
         subModel: {
           SubModel: '',
           DRChassisID: '',
           DRModelID: '',
         },
-        vehicleInformation: {
-          boltPattern: '',
-          frontRimSize: '',
-          rearRimSize: '',
-          frontCenterBore: '',
-          rearCenterBore: '',
-          maxWheelLoad: '',
-          tireSizes: null,
-          supportedWheels: [],
-        },
+        bodyTypeWithSubmodel: '',
+        vehicleInformation: initialMainFilterVehicleInformation,
       },
     },
     byTireBrand: {
@@ -81,23 +83,14 @@ const mainFilterSlice = createSlice({
             list: {
               ...state.filters.byVehicle.list,
               ...(action.payload?.filters?.byVehicle?.list ?? {}),
-              subModels:
-                [
-                  // ...(state.filters.byVehicle.list.subModels ?? []),
-                  ...(action.payload?.filters?.byVehicle?.list?.subModels ??
-                    []),
-                ].length > 0
-                  ? [
-                      // ...(state.filters.byVehicle.list.subModels ?? []),
-                      ...(action.payload?.filters?.byVehicle?.list?.subModels ??
-                        []),
-                    ]
-                  : null,
+              bodyTypesWithSubmodels:
+                action.payload?.filters?.byVehicle?.list
+                  ?.bodyTypesWithSubmodels ?? null,
             },
             current: {
               ...state.filters.byVehicle.current,
               ...(action.payload?.filters?.byVehicle?.current ?? {}),
-              submodel: {
+              subModel: {
                 ...state.filters.byVehicle.current.subModel,
                 ...action.payload?.filters?.byVehicle?.current?.subModel,
               },
@@ -137,6 +130,25 @@ const mainFilterSlice = createSlice({
         },
       };
     },
+    setBodyTypeWithSubmodel: (
+      state,
+      action: PayloadAction<
+        {
+          BodyType: string;
+          SubModel: (TMainFilterSubModel & { subModelWithBodyType: string })[];
+        }[]
+      >
+    ) => {
+      console.log('action.payload', action.payload);
+      state.filters.byVehicle.list.bodyTypesWithSubmodels = action.payload;
+    },
+    resetInitialVehicleInformation: (
+      state,
+      action: PayloadAction<undefined>
+    ) => {
+      state.filters.byVehicle.current.vehicleInformation =
+        initialMainFilterVehicleInformation;
+    },
     clearMainFilter: (state) => {
       Object.assign(state, initialState);
     },
@@ -161,4 +173,6 @@ export const {
   clearMainFilter,
   openMainFilterModal,
   closeMainFilterModal,
+  setBodyTypeWithSubmodel,
+  resetInitialVehicleInformation,
 } = mainFilterSlice.actions;
