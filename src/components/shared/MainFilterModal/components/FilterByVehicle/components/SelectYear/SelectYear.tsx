@@ -31,7 +31,7 @@ const SelectYear = () => {
         </>
       ) : (
         <>
-          <ListSkeleton onlyItem={true} mobile={2} />
+          <ListSkeleton onlyItem={true} mobile={2} desktop={5} />
         </>
       )}
     </>

@@ -100,6 +100,22 @@ const useFilterByVehicle = () => {
 
   const isDisabled =
     !allTireSizes || allTireSizes?.length === 0 || !selectedZipCode;
+
+  // auto select factory sizes
+  useEffect(() => {
+    dispatch(
+      setMainFilter({
+        filters: {
+          byVehicle: {
+            current: {
+              frontTireSize: allTireSizes?.[0]?.factory?.front ?? null,
+              rearTireSize: allTireSizes?.[0]?.factory?.rear ?? null,
+            },
+          },
+        },
+      })
+    );
+  }, [allTireSizes]);
   const submitFilter = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (isDisabled) {

@@ -37,7 +37,7 @@ const SelectMake = () => {
         </>
       ) : (
         <>
-          <ListSkeleton onlyItem={true} />
+          <ListSkeleton onlyItem={true} desktop={5} />
         </>
       )}
     </>

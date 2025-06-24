@@ -15,24 +15,20 @@ const SelectTireSize = dynamic(
 );
 const SelectMake = dynamic(() => import('./components/SelectMake/SelectMake'), {
   ssr: false,
-  loading: () => <ListSkeleton title="Make" />,
+  loading: () => <ListSkeleton title="Make" desktop={5} />,
 });
 const SelectModel = dynamic(
   () => import('./components/SelectModel/SelectModel'),
   { ssr: false, loading: () => <ListSkeleton title="Model" /> }
 );
-const SelectBodytype = dynamic(
-  () => import('./components/SelectBodytype/SelectBodytype'),
+const SelectBodyTypeWithSubmodel = dynamic(
+  () =>
+    import(
+      './components/SelectBodyTypeWithSubmodel/SelectBodyTypeWithSubmodel'
+    ),
   {
     ssr: false,
-    loading: () => <ListSkeleton title="Bodytype" />,
-  }
-);
-const SelectSubmodel = dynamic(
-  () => import('./components/SelectSubmodel/SelectSubmodel'),
-  {
-    ssr: false,
-    loading: () => <ListSkeleton title="Submodel" />,
+    loading: () => <ListSkeleton title="Submodel with Body Type" desktop={3} />,
   }
 );
 const FilterFooter = dynamic(() => import('../FilterFooter/FilterFooter'), {
@@ -40,7 +36,7 @@ const FilterFooter = dynamic(() => import('../FilterFooter/FilterFooter'), {
 });
 const SelectYear = dynamic(() => import('./components/SelectYear/SelectYear'), {
   ssr: false,
-  loading: () => <ListSkeleton title="Year" mobile={2} />,
+  loading: () => <ListSkeleton title="Year" mobile={2} desktop={5} />,
 });
 const AddZipCode = dynamic(() => import('../AddZipCode/AddZipCode'), {
   ssr: false,
@@ -83,11 +79,10 @@ const FilterByVehicle = () => {
           {!year && <SelectYear />}
           {year && !make && <SelectMake />}
           {year && make && !model && <SelectModel />}
-          {year && make && model && !bodyType && <SelectBodytype />}
-          {year && make && model && bodyType && !subModel.SubModel && (
-            <SelectSubmodel />
+          {year && make && model && !bodyType && !subModel.SubModel && (
+            <SelectBodyTypeWithSubmodel />
           )}
-          {year &&
+          {/* {year &&
             make &&
             model &&
             bodyType &&
@@ -100,7 +95,7 @@ const FilterByVehicle = () => {
             bodyType &&
             subModel.SubModel &&
             frontTireSize &&
-            !rearTireSize && <SelectTireSize direction="rear" />}
+            !rearTireSize && <SelectTireSize direction="rear" />} */}
           {year &&
             make &&
             model &&
