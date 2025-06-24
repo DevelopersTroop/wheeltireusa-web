@@ -79,10 +79,8 @@ const SaveProduct = () => {
                           className="w-[66px] h-[66px] object-cover rounded-md"
                         />
                       </div>
-                      <Link
-                        href={`/collections/product/${product.slug}?wishlist_id=${product?.wishlist_id}`}
-                      >
-                        <p className="text-primary"> {product?.title} </p>
+                      <Link href={product.slug}>
+                        <p className="text-black"> {product?.title} </p>
                       </Link>
                     </div>
                   </td>

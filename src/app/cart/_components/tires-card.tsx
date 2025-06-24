@@ -23,7 +23,6 @@ const TiresCard = ({ tires }: { tires: TCartProduct[] }) => {
   const removeCartProduct = (cartPackage: string) => {
     dispatch(removeFromCart(cartPackage));
   };
-  console.log('Tire Card', tires);
 
   const deliveryTime = 'Monday, 05/22 to 83756';
   return (

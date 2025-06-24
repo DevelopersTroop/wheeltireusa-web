@@ -54,7 +54,7 @@ const TireDetails = ({ product }: { product: TInventoryItem[] }) => {
           {/* Accordion item for saving product */}
           <AccordionItem value="save-product" className="border-none">
             <AccordionContent className="px-4 py-4">
-              <TireSave product={product[0]} />
+              <TireSave product={product} />
             </AccordionContent>
           </AccordionItem>
         </Accordion>

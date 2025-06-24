@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 // Component to handle saving a center cap to the wishlist
-const TireWishlist = ({ product }: { product: TInventoryItem }) => {
+const TireWishlist = ({ product }: { product: TInventoryItem[] }) => {
   // Hook for displaying toast notifications
 
   // Local state for managing success and error messages
@@ -42,17 +42,25 @@ const TireWishlist = ({ product }: { product: TInventoryItem }) => {
   //   const isActionButtonDisabled =
   //     getPrice(product?.msrp, product?.price) < (product?.min_price ?? 0);
 
+  let singleTirePageLink = `/collections/product/${product[0]?.slug}`; // Link to the tire's product page
+  if (product[1] !== null) {
+    singleTirePageLink += `?slug=${product[1]?.slug}`; // Add front tire slug to the link
+  }
+
   return (
     // Button to save the product to the wishlist
     <button
       onClick={() => {
         saveToLater({
-          slug: product?.slug,
+          slug: singleTirePageLink,
           data: {
-            title: product?.description,
-            category: product?.category,
-            image_url: product.image_url,
-            part_number: product?.partnumber,
+            title:
+              product[1] !== null
+                ? `${product[0].brand} ${product[1].brand}`
+                : `${product[0].brand}`,
+            category: product[0]?.category,
+            image_url: product[0].item_image,
+            part_number: product[0]?.partnumber,
           },
         });
       }}

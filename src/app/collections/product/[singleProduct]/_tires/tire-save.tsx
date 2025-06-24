@@ -2,8 +2,7 @@
 import { TInventoryItem } from '@/types/product';
 import TireWishlist from './tire-wish-list';
 
-const TireSave = ({ product }: { product: TInventoryItem }) => {
-  // console.log('product', product);
+const TireSave = ({ product }: { product: TInventoryItem[] }) => {
   return (
     <>
       <div className="relative flex w-full flex-col items-start justify-center self-stretch">

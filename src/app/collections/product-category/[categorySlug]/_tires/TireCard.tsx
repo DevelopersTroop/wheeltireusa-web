@@ -83,7 +83,7 @@ const TireCard = ({
       </div>
       <div className="flex flex-col sm:flex-row justify-between gap-2 w-full px-5 sm:pb-2">
         <TireRating productId={products[0]._id} />
-        <ComparisonWithFavorite product={products[0]} />
+        <ComparisonWithFavorite product={products} />
       </div>
       <div className="pl-5 pr-0 flex flex-col md:flex-row gap-6 self-stretch w-full">
         <div className="w-full h-full sm:w-auto my-auto flex justify-center items-center  ">

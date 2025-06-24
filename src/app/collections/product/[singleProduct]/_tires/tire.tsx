@@ -12,7 +12,6 @@ import ReliableTires from './reliable-tires';
 import SameFitmentDifferentGrip from './samefitment-differentgrip';
 
 const Tire = ({ product }: { product: TInventoryItem[] }) => {
-  console.log('tire component', product);
   let singleTirePageLink = `/collections/product/${product[0]?.slug}`; // Link to the tire's product page
   if (product.length > 1) {
     singleTirePageLink += `?slug=${product[1]?.slug}`; // Add front tire slug to the link

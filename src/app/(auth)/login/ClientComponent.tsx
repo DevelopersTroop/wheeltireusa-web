@@ -66,7 +66,7 @@ const ClientComponent = () => {
   }, [user, router, searchParams]);
 
   const onSubmit = (values: TFieldValues) => {
-    console.log(values);
+    // console.log(values);
     setIsSubmitting(true);
     userLogin({ email: values.email, password: values.password })
       .then(async (data) => {

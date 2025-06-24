@@ -19,8 +19,6 @@ const Cart = () => {
 
   const groupedProducts = useGroupedProducts(cart?.products || []);
 
-  console.log('Grouped Products:', groupedProducts);
-
   return (
     <>
       <Container>

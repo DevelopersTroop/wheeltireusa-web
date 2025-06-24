@@ -65,14 +65,6 @@ const TireActionButtons = ({ product }: { product: TInventoryItem[] }) => {
   // Convert total price to fixed decimal format and split into dollars and cents
   const splitedPrice = totalPrice.toFixed(2).split('.');
 
-  console.log('is Square ==== ', isSquare);
-  console.log('Front quantity === ', frontTireQuantity);
-  console.log('Rear quantity === ', rearTireQuantity);
-  console.log('frontPrice ==== ', frontPrice);
-  console.log('rearPrice ==== ', rearPrice);
-  console.log('Total price === ', totalPrice);
-  console.log('action product ===== ', product);
-
   // State for managing the "Add to Cart" button text
   const [addToCartText, setAddToCartText] = useState('Add To Cart');
 

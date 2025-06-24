@@ -84,7 +84,6 @@ const ClientComponent = () => {
   const [isLoadingRegister, setIsLoadingRegister] = useState(false); // State to track loading status
 
   const onSubmit = (data: TFieldValues) => {
-    console.log(data);
     setIsLoadingRegister(true);
     userRegister({
       firstName: data.fullName.split(' ')[0],

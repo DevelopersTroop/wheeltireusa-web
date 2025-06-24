@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-const ComparisonWithFavorite = ({ product }: { product: TInventoryItem }) => {
+const ComparisonWithFavorite = ({ product }: { product: TInventoryItem[] }) => {
   // Local state for managing success and error messages
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -34,7 +34,15 @@ const ComparisonWithFavorite = ({ product }: { product: TInventoryItem }) => {
     }
   }, [error]);
 
+  console.log('collection wishlist product ===== ', product);
+
   // console.log('Product', product);
+  let singleTirePageLink = `/collections/product/${product[0]?.slug}`; // Link to the tire's product page
+  if (product.length > 1) {
+    singleTirePageLink += `?slug=${product[1]?.slug}`; // Add front tire slug to the link
+  }
+
+  console.log('collection single link ====  ', singleTirePageLink);
 
   return (
     <div className="w-full flex flex-1 flex-row gap-4   ">
@@ -47,12 +55,15 @@ const ComparisonWithFavorite = ({ product }: { product: TInventoryItem }) => {
         <button
           onClick={() => {
             saveToLater({
-              slug: product?.slug,
+              slug: singleTirePageLink,
               data: {
-                title: product?.description,
-                category: product?.category,
-                image_url: product.item_image,
-                part_number: product?.partnumber,
+                title:
+                  product.length > 1
+                    ? `${product[0].brand} ${product[1].brand}`
+                    : `${product[0].brand}`,
+                category: product[0]?.category,
+                image_url: product[0].item_image,
+                part_number: product[0]?.partnumber,
               },
             });
           }}
