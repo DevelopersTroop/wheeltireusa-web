@@ -13,7 +13,7 @@ import TireSave from './tire-save';
 import TireQuantitySection from './tite-quantity-section';
 
 // Component to display in-stock wheel details
-const TireDetails = ({ product }: { product: TInventoryItem }) => {
+const TireDetails = ({ product }: { product: TInventoryItem[] }) => {
   return (
     <>
       {/* Main container for the in-stock wheel details */}
@@ -31,7 +31,7 @@ const TireDetails = ({ product }: { product: TInventoryItem }) => {
           {/* Accordion item for Quantity */}
           <AccordionItem className="border-b border-[#cfcfcf]" value="quantity">
             <AccordionContent className="px-4 py-4">
-              <TireQuantitySection product={product} />
+              <TireQuantitySection product={product[0]} />
             </AccordionContent>
           </AccordionItem>
           <AccordionItem
@@ -39,7 +39,7 @@ const TireDetails = ({ product }: { product: TInventoryItem }) => {
             value="delivery-cost"
           >
             <AccordionContent className="px-4 py-4">
-              <DeliveryCost product={product} />
+              <DeliveryCost product={product[0]} />
             </AccordionContent>
           </AccordionItem>
 
@@ -54,7 +54,7 @@ const TireDetails = ({ product }: { product: TInventoryItem }) => {
           {/* Accordion item for saving product */}
           <AccordionItem value="save-product" className="border-none">
             <AccordionContent className="px-4 py-4">
-              <TireSave product={product} />
+              <TireSave product={product[0]} />
             </AccordionContent>
           </AccordionItem>
         </Accordion>

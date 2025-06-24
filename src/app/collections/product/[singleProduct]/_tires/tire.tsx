@@ -107,7 +107,7 @@ const Tire = ({ product }: { product: TInventoryItem[] }) => {
             {product[1] !== null && (
               <TireSpecifications product={product[1]} tire={'Rear'} />
             )}
-            <TireDetails product={product[0]} />
+            <TireDetails product={product} />
           </div>
         </div>
       </div>

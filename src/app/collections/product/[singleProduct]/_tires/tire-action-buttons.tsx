@@ -5,13 +5,25 @@ import { useAppDispatch } from '@/redux/store';
 // Import necessary dependencies and utilities
 
 import { TInventoryItem } from '@/types/product';
+import { triggerGaAddToCart } from '@/utils/analytics';
+import { getPrice } from '@/utils/price';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { PiShoppingCartLight } from 'react-icons/pi';
 import { v4 as uuidv4 } from 'uuid';
 
-const TireActionButtons = ({ product }: { product: TInventoryItem }) => {
+const TireActionButtons = ({ product }: { product: TInventoryItem[] }) => {
   // Redux dispatch and router hooks
+
+  const isSquare = product[1] === null; // Check if the tire set is square (all tires same size)
+  const [frontTireQuantity, setFrontTireQuantity] = useState(2);
+  const [rearTireQuantity, setRearTireQuantity] = useState(2);
+
+  useEffect(() => {
+    // Reset quantities if the products change
+    setFrontTireQuantity(isSquare ? 4 : 2);
+    setRearTireQuantity(isSquare ? 0 : 2);
+  }, [product, isSquare]);
 
   // State for managing modal visibility
   const dispatch = useAppDispatch();
@@ -21,14 +33,45 @@ const TireActionButtons = ({ product }: { product: TInventoryItem }) => {
   const addProductToCart = async () => {
     // Check if the product is already in the cart
     const cartPackage = uuidv4();
-    const cartProducts = {
-      ...product,
-      cartPackage,
-      quantity: 4,
-    };
 
-    dispatch(addToCart(cartProducts as TCartProduct));
+    if (isSquare) {
+      const cartProducts = {
+        ...product[0],
+        cartPackage,
+        quantity: 4,
+      };
+      dispatch(addToCart(cartProducts as TCartProduct));
+    } else {
+      const cartProducts = product.map((p, id) => {
+        triggerGaAddToCart(p, frontTireQuantity + rearTireQuantity);
+        return {
+          ...p,
+          cartPackage,
+          quantity: id === 0 ? frontTireQuantity : rearTireQuantity,
+        };
+      });
+      dispatch(addToCart(cartProducts as TCartProduct[]));
+    }
   };
+
+  const frontPrice = getPrice(product[0])?.toFixed(2);
+  const rearPrice = getPrice(product[1])?.toFixed(2);
+  // Calculate total price by multiplying price per unit with quantity
+  let totalPrice = Number(frontPrice) * frontTireQuantity;
+  // Check if rearPrice is a valid number before adding to totalPrice
+  if (!Number.isNaN(Number(rearPrice))) {
+    totalPrice += Number(rearPrice) * rearTireQuantity;
+  }
+  // Convert total price to fixed decimal format and split into dollars and cents
+  const splitedPrice = totalPrice.toFixed(2).split('.');
+
+  console.log('is Square ==== ', isSquare);
+  console.log('Front quantity === ', frontTireQuantity);
+  console.log('Rear quantity === ', rearTireQuantity);
+  console.log('frontPrice ==== ', frontPrice);
+  console.log('rearPrice ==== ', rearPrice);
+  console.log('Total price === ', totalPrice);
+  console.log('action product ===== ', product);
 
   // State for managing the "Add to Cart" button text
   const [addToCartText, setAddToCartText] = useState('Add To Cart');
@@ -40,11 +83,17 @@ const TireActionButtons = ({ product }: { product: TInventoryItem }) => {
         <h4 className="text-2xl ]">
           <span className=" text-2xl font-normal">Total</span>
         </h4>
-        <div>
-          <h2 className="text-2xl font-semibold">
-            {' '}
-            ${(product?.price || 1) * 4}{' '}
-          </h2>
+        <div className="flex gap-0 items-baseline relative">
+          <h4 className="text-2xl leading-[29px] text-[#210203]">
+            <span className="text-[#210203] text-2xl font-bold">
+              ${splitedPrice[0]}.
+            </span>
+          </h4>
+          <small className="text-sm leading-[17px] text-[#210203]">
+            <span className="text-[#210203] text-sm font-bold">
+              {splitedPrice[1]}
+            </span>
+          </small>
         </div>
       </div>
 
