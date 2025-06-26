@@ -28,7 +28,7 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
     { refetchOnMountOrArgChange: true }
   );
 
-  // console.log('data ===== ', data);
+  console.log('data ===== ', data?.products);
 
   return (
     <>

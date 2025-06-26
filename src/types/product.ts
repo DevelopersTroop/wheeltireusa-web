@@ -68,6 +68,7 @@ export type TInventoryBase = {
 export type TInventoryItem = TInventoryBase & {
   model?: string;
   image_url?: string;
+  original_image?: string;
   sidewall?: string;
   load_rating?: string;
   raw_size?: string;

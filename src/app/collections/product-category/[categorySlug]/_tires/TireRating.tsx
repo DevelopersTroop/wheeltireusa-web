@@ -8,7 +8,7 @@ const TireRating: React.FC<{ productId: string }> = ({ productId }) => {
     { skip: !productId }
   );
 
-  if (!data?.average || !data.count) return null;
+  if (!data?.average || !data.count) return <div className="w-full"></div>;
   return (
     // Main container for the rating component
     <div className="rounded-md flex gap-2 items-center self-stretch relative w-full">

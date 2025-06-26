@@ -34,15 +34,11 @@ const ComparisonWithFavorite = ({ product }: { product: TInventoryItem[] }) => {
     }
   }, [error]);
 
-  console.log('collection wishlist product ===== ', product);
-
   // console.log('Product', product);
   let singleTirePageLink = `/collections/product/${product[0]?.slug}`; // Link to the tire's product page
   if (product.length > 1) {
     singleTirePageLink += `?slug=${product[1]?.slug}`; // Add front tire slug to the link
   }
-
-  console.log('collection single link ====  ', singleTirePageLink);
 
   return (
     <div className="w-full flex flex-1 flex-row gap-4   ">

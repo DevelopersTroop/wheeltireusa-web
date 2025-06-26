@@ -17,6 +17,8 @@ const Tire = ({ product }: { product: TInventoryItem[] }) => {
     singleTirePageLink += `?slug=${product[1]?.slug}`; // Add front tire slug to the link
   }
 
+  console.log('single page product ======= ', product);
+
   return (
     <div className="container mx-auto px-0 sm:px-4">
       <div className="px-4 sm:px-0 py-4">
