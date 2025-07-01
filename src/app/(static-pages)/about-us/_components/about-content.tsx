@@ -119,9 +119,9 @@ const AboutContent: React.FC = () => {
         </Container>
       </div>
 
-      <Container className="!py-0">
-        <div className="w-full md:h-[548px] flex flex-col md:flex-row md:gap-20">
-          <div className="w-full md:w-[55%] flex flex-col gap-8 items-start justify-center pt-18 md:pt-0 pb-12 md:pb-0">
+      <div className="w-full h-full">
+        <div className="w-full h-full flex flex-col md:flex-row md:gap-20">
+          <div className="w-full px-4 md:pl-6 lg:pl-8 xl:pl-16 md:w-[55%] flex flex-col gap-8 items-start justify-center pt-18 md:pt-0 pb-12 md:pb-0">
             <div className="flex flex-col gap-4">
               <h2 className="text-[40px] sm:text-5xl lg:text-[64px] text-[#212227] font-bold">
                 Our Story
@@ -141,7 +141,7 @@ const AboutContent: React.FC = () => {
               </p>
             </div>
           </div>
-          <div className="w-full md:w-[45%] h-[360px] md:h-full  md:max-h-[693px] flex flex-row relative">
+          <div className="w-full h-[360px] md:h-[693px] md:w-[45%] flex flex-row">
             <div className="w-full h-full">
               <img
                 src="/images/about/tire1.png"
@@ -165,7 +165,7 @@ const AboutContent: React.FC = () => {
             </div>
           </div>
         </div>
-      </Container>
+      </div>
     </>
   );
 };

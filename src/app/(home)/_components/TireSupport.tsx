@@ -2,9 +2,9 @@ import Container from '@/components/ui/container/container';
 
 const TireSupport = () => {
   return (
-    <Container className="!py-0">
-      <div className="flex flex-col md:flex-row justify-center items-center gap-8">
-        <div className="w-full md:w-[50%] lg:w-[40%] flex flex-col gap-4 pt-16 md:pt-0">
+    <div className="container w-full h-full px-0">
+      <div className="w-full h-full flex flex-col md:flex-row  items-center gap-8">
+        <div className="w-full px-4 sm:px-6 lg:pl-8 xl:pl-16 lg:w-[40%] flex flex-col gap-4 pt-16 md:pt-0">
           <p className="text-lg md:text-xl font-normal uppercase text-[#464853]">
             Tirematic: Roadside Support
           </p>
@@ -18,15 +18,15 @@ const TireSupport = () => {
             experience is smooth and hassle-free.
           </p>
         </div>
-        <div className="w-full md:w-[50%] lg:w-[40%]">
+        <div className="w-full h-[470px] lg:h-[505px] lg:w-[60%]">
           <img
             src={'/images/home/tireSupport.png'}
             alt="TireSupport"
-            className="w-full h-[470px] md:h-[505px] object-cover"
+            className="w-full h-full object-cover"
           />
         </div>
       </div>
-    </Container>
+    </div>
   );
 };
 

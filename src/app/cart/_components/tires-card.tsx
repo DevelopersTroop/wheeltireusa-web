@@ -67,7 +67,7 @@ const TiresCard = ({ tires }: { tires: TCartProduct[] }) => {
 
       <div className="sm:pl-5 pr-0 flex flex-col sm:flex-row gap-6 items-center justify-center self-stretch relative w-full">
         {/* Rating and Image */}
-        <div className=" w-full sm:w-auto flex flex-col gap-4 items-center text-center justify-center relative">
+        <div className=" w-full sm:w-auto flex flex-col gap-4 items-center  justify-center relative">
           {/* <Rating /> */}
           <div className="w-full flex justify-center relative">
             <Image
@@ -78,7 +78,7 @@ const TiresCard = ({ tires }: { tires: TCartProduct[] }) => {
             />
           </div>
 
-          <div className="pl-4 pt-6 pb-3 flex flex-col sm:hidden gap-2 justify-center items-start relative w-full border-b">
+          <div className="pl-4 pt-6 pb-3 flex flex-col sm:hidden gap-2 justify-start items-start relative w-full border-b">
             <p className="text-base leading-[19px] text-[#210203]">
               <span className="text-[#210203] text-base font-normal">
                 Brand name
@@ -87,18 +87,21 @@ const TiresCard = ({ tires }: { tires: TCartProduct[] }) => {
 
             <h4 className="text-2xl leading-[29px] text-[#210203]">
               <span className="text-[#210203] text-2xl font-bold">
-                {tires[0].model_group} {tires[0]?.tire_size}{' '}
-                {tires[0]?.tire_size !== tires[0]?.tire_size &&
-                typeof tires[0]?.tire_size !== 'undefined'
-                  ? `AND ${tires[0]?.tire_size}`
-                  : ''}
+                <Link href={singleTirePageLink}>
+                  {tires[0]?.brand} {tires[0]?.model_group}{' '}
+                  {tires[0]?.tire_size}{' '}
+                  {tires[0]?.tire_size !== tires[1]?.tire_size &&
+                  typeof tires[1]?.tire_size !== 'undefined'
+                    ? `AND ${tires[1]?.tire_size}`
+                    : ''}
+                </Link>
               </span>
             </h4>
           </div>
         </div>
 
         <div
-          className={`flex flex-col justify-center items-start flex-1 relative w-full ${!isSquare && 'border-l'} `}
+          className={`flex flex-col justify-center items-start flex-1 relative w-full ${!isSquare && 'sm:border-l'} `}
         >
           <div
             className={`py-5 pl-4 flex flex-col items-start gap-6 self-stretch relative w-full `}

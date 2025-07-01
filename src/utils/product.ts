@@ -36,8 +36,6 @@ export const getProductThumbnail = (product: {
   //   imageUrl = product.image_url;
   // }
 
-  console.log('images ===  ', imageUrl);
-
   if (!imageUrl?.length) {
     return '/tire-not-available.png';
   }

@@ -28,8 +28,6 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
     { refetchOnMountOrArgChange: true }
   );
 
-  console.log('data ===== ', data?.products);
-
   return (
     <>
       <Container>
@@ -99,7 +97,7 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
                 <div className="hidden min-[1300px]:block py-3">
                   <ActiveFiltersWithSorting />
                 </div>
-                <div className={'w-full flex flex-col gap-y-4'}>
+                <div className={'w-full flex flex-col gap-y-3'}>
                   {/* {data?.products.map((product) => (
                     <ProductCard product={products} key={product.slug} />
                   ))} */}

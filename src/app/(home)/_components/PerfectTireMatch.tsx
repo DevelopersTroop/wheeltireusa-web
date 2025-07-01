@@ -1,12 +1,11 @@
-import Container from '@/components/ui/container/container';
 import Link from 'next/link';
 
 const PerfectTireMatch = () => {
   return (
     <div className="bg-[#131316]">
-      <Container className="!py-0">
+      <div className="!py-0">
         <div className="w-full lg:h-[548px] flex flex-col lg:flex-row gap-8 pt-16 lg:pt-0">
-          <div className="w-full lg:w-2/5 flex flex-col gap-6 lg:gap-8 items-start justify-center">
+          <div className="w-full px-4 lg:px-8 xl:px-16 py-2 lg:w-2/5 flex flex-col gap-6 lg:gap-8 items-start justify-center">
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-2">
                 <h2 className="text-2xl md:text-[40px] text-[#FFFFFF] font-bold">
@@ -40,7 +39,7 @@ const PerfectTireMatch = () => {
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="hidden md:block absolute bottom-0 md:-left-28 lg:-left-32">
+            <div className="hidden lg:block absolute bottom-0 md:-left-28 lg:-left-32">
               <img
                 src="/images/tireMatch/tire.png"
                 alt="Tirematic"
@@ -70,7 +69,7 @@ const PerfectTireMatch = () => {
             </div>
           </div>
         </div>
-      </Container>
+      </div>
     </div>
   );
 };
