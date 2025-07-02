@@ -1,4 +1,4 @@
-import EmailVerificationSection from './_components/EmailVerification/EmailVerificationSection';
+import EmailVerificationSection from './_components/EmailVerification/EmailVerification';
 
 export default function Page() {
   return <EmailVerificationSection />;

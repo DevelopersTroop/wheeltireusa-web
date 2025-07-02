@@ -1,6 +1,6 @@
 // Import the Delivery and Installation component
 import { metaDataHelper } from '@/utils/metadata';
-import DeliveryAndInstallation from './_components/delivery-and-installation';
+import DeliveryAndInstallation from './DeliveryAndInstallation';
 
 // Metadata for the page
 export const metadata = metaDataHelper({

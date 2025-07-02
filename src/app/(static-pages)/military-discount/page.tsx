@@ -1,6 +1,6 @@
 // Import the  Military Discount component
 import { metaDataHelper } from '@/utils/metadata';
-import MilitaryDiscount from './_components/military-discount';
+import MilitaryDiscount from './MilitaryDiscount';
 
 // Metadata for the page
 export const metadata = metaDataHelper({
