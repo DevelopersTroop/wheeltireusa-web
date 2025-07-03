@@ -1,6 +1,6 @@
 // Import the Store Location component
 import { metaDataHelper } from '@/utils/metadata';
-import StoreLocator from './_components/store-locator';
+import StoreLocator from './StoreLocator';
 
 // Metadata for the page
 export const metadata = metaDataHelper({

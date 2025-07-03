@@ -1,6 +1,6 @@
 // Import the Privacy Policy component
 import { metaDataHelper } from '@/utils/metadata';
-import BecomeAnInstaller from './_components/BecomeAnInstaller/BecomeAnInstaller';
+import BecomeAnInstaller from './BecomeAnInstaller';
 
 // Metadata for the page
 export const metadata = metaDataHelper({

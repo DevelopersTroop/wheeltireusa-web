@@ -97,6 +97,7 @@ export type TInventoryItem = TInventoryBase & {
   revs_per_mile?: string;
   tire_weight?: string;
   country_of_origin?: string;
+  sku?: string;
   inventoryId?: {
     _id: string;
     internal_id: string;

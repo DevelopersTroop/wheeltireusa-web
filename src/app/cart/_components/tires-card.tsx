@@ -1,6 +1,6 @@
 'use client';
 
-import TireQuantity from '@/app/collections/product-category/[categorySlug]/_tires/TireQuantity';
+import TireQuantity from '@/app/collections/product-category/[categorySlug]/_tires/_components/TireQuantity/TireQuantity';
 import { removeFromCart, TCartProduct } from '@/redux/features/cartSlice';
 import { getPrice } from '@/utils/price';
 import { getProductThumbnail } from '@/utils/product';

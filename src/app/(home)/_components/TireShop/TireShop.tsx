@@ -1,6 +1,6 @@
 'use client';
 
-import QuantityInput from '@/app/collections/product/[singleProduct]/_tires/quantity-input';
+import QuantityInput from '@/app/collections/product/[singleProduct]/_tires/_components/QuantityInput/QuantityInput';
 import Container from '@/components/ui/container/container';
 import { useGetProductsQuery } from '@/redux/apis/product';
 import { getPrice } from '@/utils/price';

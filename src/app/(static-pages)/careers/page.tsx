@@ -1,6 +1,6 @@
 // Import the Careers component
 import { metaDataHelper } from '@/utils/metadata';
-import Careers from './_components/Careers/Careers';
+import Careers from './Careers';
 
 // Metadata for the page
 export const metadata = metaDataHelper({

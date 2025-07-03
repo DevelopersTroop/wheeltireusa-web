@@ -1,6 +1,6 @@
 // Import the Safety Tips component
 import { metaDataHelper } from '@/utils/metadata';
-import SafetyTips from './_components/safety-tips';
+import SafetyTips from './SafetyTips';
 
 // Metadata for the page
 export const metadata = metaDataHelper({

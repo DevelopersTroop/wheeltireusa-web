@@ -1,6 +1,6 @@
 'use client';
 
-import QuantityInput from '@/app/collections/product/[singleProduct]/_tires/quantity-input';
+import QuantityInput from '@/app/collections/product/[singleProduct]/_tires/_components/QuantityInput/QuantityInput';
 import { TInventoryItem } from '@/types/product';
 import { getProductThumbnail } from '@/utils/product';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
