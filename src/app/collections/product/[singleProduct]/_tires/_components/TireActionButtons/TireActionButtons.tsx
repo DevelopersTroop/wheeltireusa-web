@@ -11,6 +11,10 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { PiShoppingCartLight } from 'react-icons/pi';
 import { v4 as uuidv4 } from 'uuid';
+import {
+  calculateTotalPrice,
+  prepareCartData,
+} from './utils/tireActionButtons';
 
 const TireActionButtons = ({ product }: { product: TInventoryItem[] }) => {
   // Redux dispatch and router hooks
@@ -32,38 +36,21 @@ const TireActionButtons = ({ product }: { product: TInventoryItem[] }) => {
   // Function to add the product to the cart
   const addProductToCart = async () => {
     // Check if the product is already in the cart
-    const cartPackage = uuidv4();
-
-    if (isSquare) {
-      const cartProducts = {
-        ...product[0],
-        cartPackage,
-        quantity: 4,
-      };
-      dispatch(addToCart(cartProducts as TCartProduct));
-    } else {
-      const cartProducts = product.map((p, id) => {
-        triggerGaAddToCart(p, frontTireQuantity + rearTireQuantity);
-        return {
-          ...p,
-          cartPackage,
-          quantity: id === 0 ? frontTireQuantity : rearTireQuantity,
-        };
-      });
-      dispatch(addToCart(cartProducts as TCartProduct[]));
-    }
+    const cartProducts = prepareCartData(
+      product,
+      isSquare,
+      frontTireQuantity,
+      rearTireQuantity
+    );
+    dispatch(addToCart(cartProducts));
   };
 
-  const frontPrice = getPrice(product[0])?.toFixed(2);
-  const rearPrice = getPrice(product[1])?.toFixed(2);
-  // Calculate total price by multiplying price per unit with quantity
-  let totalPrice = Number(frontPrice) * frontTireQuantity;
-  // Check if rearPrice is a valid number before adding to totalPrice
-  if (!Number.isNaN(Number(rearPrice))) {
-    totalPrice += Number(rearPrice) * rearTireQuantity;
-  }
-  // Convert total price to fixed decimal format and split into dollars and cents
-  const splitedPrice = totalPrice.toFixed(2).split('.');
+  //get price
+  const splitedPrice = calculateTotalPrice(
+    product,
+    frontTireQuantity,
+    rearTireQuantity
+  );
 
   // State for managing the "Add to Cart" button text
   const [addToCartText, setAddToCartText] = useState('Add To Cart');

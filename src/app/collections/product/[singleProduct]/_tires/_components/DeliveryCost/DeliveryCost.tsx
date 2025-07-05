@@ -1,6 +1,7 @@
 import { TInventoryItem } from '@/types/product';
 
 const DeliveryCost = ({ product }: { product: TInventoryItem }) => {
+  console.log('delivery cost ', product);
   return (
     <div className="flex flex-col gap-4">
       <div className="">

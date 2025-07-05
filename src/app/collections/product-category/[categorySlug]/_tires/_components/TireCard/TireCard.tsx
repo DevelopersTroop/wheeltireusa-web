@@ -1,7 +1,6 @@
 import DeliveryWithStock from '@/app/cart/_components/delivery-with-stock';
 import PaymentMessaging from '@/components/shared/payment-method-messaging';
 import { TInventoryItem } from '@/types/product';
-import { getPrice } from '@/utils/price';
 import { getProductThumbnail } from '@/utils/product';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -13,19 +12,14 @@ import TireCardButton from '../TireCardButton/TireCardButton';
 import TireCardPrice from '../TireCardPrice/TireCardPrice';
 import TireQuantity from '../TireQuantity/TireQuantity';
 import TireRating from '../TireRating/TireRating';
+import {
+  calculateTotalPrice,
+  generateProductLink,
+  TireCardProps,
+} from './utils/tireCard';
+import { isSameWeek } from 'date-fns';
 
-const TireCard = ({
-  products,
-  wheelInfo,
-}: {
-  products: TInventoryItem[];
-  wheelInfo: {
-    frontForging: string;
-    rearForging: string;
-    hasDually: boolean;
-    hasOffRoad: boolean;
-  };
-}) => {
+const TireCard = ({ products, wheelInfo }: TireCardProps) => {
   const isSquare = products.length === 1; // Check if the tire set is square (all tires same size)
   const [frontTireQuantity, setFrontTireQuantity] = useState(2);
   const [rearTireQuantity, setRearTireQuantity] = useState(2);
@@ -36,26 +30,10 @@ const TireCard = ({
     setRearTireQuantity(isSquare ? 0 : 2);
   }, [products, isSquare]);
 
-  let singleTirePageLink = `/collections/product/${products[0]?.slug}`; // Link to the tire's product page
-  if (products.length > 1) {
-    singleTirePageLink += `?slug=${products[1]?.slug}`; // Add front tire slug to the link
-  }
-
-  // if (products[1]) {
-  //   // If a second tire exists (for non-square sets)
-  //   singleTirePageLink += `&rearTire=${products[1].slug}`;
-  // }
+  const singleTirePageLink = generateProductLink(products);
 
   const totalPrice = useMemo(() => {
-    const frontPrice = getPrice(products[0])?.toFixed(2);
-    const rearPrice = getPrice(products[1])?.toFixed(2);
-
-    let totalPrice = Number(frontPrice) * frontTireQuantity;
-    // Check if rearPrice is a valid number before adding to totalPrice
-    if (!Number.isNaN(Number(rearPrice))) {
-      totalPrice += Number(rearPrice) * rearTireQuantity;
-    }
-    return totalPrice;
+    return calculateTotalPrice(products, frontTireQuantity, rearTireQuantity);
   }, [products, rearTireQuantity, frontTireQuantity]);
 
   return (
@@ -149,7 +127,7 @@ const TireCard = ({
                   otherQuantity={rearTireQuantity}
                   product={products[0]}
                   setQuantity={setFrontTireQuantity}
-                  quantityStep={4}
+                  quantityStep={isSquare ? 4 : 2}
                   quantity={frontTireQuantity}
                 />
                 <TireCardPrice product={products[0]} />

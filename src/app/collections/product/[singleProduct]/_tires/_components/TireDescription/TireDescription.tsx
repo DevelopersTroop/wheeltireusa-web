@@ -7,7 +7,6 @@ import { Reviews } from '../Reviews/Reviews';
 const TireDescription: React.FC<{ product: TInventoryItem[] }> = ({
   product,
 }) => {
-  // console.log('product === ', product)
   return (
     <div className="w-full mx-auto p-4 bg-[#F7F7F7]">
       <Tabs defaultValue="specifications" className="w-full">

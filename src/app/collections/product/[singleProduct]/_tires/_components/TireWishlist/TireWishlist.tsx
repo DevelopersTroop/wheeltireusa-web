@@ -1,10 +1,12 @@
 'use client';
 import { useCreateWishlistMutation } from '@/redux/apis/wishlist';
 import { TInventoryItem } from '@/types/product';
-// import { getPrice } from '@/utils/price';
-// Import necessary dependencies
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import {
+  generateWishlistSlug,
+  generateWishlistTitle,
+} from './utils/tireWishlist';
 
 // Component to handle saving a center cap to the wishlist
 const TireWishlist = ({ product }: { product: TInventoryItem[] }) => {
@@ -39,13 +41,8 @@ const TireWishlist = ({ product }: { product: TInventoryItem[] }) => {
     }
   }, [error]);
 
-  //   const isActionButtonDisabled =
-  //     getPrice(product?.msrp, product?.price) < (product?.min_price ?? 0);
-
-  let singleTirePageLink = `/collections/product/${product[0]?.slug}`; // Link to the tire's product page
-  if (product[1] !== null) {
-    singleTirePageLink += `?slug=${product[1]?.slug}`; // Add front tire slug to the link
-  }
+  const singleTirePageLink = generateWishlistSlug(product);
+  const title = generateWishlistTitle(product);
 
   return (
     // Button to save the product to the wishlist
@@ -54,10 +51,7 @@ const TireWishlist = ({ product }: { product: TInventoryItem[] }) => {
         saveToLater({
           slug: singleTirePageLink,
           data: {
-            title:
-              product[1] !== null
-                ? `${product[0].brand} ${product[1].brand}`
-                : `${product[0].brand}`,
+            title: title,
             category: product[0]?.category,
             image_url: product[0].item_image,
             part_number: product[0]?.partnumber,

@@ -1,19 +1,13 @@
 // Importing necessary components from 'lucide-react' and React
-import { TCartProduct, updateCartQuantity } from '@/redux/features/cartSlice';
 import { useAppDispatch } from '@/redux/store';
-import { TInventoryItem } from '@/types/product';
 import { Minus, Plus } from 'lucide-react';
 import React, { useMemo } from 'react';
-
-interface TireQuantityProps {
-  quantity: number;
-  setQuantity: React.Dispatch<React.SetStateAction<number>>;
-  product?: TInventoryItem;
-  otherQuantity: number;
-  quantityStep?: number;
-  isCart?: boolean;
-  cartProduct?: TCartProduct;
-}
+import {
+  TireQuantityProps,
+  isIncreaseDisabled,
+  isDecreaseDisabled,
+} from './utils/tireQuantity';
+import { updateCartQuantity } from '@/redux/features/cartSlice';
 
 // Functional component to display the tire quantity with disabled quantity controls
 const TireQuantity: React.FC<TireQuantityProps> = ({
@@ -27,17 +21,23 @@ const TireQuantity: React.FC<TireQuantityProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   // Disable increase
-  const isDisabledIncrease = useMemo(() => {
-    return (
-      quantityStep + otherQuantity + quantity >
-      (product?.inventory_available || cartProduct?.inventory_available || 4)
-    );
-  }, [product, otherQuantity, quantityStep, quantity, cartProduct]);
+  const isDisabledIncrease = useMemo(
+    () =>
+      isIncreaseDisabled(
+        quantity,
+        otherQuantity,
+        quantityStep,
+        product,
+        cartProduct
+      ),
+    [quantity, otherQuantity, quantityStep, product, cartProduct]
+  );
 
   // Disable Decrease
-  const isDisabledDecrease = useMemo(() => {
-    return quantity - quantityStep < 2;
-  }, [quantity, quantityStep]);
+  const isDisabledDecrease = useMemo(
+    () => isDecreaseDisabled(quantity, quantityStep),
+    [quantity, quantityStep]
+  );
 
   // Update Quantity
   const updateQuantity = (type: 'increase' | 'decrease') => {
