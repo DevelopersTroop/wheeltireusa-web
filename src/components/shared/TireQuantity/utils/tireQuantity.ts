@@ -28,5 +28,5 @@ export const isIncreaseDisabled = (
 
 // Check if decreasing quantity should be disabled
 export const isDecreaseDisabled = (quantity: number, quantityStep: number) => {
-  return quantity - quantityStep < 2;
+  return quantity - quantityStep < 1;
 };

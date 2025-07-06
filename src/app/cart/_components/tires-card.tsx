@@ -1,6 +1,6 @@
 'use client';
 
-import TireQuantity from '@/app/collections/product-category/[categorySlug]/_tires/_components/TireQuantity/TireQuantity';
+import TireQuantity from '@/components/shared/TireQuantity/TireQuantity';
 import { removeFromCart, TCartProduct } from '@/redux/features/cartSlice';
 import { getPrice } from '@/utils/price';
 import { getProductThumbnail } from '@/utils/product';
@@ -12,7 +12,6 @@ import Link from 'next/link';
 
 const TiresCard = ({ tires }: { tires: TCartProduct[] }) => {
   const dispatch = useDispatch();
-  // const { products: cartProducts } = useTypedSelector((state) => state.persisted.cart)
 
   const isSquare = tires.length === 1;
   let singleTirePageLink = `/collections/product/${tires[0]?.slug}`; // Link to the tire's product page
@@ -123,7 +122,7 @@ const TiresCard = ({ tires }: { tires: TCartProduct[] }) => {
             </div>
             <div className="flex flex-row gap-2 justify-between items-center w-full pr-4">
               <TireQuantity
-                otherQuantity={2}
+                otherQuantity={!isSquare ? tires[1]?.quantity : 0}
                 quantity={tires[0].quantity}
                 setQuantity={(quantity) => {
                   // Update quantity logic here
@@ -164,7 +163,7 @@ const TiresCard = ({ tires }: { tires: TCartProduct[] }) => {
               </div>
               <div className="flex flex-row gap-2 justify-between items-center w-full pr-4">
                 <TireQuantity
-                  otherQuantity={2}
+                  otherQuantity={tires[0]?.quantity}
                   quantity={tires[1].quantity}
                   setQuantity={(quantity) => {
                     // Update quantity logic here

@@ -1,6 +1,6 @@
 'use client';
 
-import QuantityInput from '@/app/collections/product/[singleProduct]/_tires/_components/QuantityInput/QuantityInput';
+import TireQuantity from '@/components/shared/TireQuantity/TireQuantity';
 import { TInventoryItem } from '@/types/product';
 import { getProductThumbnail } from '@/utils/product';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -56,6 +56,7 @@ export const MobileItemsTireShop: React.FC<{
         </button>
         {/* Slides */}
         {tires?.map((tire, i) => {
+          const isSquare = tire.length === 1;
           return (
             <SwiperSlide
               className="w-full h-fit border rounded-xl overflow-hidden bg-white text-left swiper-slide-custom"
@@ -109,12 +110,14 @@ export const MobileItemsTireShop: React.FC<{
                 <div className="flex flex-col items-center gap-2">
                   <div className="flex flex-row justify-between items-center w-full">
                     <div className="">
-                      <QuantityInput
-                        product={tire}
-                        inventoryAvailable={tire[0].inventory_available ? 4 : 0}
-                        name={`quantity-${i}`}
-                        id={`quantity-${i}`}
-                        isDually={false} // Assuming not dually for simplicity
+                      <TireQuantity
+                        otherQuantity={0}
+                        product={tire[0]}
+                        setQuantity={(q) => {
+                          console.log('update quantity = ', q);
+                        }}
+                        quantityStep={isSquare ? 2 : 1}
+                        quantity={4}
                       />
                     </div>
                     <div className="flex flex-row gap-2">

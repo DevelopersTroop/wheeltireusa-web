@@ -15,7 +15,7 @@ const TireQuantity: React.FC<TireQuantityProps> = ({
   setQuantity,
   product,
   otherQuantity,
-  quantityStep = 2,
+  quantityStep = 1,
   isCart,
   cartProduct,
 }) => {
@@ -56,7 +56,7 @@ const TireQuantity: React.FC<TireQuantityProps> = ({
     }
   };
   return (
-    <div className="flex gap-0 items-start relative w-[164px]">
+    <div className="flex gap-0 items-start relative ">
       {/* Decrease quantity button */}
       <button
         onClick={() => updateQuantity('decrease')}

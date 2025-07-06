@@ -10,14 +10,13 @@ import PriceSet from '../PriceSet/PriceSet';
 import TireAttributes from '../TireAttributes/TireAttributes';
 import TireCardButton from '../TireCardButton/TireCardButton';
 import TireCardPrice from '../TireCardPrice/TireCardPrice';
-import TireQuantity from '../TireQuantity/TireQuantity';
+import TireQuantity from '../../../../../../../components/shared/TireQuantity/TireQuantity';
 import TireRating from '../TireRating/TireRating';
 import {
   calculateTotalPrice,
   generateProductLink,
   TireCardProps,
 } from './utils/tireCard';
-import { isSameWeek } from 'date-fns';
 
 const TireCard = ({ products, wheelInfo }: TireCardProps) => {
   const isSquare = products.length === 1; // Check if the tire set is square (all tires same size)
@@ -127,7 +126,7 @@ const TireCard = ({ products, wheelInfo }: TireCardProps) => {
                   otherQuantity={rearTireQuantity}
                   product={products[0]}
                   setQuantity={setFrontTireQuantity}
-                  quantityStep={isSquare ? 4 : 2}
+                  quantityStep={1}
                   quantity={frontTireQuantity}
                 />
                 <TireCardPrice product={products[0]} />

@@ -31,7 +31,7 @@ const TireDetails = ({ product }: { product: TInventoryItem[] }) => {
           {/* Accordion item for Quantity */}
           <AccordionItem className="border-b border-[#cfcfcf]" value="quantity">
             <AccordionContent className="px-4 py-4">
-              <TireQuantitySection product={product[0]} />
+              <TireQuantitySection product={product} />
             </AccordionContent>
           </AccordionItem>
           <AccordionItem
