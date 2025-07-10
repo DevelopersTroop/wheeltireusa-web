@@ -38,7 +38,7 @@ export default function Navbar() {
             key={menu.label}
             onMouseEnter={() => handleMouseEnter(menu.label)}
             onMouseLeave={handleMouseLeave}
-            className={cn(menu.meagMenu ? '' : 'relative')}
+            className={cn(menu.megaMenu ? '' : 'relative')}
           >
             {/* Menu link */}
             <Link
@@ -62,46 +62,133 @@ export default function Navbar() {
                 ))}
             </Link>
 
-            {/* Mega Menu */}
-            {menu.meagMenu && (
+            {/* Mega Menu with Left Tabs */}
+            {menu.megaMenu && (
               <div
                 className={cn(
-                  'absolute left-0 top-[100%] w-full text-black bg-white p-4 grid grid-cols-3 gap-4 shadow-lg transition-opacity duration-300',
+                  'absolute left-[10%] top-[100%] w-[850px] text-black bg-white flex shadow-lg transition-opacity duration-300 z-50',
                   openMenu === menu.label
                     ? 'opacity-100'
                     : 'opacity-0 pointer-events-none'
                 )}
+                style={{ minHeight: 320 }}
               >
-                {menu.children?.map((submenu) => (
-                  <div key={submenu.label} className="relative w-fit">
-                    {/* Submenu link */}
-                    <Link
-                      href={submenu.href}
-                      className="text-lg font-semibold flex items-center transition-all duration-300 hover:text-primary"
+                {/* Left Tabs */}
+                <div className="w-80 border-r flex flex-col gap-1 bg-white">
+                  {menu.children?.map((tab, idx) => (
+                    <button
+                      key={idx}
+                      className={cn(
+                        'flex items-center gap-3 py-3 px-2 rounded transition-all text-left bg-gray-50 p-6',
+                        hovering === tab.label && ' font-semibold text-primary'
+                      )}
+                      // onMouseEnter={() => setHovering(tab.label)}
+                      // onFocus={() => setHovering(tab.label)}
+                      onClick={() => setHovering(tab.label)}
+                      tabIndex={0}
                     >
-                      {submenu.label}
-                    </Link>
-                    {/* Nested submenu */}
-                    {submenu.children && (
-                      <div className="w-full bg-white transition-opacity duration-300">
-                        {submenu.children.map((subsub) => (
+                      {/* Optional: Add an icon here if needed */}
+                      {tab.image && (
+                        <img
+                          src={tab.image}
+                          alt={tab.label}
+                          className="w-20 h-20 object-contain rounded mr-3"
+                        />
+                      )}
+                      <div>
+                        <div className="text-lg">{tab.label}</div>
+                        {tab.desc && (
+                          <div className="text-xs text-gray-500">
+                            {tab.desc}
+                          </div>
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+                {/* Right Content */}
+                <div className="flex-1 p-6">
+                  {menu.children?.map(
+                    (tab) =>
+                      hovering === tab.label && (
+                        <div
+                          key={tab.label}
+                          className="w-full h-full flex flex-col justify-between"
+                        >
+                          {/* Tab Title */}
+                          <div>
+                            <div className="text-lg font-semibold mb-2">
+                              {tab.label}
+                            </div>
+                            {/* Tab Content: List of links */}
+                            <div className="grid grid-cols-1 gap-2">
+                              {tab.children?.map((item) => (
+                                <Link
+                                  key={item.label}
+                                  href={item.href}
+                                  className="block py-1 px-2 rounded transition-all hover:bg-gray-50 hover:text-primary"
+                                >
+                                  {item.label}
+                                </Link>
+                              ))}
+                            </div>
+                          </div>
+                          {/* Optional: Add explore links at the bottom */}
+                          {tab.exploreLinks && (
+                            <div className="mt-6 flex gap-4">
+                              {tab.exploreLinks.map((explore) => (
+                                <Link
+                                  key={explore.label}
+                                  href={explore.href}
+                                  className="text-sm font-semibold text-primary hover:underline flex items-center gap-1"
+                                >
+                                  {explore.label}
+                                  <ChevronRight className="w-4 h-4 mt-1" />
+                                </Link>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )
+                  )}
+                  {/* If nothing is hovered, show the first tab by default */}
+                  {!hovering && menu.children && menu.children[0] && (
+                    <div>
+                      <div className="text-lg font-semibold mb-2">
+                        {menu.children[0].label}
+                      </div>
+                      <div className="grid grid-cols-1 gap-2">
+                        {menu.children[0].children?.map((item) => (
                           <Link
-                            key={subsub.label}
-                            href={subsub.href}
-                            className="text-base flex items-center py-2 transition-all duration-300 hover:text-primary relative after:absolute after:left-0 after:bottom-0 after:w-full after:h-[2px] after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300"
+                            key={item.label}
+                            href={item.href}
+                            className="block py-1 px-2 rounded transition-all hover:bg-gray-50 hover:text-primary"
                           >
-                            {subsub.label}
+                            {item.label}
                           </Link>
                         ))}
                       </div>
-                    )}
-                  </div>
-                ))}
+                      {/* Only render exploreLinks if they exist */}
+                      {menu.children[0].exploreLinks && (
+                        <div className="mt-6 flex gap-6">
+                          {menu.children[0].exploreLinks.map((explore) => (
+                            <Link
+                              key={explore.label}
+                              href={explore.href}
+                              className="text-sm font-semibold text-primary hover:underline flex items-center gap-1"
+                            >
+                              {explore.label}
+                              <ChevronRight className="w-4 h-4" />
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
             )}
-
-            {/* Normal Dropdown */}
-            {!menu.meagMenu && menu.children && (
+            {!menu.megaMenu && menu.children && (
               <div
                 className={cn(
                   'absolute top-full left-0 text-black bg-white w-56 py-4 shadow-lg transition-opacity duration-300',
