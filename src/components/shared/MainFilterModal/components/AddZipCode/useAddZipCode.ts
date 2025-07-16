@@ -22,6 +22,8 @@ const useAddZipCode = () => {
         const latLng = {
           lat: pos.coords.latitude,
           lng: pos.coords.longitude,
+          // lat: 40.7128,
+          // lng: -74.0060,
         };
         const geocoder = new google.maps.Geocoder();
 
@@ -31,6 +33,8 @@ const useAddZipCode = () => {
             region: 'US',
           },
           (results, status) => {
+            console.log('results', results);
+
             if (status === 'OK' && results && results.length > 0) {
               const addressComponents = results[0].address_components;
 
