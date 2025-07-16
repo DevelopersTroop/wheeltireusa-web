@@ -41,7 +41,7 @@ const SelectProperty = ({
             defaultValue={field.value}
           >
             <FormControl className="!bg-white">
-              <SelectTrigger className="w-full lg:w-[200px]">
+              <SelectTrigger className="w-full lg:w-[250px]">
                 <SelectValue placeholder={label} />
               </SelectTrigger>
             </FormControl>
