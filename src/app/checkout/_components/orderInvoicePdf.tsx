@@ -499,7 +499,7 @@ const OrderInvoicePDF: React.FC<{ order: TOrder | undefined }> = ({
           <View style={styles.footer}>
             <Text>Thank you for your purchase!</Text>
             <Text style={{ marginTop: 5 }}>
-              For questions, contact sales@amaniforged.com
+              For questions, contact sales@tirematic.com
             </Text>
           </View>
         </View>

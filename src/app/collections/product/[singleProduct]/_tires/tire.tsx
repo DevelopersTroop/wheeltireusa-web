@@ -2,17 +2,16 @@ import { ImageGallery } from '@/components/shared/imageGallery';
 import Breadcrumb from '@/components/ui/breadcrumb/breadcrumb';
 import Item from '@/components/ui/breadcrumb/item';
 import { TInventoryItem } from '@/types/product';
-import TireDescription from './TireDescription';
-import TireDetails from './tire-details';
+import TireDescription from './_components/TireDescription/TireDescription';
+import TireDetails from './_components/TireDetails/TireDetails';
 import { getProductThumbnail } from '@/utils/product';
-import TireSpecifications from './tire-specifications';
+import TireSpecifications from './_components/TireSpecifications/TireSpecifications';
 import Link from 'next/link';
-import TireRating from '@/app/collections/product-category/[categorySlug]/_tires/TireRating';
-import ReliableTires from './reliable-tires';
-import SameFitmentDifferentGrip from './samefitment-differentgrip';
+import TireRating from '@/app/collections/product-category/[categorySlug]/_tires/_components/TireRating/TireRating';
+import ReliableTires from './_components/ReliableTires/ReliableTires';
+import SameFitmentDifferentGrip from './_components/SameFitmentDifferentGrip/SameFitmentDifferentGrip';
 
 const Tire = ({ product }: { product: TInventoryItem[] }) => {
-  console.log('tire component', product);
   let singleTirePageLink = `/collections/product/${product[0]?.slug}`; // Link to the tire's product page
   if (product.length > 1) {
     singleTirePageLink += `?slug=${product[1]?.slug}`; // Add front tire slug to the link
@@ -107,7 +106,7 @@ const Tire = ({ product }: { product: TInventoryItem[] }) => {
             {product[1] !== null && (
               <TireSpecifications product={product[1]} tire={'Rear'} />
             )}
-            <TireDetails product={product[0]} />
+            <TireDetails product={product} />
           </div>
         </div>
       </div>

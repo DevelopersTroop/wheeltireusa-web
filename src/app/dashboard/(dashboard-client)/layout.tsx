@@ -1,8 +1,8 @@
 'use client'; // Enables client-side rendering for this component
 import Container from '@/components/ui/container/container';
 import React, { useEffect } from 'react';
-import DashbaordSidebar from './_components/dashbaord-sidebar'; // Sidebar component for dashboard
-import DashboardBreadcrumb from './_components/dashboard-breadcrumb'; // Breadcrumb navigation for dashboard
+import DashbaordSidebar from './_components/DashbaordSidebar'; // Sidebar component for dashboard
+import DashboardBreadcrumb from './_components/DashboardBreadcrumb'; // Breadcrumb navigation for dashboard
 import useAuth from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 

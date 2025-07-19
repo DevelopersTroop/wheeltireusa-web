@@ -1,6 +1,6 @@
 // Import the Blog Resources component
 import { metaDataHelper } from '@/utils/metadata';
-import BlogResources from './_components/blog-resources';
+import BlogResources from './BlogResources';
 
 // Metadata for the page
 export const metadata = metaDataHelper({

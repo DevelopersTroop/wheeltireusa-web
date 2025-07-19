@@ -1,6 +1,6 @@
 // Import the Return Policy component
 import { metaDataHelper } from '@/utils/metadata';
-import ReturnPolicy from './_components/return-policy';
+import ReturnPolicy from './ReturnPolicy';
 
 // Metadata for the page
 export const metadata = metaDataHelper({

@@ -1,6 +1,6 @@
 // Import the Customer support component
 import { metaDataHelper } from '@/utils/metadata';
-import CustomerSupport from './_components/customer-support';
+import CustomerSupport from './CustomerSupport';
 
 // Metadata for the page
 export const metadata = metaDataHelper({

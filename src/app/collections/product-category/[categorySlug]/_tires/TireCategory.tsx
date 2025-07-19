@@ -11,7 +11,7 @@ import TireFilters from '../_filters/TireFilters';
 import ProductCardSkeleton from '../_loading/ProductCardSkeleton';
 import NoProductsFound from '../NoProductsFound';
 import ProductPagination from '../ProductPagination';
-import TireCard from './TireCard';
+import TireCard from './_components/TireCard/TireCard';
 import ActiveFiltersWithSorting from '../ActiveFiltersWithSorting';
 
 // Type definition for page props, optional page parameter
@@ -27,8 +27,6 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
     { page, category: 'tire', ...filters },
     { refetchOnMountOrArgChange: true }
   );
-
-  // console.log('data ===== ', data);
 
   return (
     <>
@@ -99,11 +97,11 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
                 <div className="hidden min-[1300px]:block py-3">
                   <ActiveFiltersWithSorting />
                 </div>
-                <div className={'w-full flex flex-col gap-y-4'}>
+                <div className={'w-full flex flex-col gap-y-3'}>
                   {/* {data?.products.map((product) => (
                     <ProductCard product={products} key={product.slug} />
                   ))} */}
-                  {data?.products?.map((product, index) => {
+                  {data?.products?.map((product) => {
                     return (
                       <TireCard
                         key={`${product?.[0]?._id}-${product?.[1]?._id}`}

@@ -1,6 +1,6 @@
 // Import the Warranty component
 import { metaDataHelper } from '@/utils/metadata';
-import TermsOfUse from './_components/warranty';
+import Warranty from './Warranty';
 
 // Metadata for the page
 export const metadata = metaDataHelper({
@@ -20,6 +20,6 @@ export const metadata = metaDataHelper({
 export default function Page() {
   return (
     // Render the Warranty component
-    <TermsOfUse />
+    <Warranty />
   );
 }

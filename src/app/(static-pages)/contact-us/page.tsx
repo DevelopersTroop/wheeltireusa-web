@@ -1,5 +1,5 @@
 import { metaDataHelper } from '@/utils/metadata';
-import Contact from './_components/contact';
+import Contact from './Contact';
 
 // Metadata for the page
 export const metadata = metaDataHelper({

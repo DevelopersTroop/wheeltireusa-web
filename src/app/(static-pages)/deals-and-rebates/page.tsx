@@ -1,6 +1,6 @@
 // Import the Deals and rebates component
 import { metaDataHelper } from '@/utils/metadata';
-import DealsAndRebates from './_components/deals-and-rebates';
+import DealsAndRebates from './DealsAndRebates';
 
 // Metadata for the page
 export const metadata = metaDataHelper({

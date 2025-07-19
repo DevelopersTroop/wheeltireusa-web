@@ -1,6 +1,6 @@
 // Import the Terms Of Use component
 import { metaDataHelper } from '@/utils/metadata';
-import TermsOfUse from './_components/terms-of-use';
+import TermsOfUse from './TermsOfUse';
 
 // Metadata for the page
 export const metadata = metaDataHelper({

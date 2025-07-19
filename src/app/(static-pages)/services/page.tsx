@@ -1,6 +1,6 @@
 // Import the Services component
 import { metaDataHelper } from '@/utils/metadata';
-import Services from './_components/services';
+import Services from './Services';
 
 // Metadata for the page
 export const metadata = metaDataHelper({

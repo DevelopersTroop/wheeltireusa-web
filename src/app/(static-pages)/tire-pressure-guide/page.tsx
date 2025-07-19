@@ -1,6 +1,6 @@
 // Import the Tire Pressure Guide component
 import { metaDataHelper } from '@/utils/metadata';
-import TirePressureGuide from './_components/tire-pressure-guide';
+import TirePressureGuide from './TirePressureGuide';
 
 // Metadata for the page
 export const metadata = metaDataHelper({

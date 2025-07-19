@@ -17,21 +17,24 @@ export const isWishListData = (
   return 'image_url' in product;
 };
 
-export const getProductThumbnail = (
-  product: TInventoryItem | TCartProduct | TWishListData
-) => {
+export const getProductThumbnail = (product: {
+  image_url?: string;
+  item_image?: string;
+  original_image?: string;
+}) => {
   // const imageUrl = isInventoryItem(product)
   //   ? product?.image_url
   //   : isWishListData(product)
   //     ? product?.image_url
   //     : product?.item_image;
 
-  let imageUrl: string | undefined;
-  if (isInventoryItem(product)) {
-    imageUrl = product.image_url || product.item_image;
-  } else if (isWishListData(product)) {
-    imageUrl = product.image_url;
-  }
+  const imageUrl: string | undefined =
+    product.image_url || product?.item_image || product?.original_image;
+  // if (isInventoryItem(product)) {
+  //   imageUrl = product.image_url || product.item_image || product?.original_image;
+  // } else if (isWishListData(product)) {
+  //   imageUrl = product.image_url;
+  // }
 
   if (!imageUrl?.length) {
     return '/tire-not-available.png';

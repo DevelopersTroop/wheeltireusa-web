@@ -1,5 +1,5 @@
 import { metaDataHelper } from '@/utils/metadata';
-import FAQs from './_components/faqs'; // Import the FAQs component to display the list of frequently asked questions
+import FAQs from './_components/Faqs'; // Import the FAQs component to display the list of frequently asked questions
 
 // Metadata for the page
 export const metadata = metaDataHelper({

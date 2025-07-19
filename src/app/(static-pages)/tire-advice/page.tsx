@@ -1,6 +1,6 @@
 // Import the Tire Advic component
 import { metaDataHelper } from '@/utils/metadata';
-import TireAdvice from './_components/tire-advice';
+import TireAdvice from './TireAdvice';
 
 // Metadata for the page
 export const metadata = metaDataHelper({

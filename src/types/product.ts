@@ -68,6 +68,7 @@ export type TInventoryBase = {
 export type TInventoryItem = TInventoryBase & {
   model?: string;
   image_url?: string;
+  original_image?: string;
   sidewall?: string;
   load_rating?: string;
   raw_size?: string;
@@ -96,6 +97,7 @@ export type TInventoryItem = TInventoryBase & {
   revs_per_mile?: string;
   tire_weight?: string;
   country_of_origin?: string;
+  sku?: string;
   inventoryId?: {
     _id: string;
     internal_id: string;
