@@ -139,7 +139,7 @@ export const FinalStep: React.FC = () => {
             coupon: order.data.couponCode, // optional
 
             items: order.data.productsInfo.map((product, index) => ({
-              item_id: product.partnumber || product._id, // required
+              item_id: product.partnumber || product.id, // required
               item_name: product.title, // required
               price: product.price, // optional but recommended
               quantity: product.quantity, // optional but recommended
@@ -257,7 +257,7 @@ export const FinalStep: React.FC = () => {
         {/* Right Section: Order Summary and Account Creation */}
         <div className="col-span-11 lg:col-span-4 sticky top-0 flex flex-col gap-8">
           {!isAccountCreated && (
-            // !user?._id &&
+            // !user?.id &&
             <CreateAccountSection orderSuccessData={orderSuccessData} />
           )}
           <OrderSummary

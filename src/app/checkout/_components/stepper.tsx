@@ -21,7 +21,7 @@ export const Stepper: React.FC<StepperProps> = ({
 }) => {
   // Get the authenticated user
   // const { user } = useAuth();
-  const user = { _id: 0 };
+  const user = { id: 0 };
   const [_, setIsMobile] = useState(false); // State to track if the device is mobile
   const { selectedOptionTitle } = useTypedSelector(
     (state) => state.persisted.checkout
@@ -112,7 +112,7 @@ export const Stepper: React.FC<StepperProps> = ({
         </div>
       </div>
       {/* Prompt for users to sign in if they are not authenticated */}
-      {!user?._id && !isFinalStep && (
+      {!user?.id && !isFinalStep && (
         <div className="my-5 border border-gray-200 rounded-lg p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 max-w-3xl">
           <div className="flex items-center gap-2">
             <svg

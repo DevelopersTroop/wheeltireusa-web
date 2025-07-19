@@ -30,7 +30,7 @@ const cartSlice = createSlice({
 
       for (const newProduct of productsToAdd) {
         const existingProduct = state.products.find(
-          (p) => p._id === newProduct._id
+          (p) => p.id === newProduct.id
         );
 
         if (existingProduct) {
@@ -66,7 +66,7 @@ const cartSlice = createSlice({
       action: PayloadAction<{ id: string; quantity: number }>
     ) => {
       const { id, quantity } = action.payload;
-      const existingProduct = state.products.find((p) => p._id === id);
+      const existingProduct = state.products.find((p) => p.id === id);
       if (existingProduct) {
         existingProduct.quantity += quantity;
       }

@@ -348,7 +348,7 @@ const ShippingAddressForm: React.FC<{ setStep: (step: number) => void }> = ({
 
           {/* Create Account Section */}
           {
-            // !user?._id &&
+            // !user?.id &&
             !isAccountCreated ? (
               <div>
                 <div className="flex items-start gap-2">

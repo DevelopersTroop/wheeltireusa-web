@@ -20,7 +20,7 @@ export const triggerGaAddToCart = (
     return;
   }
   triggerEvent('add_to_cart', {
-    item_id: product.partnumber || product._id,
+    item_id: product.partnumber || product.id,
     item_name: product.title,
     price: product.price,
     item_category: product?.category?.title,

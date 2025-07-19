@@ -39,6 +39,10 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+          name="google-site-verification"
+          content="G4LsRlcamoA4V3m5VSv8_S7IGt__ynuOev4JqtfUw5k"
+        />
         <link rel="icon" href="/images/fav.ico" />
       </head>
       <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GID as string} />

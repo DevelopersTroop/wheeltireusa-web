@@ -13,7 +13,7 @@ export type TTireSpec = {
 };
 
 export type TInventoryBase = {
-  _id: string;
+  id: string;
   item_class?: string;
   slug: string;
   distributorName?: string;
@@ -99,7 +99,7 @@ export type TInventoryItem = TInventoryBase & {
   country_of_origin?: string;
   sku?: string;
   inventoryId?: {
-    _id: string;
+    id: string;
     internal_id: string;
     partnumber: string;
     availability: {
@@ -113,7 +113,7 @@ export type TInventoryItem = TInventoryBase & {
     };
   };
   pricingId?: {
-    _id: string;
+    id: string;
     internal_id: string;
     partnumber: string;
     pricing: {

@@ -68,7 +68,7 @@ export const useOrders = () => {
               );
 
               return {
-                order_id: `#${order._id}`,
+                order_id: `#${order.id}`,
                 orderId: order.orderId,
                 date: new Date(order.createdAt).toLocaleDateString(),
                 status: order.status,

@@ -6,7 +6,7 @@ import { TCartProduct } from '@/redux/features/cartSlice';
 
 // Interface for individual product details
 interface Product {
-  _id: string;
+  id: string;
   title: string;
   sku: string;
   price: number;

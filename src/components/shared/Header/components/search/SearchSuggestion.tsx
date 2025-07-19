@@ -73,7 +73,7 @@ const SearchSuggestion = ({
               return (
                 <button
                   type="button"
-                  key={product._id}
+                  key={product.id}
                   onClick={handleClick}
                   className="block border-b py-1 border-gray-300 bg-white hover:bg-gray-100 text-left"
                 >

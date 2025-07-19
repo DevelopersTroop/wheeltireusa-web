@@ -47,7 +47,7 @@ const userRegister = async ({
         phone: string;
         verified: boolean;
         role: number;
-        _id: string;
+        id: string;
         createdAt: string;
         updatedAt: string;
       };

@@ -26,9 +26,9 @@ const TireDescription: React.FC<{ product: TInventoryItem[] }> = ({
         <TabsContent value="reviews">
           <div className="px-4 flex flex-col gap-y-10">
             <div className="space-y-2">
-              <WriteAReview productId={product[0]._id} />
+              <WriteAReview productId={product[0].id} />
             </div>
-            <Reviews productId={product[0]._id} />
+            <Reviews productId={product[0].id} />
           </div>
         </TabsContent>
         <TabsContent value="warranty-information">

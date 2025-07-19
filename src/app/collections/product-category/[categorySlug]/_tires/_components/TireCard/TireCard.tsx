@@ -62,7 +62,7 @@ const TireCard = ({ products, wheelInfo }: TireCardProps) => {
         <div
           className={`flex flex-col sm:flex-row justify-between gap-2 w-full px-4 pb-6`}
         >
-          <TireRating productId={products[0]._id} />
+          <TireRating productId={products[0].id} />
           <ComparisonWithFavorite product={products} />
         </div>
       </div>
