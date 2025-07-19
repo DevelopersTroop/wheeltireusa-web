@@ -18,9 +18,9 @@ export const isWishListData = (
 };
 
 export const getProductThumbnail = (product: {
-  imageUrl: string | null;
-  itemImage: string | null;
-  originalImage: string | null;
+  imageUrl?: string | null;
+  itemImage?: string | null;
+  originalImage?: string | null;
 }) => {
   // const imageUrl = isInventoryItem(product)
   //   ? product?.imageUrl
@@ -28,7 +28,7 @@ export const getProductThumbnail = (product: {
   //     ? product?.imageUrl
   //     : product?.itemImage;
 
-  const imageUrl: string | null =
+  const imageUrl: string | null | undefined =
     product.imageUrl || product?.itemImage || product?.originalImage;
   // if (isInventoryItem(product)) {
   //   imageUrl = product.imageUrl || product.itemImage || product?.originalImage;

@@ -49,7 +49,7 @@ export const Reviews: React.FC<{ productId: number }> = ({ productId }) => {
             return (
               <div
                 className="space-y-2 border-b last:border-none py-1"
-                key={review._id}
+                key={review.id}
               >
                 <p className="flex items-center gap-2 font-semibold">
                   <div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center">

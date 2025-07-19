@@ -22,7 +22,7 @@ const ViewOrder = () => {
         <>
           <div className="border-x border-b p-5 pr-10">
             <p className="text-base">
-              <span className="bg-yellow-100">{order._id}</span> was placed on{' '}
+              <span className="bg-yellow-100">{order.id}</span> was placed on{' '}
               <span className="bg-yellow-100">
                 {new Date(order.createdAt).toDateString()}
               </span>{' '}

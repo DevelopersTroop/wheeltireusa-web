@@ -26,7 +26,7 @@ const wishlist = baseApi.injectEndpoints({
           total: baseQueryReturnValue.total,
           wishlists: baseQueryReturnValue.wishlists.map((wishlist) => {
             return {
-              wishlistId: wishlist._id,
+              wishlist_id: wishlist.id,
               title: wishlist.data?.title || '',
               imageUrl: wishlist.data?.imageUrl || '',
               category: wishlist.data?.category || {},
@@ -54,7 +54,7 @@ const wishlist = baseApi.injectEndpoints({
         console.log(baseQueryReturnValue);
         return {
           wishlist: {
-            wishlistId: baseQueryReturnValue.wishlist._id,
+            wishlist_id: baseQueryReturnValue.wishlist.id,
             title: baseQueryReturnValue.wishlist.data.title,
             imageUrl: baseQueryReturnValue.wishlist.data.imageUrl,
             category: baseQueryReturnValue.wishlist.data.category,
@@ -102,7 +102,7 @@ const wishlist = baseApi.injectEndpoints({
           dispatch(
             wishlist.util.updateQueryData('getWishlist', undefined, (draft) => {
               draft.wishlists = draft.wishlists.filter(
-                (wishlist) => wishlist.wishlistId !== arg
+                (wishlist) => wishlist.wishlist_id !== arg
               );
             })
           );

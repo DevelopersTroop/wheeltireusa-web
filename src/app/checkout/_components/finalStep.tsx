@@ -257,7 +257,7 @@ export const FinalStep: React.FC = () => {
         {/* Right Section: Order Summary and Account Creation */}
         <div className="col-span-11 lg:col-span-4 sticky top-0 flex flex-col gap-8">
           {!isAccountCreated && (
-            // !user?._id &&
+            // !user?.id &&
             <CreateAccountSection orderSuccessData={orderSuccessData} />
           )}
           <OrderSummary

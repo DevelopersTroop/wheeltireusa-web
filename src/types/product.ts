@@ -113,7 +113,7 @@ export type TInventoryItem = TInventoryBase & {
     };
   } | null;
   pricingId: {
-    Id: string;
+    id: string;
     internalId: string;
     partnumber: string;
     pricing: {

@@ -3,7 +3,7 @@
 import { CreditCard } from 'lucide-react';
 
 interface PaymentData {
-  _id: string;
+  id: string;
   email: string;
   orderId: string;
   currency: string;

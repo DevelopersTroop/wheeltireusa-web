@@ -19,7 +19,7 @@ export type WishList = {
 
 // Type definition for wishlist data
 export type TWishListData = {
-  wishlistId: string;
+  wishlist_id: string;
   title: string;
   imageUrl: string;
   partNumber: string;
@@ -40,7 +40,7 @@ export type TWishListResult = {
 };
 
 export type TWishlistItem = {
-  _id: string;
+  id: string;
   slug: string;
   data: TWishlistItemData;
   updatedBy: string;

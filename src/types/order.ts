@@ -112,7 +112,7 @@ export type TOrderData = {
 };
 
 export type TOrder = {
-  _id: string;
+  id: string;
   email: string;
   data: TOrderData;
   orderId: string;
