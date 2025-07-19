@@ -1,18 +1,18 @@
 export type TReviewStatus = 'pending' | 'approved' | 'rejected';
 
 interface TUserSummary {
-  _id: string;
+  id: string;
   firstName: string;
   lastName: string;
   email: string;
 }
 
 interface TProductSummary {
-  _id: string;
+  id: string;
 }
 
 export interface TReview {
-  _id: string;
+  id: string;
   productId: TProductSummary;
   userId: TUserSummary;
   rating: number;

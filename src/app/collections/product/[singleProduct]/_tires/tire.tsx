@@ -80,7 +80,7 @@ const Tire = ({ product }: { product: TInventoryItem[] }) => {
               </h4>
               {/* <TireTypeBadge products={products} />  */}
             </div>
-            <TireRating productId={product[0]._id} />
+            <TireRating productId={product[0].id} />
           </div>
           <div className="w-full relative">
             <ImageGallery

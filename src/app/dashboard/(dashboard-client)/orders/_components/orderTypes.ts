@@ -15,7 +15,7 @@ export interface OrderData {
 }
 
 export interface TOrder {
-  _id: string;
+  id: string;
   orderId: string;
   createdAt: string;
   status: string;

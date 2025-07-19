@@ -5,7 +5,7 @@
 import { TCategory } from './category';
 
 export type WishList = {
-  _id: string;
+  id: string;
   slug: string;
   data: {
     title: string;
@@ -40,7 +40,7 @@ export type TWishListResult = {
 };
 
 export type TWishlistItem = {
-  _id: string;
+  id: string;
   slug: string;
   data: TWishlistItemData;
   updatedBy: string;

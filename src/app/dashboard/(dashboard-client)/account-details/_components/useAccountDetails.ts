@@ -27,7 +27,7 @@ export const useAccountDetails = () => {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(`${apiBaseUrl}/auth/profile/${user?._id}`, {
+      const response = await fetch(`${apiBaseUrl}/auth/profile/${user?.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
