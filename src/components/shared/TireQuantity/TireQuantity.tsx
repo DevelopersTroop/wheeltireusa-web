@@ -49,7 +49,7 @@ const TireQuantity: React.FC<TireQuantityProps> = ({
     if (cartProduct && isCart) {
       dispatch(
         updateCartQuantity({
-          id: cartProduct._id,
+          id: cartProduct.id,
           quantity: type === 'decrease' ? -quantityStep : quantityStep,
         })
       );

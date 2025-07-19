@@ -4,7 +4,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { useState } from 'react';
 import ReviewPagination from '../ReviewPagination/ReviewPagination';
 
-export const Reviews: React.FC<{ productId: string }> = ({ productId }) => {
+export const Reviews: React.FC<{ productId: number }> = ({ productId }) => {
   const [page, setPage] = useState(1);
   console.log('page', page);
   const { isLoading, isFetching, data } = useGetReviewsQuery({

@@ -43,8 +43,8 @@ const SameFitmentDifferentGrip = () => {
 
                     <h4 className="text-xl font-semibold text-[#212227]">
                       <span className="text-[#210203] text-2xl font-bold uppercase">
-                        {tire[0]?.brand} {tire[0]?.model_group}{' '}
-                        {tire[0]?.tire_size}{' '}
+                        {tire[0]?.brand} {tire[0]?.modelGroup}{' '}
+                        {tire[0]?.tireSize}{' '}
                         {/* {tire[0]?.tire_size !== tire[1]?.tire_size &&
                                               typeof tire[1]?.tire_size !== 'undefined'
                                                 ? `AND ${tire[1]?.tire_size}`

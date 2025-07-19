@@ -25,8 +25,8 @@ const Tire = ({ product }: { product: TInventoryItem[] }) => {
           <Item href={'/'}>Collection</Item>
           <Item href={`/`}>Tire</Item>
           <Item isEnd={true} href={`/collections/product/${product[0]?.slug}`}>
-            {product[0]?.model_group} {product[1]?.model_group ? '&' : ''}{' '}
-            {product[1]?.model_group}
+            {product[0]?.modelGroup} {product[1]?.modelGroup ? '&' : ''}{' '}
+            {product[1]?.modelGroup}
           </Item>
         </Breadcrumb>
       </div>
@@ -69,18 +69,18 @@ const Tire = ({ product }: { product: TInventoryItem[] }) => {
               <h4 className="text-2xl leading-[29px] text-[#210203]">
                 <span className="text-[#210203] text-2xl font-bold uppercase">
                   <Link href={singleTirePageLink}>
-                    {product[0]?.brand} {product[0]?.model_group}{' '}
-                    {product[0]?.tire_size}{' '}
-                    {product[0]?.tire_size !== product[1]?.tire_size &&
-                    typeof product[1]?.tire_size !== 'undefined'
-                      ? `AND ${product[1]?.tire_size}`
+                    {product[0]?.brand} {product[0]?.modelGroup}{' '}
+                    {product[0]?.tireSize}{' '}
+                    {product[0]?.tireSize !== product[1]?.tireSize &&
+                    typeof product[1]?.tireSize !== 'undefined'
+                      ? `AND ${product[1]?.tireSize}`
                       : ''}
                   </Link>
                 </span>
               </h4>
               {/* <TireTypeBadge products={products} />  */}
             </div>
-            <TireRating productId={product[0]._id} />
+            <TireRating productId={product[0].id} />
           </div>
           <div className="w-full relative">
             <ImageGallery

@@ -22,7 +22,7 @@ export const isIncreaseDisabled = (
 ) => {
   return (
     quantityStep + otherQuantity + quantity >
-    (product?.inventory_available || cartProduct?.inventory_available || 4)
+    (product?.inventoryAvailable || cartProduct?.inventoryAvailable || 4)
   );
 };
 

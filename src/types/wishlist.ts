@@ -5,12 +5,12 @@
 import { TCategory } from './category';
 
 export type WishList = {
-  _id: string;
+  id: string;
   slug: string;
   data: {
     title: string;
-    image_url: string;
-    part_number: string;
+    imageUrl: string;
+    partNumber: string;
     category: TCategory;
     slug: string;
     // currentCustomWheel: RootState["persisted"]["customWheel"]["customWheels"][string];
@@ -19,10 +19,10 @@ export type WishList = {
 
 // Type definition for wishlist data
 export type TWishListData = {
-  wishlist_id: string;
+  wishlistId: string;
   title: string;
-  image_url: string;
-  part_number: string;
+  imageUrl: string;
+  partNumber: string;
   category: TCategory;
   slug: string;
 };
@@ -52,8 +52,8 @@ export type TWishlistItem = {
 
 export type TWishlistItemData = {
   title: string;
-  image_url: string;
-  part_number: string;
+  imageUrl: string;
+  partNumber: string;
   category: TCategory;
   slug: string;
 };

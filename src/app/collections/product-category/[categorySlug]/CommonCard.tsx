@@ -76,8 +76,8 @@ export const CommonCard: React.FC<CommonCardProps> = ({
               width={272}
               alt={product?.description ?? ''}
               src={
-                product?.image_url !== ''
-                  ? `${s3BucketUrl}/${product.image_url}`
+                product?.imageUrl !== ''
+                  ? `${s3BucketUrl}/${product.imageUrl}`
                   : '/not-available.webp'
               }
             ></Image>

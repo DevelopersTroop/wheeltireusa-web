@@ -55,7 +55,7 @@ const ViewOrder = () => {
               {order.data.productsInfo.map((product, index) => {
                 return (
                   <div
-                    key={`${product._id} ${index}`}
+                    key={`${product.id} ${index}`}
                     className="border-b pb-3 mb-3"
                   >
                     <div className="flex items-center space-x-4">

@@ -5,13 +5,13 @@ import { TFilters } from '@/types/filter';
 
 const shouldArray = [
   'model',
-  'tire_size',
+  'tireSize',
   'diameter',
-  'tire_type',
-  'customer_rating',
-  'speed_index',
-  'load_index',
-  'mileage_warranty',
+  'tireType',
+  'customerRating',
+  'speedIndex',
+  'loadIndex',
+  'mileageWarranty',
 ];
 
 const products = baseApi.injectEndpoints({
@@ -44,7 +44,7 @@ const products = baseApi.injectEndpoints({
             shallowParams.sort = [{ whom: 'description', order: 'desc' }];
             break;
           default:
-            shallowParams.sort = [{ whom: '_id', order: 'desc' }];
+            shallowParams.sort = [{ whom: 'id', order: 'desc' }];
         }
 
         Object.entries(shallowParams).forEach(([key, value]) => {

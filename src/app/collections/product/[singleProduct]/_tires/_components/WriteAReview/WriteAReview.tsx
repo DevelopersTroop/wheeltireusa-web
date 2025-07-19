@@ -15,7 +15,7 @@ import { useForm } from 'react-hook-form';
 import { StarRatingInput } from './components/StarRatingInput';
 import { reviewSchema, TReviewFormValues } from './utils/reviewSchema';
 
-export const WriteAReview: React.FC<{ productId: string }> = ({
+export const WriteAReview: React.FC<{ productId: number }> = ({
   productId,
 }) => {
   const [selectedStars, setSelectedStars] = useState(0);

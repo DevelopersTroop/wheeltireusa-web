@@ -71,7 +71,7 @@ const TireAttributes: React.FC<{ product: TInventoryItem }> = ({ product }) => {
           </svg>
           <p className="text-sm font-normal text-muted-foreground">Size</p>
         </div>
-        <p>{product.tire_size}</p>
+        <p>{product.tireSize}</p>
       </div>
 
       {/* <div className="border px-3 py-2 rounded-[6px] text-center w-fit">

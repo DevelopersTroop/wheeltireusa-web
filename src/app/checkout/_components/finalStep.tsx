@@ -139,7 +139,7 @@ export const FinalStep: React.FC = () => {
             coupon: order.data.couponCode, // optional
 
             items: order.data.productsInfo.map((product, index) => ({
-              item_id: product.partnumber || product._id, // required
+              item_id: product.partnumber || product.id, // required
               item_name: product.title, // required
               price: product.price, // optional but recommended
               quantity: product.quantity, // optional but recommended

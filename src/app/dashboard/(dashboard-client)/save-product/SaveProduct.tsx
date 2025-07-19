@@ -39,7 +39,7 @@ const SaveProduct = () => {
           <tbody>
             {data?.wishlists?.length ? (
               data.wishlists?.map((product) => (
-                <tr key={product?.wishlist_id}>
+                <tr key={product?.wishlistId}>
                   <td className="py-5 px-4 border-b">
                     <div className="flex flex-col md:flex-row items-center gap-4">
                       <div
@@ -63,7 +63,7 @@ const SaveProduct = () => {
                     {product?.category?.title}
                   </td>
                   <td className="py-5 px-4 border-b">
-                    <button onClick={() => removeWishlist(product.wishlist_id)}>
+                    <button onClick={() => removeWishlist(product.wishlistId)}>
                       <p className="text-primary"> Remove </p>
                     </button>
                   </td>
@@ -92,7 +92,7 @@ const SaveProduct = () => {
         <div className="block text-xs min-[390px]:text-base  md:hidden ">
           {data?.wishlists.map((product) => (
             <div
-              key={product?.wishlist_id}
+              key={product?.wishlistId}
               className="bg-white text-sm min-[380px]:text-base border border-gray-200 rounded-lg mb-4 p-2 min-[380px]:p-4 shadow-sm"
             >
               <div className="flex justify-center mb-2">

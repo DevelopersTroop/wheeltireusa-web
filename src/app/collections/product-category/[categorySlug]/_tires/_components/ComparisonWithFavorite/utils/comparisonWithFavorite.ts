@@ -27,8 +27,8 @@ export const prepareWishlistData = (
           ? `${product[0].brand} ${product[1].brand}`
           : `${product[0].brand}`,
       category: product[0]?.category,
-      image_url: product[0].item_image,
-      part_number: product[0]?.partnumber,
+      imageUrl: product[0].itemImage,
+      partNumber: product[0]?.partnumber,
     },
   };
 };

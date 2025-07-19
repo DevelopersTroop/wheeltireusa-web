@@ -10,7 +10,7 @@ const Quantity = ({ cartProduct }: { cartProduct: TCartProduct }) => {
       id={cartProduct?.cartPackage ?? ''}
       inputName={cartProduct?.cartPackage ?? ''}
       inputValue={cartProduct?.quantity ?? 1}
-      maxInputValue={cartProduct?.inventory_available ?? 1}
+      maxInputValue={cartProduct?.inventoryAvailable ?? 1}
       minInputValue={1}
       quantityStep={2}
       onDecrease={() => {}}

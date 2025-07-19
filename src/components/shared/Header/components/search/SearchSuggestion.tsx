@@ -73,7 +73,7 @@ const SearchSuggestion = ({
               return (
                 <button
                   type="button"
-                  key={product._id}
+                  key={product.id}
                   onClick={handleClick}
                   className="block border-b py-1 border-gray-300 bg-white hover:bg-gray-100 text-left"
                 >
@@ -82,7 +82,7 @@ const SearchSuggestion = ({
                       <Image
                         className="rounded w-full"
                         src={imageURL ?? ''}
-                        alt={product?.model_group ?? ''}
+                        alt={product?.modelGroup ?? ''}
                         width={60}
                         height={60}
                       />
@@ -90,7 +90,7 @@ const SearchSuggestion = ({
                     <div className="flex w-full flex-col gap-1 justify-start">
                       {/* Product Title */}
                       <h3 className="text-black">
-                        {product?.model_group || product?.model}
+                        {product?.modelGroup || product?.model}
                       </h3>
                       {/* Finish */}
                       {/* {!isCustomProduct(product?.category) && product?.finish ? (

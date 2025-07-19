@@ -48,11 +48,11 @@ const TireCard = ({ products, wheelInfo }: TireCardProps) => {
           <h4 className="text-2xl leading-[29px] text-[#210203]">
             <span className="text-[#210203] text-2xl font-bold uppercase">
               <Link href={singleTirePageLink}>
-                {products[0]?.brand} {products[0]?.model_group}{' '}
-                {products[0]?.tire_size}{' '}
-                {products[0]?.tire_size !== products[1]?.tire_size &&
-                typeof products[1]?.tire_size !== 'undefined'
-                  ? `AND ${products[1]?.tire_size}`
+                {products[0]?.brand} {products[0]?.modelGroup}{' '}
+                {products[0]?.tireSize}{' '}
+                {products[0]?.tireSize !== products[1]?.tireSize &&
+                typeof products[1]?.tireSize !== 'undefined'
+                  ? `AND ${products[1]?.tireSize}`
                   : ''}
               </Link>
             </span>
@@ -62,7 +62,7 @@ const TireCard = ({ products, wheelInfo }: TireCardProps) => {
         <div
           className={`flex flex-col sm:flex-row justify-between gap-2 w-full px-4 pb-6`}
         >
-          <TireRating productId={products[0]._id} />
+          <TireRating productId={products[0].id} />
           <ComparisonWithFavorite product={products} />
         </div>
       </div>
