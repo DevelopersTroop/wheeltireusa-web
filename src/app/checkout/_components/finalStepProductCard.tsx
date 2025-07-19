@@ -2,7 +2,7 @@ import { TInventoryItem } from '@/types/product';
 import { Input } from '@/components/ui/input';
 import { Minus, Plus } from 'lucide-react';
 import React from 'react';
-import TiresCard from '@/app/cart/_components/tires-card';
+import TiresCard from '@/app/cart/_components/TiresCard/TiresCard';
 import { TCartProduct } from '@/redux/features/cartSlice';
 
 {

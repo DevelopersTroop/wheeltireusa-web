@@ -6,10 +6,10 @@ import Container from '@/components/ui/container/container';
 import { useGroupedProducts } from '@/hooks/useGroupedProducts';
 import { RootState } from '@/redux/store';
 import { useSelector } from 'react-redux';
-import CartSubtotal from './_components/cart-subtotal';
-import CartSummary from './_components/cart-summary';
-import CartYMM from './_components/cart-ymm';
-import TiresCard from './_components/tires-card';
+import CartSubtotal from './_components/CartSubtotal/CartSubtotal';
+import CartSummary from './_components/CartSummary/CartSummary';
+import CartYMM from './_components/CartYMM/CartYMM';
+import TiresCard from './_components/TiresCard/TiresCard';
 import EmptyCart from './empty-cart';
 
 // Main Cart component

@@ -1,9 +1,7 @@
-import { Input } from '@/components/ui/input';
-import { Minus, Plus } from 'lucide-react';
 import React from 'react';
 import CheckoutSubTotal from './checkoutSubTotal';
 import { useTypedSelector } from '@/redux/store';
-import TiresCard from '@/app/cart/_components/tires-card';
+import TiresCard from '@/app/cart/_components/TiresCard/TiresCard';
 import { useGroupedProducts } from '@/hooks/useGroupedProducts';
 
 // ProductCard Component

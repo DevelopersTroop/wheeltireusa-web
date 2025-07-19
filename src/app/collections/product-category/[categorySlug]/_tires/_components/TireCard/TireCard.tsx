@@ -1,4 +1,4 @@
-import DeliveryWithStock from '@/app/cart/_components/delivery-with-stock';
+import DeliveryWithStock from '@/app/cart/_components/TiresCard/components/DeliveryWithStock/DeliveryWithStock';
 import PaymentMessaging from '@/components/shared/payment-method-messaging';
 import { TInventoryItem } from '@/types/product';
 import { getProductThumbnail } from '@/utils/product';

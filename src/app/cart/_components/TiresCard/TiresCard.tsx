@@ -1,13 +1,12 @@
 'use client';
-
 import TireQuantity from '@/components/shared/TireQuantity/TireQuantity';
 import { removeFromCart, TCartProduct } from '@/redux/features/cartSlice';
 import { getPrice } from '@/utils/price';
 import { getProductThumbnail } from '@/utils/product';
 import Image from 'next/image';
 import { useDispatch } from 'react-redux';
-import DeliveryWithStock from './delivery-with-stock';
-import TireAttributes from './tire-attributes';
+import DeliveryWithStock from './components/DeliveryWithStock/DeliveryWithStock';
+import TireAttributes from './components/TireAttributes/TireAttributes';
 import Link from 'next/link';
 
 const TiresCard = ({ tires }: { tires: TCartProduct[] }) => {
