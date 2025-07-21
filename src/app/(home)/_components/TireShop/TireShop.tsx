@@ -40,7 +40,7 @@ export default function TireShop() {
                     <div className="w-full flex items-center justify-center">
                       <Image
                         src={getProductThumbnail(tire[0])}
-                        alt={tire[0].title || tire[0].description || ''}
+                        alt={tire[0]?.title || tire[0]?.description || ''}
                         width={304}
                         height={300}
                         className="w-[304px] h-full object-cover"
@@ -76,10 +76,10 @@ export default function TireShop() {
                   <Link href={singleTirePageLink}>
                     <div className="flex flex-col items-start gap-2">
                       <p className="text-base text-[#464853] font-normal">
-                        {tire[0].brand}
+                        {tire[0]?.brand}
                       </p>
                       <h3 className="text-2xl font-bold text-[#210203]">
-                        {tire[0].title}
+                        {tire[0]?.title}
                       </h3>
                     </div>
                   </Link>

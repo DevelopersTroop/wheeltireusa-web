@@ -28,6 +28,10 @@ export const getProductThumbnail = (product: {
   //     ? product?.imageUrl
   //     : product?.itemImage;
 
+  if (!product) {
+    return '/tire-not-available.png';
+  }
+
   const imageUrl: string | null | undefined =
     product.imageUrl || product?.itemImage || product?.originalImage;
   // if (isInventoryItem(product)) {

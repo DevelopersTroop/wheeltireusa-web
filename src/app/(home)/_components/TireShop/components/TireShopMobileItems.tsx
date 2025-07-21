@@ -66,7 +66,7 @@ export const MobileItemsTireShop: React.FC<{
                 <div className="w-full flex items-center justify-center">
                   <Image
                     src={getProductThumbnail(tire[0])}
-                    alt={tire[0].title || tire[0].description || ''}
+                    alt={tire[0]?.title || tire[0]?.description || ''}
                     width={304}
                     height={300}
                     className="w-[304px] h-full object-cover"
@@ -100,10 +100,10 @@ export const MobileItemsTireShop: React.FC<{
               <div className="flex flex-col gap-6 bg-[#F5F4F6] py-6 px-4">
                 <div className="flex flex-col items-start gap-2">
                   <p className="text-base text-[#464853] font-normal">
-                    {tire[0].brand}
+                    {tire[0]?.brand}
                   </p>
                   <h3 className="text-2xl font-bold text-[#210203]">
-                    {tire[0].title || tire[0].description || ''}
+                    {tire[0]?.title || tire[0]?.description || ''}
                   </h3>
                 </div>
 
@@ -123,7 +123,7 @@ export const MobileItemsTireShop: React.FC<{
                     <div className="flex flex-row gap-2">
                       <p className="text-[#52545B] text-xl">x</p>
                       <p className="text-xl font-semibold text-[#212227]">
-                        ${tire[0].price?.toFixed(2)}
+                        ${tire[0]?.price?.toFixed(2)}
                       </p>
                     </div>
                   </div>

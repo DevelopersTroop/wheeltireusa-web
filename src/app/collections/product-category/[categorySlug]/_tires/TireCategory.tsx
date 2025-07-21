@@ -28,6 +28,8 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
     { refetchOnMountOrArgChange: true }
   );
 
+  console.log('data =======    ', data);
+
   return (
     <>
       <Container>
@@ -101,10 +103,10 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
                   {/* {data?.products.map((product) => (
                     <ProductCard product={products} key={product.slug} />
                   ))} */}
-                  {data?.products?.map((product) => {
+                  {data?.products?.map((product, idx) => {
                     return (
                       <TireCard
-                        key={`${product?.[0]?.id}-${product?.[1]?.id}`}
+                        key={`${product?.[0]?.id}-${product?.[1]?.id}-${idx}`}
                         products={product}
                         wheelInfo={{
                           frontForging: '',
