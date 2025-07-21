@@ -5,13 +5,13 @@ import { TFilters } from '@/types/filter';
 
 const shouldArray = [
   'model',
-  'tire_size',
+  'tireSize',
   'diameter',
-  'tire_type',
-  'customer_rating',
-  'speed_index',
-  'load_index',
-  'mileage_warranty',
+  'tireType',
+  'customerRating',
+  'speedIndex',
+  'loadIndex',
+  'mileageWarranty',
 ];
 
 const products = baseApi.injectEndpoints({

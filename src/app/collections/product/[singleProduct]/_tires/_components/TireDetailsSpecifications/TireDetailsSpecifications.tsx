@@ -37,7 +37,7 @@ const TireDetailsSpecifications = ({
                 </div>
                 <p className="text-base leading-[19px] text-[#210203]">
                   <span className="line-clamp-1 text-base font-normal text-[#210203]">
-                    {product[0]?.raw_size ? product[0]?.raw_size : 'N/A'}
+                    {product[0]?.rawSize ? product[0]?.rawSize : 'N/A'}
                   </span>
                 </p>
               </div>
@@ -97,7 +97,7 @@ const TireDetailsSpecifications = ({
                 </div>
                 <p className="text-base leading-[19px] text-[#210203]">
                   <span className="line-clamp-1 text-base font-normal text-[#210203]">
-                    {product[0]?.load_range ? product[0]?.load_range : 'N/A'}
+                    {product[0]?.loadRange ? product[0]?.loadRange : 'N/A'}
                   </span>
                 </p>
               </div>
@@ -125,7 +125,7 @@ const TireDetailsSpecifications = ({
                 </div>
                 <p className="text-base leading-[19px] text-[#210203]">
                   <span className="line-clamp-1 text-base font-normal text-[#210203]">
-                    {product[0]?.eco_focus ? product[0]?.eco_focus : 'N/A'}
+                    {product[0]?.ecoFocus ? product[0]?.ecoFocus : 'N/A'}
                   </span>
                 </p>
               </div>
@@ -172,9 +172,7 @@ const TireDetailsSpecifications = ({
                 </div>
                 <p className="text-base leading-[19px] text-[#210203]">
                   <span className="line-clamp-1 text-base font-normal text-[#210203]">
-                    {product[0]?.max_load_2_kg
-                      ? product[0]?.max_load_2_kg
-                      : 'N/A'}
+                    {product[0]?.maxLoad2Kg ? product[0]?.maxLoad2Kg : 'N/A'}
                   </span>
                 </p>
               </div>
@@ -190,8 +188,8 @@ const TireDetailsSpecifications = ({
                 </div>
                 <p className="text-base leading-[19px] text-[#210203]">
                   <span className="line-clamp-1 text-base font-normal text-[#210203]">
-                    {product[0]?.max_inflaction_pressure
-                      ? product[0]?.max_inflaction_pressure
+                    {product[0]?.maxInflactionPressure
+                      ? product[0]?.maxInflactionPressure
                       : 'N/A'}
                   </span>
                 </p>
@@ -206,8 +204,8 @@ const TireDetailsSpecifications = ({
                 </div>
                 <p className="text-base leading-[19px] text-[#210203]">
                   <span className="line-clamp-1 text-base font-normal text-[#210203]">
-                    {product[0]?.tread_depth_in
-                      ? product[0]?.tread_depth_in
+                    {product[0]?.treadDepthIn
+                      ? product[0]?.treadDepthIn
                       : 'N/A'}
                   </span>
                 </p>
@@ -227,7 +225,7 @@ const TireDetailsSpecifications = ({
                 </div>
                 <p className="text-base leading-[19px] text-[#210203]">
                   <span className="line-clamp-1 text-base font-normal text-[#210203]">
-                    {product[0]?.tire_weight ? product[0]?.tire_weight : 'N/A'}
+                    {product[0]?.tireWeight ? product[0]?.tireWeight : 'N/A'}
                   </span>
                 </p>
               </div>
@@ -241,7 +239,7 @@ const TireDetailsSpecifications = ({
                 </div>
                 <p className="text-base leading-[19px] text-[#210203]">
                   <span className="line-clamp-1 text-base font-normal text-[#210203]">
-                    {product[0]?.rim_width ? product[0]?.rim_width : 'N/A'}
+                    {product[0]?.rimWidth ? product[0]?.rimWidth : 'N/A'}
                   </span>
                 </p>
               </div>
@@ -257,8 +255,8 @@ const TireDetailsSpecifications = ({
                 </div>
                 <p className="text-base leading-[19px] text-[#210203]">
                   <span className="line-clamp-1 text-base font-normal text-[#210203]">
-                    {product[0]?.meas_rim_width
-                      ? product[0]?.meas_rim_width
+                    {product[0]?.measRimWidth
+                      ? product[0]?.measRimWidth
                       : 'N/A'}
                   </span>
                 </p>
@@ -273,8 +271,8 @@ const TireDetailsSpecifications = ({
                 </div>
                 <p className="text-base leading-[19px] text-[#210203]">
                   <span className="line-clamp-1 text-base font-normal text-[#210203]">
-                    {product[0]?.section_width_in
-                      ? product[0]?.section_width_in
+                    {product[0]?.sectionWidthIn
+                      ? product[0]?.sectionWidthIn
                       : 'N/A'}
                   </span>
                 </p>
@@ -294,7 +292,7 @@ const TireDetailsSpecifications = ({
                 </div>
                 <p className="text-base leading-[19px] text-[#210203]">
                   <span className="line-clamp-1 text-base font-normal text-[#210203]">
-                    {product[0]?.tread_width ? product[0]?.tread_width : 'N/A'}
+                    {product[0]?.treadWidth ? product[0]?.treadWidth : 'N/A'}
                   </span>
                 </p>
               </div>
@@ -308,8 +306,8 @@ const TireDetailsSpecifications = ({
                 </div>
                 <p className="text-base leading-[19px] text-[#210203]">
                   <span className="line-clamp-1 text-base font-normal text-[#210203]">
-                    {product[0]?.overall_dia_in
-                      ? product[0]?.overall_dia_in
+                    {product[0]?.overallDiaIn
+                      ? product[0]?.overallDiaIn
                       : 'N/A'}
                   </span>
                 </p>
@@ -326,9 +324,7 @@ const TireDetailsSpecifications = ({
                 </div>
                 <p className="text-base leading-[19px] text-[#210203]">
                   <span className="line-clamp-1 text-base font-normal text-[#210203]">
-                    {product[0]?.revs_per_mile
-                      ? product[0]?.revs_per_mile
-                      : 'N/A'}
+                    {product[0]?.revsPerMile ? product[0]?.revsPerMile : 'N/A'}
                   </span>
                 </p>
               </div>
@@ -342,8 +338,8 @@ const TireDetailsSpecifications = ({
                 </div>
                 <p className="text-base leading-[19px] text-[#210203]">
                   <span className="line-clamp-1 text-base font-normal text-[#210203]">
-                    {product[0]?.country_of_origin
-                      ? product[0]?.country_of_origin
+                    {product[0]?.countryOfOrigin
+                      ? product[0]?.countryOfOrigin
                       : 'N/A'}
                   </span>
                 </p>

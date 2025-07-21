@@ -18,7 +18,7 @@ const CardDescription = ({
     <div className="flex flex-col gap-4 justify-center items-start self-stretch relative w-full">
       <div className="inline-block">
         <h4 className="text-2xl leading-[29px] font-bold text-[#210203] line-clamp-1 lg:line-clamp-2">
-          {product?.model_group}
+          {product?.modelGroup}
         </h4>
       </div>
       {/* Show inventory status and details only if showOnlyPrice is false */}
@@ -38,13 +38,13 @@ const CardDescription = ({
                 fillRule="evenodd"
                 clipRule="evenodd"
                 d="M14.6668 8.49998C14.6668 12.1819 11.6821 15.1666 8.00016 15.1666C4.31826 15.1666 1.3335 12.1819 1.3335 8.49998C1.3335 4.81808 4.31826 1.83331 8.00016 1.83331C11.6821 1.83331 14.6668 4.81808 14.6668 8.49998ZM10.687 6.47976C10.8823 6.67502 10.8823 6.9916 10.687 7.18687L7.35372 10.5202C7.15845 10.7155 6.84187 10.7155 6.64661 10.5202L5.31328 9.18687C5.11801 8.9916 5.11801 8.67502 5.31328 8.47976C5.50854 8.2845 5.82512 8.2845 6.02038 8.47976L7.00016 9.45954L8.49005 7.96965L9.97994 6.47976C10.1752 6.2845 10.4918 6.2845 10.687 6.47976Z"
-                fill={product?.inventory_available ? '#04A777' : '#FF0000'}
+                fill={product?.inventoryAvailable ? '#04A777' : '#FF0000'}
               />
             </svg>
 
             <p className="text-base leading-[19px] text-[#210203]">
               <span className="text-[#210203] text-base font-normal">
-                {product?.inventory_available ? 'In Stock' : 'Out of Stock'}
+                {product?.inventoryAvailable ? 'In Stock' : 'Out of Stock'}
               </span>
             </p>
           </div>
@@ -68,7 +68,7 @@ const CardDescription = ({
                 </div>
                 <p className="text-base leading-[19px] text-[#210203]">
                   <span className="text-[#210203] text-base font-normal line-clamp-1  group-hover:text-[#ffffff]">
-                    {product?.tire_size ? product?.tire_size : 'N/A'}
+                    {product?.tireSize ? product?.tireSize : 'N/A'}
                   </span>
                 </p>
               </div>

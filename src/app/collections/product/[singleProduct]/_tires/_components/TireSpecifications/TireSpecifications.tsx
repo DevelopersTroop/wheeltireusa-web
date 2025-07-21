@@ -99,7 +99,7 @@ const TireSpecifications = ({
                   </div>
                   <p className="text-base leading-[19px] text-[#210203]">
                     <span className="line-clamp-1 text-base font-normal text-[#210203]">
-                      {product?.tire_size ? product?.tire_size : 'N/A'}
+                      {product?.tireSize ? product?.tireSize : 'N/A'}
                     </span>
                   </p>
                 </div>
@@ -138,7 +138,7 @@ const TireSpecifications = ({
                     </div>
                     <p className="text-base leading-[19px] text-[#210203]">
                       <span className="line-clamp-1 text-base font-normal text-[#210203]">
-                        {product?.spoke_style ? product?.spoke_style : 'N/A'}
+                        {product?.spokeStyle ? product?.spokeStyle : 'N/A'}
                       </span>
                     </p>
                   </div>
@@ -166,7 +166,7 @@ const TireSpecifications = ({
                     </div>
                     <p className="text-base leading-[19px] text-[#210203]">
                       <span className="line-clamp-1 text-base font-normal text-[#210203]">
-                        {product?.load_rating ? product?.load_rating : 'N/A'}
+                        {product?.loadRating ? product?.loadRating : 'N/A'}
                       </span>
                     </p>
                   </div>

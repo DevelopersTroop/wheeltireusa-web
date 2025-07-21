@@ -36,11 +36,11 @@ const cartSlice = createSlice({
         if (existingProduct) {
           if (
             existingProduct.quantity + newProduct.quantity >
-            (existingProduct?.inventory_available || 4)
+            (existingProduct?.inventoryAvailable || 4)
           ) {
             // If the new quantity exceeds available inventory, set it to available inventory
             newProduct.quantity =
-              (existingProduct?.inventory_available || 4) -
+              (existingProduct?.inventoryAvailable || 4) -
               existingProduct.quantity;
             toast.error(
               `You can only add ${newProduct.quantity} more of this product to your cart.`
@@ -63,7 +63,7 @@ const cartSlice = createSlice({
     },
     updateCartQuantity: (
       state,
-      action: PayloadAction<{ id: string; quantity: number }>
+      action: PayloadAction<{ id: number; quantity: number }>
     ) => {
       const { id, quantity } = action.payload;
       const existingProduct = state.products.find((p) => p.id === id);

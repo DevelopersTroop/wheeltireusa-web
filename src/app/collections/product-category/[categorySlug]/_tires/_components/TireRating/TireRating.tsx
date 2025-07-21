@@ -2,7 +2,7 @@ import StarRating from '@/components/shared/StarRating';
 import { useGetReviewsQuery } from '@/redux/apis/reviews';
 import React from 'react';
 
-const TireRating: React.FC<{ productId: string }> = ({ productId }) => {
+const TireRating: React.FC<{ productId: number }> = ({ productId }) => {
   const { data } = useGetReviewsQuery(
     { productId, page: 1 },
     { skip: !productId }

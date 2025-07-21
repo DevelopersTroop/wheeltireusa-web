@@ -7,7 +7,7 @@ const reviews = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     createReview: builder.mutation<
       { review: TReview },
-      { productId: string; comment: string; rating: number }
+      { productId: number; comment: string; rating: number }
     >({
       query(data) {
         return {
@@ -32,7 +32,7 @@ const reviews = baseApi.injectEndpoints({
         currentPage: number;
         count: number;
       }>,
-      { productId: string; page: number }
+      { productId: number; page: number }
     >({
       query: (productId) => ({
         url: `/reviews/${productId.productId}`,

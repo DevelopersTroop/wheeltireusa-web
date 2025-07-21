@@ -17,7 +17,7 @@ const TireAttributes = ({ product }: { product: TCartProduct }) => {
       <div
         className="hover:bg-[#210203] bg-white group cursor-pointer rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative"
         data-tooltip-id="my-tooltip"
-        data-tooltip-content={product?.tire_size}
+        data-tooltip-content={product?.tireSize}
         data-tooltip-place="top"
       >
         <div className="flex gap-1 items-center relative">
@@ -30,7 +30,7 @@ const TireAttributes = ({ product }: { product: TCartProduct }) => {
         </div>
         <p className="text-base leading-[19px] text-[#210203]">
           <span className="text-[#212227] text-base font-normal group-hover:text-[#ffffff]">
-            {product?.tire_size ? product?.tire_size : 'N/A'}
+            {product?.tireSize ? product?.tireSize : 'N/A'}
           </span>
         </p>
       </div>
@@ -130,7 +130,7 @@ const TireAttributes = ({ product }: { product: TCartProduct }) => {
       <div
         className="hover:bg-[#210203] bg-white group cursor-pointer rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative"
         data-tooltip-id="my-tooltip"
-        data-tooltip-content={product?.eco_focus}
+        data-tooltip-content={product?.ecoFocus}
         data-tooltip-place="top"
       >
         <div className="flex gap-1 items-center relative">
@@ -142,7 +142,7 @@ const TireAttributes = ({ product }: { product: TCartProduct }) => {
         </div>
         <p className="text-base leading-[19px] text-[#210203]">
           <span className="text-[#212227] text-base font-normal group-hover:text-[#ffffff]">
-            {product?.eco_focus ? product?.eco_focus : 'N/A'}
+            {product?.ecoFocus ? product?.ecoFocus : 'N/A'}
           </span>
         </p>
       </div>
@@ -151,7 +151,7 @@ const TireAttributes = ({ product }: { product: TCartProduct }) => {
       <div
         className="hover:bg-[#210203] bg-white group cursor-pointer rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative"
         data-tooltip-id="my-tooltip"
-        data-tooltip-content={product?.load_rating}
+        data-tooltip-content={product?.loadRating}
         data-tooltip-place="top"
       >
         <div className="flex gap-1 items-center relative">
@@ -163,7 +163,7 @@ const TireAttributes = ({ product }: { product: TCartProduct }) => {
         </div>
         <p className="text-base leading-[19px] text-[#210203]">
           <span className="text-[#212227] text-base font-normal group-hover:text-[#ffffff]">
-            {product?.load_rating ? product?.load_rating : 'N/A'}
+            {product?.loadRating ? product?.loadRating : 'N/A'}
           </span>
         </p>
       </div>
@@ -172,7 +172,7 @@ const TireAttributes = ({ product }: { product: TCartProduct }) => {
       <div
         className="hover:bg-[#210203] bg-white group cursor-pointer rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative"
         data-tooltip-id="my-tooltip"
-        data-tooltip-content={product?.hazard_protection}
+        data-tooltip-content={product?.hazardProtection}
         data-tooltip-place="top"
       >
         <div className="flex gap-1 items-center relative">
@@ -198,7 +198,7 @@ const TireAttributes = ({ product }: { product: TCartProduct }) => {
         </div>
         <p className="text-base leading-[19px] text-[#210203]">
           <span className="text-[#212227] text-base font-normal group-hover:text-[#ffffff]">
-            {product?.hazard_protection ? product?.hazard_protection : 'N/A'}
+            {product?.hazardProtection ? product?.hazardProtection : 'N/A'}
           </span>
         </p>
       </div>

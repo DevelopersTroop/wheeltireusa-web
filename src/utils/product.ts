@@ -8,32 +8,32 @@ import allTireSizes from '../../public/data/tireSizes.json';
 export const isInventoryItem = (
   product: TInventoryItem | TCartProduct | TWishListData
 ): product is TInventoryItem => {
-  return 'image_url' in product;
+  return 'imageUrl' in product;
 };
 
 export const isWishListData = (
   product: TInventoryItem | TCartProduct | TWishListData
 ): product is TWishListData => {
-  return 'image_url' in product;
+  return 'imageUrl' in product;
 };
 
 export const getProductThumbnail = (product: {
-  image_url?: string;
-  item_image?: string;
-  original_image?: string;
+  imageUrl?: string | null;
+  itemImage?: string | null;
+  originalImage?: string | null;
 }) => {
   // const imageUrl = isInventoryItem(product)
-  //   ? product?.image_url
+  //   ? product?.imageUrl
   //   : isWishListData(product)
-  //     ? product?.image_url
-  //     : product?.item_image;
+  //     ? product?.imageUrl
+  //     : product?.itemImage;
 
-  const imageUrl: string | undefined =
-    product.image_url || product?.item_image || product?.original_image;
+  const imageUrl: string | null | undefined =
+    product.imageUrl || product?.itemImage || product?.originalImage;
   // if (isInventoryItem(product)) {
-  //   imageUrl = product.image_url || product.item_image || product?.original_image;
+  //   imageUrl = product.imageUrl || product.itemImage || product?.originalImage;
   // } else if (isWishListData(product)) {
-  //   imageUrl = product.image_url;
+  //   imageUrl = product.imageUrl;
   // }
 
   if (!imageUrl?.length) {

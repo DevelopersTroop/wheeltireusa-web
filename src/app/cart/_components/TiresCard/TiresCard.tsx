@@ -40,10 +40,10 @@ const TiresCard = ({ tires }: { tires: TCartProduct[] }) => {
           <h4 className="text-2xl leading-[29px] text-[#210203]">
             <span className="text-[#210203] text-2xl font-bold">
               <Link href={singleTirePageLink}>
-                {tires[0]?.brand} {tires[0]?.model_group} {tires[0]?.tire_size}{' '}
-                {tires[0]?.tire_size !== tires[1]?.tire_size &&
-                typeof tires[1]?.tire_size !== 'undefined'
-                  ? `AND ${tires[1]?.tire_size}`
+                {tires[0]?.brand} {tires[0]?.modelGroup} {tires[0]?.tireSize}{' '}
+                {tires[0]?.tireSize !== tires[1]?.tireSize &&
+                typeof tires[1]?.tireSize !== 'undefined'
+                  ? `AND ${tires[1]?.tireSize}`
                   : ''}
               </Link>
             </span>
@@ -72,7 +72,7 @@ const TiresCard = ({ tires }: { tires: TCartProduct[] }) => {
               src={getProductThumbnail(tires[0])}
               width={160}
               height={160}
-              alt={tires[0]?.tire_size ?? ''}
+              alt={tires[0]?.tireSize ?? ''}
             />
           </div>
 
@@ -86,11 +86,10 @@ const TiresCard = ({ tires }: { tires: TCartProduct[] }) => {
             <h4 className="text-2xl leading-[29px] text-[#210203]">
               <span className="text-[#210203] text-2xl font-bold">
                 <Link href={singleTirePageLink}>
-                  {tires[0]?.brand} {tires[0]?.model_group}{' '}
-                  {tires[0]?.tire_size}{' '}
-                  {tires[0]?.tire_size !== tires[1]?.tire_size &&
-                  typeof tires[1]?.tire_size !== 'undefined'
-                    ? `AND ${tires[1]?.tire_size}`
+                  {tires[0]?.brand} {tires[0]?.modelGroup} {tires[0]?.tireSize}{' '}
+                  {tires[0]?.tireSize !== tires[1]?.tireSize &&
+                  typeof tires[1]?.tireSize !== 'undefined'
+                    ? `AND ${tires[1]?.tireSize}`
                     : ''}
                 </Link>
               </span>

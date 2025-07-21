@@ -28,10 +28,10 @@ const wishlist = baseApi.injectEndpoints({
             return {
               wishlist_id: wishlist.id,
               title: wishlist.data?.title || '',
-              image_url: wishlist.data?.image_url || '',
+              imageUrl: wishlist.data?.imageUrl || '',
               category: wishlist.data?.category || {},
               slug: wishlist.slug,
-              part_number: wishlist.data?.part_number || '',
+              partNumber: wishlist.data?.partNumber || '',
             };
           }),
         };
@@ -56,10 +56,10 @@ const wishlist = baseApi.injectEndpoints({
           wishlist: {
             wishlist_id: baseQueryReturnValue.wishlist.id,
             title: baseQueryReturnValue.wishlist.data.title,
-            image_url: baseQueryReturnValue.wishlist.data.image_url,
+            imageUrl: baseQueryReturnValue.wishlist.data.imageUrl,
             category: baseQueryReturnValue.wishlist.data.category,
             slug: baseQueryReturnValue.wishlist.slug,
-            part_number: baseQueryReturnValue.wishlist.data.part_number,
+            partNumber: baseQueryReturnValue.wishlist.data.partNumber,
           },
         };
       },
