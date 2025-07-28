@@ -62,8 +62,8 @@ const products = baseApi.injectEndpoints({
         console.log('Shallow params', shallowParams);
         const result = await baseQuery({
           url: '/products/list',
-          method: 'GET',
-          params: { ...shallowParams, category: 'tire' },
+          method: 'POST',
+          data: { ...shallowParams, category: 'tire' },
         });
 
         if (result.error) return { error: result.error };
