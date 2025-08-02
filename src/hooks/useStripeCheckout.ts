@@ -66,16 +66,18 @@ export const useStripeCheckout = () => {
         affiliateDiscount,
       };
 
-      const response = await apiInstance.post(
-        '/payments/stripe/create-checkout-session',
-        {
-          orderData,
-        }
-      );
+      const response = await apiInstance.post('/payments/stripe/checkout', {
+        orderData,
+      });
 
       const result = response;
-      if (result.data.data.data.sessionUrl) {
-        window.location.href = result.data.data.data.sessionUrl;
+      console.log(
+        '🚀 ~ initiateCheckout ~ result:',
+        result.data.data.sessionUrl
+      );
+
+      if (result.data.data.sessionUrl) {
+        window.location.href = result.data.data.sessionUrl;
       }
     } catch (err) {
       const error = err as AxiosError<{ errors: string[]; message: string }>;

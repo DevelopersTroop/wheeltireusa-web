@@ -110,7 +110,7 @@ export const FinalStep: React.FC = () => {
         if (sessionId) {
           // Stripe
           response = await apiInstance.get(
-            `/payments/stripe/verify-payment?sessionId=${sessionId}&orderId=${orderId}`
+            `/payments/stripe/verify-payment?session_id=${sessionId}&order_id=${orderId}`
           );
         } else {
           // PayPal

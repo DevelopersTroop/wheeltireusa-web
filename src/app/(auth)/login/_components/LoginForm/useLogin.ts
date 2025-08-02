@@ -24,7 +24,7 @@ const userLogin = async ({
   const { data } = await apiInstance.post<{
     data: {
       user: TUser;
-      token: {
+      tokens: {
         accessToken: string;
         refreshToken: string;
       };
@@ -70,8 +70,8 @@ export const useLogin = () => {
         }
         setErrors([]);
         setSuccess({ isSuccess: true, message: 'Login successful' });
-        dispatch(setAccessToken({ accessToken: data.token.accessToken }));
-        dispatch(setRefreshToken({ refreshToken: data.token.refreshToken }));
+        dispatch(setAccessToken({ accessToken: data.tokens.accessToken }));
+        dispatch(setRefreshToken({ refreshToken: data.tokens.refreshToken }));
         dispatch(setUserDetails({ userDetails: data.user }));
 
         const redirect = searchParams.get('redirect');

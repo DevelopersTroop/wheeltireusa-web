@@ -207,15 +207,15 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
           });
         })
         .finally(async () => {
-          apiInstance
-            .post('/subscriptions', {
-              email: billingAddress.email,
-            })
-            .catch(() => {
-              setIsLoading(false);
-            });
+          // apiInstance
+          //   .post('/subscriptions', {
+          //     email: billingAddress.email,
+          //   })
+          //   .catch(() => {
+          //     setIsLoading(false);
+          //   });
           setIsLoading(false);
-          setTriggerPayment(false); // Reset trigger
+          setTriggerPayment(false);
         });
     }
   }, [billingAddressUpdate, triggerPayment]);
