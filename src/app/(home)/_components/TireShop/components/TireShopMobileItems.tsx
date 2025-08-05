@@ -2,6 +2,7 @@
 
 import TireQuantity from '@/components/shared/TireQuantity/TireQuantity';
 import { TInventoryItem } from '@/types/product';
+import { getPrice } from '@/utils/price';
 import { getProductThumbnail } from '@/utils/product';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
@@ -123,7 +124,7 @@ export const MobileItemsTireShop: React.FC<{
                     <div className="flex flex-row gap-2">
                       <p className="text-[#52545B] text-xl">x</p>
                       <p className="text-xl font-semibold text-[#212227]">
-                        ${tire[0]?.price?.toFixed(2)}
+                        ${getPrice(tire[0])?.toFixed(2)}
                       </p>
                     </div>
                   </div>
