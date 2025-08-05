@@ -3,7 +3,6 @@ import { apiInstance } from '@/redux/apis/base';
 import { removeUser, setUserDetails } from '@/redux/features/userSlice';
 import { RootState } from '@/redux/store';
 import { TUser } from '@/types/user';
-import { apiBaseUrl } from '@/utils/api';
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 

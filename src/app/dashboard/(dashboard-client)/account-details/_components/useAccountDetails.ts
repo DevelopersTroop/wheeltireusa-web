@@ -27,7 +27,7 @@ export const useAccountDetails = () => {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(`${apiBaseUrl}/auth/profile/${user?.id}`, {
+      const response = await fetch(`${apiBaseUrl}/auth/change-profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -41,8 +41,10 @@ export const useAccountDetails = () => {
 
       const data = await response.json();
 
+      console.log('set user ===========================  ', data?.data?.user);
+
       if (data.statusCode === 200) {
-        dispatch(setUserDetails({ userDetails: data?.data?.user }));
+        dispatch(setUserDetails({ userDetails: data?.data?.user?.data }));
         setSuccess(data.message || 'Account updated successfully');
       } else {
         throw new Error(data.message || 'Failed to update account.');

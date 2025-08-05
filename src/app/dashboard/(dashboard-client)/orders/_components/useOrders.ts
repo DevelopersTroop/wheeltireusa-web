@@ -35,12 +35,12 @@ export const useOrders = () => {
               Authorization: `Bearer ${user.accessToken}`,
             },
             body: JSON.stringify({
-              email: user.email,
-              all: true,
+              // email: user.email,
+              // all: true,
               sort: [
                 {
                   whom: 'updatedAt',
-                  order: 'desc',
+                  order: 'DESC',
                 },
               ],
             }),
