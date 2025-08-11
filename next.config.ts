@@ -53,6 +53,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: '4520456.app.netsuite.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'media.wheelpros.com',
+      },
     ],
   },
   rewrites: async () => {

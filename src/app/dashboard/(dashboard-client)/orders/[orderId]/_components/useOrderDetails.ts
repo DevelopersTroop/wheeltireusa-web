@@ -26,7 +26,7 @@ export const useOrderDetails = () => {
         const result = await response.json();
 
         if (response.ok && result.response) {
-          setOrder(result.data.order);
+          setOrder(result.data);
         } else {
           throw new Error(result.message || 'Failed to fetch order details');
         }
