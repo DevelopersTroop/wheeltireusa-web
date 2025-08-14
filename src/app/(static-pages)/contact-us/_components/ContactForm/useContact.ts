@@ -34,7 +34,7 @@ export const useContact = () => {
     setIsLoading(true);
 
     try {
-      const res = await fetch(`${apiBaseUrl}/contacts`, {
+      const res = await fetch(`${apiBaseUrl}/contact-us/create`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(values),
@@ -42,7 +42,7 @@ export const useContact = () => {
 
       const data = await res.json();
 
-      if (data.statusCode === 201) {
+      if (data.statusCode === 200) {
         setMessage(data.message);
         setIsSubmitted(true);
         setName(values.name);
