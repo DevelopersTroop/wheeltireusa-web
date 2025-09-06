@@ -4,7 +4,7 @@ COMMIT_SHA=$1
 
 sudo tee /etc/nginx/conf.d/tirematic-web.conf > /dev/null <<EOF
 server {
-    server_name tirematic.stage.developertroop.com;
+    server_name tirematic.devtroop.shop;
 
     gzip on;
     gzip_vary on;
@@ -67,18 +67,18 @@ server {
     }
 
     listen 443 ssl; # managed by Certbot
-    ssl_certificate /etc/letsencrypt/live/tirematic.stage.developertroop.com/fullchain.pem; # managed by Certbot
-    ssl_certificate_key /etc/letsencrypt/live/tirematic.stage.developertroop.com/privkey.pem; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/tirematic.devtroop.shop/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/tirematic.devtroop.shop/privkey.pem; # managed by Certbot
     include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
 }
 
 server {
-    if (\$host = tirematic.stage.developertroop.com) {
+    if (\$host = tirematic.devtroop.shop) {
         return 301 https://\$host\$request_uri;
     } # managed by Certbot
 
-    server_name tirematic.stage.developertroop.com;
+    server_name tirematic.devtroop.shop;
     listen 80;
     return 404; # managed by Certbot
 }
