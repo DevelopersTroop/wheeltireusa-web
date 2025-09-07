@@ -27,7 +27,10 @@ const TopBar = () => {
         </div>
         {/* Add My Ride button */}
         <div className="w-fit text-center">
-          <Link href={'#'} className="underline text-[16px] font-normal">
+          <Link
+            href={'/deals-and-rebates'}
+            className="underline text-[16px] font-normal"
+          >
             Click here
           </Link>
         </div>

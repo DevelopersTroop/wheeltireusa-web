@@ -118,7 +118,7 @@ const MainMenuMobile = ({
                 className={
                   'text-black tracking-wider inline-block w-full border-b pl-3 py-3.5 border-[#F1F1F1]'
                 }
-                href="/deals"
+                href="/deals-and-rebates"
               >
                 Deals
               </Link>

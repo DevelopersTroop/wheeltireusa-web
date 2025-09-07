@@ -86,7 +86,7 @@ const DealsAndRebatesContent = () => {
       </div>
 
       <Link
-        href={'/deals'}
+        href={'/deals-and-rebates'}
         className="text-[#212227] text-xl underline font-normal text-center"
       >
         View all deals
