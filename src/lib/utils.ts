@@ -32,8 +32,8 @@ export function parseTireSize(size: string) {
   }
 
   return {
-    width: parseInt(match[1], 10), // 305
-    ratio: parseInt(match[2], 10), // 35
-    diameter: parseInt(match[3], 10), // 24
+    width: parseInt(match[1], 10).toString(), // 305
+    ratio: parseInt(match[2], 10).toString(), // 35
+    diameter: parseInt(match[3], 10).toString(), // 24
   };
 }
