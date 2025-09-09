@@ -27,9 +27,6 @@ const FilterProvider = ({ children }: { children: React.ReactNode }) => {
   const [shouldPaginationRemove, setShouldPaginationRemove] =
     React.useState(false); // Tracks if pagination needs reset
 
-  useEffect(() => {
-    console.log('filters', filters);
-  }, [filters]);
   // Formats filter values by replacing separators (used for multi-value filters)
   const formatFilterValue = (
     value: string,

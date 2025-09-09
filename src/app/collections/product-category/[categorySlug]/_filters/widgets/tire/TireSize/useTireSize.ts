@@ -28,7 +28,7 @@ const useTireSize = (props: TireSizeProps) => {
   const searchParams = useSearchParams();
   const rawFrontParams = searchParams.get('frontParams');
   const rawRearParams = searchParams.get('rearParams');
-  const { replaceFilterValue } = useFilter();
+  const { replaceFilterValue, removeSpecificFilters } = useFilter();
 
   const [showFilter, setShowFilter] = useState(
     // rawFrontParams || rawRearParams ? true : false // if any front or rear params are set, show filter
@@ -115,6 +115,7 @@ const useTireSize = (props: TireSizeProps) => {
 
   const onSubmit = (values: TireSizeFormValues) => {
     let result = { ...values };
+    removeSpecificFilters(['frontTireSize', 'rearTireSize']);
     if (!values.diffRearSize) {
       result = {
         ...values,
