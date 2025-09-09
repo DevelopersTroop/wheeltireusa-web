@@ -1,3 +1,4 @@
+import { parseTireSize } from '@/lib/utils';
 import {
   closeMainFilterModal,
   setMainFilter,
@@ -122,7 +123,7 @@ const useFilterByVehicle = () => {
       return;
     }
     router.push(
-      `/collections/product-category/tire?frontTireSize=${encodeURIComponent(selectedFrontTireSize ?? '')}&rearTireSize=${encodeURIComponent(selectedRearTireSize ?? '')}`
+      `/collections/product-category/tire?frontParams=${encodeURIComponent(selectedFrontTireSize ? JSON.stringify(parseTireSize(selectedFrontTireSize)) : '')}&rearParams=${encodeURIComponent(selectedRearTireSize ? JSON.stringify(parseTireSize(selectedRearTireSize)) : '')}`
     );
     dispatch(closeMainFilterModal());
   };

@@ -22,3 +22,18 @@ export function isLgScreenOrBigger(): boolean {
 
   return window.matchMedia('(min-width: 64rem)').matches;
 }
+
+export function parseTireSize(size: string) {
+  const regex = /^(\d{3})\/(\d{2})R(\d{2})$/i;
+  const match = size.match(regex);
+
+  if (!match) {
+    throw new Error('Invalid tire size format');
+  }
+
+  return {
+    width: parseInt(match[1], 10), // 305
+    ratio: parseInt(match[2], 10), // 35
+    diameter: parseInt(match[3], 10), // 24
+  };
+}
