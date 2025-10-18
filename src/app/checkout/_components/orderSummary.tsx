@@ -1,109 +1,66 @@
-'use client';
+"use client";
+import { useCheckout } from "@/context/checkoutContext";
+// Context to manage checkout-related state
+import React from "react";
 
 // OrderSummary Component
-interface OrderSummaryProps {
-  totalCost?: string;
-  cartType?: string;
-  discount?: number;
-  zipCode?: string;
-  netCost?: string;
-  taxAmount?: number;
-  totalWithTax?: number;
-}
+const OrderSummary: React.FC = () => {
 
-export const OrderSummary: React.FC<OrderSummaryProps> = ({
-  totalCost,
-  cartType,
-  discount = 0,
-  zipCode,
-  netCost,
-  taxAmount,
-  totalWithTax,
-}) => {
+  // Destructure values from the checkout context
+  const { // Type of cart (e.g., CENTER_CAP_ONLY)
+    subTotalCost, // Subtotal cost of items in the cart
+    discount, // Discount applied to the order
+    cartType, // Sales tax for the order
+    totalCost, // Total cost of the order
+    validatedZipCode, // Validated ZIP code for delivery
+    setIsValidZipCode // Function to update ZIP code validation state
+  } = useCheckout();
+
   return (
-    <div className="bg-[#F7F7F7] h-fit py-5 rounded-xs">
-      {/* Container for order summary details */}
+    <div className="bg-white">
+      {/* Section Title */}
+      <h2 className="text-2xl font-bold text-gray-900 mb-2">
+        Delivery & Installation
+      </h2>
+      {/* ZIP Code Information */}
+      <p className="text-sm text-gray-600 mb-4">
+        You are viewing the best delivery and installation options for{' '}
+        <span className="underline font-semibold font-mono text-primary">{validatedZipCode}</span>{' '}
+        ZIP Code.
+      </p>
+      {/* Option to Change ZIP Code */}
+      <p className="underline cursor-pointer font-semibold text-primary" onClick={() => setIsValidZipCode(false)}>Change ZIP Code</p>
       <div className="space-y-2">
-        {/* Display total cost if available */}
-        {totalCost && (
-          <div className="flex justify-between items-baseline py-2 px-md">
-            <p className="text-base leading-[19px] text-[#210203]">
-              <span className="text-[#210203] text-base font-normal">
-                Item(s) Total
-              </span>
-            </p>
-            <div className="flex gap-0 items-baseline">
-              ${parseFloat(totalCost).toFixed(2)}
-            </div>
-          </div>
-        )}
-        {/* Display discount if greater than 0 */}
-        {discount > 0 && (
-          <div className="flex justify-between items-baseline px-md">
-            <p className="text-base leading-[19px] text-[#210203]">
-              <span className="text-[#210203] text-base font-normal">
-                Discount
-              </span>
-            </p>
-            <h4 className="text-2xl leading-[29px] text-[#210203]">
-              <span className="text-[#210203] text-2xl font-normal">
-                -${discount.toFixed(2)}
-              </span>
-            </h4>
-          </div>
-        )}
-
-        {/* Display shipping cost */}
-        <div className="flex justify-between items-baseline px-md">
-          <div className="flex gap-2 items-center">
-            <span className="text-[#210203] text-base font-normal">
-              Shipping {zipCode && `(${zipCode}):`}
-            </span>
-          </div>
-          <h4 className="text-2xl leading-[29px] text-[#210203] font-normal">
-            {cartType === 'CENTER_CAP_ONLY' ? '$14.99' : 'Free'}
-          </h4>
+        {/* Subtotal */}
+        <div className="flex justify-between py-2">
+          <span className="text-gray-600">Item(s) Total:</span>
+          <span className="font-medium">${subTotalCost.toFixed(2)}</span>
         </div>
 
-        {taxAmount ? (
-          <div className="flex justify-between items-baseline px-md">
-            <div className="flex gap-2 items-center">
-              <span className="text-[#210203] text-base font-normal">
-                Sales Tax {zipCode && `(${zipCode}):`}
-              </span>
-            </div>
-            <h4 className="text-2xl leading-[29px] text-[#210203] font-normal">
-              ${taxAmount.toFixed(2)}
-            </h4>
+        {/* Discount (if applicable) */}
+        {discount ? (
+          <div className="flex justify-between py-2">
+            <span className="text-gray-600">Discount:</span>
+            <span className="text-red-600">-${discount}</span>
           </div>
-        ) : null}
+        ) : ''}
 
-        {/* Display total cost after discounts and shipping */}
-        {/* <div className="flex justify-between items-baseline px-md">
-          <h5 className="text-xl leading-6 text-[#210203] font-normal">
-            Total:
-          </h5>
-          <div className="flex items-baseline">
-            <p className="text-[32px] leading-[38px] text-[#210203] font-bold">
-              ${(netCost && isNaN(parseFloat(netCost))) ? '0.00' : Number(netCost).toFixed(2)}
-            </p>
+        {/* Delivery Charge (if cart type is CENTER_CAP_ONLY) */}
+        {cartType === "CENTER_CAP_ONLY" && (
+          <div className="flex justify-between py-2">
+            <span className="text-gray-600">Delivery Charge:</span>
+            <span className="text-red-600">$14.99</span>
           </div>
+        )}
+
+        {/* <div className="flex justify-between py-2">
+          <span className="text-gray-600">Sales Tax:</span>
+          <span className="font-medium">${salesTax}</span>
         </div> */}
-
-        {/* Display total cost after discounts and shipping */}
-        <div className="flex justify-between items-baseline px-md">
-          <h5 className="text-xl leading-6 text-[#210203] font-normal">
-            Total:
-          </h5>
-          <div className="flex items-baseline">
-            <p className="text-[32px] leading-[38px] text-[#210203] font-bold">
-              $
-              {totalWithTax?.toFixed(2) &&
-              isNaN(parseFloat(totalWithTax?.toFixed(2)))
-                ? '0.00'
-                : Number(totalWithTax?.toFixed(2)).toFixed(2)}
-            </p>
-          </div>
+        {/* Total Cost */}
+        <div className="flex justify-between font-bold mt-4 pt-4 border-t border-gray-200">
+          <span>TOTAL:</span>
+          <span>${totalCost.toFixed(2)}</span>
         </div>
       </div>
     </div>

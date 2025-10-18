@@ -1,10 +1,11 @@
-'use client';
+"use client";
 
-import { CreditCard } from 'lucide-react';
+import { CreditCard } from "lucide-react";
 
 interface PaymentData {
-  id: string;
+  _id: string;
   email: string;
+  stringOrderId: string;
   orderId: string;
   currency: string;
   amount: number;
@@ -26,17 +27,17 @@ export const PaymentInfo: React.FC<{ paymentData: PaymentData }> = ({
 }) => {
   // Function to format a date string into a readable format
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
   // Function to format a currency value based on the provided currency code
   const formatCurrency = (amount: number, currency: string) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
       currency: currency,
     }).format(amount);
   };
@@ -52,7 +53,7 @@ export const PaymentInfo: React.FC<{ paymentData: PaymentData }> = ({
       <div className="flex flex-col gap-4">
         <h2 className="text-lg">Payment Info</h2>
         <div className="text-[#210203] space-y-1">
-          <p className="font-light">Order ID: {paymentData.orderId}</p>
+          <p className="font-light">Order ID: #{paymentData.orderId}</p>
           {/* <p className="font-light">Amount: {formatCurrency(paymentData.amount, paymentData.currency)}</p> */}
           <p className="font-light">
             Payment Method: {paymentData.data.paymentGateway}

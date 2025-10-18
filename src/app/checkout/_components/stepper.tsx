@@ -1,10 +1,9 @@
-'use client';
-import { useTypedSelector } from '@/redux/store'; // Custom hook to access the Redux store
-import { cn } from '@/lib/utils'; // Utility function for conditional class names
-import { Check } from 'lucide-react'; // Icon for completed steps
-import Link from 'next/link'; // Next.js Link component for navigation
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react'; // React hooks for managing state and side effects
+"use client";
+
+import { cn } from "@/lib/utils"; // Utility function for conditional class names
+import { useTypedSelector } from "@/redux/store";
+import { Check } from "lucide-react"; // Icon for completed steps
+import { useSearchParams } from "next/navigation";
 
 // Interface defining the props for the Stepper component
 interface StepperProps {
@@ -19,28 +18,14 @@ export const Stepper: React.FC<StepperProps> = ({
   steps,
   currentStep,
 }) => {
-  // Get the authenticated user
-  // const { user } = useAuth();
-  const user = { id: 0 };
-  const [_, setIsMobile] = useState(false); // State to track if the device is mobile
   const { selectedOptionTitle } = useTypedSelector(
     (state) => state.persisted.checkout
   ); // Access the selected shipping option from the Redux store
   const searchParams = useSearchParams();
 
-  // Effect to handle screen resizing and determine if the device is mobile
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768); // Check if the screen width is less than 768px
-    handleResize(); // Initialize the state on component mount
-    window.addEventListener('resize', handleResize); // Add event listener for window resizing
-    return () => window.removeEventListener('resize', handleResize); // Cleanup the event listener on unmount
-  }, []);
-
-  const isFinalStep = currentStep === 5; // Check if the current step is the final step
-
   return (
-    <div className="lg:max-w-[90%] mx-auto">
-      {' '}
+    <div className="w-full mb-6 overflow-hidden">
+      {" "}
       {/* Wrapper for the stepper */}
       <div className="flex justify-between items-start">
         <div className="w-full flex justify-between relative">
@@ -48,34 +33,36 @@ export const Stepper: React.FC<StepperProps> = ({
           <div
             className="absolute top-[15px] h-[1px] bg-gray-200"
             style={{
-              left: '14px',
-              width: '80%',
+              left: "14px",
+              width: "100%",
             }}
           />
           {/* Render each step */}
           {steps.map((step, index) => (
             <div
               key={index}
-              className="relative flex flex-col w-[20%] items-start"
+              className={cn("relative flex flex-col w-1/3 items-start", {
+                "items-center": index === 1,
+                "items-end": index === 2,
+              })}
             >
               <div className="flex flex-col items-center">
                 {/* Step circle */}
                 <div
                   onClick={() => {
-                    if (searchParams.get('order_id')?.length) return;
-                    if (currentStep > 4) return; // Prevent navigation if the current step is beyond step 4
+                    if (searchParams.get("order_id")?.length) return;
+                    if (currentStep > 2) return; // Prevent navigation if the current step is beyond step 4
                     if (
-                      selectedOptionTitle &&
-                      selectedOptionTitle !== 'Direct to Customer' &&
+                      selectedOptionTitle !== "Direct to Customer" &&
                       index + 1 === 2
                     )
                       return; // Prevent navigation to step 2 if the selected option is not "Direct To Customer"
                     if (index + 1 <= currentStep) setStep(index + 1); // Allow navigation to the current or previous steps
                   }}
                   className={cn(
-                    'w-7 h-7 rounded-full flex items-center justify-center cursor-pointer z-10 mb-4',
-                    'transition-colors duration-200',
-                    index + 1 <= currentStep ? 'bg-black' : 'bg-gray-200' // Highlight completed steps
+                    "w-7 h-7 rounded-full flex items-center justify-center cursor-pointer z-10 mb-1",
+                    "transition-colors duration-200",
+                    index + 1 <= currentStep ? "bg-black" : "bg-gray-200" // Highlight completed steps
                   )}
                 >
                   {index + 1 < currentStep ? (
@@ -89,22 +76,27 @@ export const Stepper: React.FC<StepperProps> = ({
               </div>
 
               {/* Step title and subtitle */}
-              <div className="w-full max-w-[150px] text-left">
+              <div
+                className={cn("w-full text-left", {
+                  "text-center": index === 1,
+                  "text-right": index === 2,
+                })}
+              >
                 <p
                   className={cn(
-                    'text-xl font-medium mb-1 hidden md:block',
-                    index + 1 <= currentStep ? 'text-black' : 'text-gray-500'
+                    "text-lg font-medium mb-1 hidden md:block",
+                    index + 1 <= currentStep ? "text-black" : "text-gray-500"
                   )}
                 >
                   {step.title}
                 </p>
                 <p
                   className={cn(
-                    'text-sm text-gray-600 leading-tight hidden md:block',
-                    index + 1 <= currentStep ? 'text-black' : 'text-gray-500'
+                    "text-sm text-gray-600 leading-tight hidden md:block",
+                    index + 1 <= currentStep ? "text-black" : "text-gray-500"
                   )}
                 >
-                  {step.subTitle}
+                  {/* {step.subTitle} */}
                 </p>
               </div>
             </div>
@@ -112,7 +104,7 @@ export const Stepper: React.FC<StepperProps> = ({
         </div>
       </div>
       {/* Prompt for users to sign in if they are not authenticated */}
-      {!user?.id && !isFinalStep && (
+      {/* {!user?._id && !isFinalStep && (
         <div className="my-5 border border-gray-200 rounded-lg p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 max-w-3xl">
           <div className="flex items-center gap-2">
             <svg
@@ -136,7 +128,7 @@ export const Stepper: React.FC<StepperProps> = ({
             Sign in
           </Link>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

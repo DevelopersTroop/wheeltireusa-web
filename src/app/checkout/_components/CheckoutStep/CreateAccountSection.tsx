@@ -1,27 +1,27 @@
-'use client';
-
-import { setIsAccountCreated } from '@/redux/features/checkoutSlice';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Lock, User, Loader2 } from 'lucide-react';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { toast } from 'sonner';
+"use client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import useAuth from "@/hooks/useAuth";
+import { setIsAccountCreated } from "@/redux/features/checkoutSlice";
+import { Lock, User, Loader2 } from "lucide-react";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { toast } from "sonner";
 
 // Props interface for the CreateAccountSection component
 interface CreateAccountSectionProps {
-  orderSuccessData: any;
+  orderSuccessData: any
 }
 
 // CreateAccountSection Component
 export const CreateAccountSection: React.FC<CreateAccountSectionProps> = ({
-  orderSuccessData,
+  orderSuccessData
 }) => {
   const [isLoading, setIsLoading] = useState(false); // State to track loading status
-  const [password, setPassword] = useState(''); // State to store the user's password
-  const dispatch = useDispatch(); // Redux dispatch hook
-  // const { signUp } = useAuth() // Authentication function for signing up users
+  const [password, setPassword] = useState("") // State to store the user's password
+  const dispatch = useDispatch() // Redux dispatch hook
+  const { signUp } = useAuth() // Authentication function for signing up users
 
   // Function to handle account creation
   const handleCreateAccount = async () => {
@@ -34,24 +34,22 @@ export const CreateAccountSection: React.FC<CreateAccountSectionProps> = ({
 
       const { shippingAddress, billingAddress } = orderSuccessData.data;
 
-      const name = billingAddress?.name ?? shippingAddress?.name ?? '';
-      const email = billingAddress?.email ?? shippingAddress?.email ?? '';
-      const [firstName = '', lastName = ''] = name.split(' ');
+      const name = billingAddress?.name ?? shippingAddress?.name ?? "";
+      const email = billingAddress?.email ?? shippingAddress?.email ?? "";
+      const [firstName = "", lastName = ""] = name.split(" ");
 
-      // const res = await signUp({ firstName, lastName, email, password });
+      const res = await signUp({ firstName, lastName, email, password });
 
-      // if (res?.user) {
-      //     dispatch(setIsAccountCreated(true));
-      //     toast({
-      //         title: "Account Created!",
-      //         description: "Account has been created successfully.",
-      //         variant: "default",
-      //     });
-      // }
+      if (res?.id) {
+        dispatch(setIsAccountCreated(true));
+        toast.success("Account Created!", {
+          description: "Account has been created successfully."
+        });
+      }
     } catch (error: any) {
-      console.error('Throwing error');
-      toast('Error', {
-        description: error?.message || 'Something went wrong',
+      console.error("Throwing error")
+      toast("Error", {
+        description: error?.message || "Something went wrong"
       });
     } finally {
       setIsLoading(false);
@@ -67,19 +65,15 @@ export const CreateAccountSection: React.FC<CreateAccountSectionProps> = ({
 
       {/* Description */}
       <p className="text-[#210203]">
-        Creating an account lets you personalize your shopping experience --
-        save your vehicle info and preferred installers, create a wish list,
-        share photos, submit product reviews, review your order history, and
-        more!
+        Creating an account lets you personalize your shopping experience -- save
+        your vehicle info and preferred installers, create a wish list, share
+        photos, submit product reviews, review your order history, and more!
       </p>
 
       {/* Display Email Address */}
       <div>
         <Label>Email:</Label>
-        <p className="text-[#210203] font-bold">
-          {orderSuccessData?.data?.shippingAddress?.email ||
-            orderSuccessData?.data?.billingAddress?.email}
-        </p>
+        <p className="text-[#210203] font-bold">{orderSuccessData?.data?.shippingAddress?.email || orderSuccessData?.data?.billingAddress?.email}</p>
       </div>
 
       {/* Password Input */}

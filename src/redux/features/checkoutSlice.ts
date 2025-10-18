@@ -1,92 +1,92 @@
 import {
+  SelecteOptionTitle,
   TAddress,
   TBillingAddress,
   TDealer,
   TOrder,
   TOrderData,
   TOrderInfo,
-  TProductInfo,
   TRequestedDealer,
-} from '@/types/order';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+} from "@/types/order";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type TCheckoutState = TOrderData & {
   orderSuccessData: TOrder | undefined;
   newCoupon: string | undefined | null;
-  validatedZipCode: string;
+  orderId: string;
 };
 
 const initialState: TCheckoutState = {
   discount: 0,
   selectedDealer: undefined,
-  referralCode: '',
+  referralCode: "",
   billingAddress: {
-    address1: '',
-    cityState: '',
-    country: '',
-    email: '',
-    fname: '',
-    lname: '',
-    name: '',
-    phone: '',
-    city: '',
-    zipCode: '',
-    address2: '',
-    company: '',
+    address1: "",
+    cityState: "",
+    country: "",
+    email: "",
+    fname: "",
+    lname: "",
+    name: "",
+    phone: "",
+    city: "",
+    zipCode: "",
+    address2: "",
+    company: "",
   },
   shippingAddress: {
-    address1: '',
-    cityState: '',
-    country: '',
-    email: '',
-    fname: '',
-    lname: '',
-    name: '',
-    city: '',
-    phone: '',
-    zipCode: '',
-    address2: '',
-    company: '',
+    address1: "",
+    cityState: "",
+    country: "",
+    email: "",
+    fname: "",
+    lname: "",
+    name: "",
+    city: "",
+    phone: "",
+    zipCode: "",
+    address2: "",
+    company: "",
   },
   isAccountCreated: false,
-  netCost: '',
-  totalCost: '',
+  netCost: "",
+  totalCost: "",
   orderInfo: {
-    fitmentDetails: '',
-    newsLetter: 'yes',
+    fitmentDetails: "",
+    newsLetter: "yes",
     newsLetterText: false,
     orderInfoText: false,
-    phone: '',
-    salesSpecialistName: '',
+    phone: "",
+    salesSpecialistName: "",
     termsAndConditions: false,
   },
-  vehicleInformation: '',
-  paymentStatus: '',
+  vehicleInformation: "",
+  paymentStatus: "",
   productsInfo: [],
   selectedOption: 1,
   shippingMethod: undefined,
   selectedOptionTitle: undefined,
   requestedDealer: undefined,
   selectedDealerInfo: undefined,
-  cartType: '',
+  cartType: "",
   orderSuccessData: undefined,
   deliveryCharge: 0,
   isCouponApplied: false,
-  couponCode: '',
+  couponCode: "",
   couponDiscount: 0,
   dealerDiscountApplied: false,
   localDealerSelected: false,
   localDealerInfo: undefined,
   productBasedDiscount: 0,
   productBasedDiscountApplied: false,
-  existingOrderId: '',
+  existingOrderId: "",
   newCoupon: null,
   affiliateDiscount: 0,
-  validatedZipCode: '',
+  orderId: "",
 };
 
 const checkoutSlice = createSlice({
-  name: 'checkout',
+  name: "checkout",
   initialState,
   reducers: {
     setBillingAddress: (
@@ -111,24 +111,24 @@ const checkoutSlice = createSlice({
       state.selectedDealer =
         action.payload?.address || action.payload?.addressPhone
           ? `${action.payload?.address}-${action.payload?.addressPhone}`
-          : '';
+          : "";
       state.localDealerSelected = false;
       state.selectedDealerInfo = action.payload;
       state.shippingAddress = {
-        address1: '',
-        cityState: '',
-        country: '',
-        email: '',
-        fname: '',
-        lname: '',
-        name: '',
-        phone: '',
-        zipCode: '',
-        address2: '',
-        city: '',
-        company: '',
-        primaryPhone: '',
-        password: '',
+        address1: "",
+        cityState: "",
+        country: "",
+        email: "",
+        fname: "",
+        lname: "",
+        name: "",
+        phone: "",
+        zipCode: "",
+        address2: "",
+        city: "",
+        company: "",
+        primaryPhone: "",
+        password: "",
       };
     },
     setRequestedDealer: (
@@ -139,7 +139,7 @@ const checkoutSlice = createSlice({
     },
     setSelectedOptionTitle: (
       state: TCheckoutState,
-      action: PayloadAction<TCheckoutState['selectedOptionTitle']>
+      action: PayloadAction<SelecteOptionTitle>
     ) => {
       state.selectedOptionTitle = action.payload;
     },
@@ -153,26 +153,32 @@ const checkoutSlice = createSlice({
       state: TCheckoutState,
       action: PayloadAction<{
         option: number;
-        title: TCheckoutState['selectedOptionTitle'];
+        title: SelecteOptionTitle | undefined;
       }>
     ) => {
       state.shippingMethod = action.payload;
     },
-    updateDiscount: (state, action: PayloadAction<number>) => {
+    updateDiscount: (
+      state,
+      action: PayloadAction<{ clearDealer?: boolean; amount: number }>
+    ) => {
       if (state.isCouponApplied) {
-        state.discount = action.payload + state.couponDiscount;
+        state.discount = action.payload.amount + state.couponDiscount;
       } else if (state.productBasedDiscount) {
-        state.discount = action.payload + state.productBasedDiscount;
+        state.discount = action.payload.amount + state.productBasedDiscount;
       } else if (state.affiliateDiscount) {
-        state.discount = action.payload + state.affiliateDiscount;
+        state.discount = action.payload.amount + state.affiliateDiscount;
       } else {
-        state.discount = action.payload;
+        state.discount = action.payload.amount;
       }
     },
-    updateProductFromCart: (state, action: PayloadAction<TProductInfo[]>) => {
+    clearDealerDiscount: (state, action: PayloadAction<number>) => {
+      state.discount = Math.max(0, state.discount - action.payload);
+    },
+    updateProductFromCart: (state, action: PayloadAction<any[]>) => {
       state.productsInfo = action.payload;
     },
-    initiateCheckout: (state) => {},
+    initiateCheckout: (state) => { },
     setOrderInfo: (state, action: PayloadAction<TOrderInfo>) => {
       state.orderInfo = {
         ...state.orderInfo,
@@ -202,7 +208,7 @@ const checkoutSlice = createSlice({
     revokeCouponCode: (state) => {
       if (state.isCouponApplied) {
         state.isCouponApplied = false;
-        state.couponCode = '';
+        state.couponCode = "";
         if (state.discount >= state.couponDiscount) {
           state.discount -= state.couponDiscount;
         } else {
@@ -217,7 +223,7 @@ const checkoutSlice = createSlice({
       state.discount = 0;
       state.dealerDiscountApplied = false;
       state.isCouponApplied = false;
-      state.couponCode = '';
+      state.couponCode = "";
       state.couponDiscount = 0;
       state.productBasedDiscount = 0;
       state.productBasedDiscountApplied = false;
@@ -238,20 +244,20 @@ const checkoutSlice = createSlice({
       state.requestedDealer = undefined;
       state.selectedDealer = undefined;
       state.shippingAddress = {
-        address1: '',
-        cityState: '',
-        country: '',
-        email: '',
-        fname: '',
-        lname: '',
-        name: '',
-        city: '',
-        phone: '',
-        zipCode: '',
-        address2: '',
-        company: '',
-        primaryPhone: '',
-        password: '',
+        address1: "",
+        cityState: "",
+        country: "",
+        email: "",
+        fname: "",
+        lname: "",
+        name: "",
+        city: "",
+        phone: "",
+        zipCode: "",
+        address2: "",
+        company: "",
+        primaryPhone: "",
+        password: "",
       };
     },
     updateVechicleInformation: (state, action: PayloadAction<string>) => {
@@ -317,6 +323,9 @@ const checkoutSlice = createSlice({
       }
       state.affiliateDiscount = 0;
     },
+    setOrderId(state, action: PayloadAction<string>) {
+      state.orderId = action.payload;
+    },
     updateValidatedZipCode: (state, action: PayloadAction<string>) => {
       return {
         ...state,
@@ -354,5 +363,7 @@ export const {
   addReferralCode,
   updateAffiliateDiscount,
   clearAffiliateDiscount,
-  updateValidatedZipCode,
+  clearDealerDiscount,
+  setOrderId,
+  updateValidatedZipCode
 } = checkoutSlice.actions;

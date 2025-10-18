@@ -1,46 +1,52 @@
-import { Button } from '@/components/ui/button';
-import { SelectDirectToCustomer } from './selectDirectToCustomer';
-import { useAppDispatch, useTypedSelector } from '@/redux/store';
-import {
-  setSelectedOption,
-  setSelectedOptionTitle,
-  setShippingMethod,
-  TCheckoutState,
-} from '@/redux/features/checkoutSlice';
+"use client";
+import { setSelectedOption as dispatchSelectedOption, setSelectedOptionTitle, setShippingMethod } from "@/redux/features/checkoutSlice";
+import { useTypedSelector } from "@/redux/store";
+import { SelecteOptionTitle } from "@/types/order";
+import { useDispatch } from "react-redux"; // Redux dispatch hook
+import { SelectDirectToCustomer } from "./SelectDirecToCustomer";
 
-type DeliveryOptionsProps = {
+// DeliveryOptions Component
+const DeliveryOptions: React.FC<{
   setStep: (step: number) => void;
-};
+}> = ({ setStep }) => {
+  const dispatch = useDispatch(); // Redux dispatch hook
 
-export const DeliveryOptions: React.FC<DeliveryOptionsProps> = ({
-  setStep,
-}) => {
-  const dispatch = useAppDispatch();
-  const { selectedOption } = useTypedSelector(
+
+  const { selectedOption, selectedDealer } = useTypedSelector(
     (state) => state.persisted.checkout
-  );
-  function dispatchShippingMethod(
-    option: number,
-    title: TCheckoutState['selectedOptionTitle']
-  ) {
-    dispatch(setShippingMethod({ option, title }));
-  }
-  const handleOptionSelect = (
-    option: number,
-    title: TCheckoutState['selectedOptionTitle']
-  ) => {
+  ); // Access selected option and dealer from Redux store
+  /**
+   * Auto-select nearest dealer based on cart type and selected option
+   */
+
+  const handleOptionSelect = (option: number, title: SelecteOptionTitle) => {
     dispatchShippingMethod(option, title);
     setSelectedOption(option);
     dispatch(setSelectedOptionTitle(title));
   };
+
+  function setSelectedOption(option: number) {
+    dispatch(dispatchSelectedOption(option));
+  }
+
+  function dispatchShippingMethod(option: number, title: SelecteOptionTitle) {
+    dispatch(setShippingMethod({ option, title }));
+  }
+
   return (
-    <div className="flex flex-col gap-4">
-      <SelectDirectToCustomer
-        checked={selectedOption === 1} // Assuming this option is always checked for this component
-        handleOptionSelect={() => handleOptionSelect(1, 'Direct to Customer')}
-        setSelectedOption={() => dispatch(setSelectedOption(1))}
-        setStep={setStep}
-      />
-    </div>
+    <>
+      <div className="flex flex-col gap-y-3">
+        <SelectDirectToCustomer
+          checked={selectedOption === 1}
+          handleOptionSelect={() =>
+            handleOptionSelect(1, "Direct to Customer")
+          }
+          setSelectedOption={() => setSelectedOption(1)}
+          setStep={setStep}
+        />
+      </div>
+    </>
   );
 };
+
+export default DeliveryOptions
