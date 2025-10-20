@@ -1,23 +1,20 @@
-import { useCheckout } from "@/context/checkoutContext";
-import { apiInstance } from "@/redux/apis/base";
-import { useTypedSelector } from "@/redux/store";
-import { TOrder } from "@/types/order";
-import { createSnapFinanceData } from "./snapFinance";
-import { apiBaseUrl } from "@/utils/api";
-import { toast } from "sonner";
-
+import { useCheckout } from '@/context/checkoutContext';
+import { apiInstance } from '@/redux/apis/base';
+import { useTypedSelector } from '@/redux/store';
+import { TOrder } from '@/types/order';
+import { createSnapFinanceData } from './snapFinance';
+import { apiBaseUrl } from '@/utils/api';
+import { toast } from 'sonner';
 
 export const getLatestOrderId = async () => {
   const { data: response } = await apiInstance.get<{
     data: {
-      data: {
-        order: TOrder;
-      };
+      order: TOrder;
     };
-  }>("/orders/last-order");
-  console.log("TCL: getLatestOrderId -> response", response);
+  }>('/orders/last-order');
+  console.log('TCL: getLatestOrderId -> response', response);
 
-  return response.data.data.order.orderId;
+  return response.data?.order?.orderId;
 };
 
 export const useSnapFinanceOrderData = () => {
@@ -64,7 +61,7 @@ export const useSnapFinanceOrderData = () => {
     selectedOptionTitle,
     requestedDealer,
     selectedDealerInfo,
-    deliveryCharge: cartType === "CENTER_CAP_ONLY" ? 14.99 : 0,
+    deliveryCharge: cartType === 'CENTER_CAP_ONLY' ? 14.99 : 0,
     isAccountCreated,
     productsInfo,
     isCouponApplied,
@@ -73,7 +70,7 @@ export const useSnapFinanceOrderData = () => {
     user: null,
     localDealerSelected,
     localDealerInfo,
-    paymentMethod: "Snap Finance",
+    paymentMethod: 'Snap Finance',
     vehicleInformation,
     productBasedDiscount,
     productBasedDiscountApplied,
@@ -89,7 +86,7 @@ export const useSnapFinanceOrderData = () => {
       dealerDiscountApplied,
       paymentStatus,
       selectedOption,
-      user: undefined
+      user: undefined,
     });
   };
 
@@ -104,8 +101,8 @@ export const useSnapFinanceOrderData = () => {
         `${apiBaseUrl}/payments/snap-finance/checkout`,
         // `http://localhost:8080/api/v1/payments/create-paypal-payment`,
         {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             orderData: {
               ...rest,
@@ -132,11 +129,11 @@ export const useSnapFinanceOrderData = () => {
 
       const data = await response.json();
 
-      if (data.success_url) {
-        window.location.href = data.success_url;
+      if (data?.success_url) {
+        window.location.href = data?.success_url;
       }
     } catch (err: any) {
-      toast.error("Error", {
+      toast.error('Error', {
         description: err.message,
       });
     }

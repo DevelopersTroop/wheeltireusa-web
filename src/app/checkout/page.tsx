@@ -2,6 +2,7 @@
 
 import { metaDataHelper } from '@/utils/metadata';
 import ClientComponent from './clientComponent';
+import Script from 'next/script';
 export const metadata = metaDataHelper({
   title: 'Checkout - Amani Forged Wheels',
   keywords: '',
@@ -19,6 +20,12 @@ export const metadata = metaDataHelper({
 export default function Page() {
   return (
     // Render the ClientComponent, which contains the checkout logic and UI
-    <ClientComponent />
+    <>
+      <ClientComponent />
+      <Script
+        src={process.env.NEXT_PUBLIC_SNAP_SDK}
+        strategy="afterInteractive"
+      />
+    </>
   );
 }

@@ -44,32 +44,19 @@ import { toast } from 'sonner';
 import { useCheckout } from '@/context/checkoutContext';
 import { usePaypalCheckout } from '@/hooks/usePaypalCheckout';
 
-const paymentMethodsRequiringValidation = new Set([
-  'card',
-  'affirm',
-  'cashapp',
-  'klarna',
-  'paypal',
-  'applepay',
-  'google_pay',
-  'amazon_pay',
-  'pay-tomorrow',
-  'snap-finance',
-]);
-
 // StepFour Component
 export const StepFour: React.FC<ICheckoutStepProps> = () => {
   // const { showNotice } = useShippingRestrictionLocationNotice();
 
   // Component state
   const [activeAccordion, setActiveAccordion] = useState('card');
-  const [billingSameAsShipping, setShippingSameAsBilling] = useState(true);
+
   const [showTermsAlert, setShowTermsAlert] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [shouldDisableButton, setShouldDisableButton] = useState(true);
   const [coupon, setCoupon] = useState('');
   const termsRef = useRef<HTMLDivElement>(null);
   const autoCloseTimerRef = useRef<NodeJS.Timeout | undefined>(undefined);
-  const prevShippingRef = useRef<TBillingAddress | null>(null);
 
   const dispatch = useDispatch();
   const snapInstanceRef = useRef<TSnapCheckoutReturn | null>(null);
@@ -85,7 +72,6 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
    */
   const {
     billingAddress,
-    shippingAddress,
     orderInfo,
     selectedOptionTitle,
     affiliateDiscount,
@@ -93,6 +79,9 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
     isCouponApplied,
     discount,
   } = useTypedSelector((state) => state.persisted.checkout);
+  const [billingSameAsShipping, setShippingSameAsBilling] = useState(
+    selectedOptionTitle === 'Direct to Customer'
+  );
   const { cartType, subTotalCost, totalCost } = useCheckout();
 
   const { getSnapFinanceTransactionData, placeOrderWithSnapFinance } =
@@ -156,7 +145,7 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
   const handleSnapFinanceCheckout = async () => {
     getLatestOrderId()
       .then((orderId) => {
-        const stringOrderID = orderId.split('-')?.[1] || `AF-0000`;
+        const stringOrderID = orderId?.split('-')?.[1] || `AF-0000`;
         const newOrderId = `AF-${(parseInt(stringOrderID, 10) + 1)
           .toString()
           .padStart(6, '0')}`;
@@ -179,57 +168,6 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [showPaymentError, setShowPaymentError] = useState(false);
-
-  // React Hook Form setup with proper memoization
-  const billingDefaultValues = useMemo(
-    () => ({
-      ...billingAddress,
-      country: 'US',
-    }),
-    [billingAddress]
-  );
-
-  const shippingDefaultValues = useMemo(
-    () => ({
-      ...shippingAddress,
-      country: 'US',
-    }),
-    [shippingAddress]
-  );
-
-  // Shipping form
-  const {
-    register,
-    formState: { errors },
-    trigger,
-    watch,
-    setValue,
-  } = useForm<TBillingAddress>({
-    defaultValues: shippingDefaultValues,
-    mode: 'onChange',
-    reValidateMode: 'onChange',
-    values: shippingDefaultValues,
-  });
-
-  // Billing form
-  const {
-    register: billingRegister,
-    formState: { errors: billingErrors },
-    trigger: billingTrigger,
-    watch: billingWatch,
-    setValue: billingSetValue,
-  } = useForm<TBillingAddress>({
-    defaultValues: billingDefaultValues,
-    mode: 'onChange',
-    reValidateMode: 'onChange',
-    values: billingDefaultValues,
-  });
-
-  // Form values
-  const billingFormValues = billingWatch();
-  const shippingFormValues = watch();
-  const zipCode = billingWatch('zipCode') || watch('zipCode');
-
   // Handle payment error alert
   useEffect(() => {
     const orderStatus = searchParams.get('order_status');
@@ -258,110 +196,6 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
       setShowTermsAlert(false);
     }
   }, [orderInfo.termsAndConditions]);
-
-  // Handle zip code changes with debouncing
-  useEffect(() => {
-    if (
-      !zipCode ||
-      zipCode === shippingAddress.zipCode ||
-      zipCode === billingAddress.zipCode
-    ) {
-      return;
-    }
-
-    const handler = setTimeout(() => {
-      dispatch(setShippingAddress({ ...shippingAddress, zipCode }));
-      dispatch(setBillingAddress({ ...billingAddress, zipCode }));
-    }, 500);
-
-    return () => clearTimeout(handler);
-  }, [zipCode, billingAddress, shippingAddress, dispatch]);
-
-  // Sync billing address with shipping address when needed
-  useEffect(() => {
-    // Run when toggle or title changes
-    if (billingSameAsShipping || selectedOptionTitle === 'Direct to Customer') {
-      const mergedValues = {
-        ...shippingAddress, // ← pull from Redux, not watch()
-        country: 'US',
-      };
-
-      Object.entries(mergedValues).forEach(([key, value]) => {
-        billingSetValue(key as keyof TBillingAddress, value as any, {
-          shouldValidate: false,
-          shouldDirty: false,
-        });
-      });
-
-      prevShippingRef.current = mergedValues;
-    }
-  }, [
-    billingSameAsShipping,
-    selectedOptionTitle,
-    shippingAddress,
-    billingSetValue,
-  ]);
-
-  // Update Redux store when form values change
-  useEffect(() => {
-    if (!activeAccordion) return;
-
-    const formattedFName = billingFormValues.fname?.trim() || '';
-    const formattedLName = billingFormValues.lname?.trim() || '';
-    const fullName = [formattedFName, formattedLName].filter(Boolean).join(' ');
-
-    const formattedSFName = shippingFormValues.fname?.trim() || '';
-    const formattedSLName = shippingFormValues.lname?.trim() || '';
-    const fullNameS = [formattedSFName, formattedSLName]
-      .filter(Boolean)
-      .join(' ');
-
-    const finalBillingData = {
-      ...billingFormValues,
-      fname: formattedFName,
-      lname: formattedLName,
-      name: fullName,
-    };
-
-    const finalShippingData = {
-      ...shippingFormValues,
-      fname: formattedSFName,
-      lname: formattedSLName,
-      name: fullNameS,
-    };
-
-    if (!finalBillingData.name && !finalShippingData.name) return;
-
-    if (!isEqual(billingAddress, finalBillingData)) {
-      dispatch(setBillingAddress(finalBillingData));
-    }
-
-    if (!isEqual(shippingAddress, finalShippingData)) {
-      dispatch(setShippingAddress(finalShippingData));
-    }
-  }, [
-    activeAccordion,
-    billingFormValues,
-    shippingFormValues,
-    dispatch,
-    billingAddress,
-    shippingAddress,
-  ]);
-
-  // Form validation watchers
-  useEffect(() => {
-    const subscription = watch(() => {
-      trigger();
-    });
-    return () => subscription.unsubscribe();
-  }, [watch, trigger]);
-
-  useEffect(() => {
-    const subscription = billingWatch(() => {
-      billingTrigger();
-    });
-    return () => subscription.unsubscribe();
-  }, [billingWatch, billingTrigger]);
 
   // Event handlers
   const handleCloseAlert = useCallback(() => {
@@ -416,9 +250,7 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
     }
 
     try {
-      const isValid = await trigger();
-
-      if (!isValid) {
+      if (shouldDisableButton) {
         return toast.error('Error', {
           description: 'Please fill in all required fields',
         });
@@ -453,7 +285,6 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
   }, [
     isLoading,
     subTotalCost,
-    trigger,
     orderInfo.termsAndConditions,
     processPayment,
     billingAddress.email,
@@ -477,47 +308,6 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
   }, [dispatch, orderInfo]);
 
   // Computed values
-  const shouldDisableButton = useMemo(() => {
-    if (paymentMethodsRequiringValidation.has(activeAccordion)) {
-      const requiredFields: (keyof TBillingAddress)[] = [
-        'address1',
-        'zipCode',
-        'country',
-        'cityState',
-        'phone',
-        'email',
-        'fname',
-        'lname',
-      ];
-
-      const hasBillingFields = requiredFields.every(
-        (field) =>
-          billingFormValues[field]?.toString()?.trim()?.length &&
-          billingFormValues[field]?.toString()?.trim()?.length > 0
-      );
-
-      let hasShippingFields = true;
-      if (selectedOptionTitle === 'Direct to Customer') {
-        hasShippingFields = requiredFields.every(
-          (field) =>
-            shippingFormValues[field]?.toString()?.trim()?.length &&
-            shippingFormValues[field]?.toString()?.trim()?.length > 0
-        );
-      }
-
-      return (
-        !hasBillingFields || !hasShippingFields || !orderInfo.termsAndConditions
-      );
-    }
-
-    return !activeAccordion;
-  }, [
-    activeAccordion,
-    billingFormValues,
-    shippingFormValues,
-    orderInfo.termsAndConditions,
-    selectedOptionTitle,
-  ]);
 
   // Render payment method option
   const renderPaymentOption = useCallback(
@@ -768,7 +558,7 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
                   alt="Credit Card"
                 />
               )}
-
+              {/* 
               {renderPaymentOption(
                 'paypal',
                 '',
@@ -779,7 +569,7 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
                   alt="PayPal"
                   className="h-8"
                 />
-              )}
+              )} */}
 
               {renderPaymentOption(
                 'pay-tomorrow',
@@ -851,14 +641,7 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
             billingSameAsShipping={billingSameAsShipping}
             selectedOptionTitle={selectedOptionTitle ?? ''}
             setBillingSameAsShipping={setShippingSameAsBilling}
-            shippingErrors={errors}
-            shippingRegister={register}
-            shippingSetValue={setValue}
-            shippingWatch={watch}
-            billingErrors={billingErrors}
-            billingRegister={billingRegister}
-            billingSetValue={billingSetValue}
-            billingWatch={billingWatch}
+            setShouldDisableButton={setShouldDisableButton}
           />
         </div>
 
