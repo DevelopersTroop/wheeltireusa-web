@@ -33,7 +33,7 @@ export const useStripeCheckout = () => {
     affiliateDiscount,
     cartType,
   } = useTypedSelector((state) => state.persisted.checkout);
-  const { netCost, subTotalCost } = useCheckout();
+  const { totalCost, subTotalCost } = useCheckout();
   const initiateCheckout = async (paymentMethod: string) => {
     try {
       const orderData = {
@@ -42,8 +42,8 @@ export const useStripeCheckout = () => {
         shippingAddress,
         billingAddress,
         discount,
-        totalCost: parseFloat(netCost).toFixed(2),
-        netCost: parseFloat(subTotalCost).toFixed(2),
+        totalCost: parseFloat(subTotalCost).toFixed(2),
+        netCost: parseFloat(totalCost).toFixed(2),
         selectedDealer,
         selectedOptionTitle,
         requestedDealer,

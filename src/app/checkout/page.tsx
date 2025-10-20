@@ -1,9 +1,10 @@
-import { metaDataHelper } from '@/utils/metadata';
-import { CheckoutClientComponent } from './clientComponent';
+// Import the ClientComponent, which handles the main functionality of the checkout page
 
-// Metadata for the page
+import { metaDataHelper } from '@/utils/metadata';
+import ClientComponent from './clientComponent';
+import Script from 'next/script';
 export const metadata = metaDataHelper({
-  title: 'Checkout - Tirematic',
+  title: 'Checkout - Amani Forged Wheels',
   keywords: '',
   description: '',
   openGraph: {
@@ -11,7 +12,7 @@ export const metadata = metaDataHelper({
     description: '',
   },
   alternates: {
-    canonical: 'https://tirematic.com/return-policy',
+    canonical: 'https://amaniforged.com/checkout',
   },
 });
 
@@ -19,6 +20,12 @@ export const metadata = metaDataHelper({
 export default function Page() {
   return (
     // Render the ClientComponent, which contains the checkout logic and UI
-    <CheckoutClientComponent />
+    <>
+      <ClientComponent />
+      <Script
+        src={process.env.NEXT_PUBLIC_SNAP_SDK}
+        strategy="afterInteractive"
+      />
+    </>
   );
 }

@@ -1,5 +1,5 @@
 'use client';
-import { useCheckout } from '@/context/checkoutContext';
+
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
@@ -18,20 +18,21 @@ import {
   updateOrderSuccessData,
 } from '@/redux/features/checkoutSlice';
 import { useTypedSelector } from '@/redux/store';
-import { CartSummary } from './cartSummary';
-import { CreateAccountSection } from './createAccountSection';
-import { OrderConfirmation } from './orderConfirmation';
-import { OrderSummary } from './orderSummary';
-import { PaymentInfo } from './paymentInfo';
-import { ShippingDetails } from './shippingDetails';
 import { TOrder } from '@/types/order';
-import { DeliveryDetails } from './deliveryDetails';
-import { apiInstance } from '@/redux/apis/base';
-import { toast } from 'sonner';
-import Image from 'next/image';
-import { emptyCart } from '@/redux/features/cartSlice';
 import { triggerGaPurchaseEvent } from '@/utils/analytics';
-import { useGroupedProducts } from '@/hooks/useGroupedProducts';
+import { apiBaseUrl } from '@/utils/api';
+import { CartSummary } from './CartSummary';
+import { CreateAccountSection } from './CreateAccountSection';
+import { DeliveryOptions } from './DeliveryOptions';
+import { OrderConfirmation } from './OrderConfirmation';
+import { OrderSummary } from './OrderSummary';
+import { PaymentInfo } from './PaymentInfo';
+import { ShippingDetails } from './ShippingDetails';
+import StaticImage from '@/components/ui/staticImage';
+import { useCheckout } from '@/context/checkoutContext';
+import useAuth from '@/hooks/useAuth';
+import { emptyCart } from '@/redux/features/cartSlice';
+import { toast } from 'sonner';
 
 // Interface for checkout step props
 
@@ -43,10 +44,6 @@ export const FinalStep: React.FC = () => {
   const { orderSuccessData, isAccountCreated } = useTypedSelector(
     (state) => state.persisted.checkout
   );
-  const groupedProducts = useGroupedProducts(
-    orderSuccessData?.data.productsInfo || []
-  );
-
   const dispatch = useDispatch(); // Redux dispatch hook
 
   // Use a ref to track if verification has already been attempted
@@ -56,6 +53,7 @@ export const FinalStep: React.FC = () => {
    * Checkout context
    */
   const { clearCheckoutState, setStep } = useCheckout(); // Functions to clear checkout state and set the current step
+  const { user }: any = useAuth(); // Authentication context
   const searchParams = useSearchParams(); // Hook to access query parameters
   const router = useRouter(); // Hook for navigation
 
@@ -81,6 +79,8 @@ export const FinalStep: React.FC = () => {
 
       try {
         setVerifying(true);
+
+        const method = searchParams.get('method');
 
         //Stripe params
         const sessionId = searchParams.get('session_id');
@@ -109,51 +109,40 @@ export const FinalStep: React.FC = () => {
 
         if (sessionId) {
           // Stripe
-          response = await apiInstance.get(
-            `/payments/stripe/verify-payment?session_id=${sessionId}&order_id=${orderId}`
+          response = await fetch(
+            `${apiBaseUrl}/payments/stripe/verify-payment?sessionId=${sessionId}&orderId=${orderId}`
+          );
+        } else if (method === 'pay_tomorrow') {
+          response = await fetch(
+            `${apiBaseUrl}/payments/pay-tomorrow/status?orderId=${orderId}`
+          );
+        } else if (method === 'snap_finance') {
+          response = await fetch(
+            `${apiBaseUrl}/payments/snap-finance/status?orderId=${orderId}`
           );
         } else {
           // PayPal
-          response = await apiInstance(
-            `/payments/verify-paypal-payment?paymentId=${paymentId}&PayerID=${PayerID}&orderId=${orderId}`
+          response = await fetch(
+            `${apiBaseUrl}/payments/verify-paypal-payment?paymentId=${paymentId}&PayerID=${PayerID}&orderId=${orderId}`
           );
         }
 
-        const result = response;
+        const result = await response.json();
 
         // Handle successful payment verification
-        if (response.status && result.data?.data?.order) {
-          const order = result.data.data.order as TOrder;
+        if (response.ok && result.data?.order) {
+          const order = result.data.order as TOrder;
           setProgress(100);
           // Update Redux state with order success data
-          dispatch(updateOrderSuccessData(order));
-          setPaymentData(result.data?.data?.payment);
-
+          dispatch(updateOrderSuccessData(result.data.order));
+          setPaymentData(result.data.payment);
           // Trigger Google Analytics purchase event
-          triggerGaPurchaseEvent({
-            transaction_id: order.orderId, // required
-            value: order.data.totalWithTax, // required
-            currency: 'USD', // required
-            tax: order.data.taxAmount, // optional
-            shipping: order.data.deliveryCharge, // optional
-            coupon: order.data.couponCode, // optional
-
-            items: order.data.productsInfo.map((product, index) => ({
-              item_id: product.partnumber || product.id, // required
-              item_name: product.title, // required
-              price: product.price, // optional but recommended
-              quantity: product.quantity, // optional but recommended
-              item_brand: product.brand, // optional
-              item_category: product.category?.title, // optional
-              index, // optional
-            })),
-          });
-          toast('Order Confirmed!', {
+          triggerGaPurchaseEvent(order);
+          toast.success('Order Confirmed', {
             description: 'Your payment has been processed successfully.',
           });
-
           clearCheckoutState();
-          setStep(5);
+          setStep(3);
           dispatch(emptyCart());
           dispatch(revokeCouponCode());
         } else {
@@ -161,7 +150,7 @@ export const FinalStep: React.FC = () => {
         }
       } catch (err) {
         // Redirect to checkout page with error status
-        router.push('/checkout?step=4&order_status=false');
+        router.push('/checkout?step=2&order_status=false');
       } finally {
         setVerifying(false);
       }
@@ -170,7 +159,8 @@ export const FinalStep: React.FC = () => {
     // Only run verification if we have URL parameters indicating a payment return
     const hasPaymentParams =
       searchParams.get('session_id') ||
-      (searchParams.get('paymentId') && searchParams.get('PayerID'));
+      (searchParams.get('paymentId') && searchParams.get('PayerID')) ||
+      searchParams.get('method');
 
     if (hasPaymentParams && searchParams.get('order_id')) {
       verifyPayment();
@@ -187,8 +177,8 @@ export const FinalStep: React.FC = () => {
   // Render loading state while verifying payment
   if (verifying) {
     return (
-      <div className="min-h-[60vh] flex items-center justify-center p-4 w-full">
-        <div className="w-full max-w-xl space-y-4">
+      <div className="min-h-[60vh] flex items-center justify-center p-4">
+        <div className="w-full max-w-md space-y-4">
           <div className="text-center pb-2">
             <div className="mx-auto mb-4 bg-blue-50 w-16 h-16 rounded-full flex items-center justify-center">
               <Clock className="h-8 w-8 text-blue-500 animate-pulse" />
@@ -213,6 +203,20 @@ export const FinalStep: React.FC = () => {
   // Render final step content
   return (
     <div>
+      {searchParams.get('method') === 'pay_tomorrow' && (
+        <div className="rounded-2xl border border-blue-300 bg-blue-50 p-4 mt-4">
+          <h3 className="text-lg font-semibold text-primary">
+            Your Order is Being Processed
+          </h3>
+          <p className="text-sm text-primary mt-1">
+            You’ve chosen <strong>Pay Tomorrow</strong> as your payment method.
+            This option allows you to complete your purchase through a loan
+            system. We’ll wait for <strong>verification and funding</strong> to
+            be completed before shipping your order. Stay tuned — we’ll update
+            you by email once your order is cleared for shipment.
+          </p>
+        </div>
+      )}
       <div className="grid grid-cols-11 gap-6 lg:gap-8 pt-8 pb-20">
         {/* Left Section: Order Details */}
         <div className="col-span-11 lg:col-span-7">
@@ -223,19 +227,11 @@ export const FinalStep: React.FC = () => {
 
           <div className="flex flex-col gap-8">
             <CartSummary
-              productsInfo={groupedProducts}
-              totalCost={orderSuccessData?.data?.totalCost || '0.00'}
+              productsInfo={orderSuccessData?.data?.productsInfo as any}
+              totalCost={orderSuccessData?.data?.totalCost}
             />
 
-            {/* {groupedProducts?.map((tires, index) => (
-                <CartSummary
-                key={index}
-                productsInfo={tires.tires}
-                totalCost={orderSuccessData?.data?.totalCost || '0.00'}
-              />
-            ))} */}
-
-            <DeliveryDetails
+            <DeliveryOptions
               requestedDealer={orderSuccessData?.data?.requestedDealer}
               selectedDealerInfo={orderSuccessData?.data?.selectedDealerInfo}
               selectedOptionTitle={orderSuccessData?.data?.selectedOptionTitle}
@@ -250,14 +246,22 @@ export const FinalStep: React.FC = () => {
               // selectedDealer={orderSuccessData?.data?.selectedDealer}
             />
 
-            {paymentData && <PaymentInfo paymentData={paymentData as any} />}
+            {paymentData && (
+              <PaymentInfo
+                paymentData={
+                  {
+                    ...(paymentData as any),
+                    orderId: orderSuccessData?.orderId,
+                  } as any
+                }
+              />
+            )}
           </div>
         </div>
 
         {/* Right Section: Order Summary and Account Creation */}
         <div className="col-span-11 lg:col-span-4 sticky top-0 flex flex-col gap-8">
-          {!isAccountCreated && (
-            // !user?.id &&
+          {!isAccountCreated && !user?._id && (
             <CreateAccountSection orderSuccessData={orderSuccessData} />
           )}
           <OrderSummary
@@ -276,10 +280,7 @@ export const FinalStep: React.FC = () => {
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="relative w-fit">
-              <Image
-                alt=""
-                width={80}
-                height={80}
+              <StaticImage
                 src="images/AmaniLogo.webp"
                 className="w-20 h-20 rounded-full"
               />

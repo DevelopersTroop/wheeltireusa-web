@@ -1,6 +1,7 @@
-import { setSelectedDealerInfo } from '@/redux/features/checkoutSlice'; // Redux action to reset the selected dealer info
-import { Button } from '@/components/ui/button'; // Button component for UI
-import { useDispatch } from 'react-redux';
+// Redux action to reset the selected dealer info
+import { Button } from "@/components/ui/button"; // Button component for UI
+import { setSelectedDealerInfo } from "@/redux/features/checkoutSlice";
+import { useDispatch } from "react-redux";
 
 // Component to render the "Direct to Customer" shipping option
 export const SelectDirectToCustomer: React.FC<{
@@ -13,9 +14,8 @@ export const SelectDirectToCustomer: React.FC<{
   return (
     <div
       onClick={handleOptionSelect} // Handle selection when the container is clicked
-      className={`rounded-lg border transition-all duration-200 py-3 px-4 lg:py-5 lg:px-6 flex flex-col gap-y-5 cursor-pointer hover:border-black ${
-        checked ? 'border-black' : 'border-[#CFCFCF]'
-      }`}
+      className={`rounded-lg border transition-all duration-200 py-3 px-4 lg:py-5 lg:px-6 flex flex-col gap-y-5 cursor-pointer hover:border-black ${checked ? "border-black" : "border-[#CFCFCF]"
+        }`}
     >
       <div className="flex flex-col gap-3">
         <div className={`flex items-center gap-4`}>
@@ -31,7 +31,7 @@ export const SelectDirectToCustomer: React.FC<{
           />
           {/* Option title */}
           <div className="flex items-center gap-2 text-xl lg:text-2xl font-bold">
-            I want it shipped to my address
+            Ship to my address
           </div>
         </div>
         {/* Option description */}
@@ -90,7 +90,7 @@ export const SelectDirectToCustomer: React.FC<{
           />
         </svg>
 
-        <span>Continue to Shipping info</span>
+        <span>Continue to payment</span>
       </Button>
     </div>
   );

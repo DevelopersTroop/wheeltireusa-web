@@ -1,13 +1,6 @@
 'use client';
-import { TOrder, TOrderData } from '@/types/order';
-import {
-  Document,
-  Image,
-  Page,
-  StyleSheet,
-  Text,
-  View,
-} from '@react-pdf/renderer';
+import { TOrder } from '@/types/order';
+import { Document, Page, StyleSheet, Text, View } from '@react-pdf/renderer';
 import React from 'react';
 
 // Define primary colors and styles for the PDF
@@ -416,9 +409,9 @@ const OrderInvoicePDF: React.FC<{ order: TOrder | undefined }> = ({
                       {Object.entries(product.metaData)
                         .map(maniPulatedWheelConfigurationMapping)
                         .filter((p) => p !== null)
-                        .map(({ key, value }, index) => {
+                        .map(({ key, value }) => {
                           return (
-                            <View key={index}>
+                            <View key={key}>
                               <Text>
                                 <Text style={{ fontWeight: 'semibold' }}>
                                   {key}:
@@ -499,7 +492,7 @@ const OrderInvoicePDF: React.FC<{ order: TOrder | undefined }> = ({
           <View style={styles.footer}>
             <Text>Thank you for your purchase!</Text>
             <Text style={{ marginTop: 5 }}>
-              For questions, contact sales@tirematic.com
+              For questions, contact sales@amaniforged.com
             </Text>
           </View>
         </View>

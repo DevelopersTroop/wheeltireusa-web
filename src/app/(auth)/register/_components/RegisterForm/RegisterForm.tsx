@@ -108,7 +108,7 @@ const RegisterForm = () => {
             type="submit"
             disabled={isLoadingRegister}
           >
-            <img src="UserCircle.svg" className="w-5 h-5 text-white" />{' '}
+            <img alt="" src="UserCircle.svg" className="w-5 h-5 text-white" />{' '}
             {isLoadingRegister ? 'Please wait...' : 'Register'}
           </Button>
         </div>

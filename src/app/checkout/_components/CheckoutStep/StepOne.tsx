@@ -1,18 +1,19 @@
-'use client';
+"use client";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@/components/ui/accordion';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { InfoIcon } from 'lucide-react';
-import React, { useState } from 'react';
-import { DeliveryOptions } from './deliveryOptions';
-import { useTypedSelector } from '@/redux/store';
-import useAddZipCode from '@/components/shared/MainFilterModal/components/AddZipCode/useAddZipCode';
+} from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useCheckout } from "@/context/checkoutContext";
+import { useZipCodeValidator } from "@/hooks/useZipCode";
+import { InfoIcon, Loader2 } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import Map from "../Maps";
+import { ZipCodeValidator } from "./ZipCodeValidator";
+import DeliveryOptions from "../deliveryOptions";
 
 // Interface for checkout step props
 export interface ICheckoutStepProps {
@@ -28,43 +29,45 @@ export const StepOne: React.FC<ICheckoutStepProps> = ({
   setStep,
 }) => {
   // Access checkout-related state and functions from the context
+  const { handleValidate, loading, valid } = useZipCodeValidator();
+  const { validatedZipCode } = useCheckout();
   // Component state
-  const { validateZipCode, loading } = useAddZipCode();
-  const { validatedZipCode } = useTypedSelector(
-    (state) => state.persisted.checkout
-  );
-  const [code, setCode] = useState(validatedZipCode || ''); // State to store the ZIP code input
+  const [code, setCode] = useState(""); // State to store the ZIP code input
   const [dealerDialog, setDealerDialog] = useState(false); // State to manage the dealer request dialog
+  useEffect(() => {
+    if (validatedZipCode) {
+      setCode(validatedZipCode);
+    }
+  }, [validatedZipCode]);
 
+  if (!valid) {
+    return <ZipCodeValidator />;
+  }
   return (
     <div className="flex flex-col gap-y-6">
       {/* ZIP Code and Delivery Options Section */}
-      <div className="bg-[#F7F7F7] rounded-xs px-md py-5 grid grid-cols-1 lg:grid-cols-2 gap-lg">
-        <div className="flex flex-col gap-y-3 justify-between">
-          <div className="pt-3">
-            <p className="leading-snug">
-              We can ship your tires to an independent recommended installe who
-              can professionally install them at a reasonable cost.
-            </p>
-          </div>
-          <div className="space-y-3 w-full">
-            <Label>Change ZIP code to update installer options</Label>
-            <div className="flex gap-xs max-w-xl">
-              {/* ZIP Code Input */}
-              <Input
-                placeholder="Enter zip code"
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-                className="h-12 bg-white w-full"
-              />
-              {/* Validate Button */}
-              <Button
-                disabled={loading}
-                onClick={() => {
-                  validateZipCode(code, true);
-                }}
-                className="flex h-12 items-center justify-center gap-2 w-[180px]"
-              >
+      <div className="bg-[#F7F7F7] rounded-xs py-3 px-2 grid grid-cols-1 lg:grid-cols-2 gap-lg">
+        <div className="flex flex-col gap-y-3">
+          <Input
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            className="h-12 bg-white w-full"
+          />
+          {/* Validate Button */}
+          <Button
+            onClick={async () => {
+              await handleValidate(code);
+            }}
+            className="flex w-full !h-12 items-center justify-center gap-2"
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <Loader2 className="h-5 w-5 animate-spin" />
+                <span className="text-[18px]">Validating...</span>
+              </>
+            ) : (
+              <>
                 <svg
                   width="21"
                   height="20"
@@ -91,23 +94,21 @@ export const StepOne: React.FC<ICheckoutStepProps> = ({
                     fill="white"
                   />
                 </svg>
-                <span className="text-[18px]">
-                  {loading ? 'Validating' : 'View installers'}
-                </span>
-              </Button>
-            </div>
-          </div>
+                <span className="text-[18px]">View installers</span>
+              </>
+            )}
+          </Button>
         </div>
-        <Accordion className="md:hidden" type="single" collapsible>
-          <AccordionItem value={'item-1'} className="border rounded-xs px-4">
-            <AccordionTrigger className="">
+        <Accordion type="single" className="md:block hidden" collapsible>
+          <AccordionItem value={"item-1"} className="border rounded-xs px-4">
+            <AccordionTrigger className="h-12">
               <div className="flex items-center gap-1">
                 <InfoIcon className="fill-primary stroke-white" />
                 <p className="text-xl font-bold">Note</p>
               </div>
             </AccordionTrigger>
             <AccordionContent>
-              <div className="space-y-4 text-muted-foreground text-base">
+              <div className="space-y-4 text-base">
                 <p>
                   We will send your selected/recommended installer an order and
                   shipment confirmation that includes your name, phone number,
@@ -125,12 +126,12 @@ export const StepOne: React.FC<ICheckoutStepProps> = ({
           </AccordionItem>
         </Accordion>
         {/* Right Section: Note */}
-        <div className="rounded-xl hidden md:block border border-border bg-white p-smx space-y-2">
+        {/* <div className="rounded-xl hidden md:block border border-border bg-white p-smx space-y-2">
           <div className="flex items-center gap-1">
             <InfoIcon className="fill-primary stroke-white" />
             <p className="text-xl font-bold">Note</p>
           </div>
-          <div className="space-y-4 text-muted-foreground">
+          <div className="space-y-4 text-muted">
             <p>
               We will send your selected Recommended Installer order ad shipment
               confirmation that include your name, phone number, email address,
@@ -143,7 +144,7 @@ export const StepOne: React.FC<ICheckoutStepProps> = ({
               the product and vehicle selected.
             </p>
           </div>
-        </div>
+        </div> */}
       </div>
       {/* Delivery Options and Map Section */}
       <div className="grid grid-cols-10 gap-8">
@@ -225,14 +226,11 @@ export const StepOne: React.FC<ICheckoutStepProps> = ({
             </button>
           </div>
           {/* <DealerMap /> */}
-          {/* <Map /> */}
+          <Map />
         </div>
       </div>
       {/* Dealer Request Dialog */}
-      {/* <DealerRequest
-                isDialogOpen={dealerDialog}
-                setIsDialogOpen={setDealerDialog}
-            /> */}
+
     </div>
   );
 };

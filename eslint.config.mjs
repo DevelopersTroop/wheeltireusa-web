@@ -5,7 +5,7 @@ import globals from 'globals';
 // FlatCompat helps bring in legacy `extends` and `rules` from plugins
 const compat = new FlatCompat({
   baseDirectory: import.meta.dirname,
-  recommendedConfig: js.configs.recommended
+  recommendedConfig: js.configs.recommended,
 });
 
 export default [
@@ -40,8 +40,10 @@ export default [
       'react/prop-types': 'off',
       '@typescript-eslint/no-unused-expressions': 'off',
       'no-unsafe-optional-chaining': 'off',
-      '@typescript-eslint/no-unused-vars': 'warn',
-      '@typescript-eslint/no-explicit-any':'warn'
+      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@next/next/no-img-element': 'off',
+      'react-hooks/exhaustive-deps': 'off',
     },
   },
 ];

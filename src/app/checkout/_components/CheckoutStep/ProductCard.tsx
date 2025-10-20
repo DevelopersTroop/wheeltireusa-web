@@ -1,5 +1,5 @@
 import React from 'react';
-import CheckoutSubTotal from './checkoutSubTotal';
+import CheckoutSubTotal from './checkoutSubtotal';
 import { useTypedSelector } from '@/redux/store';
 import TiresCard from '@/app/cart/_components/TiresCard/TiresCard';
 import { useGroupedProducts } from '@/hooks/useGroupedProducts';

@@ -8,6 +8,7 @@ import TextPassword from '@/lib/generic-form/fields/TextPassword';
 import TextCheckBox from '@/lib/generic-form/fields/TextCheck';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import Image from 'next/image';
 
 const LoginForm = () => {
   const { onSubmit, errors, success, isSubmitting } = useLogin();
@@ -61,7 +62,13 @@ const LoginForm = () => {
             type="submit"
             disabled={isSubmitting}
           >
-            <img src="UserCircle.svg" className="w-5 h-5 text-white" />{' '}
+            <Image
+              width={20}
+              height={20}
+              alt=""
+              src="UserCircle.svg"
+              className="w-5 h-5 text-white"
+            />{' '}
             {isSubmitting ? 'Please wait...' : 'Login'}
           </Button>
         </div>

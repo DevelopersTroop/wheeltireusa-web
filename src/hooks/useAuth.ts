@@ -48,12 +48,16 @@ const useAuth = () => {
     lastName: string;
     email: string;
     password: string;
-  }): Promise<unknown> => {
-    const { data } = await apiInstance.post<{ data: { user: TUser } }>(
-      `/auth/signup`,
-      { ...input, role: 'customer' }
-    );
-    return data.data.user;
+  }): Promise<TUser | null> => {
+    try {
+      const { data } = await apiInstance.post<{ data: { user: TUser } }>(
+        `/auth/signup`,
+        { ...input, role: 'customer' }
+      );
+      return data.data.user;
+    } catch (error) {
+      return null
+    }
   };
 
   // Return the functions and user state for external use

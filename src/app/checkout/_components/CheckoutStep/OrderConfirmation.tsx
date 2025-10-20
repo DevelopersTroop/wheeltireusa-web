@@ -4,7 +4,7 @@ import { TOrder } from '@/types/order';
 import { usePDF } from '@react-pdf/renderer';
 import { format } from 'date-fns';
 import { PrinterIcon } from 'lucide-react';
-import OrderInvoicePDF from './orderInvoicePdf';
+import OrderInvoicePDF from './OrderInvoicePDF';
 
 // Props interface for the OrderConfirmation component
 interface OrderConfirmationProps {

@@ -161,7 +161,7 @@ export const GooglePlacesInput = React.memo<GooglePlacesInputProps>(
                   const state =
                     addressComponents.find((component) =>
                       component.types.includes('administrative_area_level_1')
-                    )?.long_name || '';
+                    )?.short_name || '';
                   const streetNumber =
                     addressComponents.find((component) =>
                       component.types.includes('street_number')
@@ -283,4 +283,4 @@ export const GooglePlacesInput = React.memo<GooglePlacesInputProps>(
   }
 );
 
-GooglePlacesInput.displayName = 'GooglePlaceInput';
+GooglePlacesInput.displayName = 'GooglePlacesInput';

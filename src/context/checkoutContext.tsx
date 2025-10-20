@@ -10,7 +10,6 @@ import React, {
   useState,
 } from 'react';
 import { TDealer } from '../types/order';
-import { TCategory } from '../types/category';
 import { getPrice } from '../utils/price';
 
 type ValidatedAddress = {
@@ -35,7 +34,7 @@ interface CheckoutContextType {
   subTotalCost: any;
   discount: any;
   salesTax: any;
-  netCost: any;
+  totalCost: any;
   validatedZipCode: any;
   setValidatedZipCode: React.Dispatch<React.SetStateAction<any>>;
   isValidZipCode: any;
@@ -45,6 +44,7 @@ interface CheckoutContextType {
     React.SetStateAction<ValidatedAddress | undefined>
   >;
   relocate: any;
+  deliveryCharge: number;
 }
 
 // Key for saving state to local storage
@@ -130,7 +130,7 @@ export const CheckoutProvider: React.FC<{ children: React.ReactNode }> = ({
         router.replace(`/checkout?step=${newStep}`, { scroll: false });
       }
     },
-    [step, pathname, router, saveState]
+    [step, pathname, router]
   );
 
   // Function to set the nearest dealer and save the state
@@ -168,7 +168,7 @@ export const CheckoutProvider: React.FC<{ children: React.ReactNode }> = ({
     setZipCodeAddress(address);
     saveState({ zipCodeAddress: address });
   };
-  const cartType = () => 'TIRES'; // Assuming cartType is always 'TIRES' for this context
+
   /**
    * Getting Products Cost From Redux Store
    */
@@ -183,7 +183,7 @@ export const CheckoutProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [productsInfo]);
 
   // Define the delivery charge, sales tax, and total cost based on the cart type
-  const deliveryCharge = cartType() === 'CENTER_CAP_ONLY' ? 14.99 : 0;
+  const deliveryCharge = 0;
   const salesTax = 0;
   const totalCost = subTotalCost - discount + salesTax + deliveryCharge;
 
@@ -222,17 +222,18 @@ export const CheckoutProvider: React.FC<{ children: React.ReactNode }> = ({
     setOtherDealers: handleSetOtherDealers,
     isDialogOpen,
     setIsDialogOpen: handleSetIsDialogOpen,
-    cartType,
     subTotalCost,
     discount,
     salesTax,
-    netCost: totalCost,
+    totalCost,
     validatedZipCode,
     setValidatedZipCode: handleSetValidatedZipCode,
     isValidZipCode,
     setIsValidZipCode: handleSetIsValidZipCode,
     zipCodeAddress,
     setZipCodeAddress: handleSetZipCodeAddress,
+    deliveryCharge,
+    cartType: '',
   };
 
   return (
