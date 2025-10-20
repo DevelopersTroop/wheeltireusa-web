@@ -519,6 +519,7 @@ export const WhatWeAccept = () => {
 
         <div className="w-[52px] h-[35px] flex items-center justify-center  relative rounded-[4px]">
           <img
+            alt=""
             src={`accepted-cards/Afterpay.svg`}
             className="object-cover w-full h-full"
           />

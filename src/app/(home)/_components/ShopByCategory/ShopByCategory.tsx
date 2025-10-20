@@ -46,7 +46,8 @@ const ShopByCategory = () => {
             </div>
             <Link href={"/collections/product-category/tires'"}>
               <button className="w-full max-w-[384px] bg-[#F6511D] hover:bg-[#e0551b] text-white font-semibold text-lg px-6 py-3 rounded text-center flex items-center justify-center gap-2">
-                <img src="/images/shopCategoty/Vector.svg" /> Select category
+                <img alt="" src="/images/shopCategoty/Vector.svg" /> Select
+                category
               </button>
             </Link>
           </div>

@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useRouter, useSearchParams } from "next/navigation"; // Next.js router for navigation
-import { useEffect, useRef, useState } from "react"; // React hooks for managing state and side effects
-import { Stepper } from "./_components/Stepper"; // Stepper component to display the checkout steps
-import { Renderer } from "./_components/StepRenderer"; // Renderer component to render the current step's content
-import { mapPendingOrderToCheckout } from "./helper/map-pending-order-to-checkout";
-import { useCheckout } from "@/context/checkoutContext";
-import { useAppDispatch, useTypedSelector } from "@/redux/store";
-import { toast } from "sonner";
-import LoadingSpinner from "@/components/shared/loading/spinner";
-import { LocationAccess } from "@/components/shared/locationAccess";
+import { useRouter, useSearchParams } from 'next/navigation'; // Next.js router for navigation
+import { useEffect, useRef, useState } from 'react'; // React hooks for managing state and side effects
+import { mapPendingOrderToCheckout } from './helper/map-pending-order-to-checkout';
+import { useCheckout } from '@/context/checkoutContext';
+import { useAppDispatch, useTypedSelector } from '@/redux/store';
+import { toast } from 'sonner';
+import LoadingSpinner from '@/components/shared/loading/spinner';
+import { LocationAccess } from '@/components/shared/locationAccess';
+import Stepper from './_components/stepper';
+import { Renderer } from './_components/stepRenderer';
 
 // Main component for the checkout page
 const ClientComponent: React.FC = () => {
@@ -24,8 +24,8 @@ const ClientComponent: React.FC = () => {
   // Define the steps for the checkout process
   const steps = [
     {
-      title: "Installation",
-      subTitle: "Enter your ZIP code to view your installation options.",
+      title: 'Installation',
+      subTitle: 'Enter your ZIP code to view your installation options.',
     },
     // {
     //     title: "Shipping Info",
@@ -36,34 +36,34 @@ const ClientComponent: React.FC = () => {
     //     subTitle: "Select preferred payment method.",
     // },
     {
-      title: "Secure payment options",
-      subTitle: "Check order details to ensure everything is correct.",
+      title: 'Secure payment options',
+      subTitle: 'Check order details to ensure everything is correct.',
     },
     {
-      title: "Order Confirmation",
-      subTitle: "All information you need about your order.",
+      title: 'Order Confirmation',
+      subTitle: 'All information you need about your order.',
     },
   ];
 
   // Effect to handle empty cart scenarios and loading state
   useEffect(() => {
-    if (step === 2 && searchParams.get("order_id")?.length) {
+    if (step === 2 && searchParams.get('order_id')?.length) {
       if (requestSent.current) return;
       mapPendingOrderToCheckout(
         dispatch,
-        searchParams.get("order_id") as string,
+        searchParams.get('order_id') as string,
         router,
-        searchParams.get("coupon") as string | undefined | null
+        searchParams.get('coupon') as string | undefined | null
       ).finally(() => {
         requestSent.current = true;
       });
     } else if (Object.keys(products).length === 0 && step !== 3) {
-      toast.error("Empty cart", {
+      toast.error('Empty cart', {
         description:
-          "Your cart is empty. Please add items before proceeding to checkout.",
+          'Your cart is empty. Please add items before proceeding to checkout.',
       });
       // Show a toast notification
-      router.push("/cart"); // Redirect the user to the cart page
+      router.push('/cart'); // Redirect the user to the cart page
       return;
     }
     setIsLoading(false); // Set loading to false once the cart is validated

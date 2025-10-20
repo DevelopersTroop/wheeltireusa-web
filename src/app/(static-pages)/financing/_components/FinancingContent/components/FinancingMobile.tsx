@@ -39,7 +39,7 @@ export const FinancingMobile = () => {
               onClick={() => setSelectedPaymentProvider(provider.name)}
             >
               <div className="flex items-center max-w-full">
-                <img src={provider.image} />
+                <img alt="" src={provider.image} />
               </div>
             </SelectItem>
           ))}

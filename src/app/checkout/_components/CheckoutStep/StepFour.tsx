@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   revokeCouponCode,
@@ -6,55 +6,55 @@ import {
   setOrderId,
   setOrderInfo,
   setShippingAddress,
-} from "@/redux/features/checkoutSlice";
-import { useTypedSelector } from "@/redux/store";
-import { TBillingAddress } from "@/types/order";
-import { apiBaseUrl } from "@/utils/api";
+} from '@/redux/features/checkoutSlice';
+import { useTypedSelector } from '@/redux/store';
+import { TBillingAddress } from '@/types/order';
+import { apiBaseUrl } from '@/utils/api';
 import {
   TSnapCheckoutReturn,
   TSnapInputCheckout,
-} from "@/components/shared/snapLoader";
-import { WhatWeAccept } from "@/components/shared/what-we-accept";
+} from '@/components/shared/snapLoader';
+import { WhatWeAccept } from '@/components/shared/what-we-accept';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-import { getLatestOrderId, useSnapFinanceOrderData } from "@/lib/order";
-import { getSnapFinanceToken } from "@/lib/snapFinance";
-import isEqual from "lodash.isequal";
-import { AlertCircle, InfoIcon, Loader, ShoppingCart, X } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import Sticky from "react-sticky-el";
-import { BillingAndShippingInput } from "./BillingAndShippingInput";
-import { ICheckoutStepProps } from "./StepOne";
-import { useStripeCheckout } from "@/hooks/useStripeCheckout";
-import { usePaytomorrowCheckout } from "@/hooks/usePayTomorrowCheckout";
-import { toast } from "sonner";
-import { useCheckout } from "@/context/checkoutContext";
-import { usePaypalCheckout } from "@/hooks/usePaypalCheckout";
+} from '@/components/ui/accordion';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
+import { getLatestOrderId, useSnapFinanceOrderData } from '@/lib/order';
+import { getSnapFinanceToken } from '@/lib/snapFinance';
+import isEqual from 'lodash.isequal';
+import { AlertCircle, InfoIcon, Loader, ShoppingCart, X } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import Sticky from 'react-sticky-el';
+import { BillingAndShippingInput } from './BillingAndShippingInput';
+import { ICheckoutStepProps } from './StepOne';
+import { useStripeCheckout } from '@/hooks/useStripeCheckout';
+import { usePaytomorrowCheckout } from '@/hooks/usePayTomorrowCheckout';
+import { toast } from 'sonner';
+import { useCheckout } from '@/context/checkoutContext';
+import { usePaypalCheckout } from '@/hooks/usePaypalCheckout';
 
 const paymentMethodsRequiringValidation = new Set([
-  "card",
-  "affirm",
-  "cashapp",
-  "klarna",
-  "paypal",
-  "applepay",
-  "google_pay",
-  "amazon_pay",
-  "pay-tomorrow",
-  "snap-finance",
+  'card',
+  'affirm',
+  'cashapp',
+  'klarna',
+  'paypal',
+  'applepay',
+  'google_pay',
+  'amazon_pay',
+  'pay-tomorrow',
+  'snap-finance',
 ]);
 
 // StepFour Component
@@ -62,11 +62,11 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
   // const { showNotice } = useShippingRestrictionLocationNotice();
 
   // Component state
-  const [activeAccordion, setActiveAccordion] = useState("card");
+  const [activeAccordion, setActiveAccordion] = useState('card');
   const [billingSameAsShipping, setShippingSameAsBilling] = useState(true);
   const [showTermsAlert, setShowTermsAlert] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [coupon, setCoupon] = useState("");
+  const [coupon, setCoupon] = useState('');
   const termsRef = useRef<HTMLDivElement>(null);
   const autoCloseTimerRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const prevShippingRef = useRef<TBillingAddress | null>(null);
@@ -100,7 +100,7 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
 
   // ✅ Define handlers (stable, no re-creation)
   const onClickHandler = (data: any, actions: any) => {
-    console.log("TCL: onClickHandler -> data", data);
+    console.log('TCL: onClickHandler -> data', data);
     // Trigger Snap app logic here (apply for credit, etc.)
   };
 
@@ -112,11 +112,11 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
   };
 
   const onErrorHandler = (error: any) => {
-    console.error("Error occurred: And I can see", error);
+    console.error('Error occurred: And I can see', error);
   };
 
   const onInitHandler = (d: string) => {
-    console.log("Init data:", d);
+    console.log('Init data:', d);
   };
 
   // ✅ Input config
@@ -126,7 +126,7 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
     onApproved: onApprovedHandler,
     onError: onErrorHandler,
     onInit(data, actions) {
-      console.log("TCL: onInit -> data", data);
+      console.log('TCL: onInit -> data', data);
     },
   };
 
@@ -143,10 +143,10 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
 
         // ✅ Create Snap instance
         const instance = window.snap.checkoutButton(inputCheckout);
-        console.log("TCL: initSnap -> instance", instance);
+        console.log('TCL: initSnap -> instance', instance);
         snapInstanceRef.current = instance;
       } catch (error) {
-        console.error("Snap Finance init failed:", error);
+        console.error('Snap Finance init failed:', error);
       }
     };
 
@@ -156,10 +156,10 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
   const handleSnapFinanceCheckout = async () => {
     getLatestOrderId()
       .then((orderId) => {
-        const stringOrderID = orderId.split("-")?.[1] || `AF-0000`;
+        const stringOrderID = orderId.split('-')?.[1] || `AF-0000`;
         const newOrderId = `AF-${(parseInt(stringOrderID, 10) + 1)
           .toString()
-          .padStart(6, "0")}`;
+          .padStart(6, '0')}`;
         if (newOrderId) {
           dispatch(setOrderId(newOrderId));
         }
@@ -184,7 +184,7 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
   const billingDefaultValues = useMemo(
     () => ({
       ...billingAddress,
-      country: "US",
+      country: 'US',
     }),
     [billingAddress]
   );
@@ -192,7 +192,7 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
   const shippingDefaultValues = useMemo(
     () => ({
       ...shippingAddress,
-      country: "US",
+      country: 'US',
     }),
     [shippingAddress]
   );
@@ -206,8 +206,8 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
     setValue,
   } = useForm<TBillingAddress>({
     defaultValues: shippingDefaultValues,
-    mode: "onChange",
-    reValidateMode: "onChange",
+    mode: 'onChange',
+    reValidateMode: 'onChange',
     values: shippingDefaultValues,
   });
 
@@ -220,20 +220,20 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
     setValue: billingSetValue,
   } = useForm<TBillingAddress>({
     defaultValues: billingDefaultValues,
-    mode: "onChange",
-    reValidateMode: "onChange",
+    mode: 'onChange',
+    reValidateMode: 'onChange',
     values: billingDefaultValues,
   });
 
   // Form values
   const billingFormValues = billingWatch();
   const shippingFormValues = watch();
-  const zipCode = billingWatch("zipCode") || watch("zipCode");
+  const zipCode = billingWatch('zipCode') || watch('zipCode');
 
   // Handle payment error alert
   useEffect(() => {
-    const orderStatus = searchParams.get("order_status");
-    if (orderStatus === "false") {
+    const orderStatus = searchParams.get('order_status');
+    if (orderStatus === 'false') {
       setShowPaymentError(true);
       autoCloseTimerRef.current = setTimeout(() => {
         handleCloseAlert();
@@ -249,7 +249,7 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
 
   // Scroll to top on mount
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
   // Hide terms alert when terms are accepted
@@ -280,10 +280,10 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
   // Sync billing address with shipping address when needed
   useEffect(() => {
     // Run when toggle or title changes
-    if (billingSameAsShipping || selectedOptionTitle === "Direct to Customer") {
+    if (billingSameAsShipping || selectedOptionTitle === 'Direct to Customer') {
       const mergedValues = {
         ...shippingAddress, // ← pull from Redux, not watch()
-        country: "US",
+        country: 'US',
       };
 
       Object.entries(mergedValues).forEach(([key, value]) => {
@@ -306,15 +306,15 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
   useEffect(() => {
     if (!activeAccordion) return;
 
-    const formattedFName = billingFormValues.fname?.trim() || "";
-    const formattedLName = billingFormValues.lname?.trim() || "";
-    const fullName = [formattedFName, formattedLName].filter(Boolean).join(" ");
+    const formattedFName = billingFormValues.fname?.trim() || '';
+    const formattedLName = billingFormValues.lname?.trim() || '';
+    const fullName = [formattedFName, formattedLName].filter(Boolean).join(' ');
 
-    const formattedSFName = shippingFormValues.fname?.trim() || "";
-    const formattedSLName = shippingFormValues.lname?.trim() || "";
+    const formattedSFName = shippingFormValues.fname?.trim() || '';
+    const formattedSLName = shippingFormValues.lname?.trim() || '';
     const fullNameS = [formattedSFName, formattedSLName]
       .filter(Boolean)
-      .join(" ");
+      .join(' ');
 
     const finalBillingData = {
       ...billingFormValues,
@@ -378,26 +378,26 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
 
   const processPayment = useCallback(async () => {
     switch (activeAccordion) {
-      case "card":
-      case "affirm":
-      case "cashapp":
-      case "klarna":
-      case "applepay":
-      case "google_pay":
-      case "amazon_pay":
+      case 'card':
+      case 'affirm':
+      case 'cashapp':
+      case 'klarna':
+      case 'applepay':
+      case 'google_pay':
+      case 'amazon_pay':
         await initiateCheckout(activeAccordion);
         break;
-      case "paypal":
+      case 'paypal':
         await initiatePaypalCheckout();
         break;
-      case "pay-tomorrow":
+      case 'pay-tomorrow':
         await initiatePaytomorrowCheckout();
         break;
-      case "snap-finance":
+      case 'snap-finance':
         await handleSnapFinanceCheckout();
         break;
       default:
-        console.warn("No valid payment method selected.");
+        console.warn('No valid payment method selected.');
     }
   }, [
     activeAccordion,
@@ -410,8 +410,8 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
     if (isLoading) return;
 
     if (subTotalCost < 50) {
-      return toast.error("Error", {
-        description: "Minimum order amount is $50"
+      return toast.error('Error', {
+        description: 'Minimum order amount is $50',
       });
     }
 
@@ -419,14 +419,14 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
       const isValid = await trigger();
 
       if (!isValid) {
-        return toast.error("Error", {
-          description: "Please fill in all required fields"
+        return toast.error('Error', {
+          description: 'Please fill in all required fields',
         });
       }
 
       if (!orderInfo.termsAndConditions) {
         setShowTermsAlert(true);
-        termsRef.current?.scrollIntoView({ behavior: "smooth" });
+        termsRef.current?.scrollIntoView({ behavior: 'smooth' });
         return;
       }
 
@@ -435,17 +435,17 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
 
       // Subscribe to newsletter
       await fetch(`${apiBaseUrl}/subscriptions`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           email: billingAddress.email,
         }),
       });
     } catch (error) {
-      toast.error("Error", {
-        description: "Something went wrong. Please try again.",
+      toast.error('Error', {
+        description: 'Something went wrong. Please try again.',
       });
     } finally {
       setIsLoading(false);
@@ -465,7 +465,7 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
     } else {
       // applyCoupon(coupon);
     }
-  }, [isCouponApplied, coupon, dispatch]);
+  }, [isCouponApplied, dispatch]);
 
   const handleToggleTerms = useCallback(() => {
     dispatch(
@@ -480,14 +480,14 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
   const shouldDisableButton = useMemo(() => {
     if (paymentMethodsRequiringValidation.has(activeAccordion)) {
       const requiredFields: (keyof TBillingAddress)[] = [
-        "address1",
-        "zipCode",
-        "country",
-        "cityState",
-        "phone",
-        "email",
-        "fname",
-        "lname",
+        'address1',
+        'zipCode',
+        'country',
+        'cityState',
+        'phone',
+        'email',
+        'fname',
+        'lname',
       ];
 
       const hasBillingFields = requiredFields.every(
@@ -497,7 +497,7 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
       );
 
       let hasShippingFields = true;
-      if (selectedOptionTitle === "Direct to Customer") {
+      if (selectedOptionTitle === 'Direct to Customer') {
         hasShippingFields = requiredFields.every(
           (field) =>
             shippingFormValues[field]?.toString()?.trim()?.length &&
@@ -531,10 +531,11 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
           <div className="flex items-center cursor-pointer min-w-0">
             <div className="absolute left-2.5 top-1/2 -translate-y-1/2">
               <span
-                className={`inline-block w-5 h-5 rounded-full border ${activeAccordion === method
-                  ? "border-4 border-black"
-                  : "border-gray-600"
-                  }`}
+                className={`inline-block w-5 h-5 rounded-full border ${
+                  activeAccordion === method
+                    ? 'border-4 border-black'
+                    : 'border-gray-600'
+                }`}
               />
             </div>
             <div className="flex items-center pl-10">
@@ -574,10 +575,10 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
                     className="!h-12 font-semibold"
                   >
                     {isLoading
-                      ? "Loading"
+                      ? 'Loading'
                       : isCouponApplied
-                        ? "Revoke"
-                        : "Apply"}
+                        ? 'Revoke'
+                        : 'Apply'}
                   </Button>
                 </AccordionContent>
               </AccordionItem>
@@ -604,7 +605,7 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
                     ${Math.floor(subTotalCost)}.
                   </span>
                   <span className="text-sm font-bold">
-                    {subTotalCost.toFixed(2).split(".")[1]}
+                    {subTotalCost.toFixed(2).split('.')[1]}
                   </span>
                 </p>
               </div>
@@ -624,11 +625,7 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
               <div className="flex gap-0 items-baseline relative">
                 <h4 className="text-2xl leading-[29px] text-[#210203]">
                   <span className="text-[#210203] text-2xl font-bold">
-                    {cartType === "CENTER_CAP_ONLY" ? (
-                      "$14.99"
-                    ) : (
-                      "Free"
-                    )}
+                    {cartType === 'CENTER_CAP_ONLY' ? '$14.99' : 'Free'}
                   </span>
                 </h4>
               </div>
@@ -662,15 +659,15 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
               className="rounded-md data-[state=checked]:border-none bg-white h-5 w-5 border border-[#AAAAAA]"
             />
             <p className="text-base">
-              I acknowledge the{" "}
+              I acknowledge the{' '}
               <Link
                 href="/terms-conditions"
                 target="_blank"
                 className="font-semibold"
               >
                 Terms and Conditions
-              </Link>{" "}
-              and the{" "}
+              </Link>{' '}
+              and the{' '}
               <Link
                 href="/privacy-policy"
                 target="_blank"
@@ -763,8 +760,8 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
           <div>
             <div className="flex flex-col space-y-4">
               {renderPaymentOption(
-                "card",
-                "Card",
+                'card',
+                'Card',
                 <img
                   src="https://js.stripe.com/v3/fingerprinted/img/card-ce24697297bd3c6a00fdd2fb6f760f0d.svg"
                   className="w-4 h-4 mr-2"
@@ -773,8 +770,8 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
               )}
 
               {renderPaymentOption(
-                "paypal",
-                "",
+                'paypal',
+                '',
                 <Image
                   src="/images/financing/PayPal.png"
                   width={100}
@@ -785,8 +782,8 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
               )}
 
               {renderPaymentOption(
-                "pay-tomorrow",
-                "",
+                'pay-tomorrow',
+                '',
                 <Image
                   src="/PTLogo.png"
                   width={100}
@@ -797,8 +794,8 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
               )}
 
               {renderPaymentOption(
-                "affirm",
-                "Affirm",
+                'affirm',
+                'Affirm',
                 <img
                   src="https://js.stripe.com/v3/fingerprinted/img/affirm-bce57680b3d99bf1f1390bda5d024909.svg"
                   className="w-4 h-4 mr-2"
@@ -807,8 +804,8 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
               )}
 
               {renderPaymentOption(
-                "amazon_pay",
-                "",
+                'amazon_pay',
+                '',
                 <img
                   src="https://amazon-pay.brightspotcdn.com/75/8c/05780a7c41eb91759c77310a6f85/amazonpay-logo-rgb-clr.svg"
                   className="w-full h-7 mr-2"
@@ -817,8 +814,8 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
               )}
 
               {renderPaymentOption(
-                "cashapp",
-                "Cash App Pay",
+                'cashapp',
+                'Cash App Pay',
                 <img
                   src="https://js.stripe.com/v3/fingerprinted/img/payment-methods/icon-pm-cashapp-981164a833e417d28a8ac2684fda2324.svg"
                   className="w-4 h-4 mr-2"
@@ -826,8 +823,8 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
                 />
               )}
               {renderPaymentOption(
-                "snap-finance",
-                "",
+                'snap-finance',
+                '',
                 <img
                   src="https://snapfinance.com/assets/icons/logo.svg"
                   className="w-auto h-8 mr-2"
@@ -837,7 +834,7 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
             </div>
 
             <div className="mt-2">
-              {activeAccordion === "card" && (
+              {activeAccordion === 'card' && (
                 <div className="flex items-center gap-1 text-primary">
                   <InfoIcon />
                   <p>
@@ -852,7 +849,7 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
           <BillingAndShippingInput
             activeAccordion={activeAccordion}
             billingSameAsShipping={billingSameAsShipping}
-            selectedOptionTitle={selectedOptionTitle ?? ""}
+            selectedOptionTitle={selectedOptionTitle ?? ''}
             setBillingSameAsShipping={setShippingSameAsBilling}
             shippingErrors={errors}
             shippingRegister={register}

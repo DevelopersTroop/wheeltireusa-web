@@ -3,8 +3,8 @@
 import LoadingSpinner from '@/components/ui/loading-spinner/loading-spinner';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { PrinterIcon } from 'lucide-react';
-import OrderInvoicePDF from '@/app/checkout/_components/orderInvoicePdf';
 import { useOrderDetails } from './_components/useOrderDetails';
+import OrderInvoicePDF from '@/app/checkout/_components/CheckoutStep/OrderInvoicePDF';
 
 const ViewOrder = () => {
   const { order, loading, error } = useOrderDetails();

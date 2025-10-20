@@ -11,6 +11,7 @@ import useGenericForm from '../context/useGenericForm';
 import { FieldValues, Path } from 'react-hook-form';
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 type TextProps<T> = {
   [K in Exclude<
@@ -86,12 +87,18 @@ const TextPassword = <T extends FieldValues>({
                   className="absolute -translate-y-1/2 cursor-pointer right-3 top-1/2"
                 >
                   {show ? (
-                    <img
+                    <Image
+                      width={24}
+                      height={24}
+                      alt=""
                       src="password.svg"
                       className="cursor-pointer text-muted w-6 h-6"
                     />
                   ) : (
-                    <img
+                    <Image
+                      width={24}
+                      height={24}
+                      alt=""
                       src="password.svg"
                       className="cursor-pointer text-muted w-6 h-6"
                     />

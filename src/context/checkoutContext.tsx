@@ -10,7 +10,6 @@ import React, {
   useState,
 } from 'react';
 import { TDealer } from '../types/order';
-import { TCategory } from '../types/category';
 import { getPrice } from '../utils/price';
 
 type ValidatedAddress = {
@@ -49,11 +48,11 @@ interface CheckoutContextType {
 }
 
 // Key for saving state to local storage
-const STORAGE_KEY = "checkout_state";
+const STORAGE_KEY = 'checkout_state';
 
 // Function to load state from local storage
 const loadState = () => {
-  if (typeof window === "undefined") return null;
+  if (typeof window === 'undefined') return null;
   const saved = localStorage.getItem(STORAGE_KEY);
   return saved ? JSON.parse(saved) : null;
 };
@@ -79,7 +78,7 @@ export const CheckoutProvider: React.FC<{ children: React.ReactNode }> = ({
   const initialState = loadState();
 
   // Get the current step from URL query params, default to 1
-  const urlStep = searchParams.get("step");
+  const urlStep = searchParams.get('step');
   const [relocate, setRelocate] = useState<any>(
     initialState?.relocate || false
   );
@@ -91,7 +90,7 @@ export const CheckoutProvider: React.FC<{ children: React.ReactNode }> = ({
   >(initialState?.validatedZipCode || undefined);
 
   const [zipCodeAddress, setZipCodeAddress] = useState<any>(
-    initialState?.zipCodeAddress || ""
+    initialState?.zipCodeAddress || ''
   );
   const [isValidZipCode, setIsValidZipCode] = useState<any>(
     initialState?.isValidZipCode || false
@@ -108,7 +107,7 @@ export const CheckoutProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Function to save state to local storage
   const saveState = (updates: any) => {
-    if (typeof window === "undefined") return;
+    if (typeof window === 'undefined') return;
     const currentState = loadState() || {};
     const newState = { ...currentState, ...updates };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
@@ -118,7 +117,7 @@ export const CheckoutProvider: React.FC<{ children: React.ReactNode }> = ({
   const handleSetStep = useCallback(
     (newStep: string | number | null | undefined) => {
       if (newStep == null) {
-        console.warn("Attempted to set an invalid step:", newStep);
+        console.warn('Attempted to set an invalid step:', newStep);
         return;
       }
 
@@ -127,11 +126,11 @@ export const CheckoutProvider: React.FC<{ children: React.ReactNode }> = ({
       setStep(newStep);
       saveState({ step: newStep });
 
-      if (pathname === "/checkout") {
+      if (pathname === '/checkout') {
         router.replace(`/checkout?step=${newStep}`, { scroll: false });
       }
     },
-    [step, pathname, router, saveState]
+    [step, pathname, router]
   );
 
   // Function to set the nearest dealer and save the state
@@ -178,21 +177,20 @@ export const CheckoutProvider: React.FC<{ children: React.ReactNode }> = ({
   const subTotalCost = useMemo(() => {
     if (!productsInfo) return 0;
     return productsInfo?.reduce(
-      (acc, product) =>
-        acc + getPrice(product) * product.quantity,
+      (acc, product) => acc + getPrice(product) * product.quantity,
       0
     );
   }, [productsInfo]);
 
   // Define the delivery charge, sales tax, and total cost based on the cart type
-  const deliveryCharge = 0
+  const deliveryCharge = 0;
   const salesTax = 0;
   const totalCost = subTotalCost - discount + salesTax + deliveryCharge;
 
   // Effect to sync the checkout step with the URL query parameter
   useEffect(() => {
-    if (pathname === "/checkout") {
-      const stepParam = searchParams.get("step");
+    if (pathname === '/checkout') {
+      const stepParam = searchParams.get('step');
       if (stepParam) {
         const parsedStep = parseInt(stepParam);
         if (parsedStep !== step) {
@@ -235,7 +233,7 @@ export const CheckoutProvider: React.FC<{ children: React.ReactNode }> = ({
     zipCodeAddress,
     setZipCodeAddress: handleSetZipCodeAddress,
     deliveryCharge,
-    cartType: ""
+    cartType: '',
   };
 
   return (
@@ -249,18 +247,18 @@ export const CheckoutProvider: React.FC<{ children: React.ReactNode }> = ({
 export const useCheckout = () => {
   const context = useContext(CheckoutContext);
   if (context === undefined) {
-    throw new Error("useCheckout must be used within a CheckoutProvider");
+    throw new Error('useCheckout must be used within a CheckoutProvider');
   }
 
   // Function to clear the checkout state from both context and local storage
   const clearCheckoutState = () => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       localStorage.removeItem(STORAGE_KEY);
     }
     context.setNearestDealer(null);
     context.setOtherDealers([]);
     context.setIsDialogOpen(false);
-    context.setValidatedZipCode("");
+    context.setValidatedZipCode('');
     context.setIsValidZipCode(false);
     context.setZipCodeAddress(undefined);
   };

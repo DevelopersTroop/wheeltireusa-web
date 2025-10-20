@@ -1,44 +1,43 @@
-"use client";
+'use client';
 
-import { Checkbox } from "@/components/ui/checkbox";
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Progress } from "@/components/ui/progress";
-import { Clock, Loader2 } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+} from '@/components/ui/dialog';
+import { Progress } from '@/components/ui/progress';
+import { Clock, Loader2 } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import {
   revokeCouponCode,
   updateOrderSuccessData,
-} from "@/redux/features/checkoutSlice";
-import { useTypedSelector } from "@/redux/store";
-import { TOrder } from "@/types/order";
-import { triggerGaPurchaseEvent } from "@/utils/analytics";
-import { apiBaseUrl } from "@/utils/api";
-import { CartSummary } from "./CartSummary";
-import { CreateAccountSection } from "./CreateAccountSection";
-import { DeliveryOptions } from "./DeliveryOptions";
-import { OrderConfirmation } from "./OrderConfirmation";
-import { OrderSummary } from "./OrderSummary";
-import { PaymentInfo } from "./PaymentInfo";
-import { ShippingDetails } from "./ShippingDetails";
-import StaticImage from "@/components/ui/staticImage";
-import { useCheckout } from "@/context/checkoutContext";
-import useAuth from "@/hooks/useAuth";
-import { emptyCart } from "@/redux/features/cartSlice";
-import { toast } from "sonner";
+} from '@/redux/features/checkoutSlice';
+import { useTypedSelector } from '@/redux/store';
+import { TOrder } from '@/types/order';
+import { triggerGaPurchaseEvent } from '@/utils/analytics';
+import { apiBaseUrl } from '@/utils/api';
+import { CartSummary } from './CartSummary';
+import { CreateAccountSection } from './CreateAccountSection';
+import { DeliveryOptions } from './DeliveryOptions';
+import { OrderConfirmation } from './OrderConfirmation';
+import { OrderSummary } from './OrderSummary';
+import { PaymentInfo } from './PaymentInfo';
+import { ShippingDetails } from './ShippingDetails';
+import StaticImage from '@/components/ui/staticImage';
+import { useCheckout } from '@/context/checkoutContext';
+import useAuth from '@/hooks/useAuth';
+import { emptyCart } from '@/redux/features/cartSlice';
+import { toast } from 'sonner';
 
 // Interface for checkout step props
-interface ICheckoutStepProps { }
 
 // FinalStep Component
-export const FinalStep: React.FC<ICheckoutStepProps> = () => {
+export const FinalStep: React.FC = () => {
   /**
    * Redux Store & Dispatch hook
    */
@@ -60,7 +59,7 @@ export const FinalStep: React.FC<ICheckoutStepProps> = () => {
 
   // Component state
   const [showSurvey, setShowSurvey] = useState(false); // State to show the survey modal
-  const [survey, setSurvey] = useState<"yes" | "no" | "">(""); // State to track survey response
+  const [survey, setSurvey] = useState<'yes' | 'no' | ''>(''); // State to track survey response
   const [verifying, setVerifying] = useState(true); // State to track payment verification
   const [progress, setProgress] = useState(0); // State to track progress bar value
   const [paymentData, setPaymentData] = useState(null); // State to store payment data
@@ -81,19 +80,19 @@ export const FinalStep: React.FC<ICheckoutStepProps> = () => {
       try {
         setVerifying(true);
 
-        const method = searchParams.get("method");
+        const method = searchParams.get('method');
 
         //Stripe params
-        const sessionId = searchParams.get("session_id");
-        const orderId = searchParams.get("order_id");
+        const sessionId = searchParams.get('session_id');
+        const orderId = searchParams.get('order_id');
 
         //PayPal params
-        const paymentId = searchParams.get("paymentId");
-        const PayerID = searchParams.get("PayerID");
+        const paymentId = searchParams.get('paymentId');
+        const PayerID = searchParams.get('PayerID');
 
         // Early return if no order ID is present
         if (!orderId) {
-          throw new Error("Missing order information");
+          throw new Error('Missing order information');
         }
 
         const interval = setInterval(() => {
@@ -113,11 +112,11 @@ export const FinalStep: React.FC<ICheckoutStepProps> = () => {
           response = await fetch(
             `${apiBaseUrl}/payments/stripe/verify-payment?sessionId=${sessionId}&orderId=${orderId}`
           );
-        } else if (method === "pay_tomorrow") {
+        } else if (method === 'pay_tomorrow') {
           response = await fetch(
             `${apiBaseUrl}/payments/pay-tomorrow/status?orderId=${orderId}`
           );
-        } else if (method === "snap_finance") {
+        } else if (method === 'snap_finance') {
           response = await fetch(
             `${apiBaseUrl}/payments/snap-finance/status?orderId=${orderId}`
           );
@@ -139,8 +138,8 @@ export const FinalStep: React.FC<ICheckoutStepProps> = () => {
           setPaymentData(result.data.payment);
           // Trigger Google Analytics purchase event
           triggerGaPurchaseEvent(order);
-          toast.success("Order Confirmed", {
-            description: "Your payment has been processed successfully.",
+          toast.success('Order Confirmed', {
+            description: 'Your payment has been processed successfully.',
           });
           clearCheckoutState();
           setStep(3);
@@ -151,7 +150,7 @@ export const FinalStep: React.FC<ICheckoutStepProps> = () => {
         }
       } catch (err) {
         // Redirect to checkout page with error status
-        router.push("/checkout?step=2&order_status=false");
+        router.push('/checkout?step=2&order_status=false');
       } finally {
         setVerifying(false);
       }
@@ -159,11 +158,11 @@ export const FinalStep: React.FC<ICheckoutStepProps> = () => {
 
     // Only run verification if we have URL parameters indicating a payment return
     const hasPaymentParams =
-      searchParams.get("session_id") ||
-      (searchParams.get("paymentId") && searchParams.get("PayerID")) ||
-      searchParams.get("method");
+      searchParams.get('session_id') ||
+      (searchParams.get('paymentId') && searchParams.get('PayerID')) ||
+      searchParams.get('method');
 
-    if (hasPaymentParams && searchParams.get("order_id")) {
+    if (hasPaymentParams && searchParams.get('order_id')) {
       verifyPayment();
     }
 
@@ -172,7 +171,7 @@ export const FinalStep: React.FC<ICheckoutStepProps> = () => {
 
   // Effect to scroll to the top of the page on component mount
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
   // Render loading state while verifying payment
@@ -204,7 +203,7 @@ export const FinalStep: React.FC<ICheckoutStepProps> = () => {
   // Render final step content
   return (
     <div>
-      {searchParams.get("method") === "pay_tomorrow" && (
+      {searchParams.get('method') === 'pay_tomorrow' && (
         <div className="rounded-2xl border border-blue-300 bg-blue-50 p-4 mt-4">
           <h3 className="text-lg font-semibold text-primary">
             Your Order is Being Processed
@@ -243,8 +242,8 @@ export const FinalStep: React.FC<ICheckoutStepProps> = () => {
               selectedDealer={orderSuccessData?.data?.selectedDealer}
               shippingAddress={orderSuccessData?.data?.shippingAddress}
               selectedOptionTitle={orderSuccessData?.data?.selectedOptionTitle}
-            // shippingAddress={orderSuccessData?.data?.shippingAddress}
-            // selectedDealer={orderSuccessData?.data?.selectedDealer}
+              // shippingAddress={orderSuccessData?.data?.shippingAddress}
+              // selectedDealer={orderSuccessData?.data?.selectedDealer}
             />
 
             {paymentData && (
@@ -293,21 +292,21 @@ export const FinalStep: React.FC<ICheckoutStepProps> = () => {
           </h3>
           <div className="flex items-center gap-4">
             <div
-              onClick={() => handleSumbitSurvey("yes")}
+              onClick={() => handleSumbitSurvey('yes')}
               className="flex items-center font-bold gap-2 cursor-pointer"
             >
               <Checkbox
-                checked={survey === "yes"}
+                checked={survey === 'yes'}
                 className="rounded-full border-slate-300"
               />
               <p>Yes</p>
             </div>
             <div
-              onClick={() => handleSumbitSurvey("no")}
+              onClick={() => handleSumbitSurvey('no')}
               className="flex items-center font-bold gap-2 cursor-pointer"
             >
               <Checkbox
-                checked={survey === "no"}
+                checked={survey === 'no'}
                 className="rounded-full border-slate-300"
               />
               <p>No</p>

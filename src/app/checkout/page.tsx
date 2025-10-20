@@ -1,17 +1,17 @@
 // Import the ClientComponent, which handles the main functionality of the checkout page
 
-import { metaDataHelper } from "@/utils/metadata";
-import ClientComponent from "./ClientComponent";
+import { metaDataHelper } from '@/utils/metadata';
+import ClientComponent from './clientComponent';
 export const metadata = metaDataHelper({
-  title: "Checkout - Amani Forged Wheels",
-  keywords: "",
-  description: "",
+  title: 'Checkout - Amani Forged Wheels',
+  keywords: '',
+  description: '',
   openGraph: {
-    title: "",
-    description: "",
+    title: '',
+    description: '',
   },
   alternates: {
-    canonical: "https://amaniforged.com/checkout",
+    canonical: 'https://amaniforged.com/checkout',
   },
 });
 
