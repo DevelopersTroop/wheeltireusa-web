@@ -10,6 +10,7 @@ import LoadingSpinner from '@/components/shared/loading/spinner';
 import { LocationAccess } from '@/components/shared/locationAccess';
 import Stepper from './_components/stepper';
 import { Renderer } from './_components/stepRenderer';
+import StripeProvider from './stripe';
 
 // Main component for the checkout page
 const ClientComponent: React.FC = () => {
@@ -95,7 +96,9 @@ const ClientComponent: React.FC = () => {
           {/* Stepper component to display the current step and allow navigation between steps */}
           <Stepper currentStep={step} steps={steps} setStep={setStep} />
           {/* Renderer component to render the content for the current step */}
-          <Renderer setStep={setStep} step={step} />
+          <StripeProvider>
+            <Renderer setStep={setStep} step={step} />
+          </StripeProvider>
         </div>
       </div>
     </>
