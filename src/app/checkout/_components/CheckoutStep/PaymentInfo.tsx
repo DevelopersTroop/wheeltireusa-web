@@ -56,7 +56,7 @@ export const PaymentInfo: React.FC<{ paymentData: PaymentData }> = ({
           <p className="font-light">Order ID: #{paymentData.orderId}</p>
           {/* <p className="font-light">Amount: {formatCurrency(paymentData.amount, paymentData.currency)}</p> */}
           <p className="font-light">
-            Payment Method: {paymentData.data.paymentGateway}
+            Payment Method: {paymentData?.data?.paymentGateway}
           </p>
           <p className="font-light">Status: {paymentData.data.status}</p>
           {/* <p className="font-light">Transaction ID: {paymentData.data.transactionId}</p> */}
