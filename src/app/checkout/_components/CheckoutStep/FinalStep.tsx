@@ -267,7 +267,7 @@ export const FinalStep: React.FC = () => {
           <OrderSummary
             totalCost={orderSuccessData?.data?.totalCost}
             taxAmount={orderSuccessData?.data?.taxAmount}
-            totalWithTax={orderSuccessData?.data?.totalWithTax||orderSuccessData?.data?.netCost?parseFloat(orderSuccessData?.data?.totalWithTax):0}
+            totalWithTax={orderSuccessData?.data?.totalWithTax||orderSuccessData?.data?.netCost?parseFloat(orderSuccessData?.data?.netCost):0}
             netCost={orderSuccessData?.data?.netCost}
             cartType={orderSuccessData?.data?.cartType}
             discount={orderSuccessData?.data?.discount}
