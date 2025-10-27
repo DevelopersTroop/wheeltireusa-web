@@ -107,10 +107,10 @@ export const FinalStep: React.FC = () => {
 
         let response;
 
-        if (sessionId) {
+        if (method==="stripe") {
           // Stripe
           response = await fetch(
-            `${apiBaseUrl}/payments/stripe/verify-payment?sessionId=${sessionId}&orderId=${orderId}`
+            `${apiBaseUrl}/payments/stripe/verify-payment?orderId=${orderId}`
           );
         } else if (method === 'pay_tomorrow') {
           response = await fetch(
