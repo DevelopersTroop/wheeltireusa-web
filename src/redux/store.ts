@@ -17,7 +17,7 @@ import {
 import storage from 'redux-persist/lib/storage';
 import { baseApi } from './apis/base';
 import { TypedUseSelectorHook, useSelector, useDispatch } from 'react-redux';
-import { checkoutMiddleware } from './middleware/checkoutMiddleware';
+import { checkoutListenerMiddleware } from './middleware/checkoutMiddleware';
 const rootPersistConfig = {
   key: 'tirematic-store',
   storage,
@@ -48,7 +48,7 @@ const store = configureStore({
       },
     })
       .concat(baseApi.middleware)
-      .concat(checkoutMiddleware.middleware),
+      .concat(checkoutListenerMiddleware.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
