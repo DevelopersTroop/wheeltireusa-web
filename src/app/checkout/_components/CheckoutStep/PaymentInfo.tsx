@@ -42,6 +42,8 @@ export const PaymentInfo: React.FC<{ paymentData: PaymentData }> = ({
     }).format(amount);
   };
 
+  if(!paymentData)return null;
+
   return (
     <div className="flex items-start gap-4 font-bold">
       {/* Icon Section */}
@@ -53,16 +55,16 @@ export const PaymentInfo: React.FC<{ paymentData: PaymentData }> = ({
       <div className="flex flex-col gap-4">
         <h2 className="text-lg">Payment Info</h2>
         <div className="text-[#210203] space-y-1">
-          <p className="font-light">Order ID: #{paymentData.orderId}</p>
+          <p className="font-light">Order ID: #{paymentData?.orderId}</p>
           {/* <p className="font-light">Amount: {formatCurrency(paymentData.amount, paymentData.currency)}</p> */}
           <p className="font-light">
             Payment Method: {paymentData?.data?.paymentGateway}
           </p>
-          <p className="font-light">Status: {paymentData.data.status}</p>
+          <p className="font-light">Status: {paymentData?.data?.status}</p>
           {/* <p className="font-light">Transaction ID: {paymentData.data.transactionId}</p> */}
-          <p className="font-light">Email: {paymentData.email}</p>
+          <p className="font-light">Email: {paymentData?.email}</p>
           <p className="font-light">
-            Date: {formatDate(paymentData.createdAt)}
+            Date: {formatDate(paymentData?.createdAt)}
           </p>
         </div>
       </div>
