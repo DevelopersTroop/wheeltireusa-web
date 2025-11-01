@@ -13,6 +13,16 @@ import React, { useEffect, useMemo, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { Input } from '../ShippingAddress';
 import { PhoneInput } from './PhoneInput';
+import { FormField, FormItem } from '@/components/ui/form';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { US_STATES } from '../../states';
 
 interface ICompProps {
   selectedOptionTitle: string;
@@ -52,6 +62,7 @@ export const BillingAndShippingInput: React.FC<ICompProps> = ({
     watch: shippingWatch,
     setValue: shippingSetValue,
     getValues: getValuesShipping,
+    control: shippingControl,
   } = useForm<TBillingAddress>({
     defaultValues: shippingDefaultValues,
     mode: 'onChange',
@@ -64,6 +75,7 @@ export const BillingAndShippingInput: React.FC<ICompProps> = ({
     watch: billingWatch,
     setValue: billingSetValue,
     getValues: getValuesBilling,
+    control: billingControl,
   } = useForm<TBillingAddress>({
     defaultValues: billingDefaultValues,
     mode: 'onChange',
@@ -288,20 +300,43 @@ export const BillingAndShippingInput: React.FC<ICompProps> = ({
                 {...shippingRegister('city', { required: 'City is required' })}
               />
 
-              <Input
-                label="State"
-                required
-                placeholder="FL"
-                error={shippingErrors.cityState?.message}
-                {...shippingRegister('cityState', {
-                  required: 'State is required',
-                  maxLength: { value: 2, message: 'Must be 2 letters' },
-                  minLength: { value: 2, message: 'Must be 2 letters' },
-                  pattern: {
-                    value: /^[A-Za-z]{2}$/,
-                    message: 'Invalid state code',
-                  },
-                })}
+              <FormField
+                render={({ field, fieldState }) => {
+                  return (
+                    <FormItem>
+                      <Label className="block text-lg mb-1 font-medium leading-[24px]">
+                        State <span className="text-red-600">*</span>
+                      </Label>
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger className="h-14">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {US_STATES.map((s) => {
+                            return (
+                              <SelectItem
+                                key={s.abbreviation}
+                                value={s.abbreviation}
+                              >
+                                {s.name}
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectContent>
+                      </Select>
+                      {fieldState.error?.message && (
+                        <p className="text-red-600">
+                          {fieldState.error?.message}
+                        </p>
+                      )}
+                    </FormItem>
+                  );
+                }}
+                control={shippingControl}
+                name="cityState"
               />
 
               <PhoneInput
@@ -433,20 +468,43 @@ export const BillingAndShippingInput: React.FC<ICompProps> = ({
                 {...billingRegister('city', { required: 'City is required' })}
               />
 
-              <Input
-                label="State"
-                required
-                placeholder="FL"
-                error={billingErrors.cityState?.message}
-                {...billingRegister('cityState', {
-                  required: 'State is required',
-                  maxLength: { value: 2, message: 'Must be 2 letters' },
-                  minLength: { value: 2, message: 'Must be 2 letters' },
-                  pattern: {
-                    value: /^[A-Za-z]{2}$/,
-                    message: 'Invalid state code',
-                  },
-                })}
+              <FormField
+                render={({ field, fieldState }) => {
+                  return (
+                    <FormItem>
+                      <Label className="block text-lg mb-1 font-medium leading-[24px]">
+                        State <span className="text-red-600">*</span>
+                      </Label>
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger className="h-14">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {US_STATES.map((s) => {
+                            return (
+                              <SelectItem
+                                key={s.abbreviation}
+                                value={s.abbreviation}
+                              >
+                                {s.name}
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectContent>
+                      </Select>
+                      {fieldState.error?.message && (
+                        <p className="text-red-600">
+                          {fieldState.error?.message}
+                        </p>
+                      )}
+                    </FormItem>
+                  );
+                }}
+                control={billingControl}
+                name="cityState"
               />
 
               <PhoneInput

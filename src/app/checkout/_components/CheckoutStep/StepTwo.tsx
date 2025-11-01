@@ -39,10 +39,13 @@ import { toast } from 'sonner';
 import { BillingAndShippingInput } from './BillingAndShippingInput';
 import { ICheckoutStepProps } from './StepOne';
 import { PaymentElement } from '@stripe/react-stripe-js';
-import { StripePaymentElement } from '@stripe/stripe-js';
+import {
+  StripePaymentElement,
+  StripePaymentElementChangeEvent,
+} from '@stripe/stripe-js';
 
 // StepFour Component
-export const StepFour: React.FC<ICheckoutStepProps> = () => {
+export const StepTwo: React.FC<ICheckoutStepProps> = () => {
   // const { showNotice } = useShippingRestrictionLocationNotice();
 
   // Component state
@@ -54,6 +57,38 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
   const [coupon, setCoupon] = useState('');
   const termsRef = useRef<HTMLDivElement>(null);
   const autoCloseTimerRef = useRef<NodeJS.Timeout | undefined>(undefined);
+  const [cardError, setCardError] = useState<string | null>(null);
+
+  const handlePaymentElementChange = (
+    event: StripePaymentElementChangeEvent
+  ) => {
+    console.log('TCL: event', event.value.type);
+    // Check if the currently selected payment method is 'card'
+    if (event.value.type === 'card') {
+      if (event.empty) {
+        // Stripe's built-in validation error (e.g., "Invalid card number")
+        setCardError('Card information empty');
+      } else if (!event.complete) {
+        // You can set a generic "incomplete" message or wait for submission
+        setCardError('Card information is incomplete.');
+      } else {
+        // It's a card, and it's complete with no errors
+        setCardError(null);
+      }
+    } else if (event.value.type === 'us_bank_account') {
+      if (event.empty) {
+        setCardError('Bank information empty');
+      } else if (!event.complete) {
+        setCardError('Bank information is incomplete.');
+      } else {
+        setCardError(null);
+      }
+    } else {
+      // Another payment method is selected (e.g., Klarna, Afterpay)
+      // Clear any card-specific errors
+      setCardError(null);
+    }
+  };
 
   const dispatch = useDispatch();
   const snapInstanceRef = useRef<TSnapCheckoutReturn | null>(null);
@@ -470,7 +505,7 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
 
         <div className="px-6">
           <Button
-            disabled={shouldDisableButton}
+            disabled={shouldDisableButton || !!cardError}
             className="font-semibold rounded-xs antialiased w-full h-14 mt-2 flex items-center justify-center gap-2"
             onClick={handlePlaceOrder}
           >
@@ -560,6 +595,7 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
                     visibleAccordionItemsCount: 10,
                   },
                 }}
+                onChange={handlePaymentElementChange}
               />
               {/* 
               {renderPaymentOption(

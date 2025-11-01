@@ -1,6 +1,6 @@
-import { FinalStep } from "./CheckoutStep/FinalStep"; // Component for the final step of the checkout process
-import { StepFour } from "./CheckoutStep/StepFour"; // Component for step four of the checkout process
-import { StepOne } from "./CheckoutStep/StepOne"; // Component for step one of the checkout process// Component for step three of the checkout process
+import { FinalStep } from './CheckoutStep/FinalStep'; // Component for the final step of the checkout process
+import { StepTwo } from './CheckoutStep/StepTwo'; // Component for step four of the checkout process
+import { StepOne } from './CheckoutStep/StepOne'; // Component for step one of the checkout process// Component for step three of the checkout process
 // import ShippingAddressForm from "./ShippingAddress"; // Component for the shipping address form (step two)
 
 // Interface defining the props for the Renderer component
@@ -14,7 +14,7 @@ export const Renderer: React.FC<RendererProps> = ({ step, setStep }) => {
   // Function to handle the "Back" button action
   const handleBack = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent default behavior of the button
-    window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to the top of the page smoothly
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to the top of the page smoothly
     if (step > 1) {
       setStep(step - 1); // Move to the previous step if not on the first step
     }
@@ -23,7 +23,7 @@ export const Renderer: React.FC<RendererProps> = ({ step, setStep }) => {
   // Function to handle the "Continue" button action
   const handleContinue = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent default behavior of the button
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     if (step < 3) {
       setStep(step + 1); // Move to the next step if not on the last step
     }
@@ -34,7 +34,7 @@ export const Renderer: React.FC<RendererProps> = ({ step, setStep }) => {
       return <StepOne handleContinue={handleContinue} setStep={setStep} />; // Render step one
     case 2:
       return (
-        <StepFour
+        <StepTwo
           handleBack={handleBack} // Pass the "Back" button handler
           handleContinue={handleContinue} // Pass the "Continue" button handler
           setStep={setStep} // Pass the function to update the step
