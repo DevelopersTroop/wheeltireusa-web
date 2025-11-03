@@ -4,10 +4,15 @@ import { ChevronDown, ChevronUp, ChevronRight } from 'lucide-react';
 import navMenus from './navMenus';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import { useDispatch } from 'react-redux';
+import { openMainFilterModal } from '@/redux/features/mainFilterSlice';
 
 // Navbar Component
 // This component renders the main navigation bar with support for mega menus and dropdowns
 export default function Navbar() {
+  // Redux dispatch hook
+  const dispatch = useDispatch();
+
   // State to manage the currently open menu
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   // State to manage the currently hovered submenu
@@ -17,6 +22,38 @@ export default function Navbar() {
   const [submenuTimeout, setSubmenuTimeout] = useState<NodeJS.Timeout | null>(
     null
   );
+
+  // Function to handle clicks on specific href values that should open the modal
+  const handleModalOpen = (tab: 'Vehicle' | 'TireSize' | 'TireBrand') => {
+    console.log('handleModalOpen called with tab:', tab);
+    dispatch(openMainFilterModal({ tab }));
+  };
+
+  // Function to check if an href should open a modal instead of navigating
+  const isModalHref = (href: string) => {
+    return (
+      href === '#tiresByVehicle' ||
+      href === '#tiresBySize' ||
+      href === '#tiresByBrand'
+    );
+  };
+
+  // Function to get the modal tab from href
+  const getModalTabFromHref = (
+    href: string
+  ): 'Vehicle' | 'TireSize' | 'TireBrand' | null => {
+    console.log('getModalTabFromHref called with href:', href);
+    switch (href) {
+      case '#tiresByVehicle':
+        return 'Vehicle';
+      case '#tiresBySize':
+        return 'TireSize';
+      case '#tiresByBrand':
+        return 'TireBrand';
+      default:
+        return null;
+    }
+  };
 
   // Function to handle mouse enter on a menu item
   const handleMouseEnter = (menu: string) => {
@@ -122,15 +159,33 @@ export default function Navbar() {
                             </div>
                             {/* Tab Content: List of links */}
                             <div className="grid grid-cols-1 gap-2">
-                              {tab.children?.map((item) => (
-                                <Link
-                                  key={item.label}
-                                  href={item.href}
-                                  className="block py-1 px-2 rounded transition-all hover:bg-gray-50 hover:text-primary"
-                                >
-                                  {item.label}
-                                </Link>
-                              ))}
+                              {tab.children?.map((item) => {
+                                const modalTab = getModalTabFromHref(item.href);
+
+                                if (modalTab) {
+                                  // Render as button for modal items
+                                  return (
+                                    <button
+                                      key={item.label}
+                                      onClick={() => handleModalOpen(modalTab)}
+                                      className="block py-1 px-2 rounded transition-all hover:bg-gray-50 hover:text-primary text-left"
+                                    >
+                                      {item.label}
+                                    </button>
+                                  );
+                                } else {
+                                  // Render as Link for regular navigation
+                                  return (
+                                    <Link
+                                      key={item.label}
+                                      href={item.href}
+                                      className="block py-1 px-2 rounded transition-all hover:bg-gray-50 hover:text-primary"
+                                    >
+                                      {item.label}
+                                    </Link>
+                                  );
+                                }
+                              })}
                             </div>
                           </div>
                           {/* Optional: Add explore links at the bottom */}
@@ -158,15 +213,33 @@ export default function Navbar() {
                         {menu.children[0].label}
                       </div>
                       <div className="grid grid-cols-1 gap-2">
-                        {menu.children[0].children?.map((item) => (
-                          <Link
-                            key={item.label}
-                            href={item.href}
-                            className="block py-1 px-2 rounded transition-all hover:bg-gray-50 hover:text-primary"
-                          >
-                            {item.label}
-                          </Link>
-                        ))}
+                        {menu.children[0].children?.map((item) => {
+                          const modalTab = getModalTabFromHref(item.href);
+
+                          if (modalTab) {
+                            // Render as button for modal items
+                            return (
+                              <button
+                                key={item.label}
+                                onClick={() => handleModalOpen(modalTab)}
+                                className="block py-1 px-2 rounded transition-all hover:bg-gray-50 hover:text-primary text-left"
+                              >
+                                {item.label}
+                              </button>
+                            );
+                          } else {
+                            // Render as Link for regular navigation
+                            return (
+                              <Link
+                                key={item.label}
+                                href={item.href}
+                                className="block py-1 px-2 rounded transition-all hover:bg-gray-50 hover:text-primary"
+                              >
+                                {item.label}
+                              </Link>
+                            );
+                          }
+                        })}
                       </div>
                       {/* Only render exploreLinks if they exist */}
                       {menu.children[0].exploreLinks && (
