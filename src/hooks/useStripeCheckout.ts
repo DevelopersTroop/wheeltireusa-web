@@ -85,7 +85,6 @@ export const useStripeCheckout = () => {
         confirmParams: {
           return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout?step=3&order_id=${response.data.data.orderId}&method=stripe`,
         },
-        redirect: 'if_required',
       });
       if (error && error.message) {
         window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}/checkout?step=2&order_status=false`;
