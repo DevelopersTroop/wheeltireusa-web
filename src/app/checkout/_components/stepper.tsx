@@ -1,9 +1,10 @@
-"use client";
+'use client';
 
-import { cn } from "@/lib/utils"; // Utility function for conditional class names
-import { useTypedSelector } from "@/redux/store";
-import { Check } from "lucide-react"; // Icon for completed steps
-import { useSearchParams } from "next/navigation";
+import { useScreenSize } from '@/hooks/useScreenSize';
+import { cn } from '@/lib/utils';
+import { useTypedSelector } from '@/redux/store';
+import { Check } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 
 // Interface defining the props for the Stepper component
 interface StepperProps {
@@ -15,120 +16,151 @@ interface StepperProps {
 // Stepper component to display and manage the checkout steps
 export const Stepper: React.FC<StepperProps> = ({
   setStep,
-  steps,
+  steps, // This 'steps' variable MUST have a .length of 4
   currentStep,
 }) => {
   const { selectedOptionTitle } = useTypedSelector(
     (state) => state.persisted.checkout
-  ); // Access the selected shipping option from the Redux store
+  );
   const searchParams = useSearchParams();
+  const { isLg, screenSize } = useScreenSize();
+
+  // This calculation is correct, but it relies on 'steps.length'
+  // If steps.length is 3 and currentStep is 3, width will be 100%
+  // If steps.length is 4 and currentStep is 3, width will be 66.6%
+  const progressWidth =
+    steps.length > 1
+      ? ((currentStep - 1) / (steps.length - 1)) *
+        (isLg
+          ? currentStep === 4
+            ? 100
+            : 92
+          : screenSize < 768
+            ? 100
+            : screenSize < 1033
+              ? 88
+              : 100)
+      : 0;
 
   return (
     <div className="w-full mb-6 overflow-hidden">
-      {" "}
-      {/* Wrapper for the stepper */}
       <div className="flex justify-between items-start">
         <div className="w-full flex justify-between relative">
-          {/* Horizontal line connecting the steps */}
+          {/* --- Line Container --- */}
+          {/* This container defines the "track" from the center of the first circle to the center of the last. */}
           <div
-            className="absolute top-[15px] h-[1px] bg-gray-200"
+            className="absolute top-[14px] h-[1px]"
             style={{
-              left: "14px",
-              width: "100%",
+              left: '14px', // Half the width of the circle (w-7)
+              right: '14px', // Half the width of the circle (w-7)
             }}
-          />
-          {/* Render each step */}
-          {steps.map((step, index) => (
+          >
+            {/* Background line (fills 100% of the track) */}
+            <div className="absolute top-0 left-0 h-full w-full bg-gray-200" />
+
+            {/* Progress line (fills a percentage of the track) */}
             <div
-              key={index}
-              className={cn("relative flex flex-col w-1/3 items-start", {
-                "items-center": index === 1,
-                "items-end": index === 2,
-              })}
-            >
-              <div className="flex flex-col items-center">
+              className="relative top-0 left-0 h-full bg-black"
+              style={{
+                width: `${progressWidth}%`, // This % is now relative to the track
+                transition: 'width 0.3s ease-in-out',
+              }}
+            />
+          </div>
+          {/* --- End Line Container --- */}
+
+          {/* Render each step */}
+          {steps.map((step, index) => {
+            const stepNumber = index + 1;
+            const isCompleted = stepNumber < currentStep;
+            const isCurrentOrCompleted = stepNumber <= currentStep;
+
+            // Determine alignment based on position
+            const isFirstStep = index === 0;
+            const isLastStep = index === steps.length - 1;
+
+            return (
+              <div
+                key={index}
+                className={cn(
+                  'relative flex flex-col z-10', // z-10 to place circles above the line
+                  // Flexible alignment:
+                  isFirstStep
+                    ? 'items-start'
+                    : isLastStep
+                      ? 'items-end'
+                      : 'items-center'
+                )}
+              >
                 {/* Step circle */}
                 <div
                   onClick={() => {
-                    if (searchParams.get("order_id")?.length) return;
-                    if (currentStep > 2) return; // Prevent navigation if the current step is beyond step 4
+                    const clickedStep = index + 1;
+
+                    // 1. Don't navigate if order is already placed
+                    if (searchParams.get('order_id')?.length) return;
+
+                    // 2. Don't navigate if on the last step (e.g., "Confirmation")
+                    if (currentStep > steps.length - 1) return;
+
+                    // 3. Specific business logic: Skip step 2 if not "Direct To Customer"
                     if (
-                      selectedOptionTitle !== "Direct to Customer" &&
-                      index + 1 === 2
+                      selectedOptionTitle !== 'Direct to Customer' &&
+                      clickedStep === 2
                     )
-                      return; // Prevent navigation to step 2 if the selected option is not "Direct To Customer"
-                    if (index + 1 <= currentStep) setStep(index + 1); // Allow navigation to the current or previous steps
+                      return;
+
+                    // 4. Only allow navigation to current or previous steps
+                    if (clickedStep <= currentStep) {
+                      setStep(clickedStep);
+                    }
                   }}
                   className={cn(
-                    "w-7 h-7 rounded-full flex items-center justify-center cursor-pointer z-10 mb-1",
-                    "transition-colors duration-200",
-                    index + 1 <= currentStep ? "bg-black" : "bg-gray-200" // Highlight completed steps
+                    'w-7 h-7 rounded-full flex items-center justify-center cursor-pointer mb-1',
+                    'transition-colors duration-200',
+                    isCurrentOrCompleted ? 'bg-black' : 'bg-gray-200' // Highlight completed/current steps
                   )}
                 >
-                  {index + 1 < currentStep ? (
+                  {isCompleted ? (
                     <Check className="w-4 h-4 text-white" />
                   ) : (
-                    <span className="text-sm font-medium text-white">
-                      {index + 1} {/* Display the step number */}
+                    <span
+                      className={cn(
+                        'text-sm font-medium',
+                        isCurrentOrCompleted ? 'text-white' : 'text-gray-500' // Fixed text color for upcoming steps
+                      )}
+                    >
+                      {stepNumber} {/* Display the step number */}
                     </span>
                   )}
                 </div>
-              </div>
 
-              {/* Step title and subtitle */}
-              <div
-                className={cn("w-full text-left", {
-                  "text-center": index === 1,
-                  "text-right": index === 2,
-                })}
-              >
-                <p
+                {/* Step title and subtitle */}
+                <div
                   className={cn(
-                    "text-lg font-medium mb-1 hidden md:block",
-                    index + 1 <= currentStep ? "text-black" : "text-gray-500"
+                    'hidden md:block', // Alignment is now handled by the parent div
+                    isFirstStep
+                      ? 'text-left'
+                      : isLastStep
+                        ? 'text-right'
+                        : 'text-center'
                   )}
                 >
-                  {step.title}
-                </p>
-                <p
-                  className={cn(
-                    "text-sm text-gray-600 leading-tight hidden md:block",
-                    index + 1 <= currentStep ? "text-black" : "text-gray-500"
-                  )}
-                >
-                  {/* {step.subTitle} */}
-                </p>
+                  <p
+                    className={cn(
+                      'text-lg font-medium mb-1',
+                      isCurrentOrCompleted ? 'text-black' : 'text-gray-500'
+                    )}
+                  >
+                    {step.title}
+                  </p>
+                  {/* <p className={cn(...)}>{step.subTitle}</p> */}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
-      {/* Prompt for users to sign in if they are not authenticated */}
-      {/* {!user?._id && !isFinalStep && (
-        <div className="my-5 border border-gray-200 rounded-lg p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 max-w-3xl">
-          <div className="flex items-center gap-2">
-            <svg
-              className="w-5 h-5 text-red-600"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M18.3327 10C18.3327 14.6024 14.6017 18.3333 9.99935 18.3333C5.39698 18.3333 1.66602 14.6024 1.66602 10C1.66602 5.39762 5.39698 1.66666 9.99935 1.66666C14.6017 1.66666 18.3327 5.39762 18.3327 10ZM12.4993 7.5C12.4993 8.88071 11.3801 10 9.99935 10C8.61864 10 7.49935 8.88071 7.49935 7.5C7.49935 6.11929 8.61864 5 9.99935 5C11.3801 5 12.4993 6.11929 12.4993 7.5ZM9.99934 17.0833C11.486 17.0833 12.8658 16.6253 14.0051 15.8427C14.5083 15.497 14.7234 14.8385 14.4308 14.3027C13.8243 13.1919 12.5745 12.5 9.9993 12.5C7.42409 12.5 6.17432 13.1919 5.5678 14.3026C5.27522 14.8385 5.49027 15.4969 5.99348 15.8426C7.13284 16.6253 8.5126 17.0833 9.99934 17.0833Z"
-              />
-            </svg>
-            <p className="text-sm font-medium">
-              Have an account? Sign in for the faster checkout
-            </p>
-          </div>
-          <Link
-            href={`/login?redirect=/checkout?step=${currentStep}`} // Redirect to login with the current step as a query parameter
-            className="text-sm font-medium underline hover:text-gray-700"
-          >
-            Sign in
-          </Link>
-        </div>
-      )} */}
     </div>
   );
 };

@@ -142,7 +142,7 @@ export const FinalStep: React.FC = () => {
             description: 'Your payment has been processed successfully.',
           });
           clearCheckoutState();
-          setStep(3);
+          setStep(4);
           dispatch(emptyCart());
           dispatch(revokeCouponCode());
         } else {
@@ -150,7 +150,7 @@ export const FinalStep: React.FC = () => {
         }
       } catch (err) {
         // Redirect to checkout page with error status
-        router.push('/checkout?step=2&order_status=false');
+        router.push('/checkout?step=3&order_status=false');
       } finally {
         setVerifying(false);
       }

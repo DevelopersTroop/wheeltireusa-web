@@ -10,7 +10,6 @@ import LoadingSpinner from '@/components/shared/loading/spinner';
 import { LocationAccess } from '@/components/shared/locationAccess';
 import Stepper from './_components/stepper';
 import { Renderer } from './_components/stepRenderer';
-import StripeProvider from './stripe';
 
 // Main component for the checkout page
 const ClientComponent: React.FC = () => {
@@ -28,14 +27,11 @@ const ClientComponent: React.FC = () => {
       title: 'Installation',
       subTitle: 'Enter your ZIP code to view your installation options.',
     },
-    // {
-    //     title: "Shipping Info",
-    //     subTitle: "Enter shipping info and a few additional details.",
-    // },
-    // {
-    //     title: "Order Summary",
-    //     subTitle: "Select preferred payment method.",
-    // },
+    {
+      title: 'Address Info',
+      subTitle: 'Enter shipping & billing info and a few additional details.',
+    },
+
     {
       title: 'Secure payment options',
       subTitle: 'Check order details to ensure everything is correct.',
@@ -48,7 +44,7 @@ const ClientComponent: React.FC = () => {
 
   // Effect to handle empty cart scenarios and loading state
   useEffect(() => {
-    if (step === 2 && searchParams.get('order_id')?.length) {
+    if (step === 3 && searchParams.get('order_id')?.length) {
       if (requestSent.current) return;
       mapPendingOrderToCheckout(
         dispatch,
@@ -58,7 +54,7 @@ const ClientComponent: React.FC = () => {
       ).finally(() => {
         requestSent.current = true;
       });
-    } else if (Object.keys(products).length === 0 && step !== 3) {
+    } else if (Object.keys(products).length === 0 && step !== 4) {
       toast.error('Empty cart', {
         description:
           'Your cart is empty. Please add items before proceeding to checkout.',
@@ -96,9 +92,8 @@ const ClientComponent: React.FC = () => {
           {/* Stepper component to display the current step and allow navigation between steps */}
           <Stepper currentStep={step} steps={steps} setStep={setStep} />
           {/* Renderer component to render the content for the current step */}
-          <StripeProvider>
-            <Renderer setStep={setStep} step={step} />
-          </StripeProvider>
+
+          <Renderer setStep={setStep} step={step} />
         </div>
       </div>
     </>

@@ -83,14 +83,14 @@ export const useStripeCheckout = () => {
       const { error } = await stripe.confirmPayment({
         elements,
         confirmParams: {
-          return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout?step=3&order_id=${response.data.data.orderId}&method=stripe`,
+          return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout?step=4&order_id=${response.data.data.orderId}&method=stripe`,
         },
       });
       if (error && error.message) {
-        window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}/checkout?step=2&order_status=false`;
+        window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}/checkout?step=3&order_status=false`;
       }
     } catch (err) {
-      window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}/checkout?step=2&order_status=false`;
+      window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}/checkout?step=3&order_status=false`;
       toast.error('Error', {
         description: (err as Error).message,
       });

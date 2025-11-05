@@ -1,672 +1,275 @@
-'use client';
-
-import {
-  TSnapCheckoutReturn,
-  TSnapInputCheckout,
-} from '@/components/shared/snapLoader';
-import { WhatWeAccept } from '@/components/shared/what-we-accept';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
-import { useCheckout } from '@/context/checkoutContext';
-import { usePaypalCheckout } from '@/hooks/usePaypalCheckout';
-import { usePaytomorrowCheckout } from '@/hooks/usePayTomorrowCheckout';
-import { useStripeCheckout } from '@/hooks/useStripeCheckout';
-import { getLatestOrderId, useSnapFinanceOrderData } from '@/lib/order';
-import { getSnapFinanceToken } from '@/lib/snapFinance';
-import {
-  revokeCouponCode,
-  setOrderId,
-  setOrderInfo,
-} from '@/redux/features/checkoutSlice';
-import { useTypedSelector } from '@/redux/store';
-import { apiBaseUrl } from '@/utils/api';
-import { AlertCircle, InfoIcon, Loader, ShoppingCart, X } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import Sticky from 'react-sticky-el';
-import { toast } from 'sonner';
 import { BillingAndShippingInput } from './BillingAndShippingInput';
 import { ICheckoutStepProps } from './StepOne';
-import { PaymentElement } from '@stripe/react-stripe-js';
-import {
-  StripePaymentElement,
-  StripePaymentElementChangeEvent,
-} from '@stripe/stripe-js';
+import { useTypedSelector } from '@/redux/store';
+import { useCheckout } from '@/context/checkoutContext';
+import { useShippingRestrictionLocationNotice } from '@/hooks/useShippingRestriction';
+import { useApplyCoupon } from '@/hooks/useApplyCoupon';
+import { revokeCouponCode, setOrderInfo } from '@/redux/features/checkoutSlice';
 
-// StepFour Component
-export const StepTwo: React.FC<ICheckoutStepProps> = () => {
-  // const { showNotice } = useShippingRestrictionLocationNotice();
-
-  // Component state
-  const [activeAccordion, setActiveAccordion] = useState('');
-
-  const [showTermsAlert, setShowTermsAlert] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [shouldDisableButton, setShouldDisableButton] = useState(true);
-  const [coupon, setCoupon] = useState('');
-  const termsRef = useRef<HTMLDivElement>(null);
-  const autoCloseTimerRef = useRef<NodeJS.Timeout | undefined>(undefined);
-  const [cardError, setCardError] = useState<string | null>(null);
-
-  const handlePaymentElementChange = (
-    event: StripePaymentElementChangeEvent
-  ) => {
-    console.log('TCL: event', event.value.type);
-    // Check if the currently selected payment method is 'card'
-    if (event.value.type === 'card') {
-      if (event.empty) {
-        // Stripe's built-in validation error (e.g., "Invalid card number")
-        setCardError('Card information empty');
-      } else if (!event.complete) {
-        // You can set a generic "incomplete" message or wait for submission
-        setCardError('Card information is incomplete.');
-      } else {
-        // It's a card, and it's complete with no errors
-        setCardError(null);
-      }
-    } else if (event.value.type === 'us_bank_account') {
-      if (event.empty) {
-        setCardError('Bank information empty');
-      } else if (!event.complete) {
-        setCardError('Bank information is incomplete.');
-      } else {
-        setCardError(null);
-      }
-    } else {
-      // Another payment method is selected (e.g., Klarna, Afterpay)
-      // Clear any card-specific errors
-      setCardError(null);
-    }
-  };
-
-  const dispatch = useDispatch();
-  const snapInstanceRef = useRef<TSnapCheckoutReturn | null>(null);
-
-  // Hooks
-  // const { applyCoupon } = useApplyCoupon();
-  const { initiateCheckout } = useStripeCheckout();
-  const { initiatePaypalCheckout } = usePaypalCheckout();
-  const { initiatePaytomorrowCheckout } = usePaytomorrowCheckout();
-
-  /**
-   * Redux Store And Dispatch Hook
-   */
+// StepThree Component
+export const StepTwo: React.FC<ICheckoutStepProps> = ({
+  setStep,
+  handleContinue,
+}) => {
   const {
-    billingAddress,
-    orderInfo,
     selectedOptionTitle,
-    affiliateDiscount,
-    productBasedDiscountApplied,
-    isCouponApplied,
     discount,
+    orderInfo,
+    couponCode,
+    isCouponApplied,
+    productBasedDiscountApplied,
+    productsInfo,
+    affiliateDiscount,
   } = useTypedSelector((state) => state.persisted.checkout);
-  const [billingSameAsShipping, setShippingSameAsBilling] = useState(
-    selectedOptionTitle === 'Direct to Customer'
-  );
-  const { cartType, subTotalCost, totalCost } = useCheckout();
+  const newsLetterRef = useRef<HTMLDivElement>(null); // Ref for newsletter section
+  const phoneNumberRef = useRef<HTMLDivElement>(null); // Ref for phone number section
+  const { showNotice } = useShippingRestrictionLocationNotice();
+  console.log('TCL: showNotice', showNotice);
+  const [billingSameAsShipping, setShippingSameAsBilling] = useState(true);
+  /**
+   * Redux Store & Dispatch
+   */ // Access cart products from Redux store
+  const [coupon, setCoupon] = useState(couponCode);
+  const { applyCoupon, isLoading } = useApplyCoupon();
+  const dispatch = useDispatch();
 
-  const { getSnapFinanceTransactionData, placeOrderWithSnapFinance } =
-    useSnapFinanceOrderData();
+  const [shouldDisableButton, setShouldDisableButton] = useState(false);
 
-  // ✅ Define handlers (stable, no re-creation)
-  const onClickHandler = (data: any, actions: any) => {
-    console.log('TCL: onClickHandler -> data', data);
-    // Trigger Snap app logic here (apply for credit, etc.)
-  };
-
-  const onApprovedHandler = (
-    data: { applicationId: string; type: string },
-    actions: any
-  ) => {
-    placeOrderWithSnapFinance(data.applicationId, data.type);
-  };
-
-  const onErrorHandler = (error: any) => {
-    console.error('Error occurred: And I can see', error);
-  };
-
-  const onInitHandler = (d: string) => {
-    console.log('Init data:', d);
-  };
-
-  // ✅ Input config
-  const inputCheckout: TSnapInputCheckout = {
-    init: onInitHandler,
-    onClick: onClickHandler,
-    onApproved: onApprovedHandler,
-    onError: onErrorHandler,
-    onInit(data, actions) {
-      console.log('TCL: onInit -> data', data);
-    },
-  };
-
-  useEffect(() => {
-    const initSnap = async () => {
-      if (snapInstanceRef.current) return; // prevent re-init
-
-      try {
-        // ✅ Fetch token once
-        const token = await getSnapFinanceToken();
-
-        // ✅ Initialize Snap SDK
-        window.snap.init(token);
-
-        // ✅ Create Snap instance
-        const instance = window.snap.checkoutButton(inputCheckout);
-        console.log('TCL: initSnap -> instance', instance);
-        snapInstanceRef.current = instance;
-      } catch (error) {
-        console.error('Snap Finance init failed:', error);
-      }
-    };
-
-    initSnap();
-  }, []);
-
-  const handleSnapFinanceCheckout = async () => {
-    getLatestOrderId()
-      .then((orderId) => {
-        const stringOrderID = orderId?.split('-')?.[1] || `AF-0000`;
-        const newOrderId = `AF-${(parseInt(stringOrderID, 10) + 1)
-          .toString()
-          .padStart(6, '0')}`;
-        if (newOrderId) {
-          dispatch(setOrderId(newOrderId));
-        }
-        const transactionData = getSnapFinanceTransactionData(newOrderId);
-        snapInstanceRef.current?._actions?.launchCheckout(transactionData);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  const { cartType, subTotalCost, totalCost, validatedZipCode } = useCheckout();
 
   /**
-   * Checkout Context
+   * Handle newsletter validation
    */
-  const { validatedZipCode } = useCheckout();
-
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const [showPaymentError, setShowPaymentError] = useState(false);
-  // Handle payment error alert
   useEffect(() => {
-    const orderStatus = searchParams.get('order_status');
-    if (orderStatus === 'false') {
-      setShowPaymentError(true);
-      autoCloseTimerRef.current = setTimeout(() => {
-        handleCloseAlert();
-      }, 5000);
+    if (orderInfo?.newsLetter !== '') {
+      const element = newsLetterRef?.current?.querySelector('.error-message');
+      if (element) newsLetterRef.current?.removeChild(element);
     }
+  }, [orderInfo?.newsLetter]);
 
-    return () => {
-      if (autoCloseTimerRef.current) {
-        clearTimeout(autoCloseTimerRef.current);
-      }
-    };
-  }, [searchParams]);
-
-  // Scroll to top on mount
+  /**
+   * Handle phone number validation
+   */
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, []);
-
-  // Hide terms alert when terms are accepted
+    if (orderInfo.phone !== '') {
+      const element = phoneNumberRef?.current?.querySelector('.error-message');
+      if (element) phoneNumberRef.current?.removeChild(element);
+    }
+  }, [orderInfo.phone]);
+  /**
+   * Update newsletter state when order info changes
+   */
   useEffect(() => {
-    if (orderInfo.termsAndConditions) {
-      setShowTermsAlert(false);
+    if (!orderInfo.orderInfoText && orderInfo.newsLetterText) {
+      dispatch(setOrderInfo({ ...orderInfo, newsLetterText: false }));
     }
-  }, [orderInfo.termsAndConditions]);
+  }, [orderInfo.orderInfoText]);
 
-  // Event handlers
-  const handleCloseAlert = useCallback(() => {
-    setShowPaymentError(false);
-    router.replace(`/checkout?step=2`);
-    if (autoCloseTimerRef.current) {
-      clearTimeout(autoCloseTimerRef.current);
-    }
-  }, [router]);
-
-  const toggleAccordion = useCallback((accordion: string) => {
-    setActiveAccordion(accordion);
-  }, []);
-
-  const processPayment = useCallback(async () => {
-    switch (activeAccordion) {
-      case 'paypal':
-        await initiatePaypalCheckout();
-        break;
-      case 'pay-tomorrow':
-        await initiatePaytomorrowCheckout();
-        break;
-      case 'snap-finance':
-        await handleSnapFinanceCheckout();
-        break;
-      default:
-        await initiateCheckout();
-    }
-  }, [
-    activeAccordion,
-    initiateCheckout,
-    // initiatePaypalCheckout,
-    initiatePaytomorrowCheckout,
-  ]);
-
-  const handlePlaceOrder = useCallback(async () => {
-    if (isLoading) return;
-
-    if (subTotalCost < 50) {
-      return toast.error('Error', {
-        description: 'Minimum order amount is $50',
-      });
-    }
-
-    try {
-      if (shouldDisableButton) {
-        return toast.error('Error', {
-          description: 'Please fill in all required fields',
-        });
-      }
-
-      if (!orderInfo.termsAndConditions) {
-        setShowTermsAlert(true);
-        termsRef.current?.scrollIntoView({ behavior: 'smooth' });
-        return;
-      }
-
-      setIsLoading(true);
-      await processPayment();
-
-      // Subscribe to newsletter
-      await fetch(`${apiBaseUrl}/subscriptions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: billingAddress.email,
-        }),
-      });
-    } catch (error) {
-      toast.error('Error', {
-        description: 'Something went wrong. Please try again.',
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  }, [
-    isLoading,
-    subTotalCost,
-    orderInfo.termsAndConditions,
-    processPayment,
-    billingAddress.email,
-  ]);
-
-  const handleCouponAction = useCallback(() => {
-    if (isCouponApplied) {
-      dispatch(revokeCouponCode());
-    } else {
-      // applyCoupon(coupon);
-    }
-  }, [isCouponApplied, dispatch]);
-
-  const handleToggleTerms = useCallback(() => {
-    dispatch(
-      setOrderInfo({
-        ...orderInfo,
-        termsAndConditions: !orderInfo.termsAndConditions,
-      })
-    );
-  }, [dispatch, orderInfo]);
-
-  // Computed values
-
-  // Render payment method option
-  const renderPaymentOption = useCallback(
-    (method: string, label: string, icon: React.ReactNode) => (
-      <div
-        key={method}
-        onClick={() => toggleAccordion(method)}
-        className="relative border border-[#f0efef] rounded-[12px] px-2.5 h-[48px] cursor-pointer"
-      >
-        <div className="flex items-center justify-between h-full">
-          <div className="flex items-center cursor-pointer min-w-0 gap-3">
-            <div className="ml-2 flex items-center">
-              {activeAccordion === method ? (
-                <div className="relative w-[15px] h-[15px]">
-                  <span className="absolute inset-0 rounded-full border-2 border-black"></span>
-                  <span className="absolute inset-[4px] rounded-full bg-black"></span>
-                </div>
-              ) : (
-                <span
-                  className={`inline-block w-[15px] h-[15px] rounded-full border-[2px] border-[#6d6e78]`}
-                />
-              )}
-            </div>
-            <div className="flex items-center h-full">
-              {icon}
-              {label && (
-                <span className="font-semibold text-gray-900 text-xl truncate">
-                  {label}
-                </span>
-              )}
-            </div>
-          </div>
+  return (
+    <div className="flex flex-col">
+      <div className="grid grid-cols-11 gap-6 lg:gap-8 pt-8 pb-20">
+        <div className="col-span-11 lg:col-span-7 space-y-8">
+          <BillingAndShippingInput
+            billingSameAsShipping={billingSameAsShipping}
+            setBillingSameAsShipping={setShippingSameAsBilling}
+            setShouldDisableButton={setShouldDisableButton}
+          />
         </div>
-      </div>
-    ),
-    [activeAccordion, toggleAccordion]
-  );
-
-  // Order summary component to avoid duplication
-  const OrderSummary = useMemo(
-    () => (
-      <div className="rounded-xs bg-[#F7F7F7] py-7">
-        {productBasedDiscountApplied || affiliateDiscount ? null : (
-          <div className="px-2 sm:px-6 w-full pb-4">
-            <Accordion defaultValue="item-1" type="single" collapsible>
-              <AccordionItem value="item-1">
-                <AccordionTrigger>Do you have a coupon code?</AccordionTrigger>
-                <AccordionContent className="flex items-center gap-2 py-1 px-1">
-                  <Input
-                    value={coupon}
-                    onChange={(e) => setCoupon(e.target.value)}
-                    placeholder="Enter your coupon "
-                    className="h-12 !bg-white"
-                  />
-                  <Button
-                    disabled={isLoading}
-                    onClick={handleCouponAction}
-                    className="!h-12 font-semibold"
-                  >
-                    {isLoading
-                      ? 'Loading'
-                      : isCouponApplied
-                        ? 'Revoke'
-                        : 'Apply'}
-                  </Button>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </div>
-        )}
-
-        <div className="space-y-6 text-[#210203]">
-          <div className="space-y-2 px-6">
-            <h3 className="text-base font-semibold text-black uppercase tracking-wider">
-              Delivery Option
-            </h3>
-            <div className="text-sm text-[#210203]">{selectedOptionTitle}</div>
-          </div>
+        {/**
+         * Order Summary
+         */}
+        <div className="col-span-11 lg:col-span-4 sticky top-0 bg-[#F7F7F7] mt-12 py-5 rounded-xs h-fit">
+          {productBasedDiscountApplied || affiliateDiscount ? null : (
+            <div className="px-2 sm:px-6 w-full pb-4">
+              <Accordion type="single" collapsible>
+                <AccordionItem value="item-1">
+                  <AccordionTrigger>
+                    Do you have a coupon code?
+                  </AccordionTrigger>
+                  <AccordionContent className="flex items-center gap-2 py-1 px-1">
+                    <Input
+                      value={coupon}
+                      onChange={(e) => setCoupon(e.target.value)}
+                      placeholder="Enter your coupon "
+                      className="h-12 !bg-white"
+                    />
+                    <Button
+                      disabled={isLoading}
+                      onClick={() => {
+                        if (isCouponApplied) {
+                          dispatch(revokeCouponCode());
+                        } else {
+                          applyCoupon(coupon);
+                        }
+                      }}
+                      className="!h-12 font-semibold"
+                    >
+                      {isLoading
+                        ? 'Loading'
+                        : isCouponApplied
+                          ? 'Revoke'
+                          : 'Apply'}
+                    </Button>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </div>
+          )}
 
           <div className="space-y-2 text-[#210203]">
-            <div className="flex justify-between items-baseline py-2 px-6">
+            <div className="flex justify-between items-baseline py-2 px-md">
               <p className="text-base leading-[19px] text-[#210203]">
-                Item(s) Total
+                <span className="text-[#210203] text-base font-normal">
+                  Item(s) Total
+                </span>
               </p>
               <div className="flex gap-0 items-baseline relative">
-                <p className="text-xl leading-[29px] text-[#210203]">
-                  <span className="text-xl font-bold">
+                <p className="text-2xl leading-[29px] text-[#210203]">
+                  <span className="text-[#210203] text-2xl font-bold">
                     ${Math.floor(subTotalCost)}.
                   </span>
-                  <span className="text-sm font-bold">
+                  <span className="text-[#210203] text-sm font-bold">
                     {subTotalCost.toFixed(2).split('.')[1]}
                   </span>
                 </p>
               </div>
             </div>
-
-            <div className="flex justify-between items-baseline self-stretch relative w-full px-6">
+            <div className="flex justify-between items-baseline self-stretch relative w-full px-md">
               <div className="flex gap-2 items-center relative">
                 <p className="text-base leading-[19px] text-[#210203]">
-                  Shipping
+                  <span className="text-[#210203] text-base font-normal">
+                    Shipping{' '}
+                  </span>
                 </p>
                 <div className="flex gap-0 items-center relative">
                   <p className="text-base leading-[19px] text-[#210203]">
-                    ({validatedZipCode}):
+                    <span className="text-[#210203] text-base font-semibold">
+                      ({validatedZipCode})
+                    </span>
+                  </p>
+
+                  <p className="text-base leading-[19px] text-[#210203]">
+                    <span className="text-[#210203] text-base font-normal">
+                      :
+                    </span>
                   </p>
                 </div>
               </div>
               <div className="flex gap-0 items-baseline relative">
                 <h4 className="text-2xl leading-[29px] text-[#210203]">
                   <span className="text-[#210203] text-2xl font-bold">
-                    {cartType === 'CENTER_CAP_ONLY' ? '$14.99' : 'Free'}
+                    {cartType === 'CENTER_CAP_ONLY' ? (
+                      '$14.99'
+                    ) : !showNotice ? (
+                      'Free'
+                    ) : (
+                      <p className="text-[13px] leading-snug font-normal text-primary">
+                        This location is not included free shipping
+                      </p>
+                    )}
                   </span>
                 </h4>
               </div>
             </div>
 
             {discount ? (
-              <div className="flex justify-between px-6">
+              <div className="flex justify-between py-2 items-center px-md">
                 <span className="">Discount:</span>
                 <span className="font-bold text-2xl">-${discount}</span>
               </div>
             ) : null}
 
-            <div className="border-x-0 border-t-0 border-b border-[#cfcfcf] pb-4 flex justify-between items-baseline self-stretch relative w-full px-6 pt-2">
-              <h5 className="text-xl leading-6 text-[#210203]">Total:</h5>
+            <div className="border-x-0 border-t-0 border-b border-[#cfcfcf] pb-4 flex justify-between items-baseline self-stretch relative w-full px-md pt-2">
+              <h5 className="text-xl leading-6 text-[#210203]">
+                <span className="text-[#210203] text-xl font-normal">
+                  Total:
+                </span>
+              </h5>
               <div className="flex gap-0 items-baseline relative">
-                <p className="text-xl leading-[38px] text-[#210203]">
-                  <span className="font-bold">${totalCost?.toFixed(2)}</span>
+                <p className="text-[32px] leading-[38px] text-[#210203]">
+                  <span className="text-[#210203] text-[32px] font-bold">
+                    ${totalCost.toFixed(2)}
+                  </span>
                 </p>
               </div>
             </div>
           </div>
-        </div>
-
-        <div className="py-4 px-6" ref={termsRef}>
-          <div
-            onClick={handleToggleTerms}
-            className="flex items-start gap-2 cursor-pointer"
-          >
-            <Checkbox
-              checked={orderInfo.termsAndConditions}
-              className="rounded-md data-[state=checked]:border-none bg-white h-5 w-5 border border-[#AAAAAA]"
-            />
-            <p className="text-base">
-              I acknowledge the{' '}
-              <Link
-                href="/terms-conditions"
-                target="_blank"
-                className="font-semibold"
-              >
-                Terms and Conditions
-              </Link>{' '}
-              and the{' '}
-              <Link
-                href="/privacy-policy"
-                target="_blank"
-                className="font-semibold"
-              >
-                Privacy Policy
-              </Link>
-              .
-            </p>
-          </div>
-          {showTermsAlert && (
-            <Alert variant="destructive" className="mt-4">
-              <AlertDescription>
-                To place your order, please accept our policies.
-              </AlertDescription>
-            </Alert>
-          )}
-        </div>
-
-        <div className="px-6">
-          <Button
-            disabled={shouldDisableButton || !!cardError}
-            className="font-semibold rounded-xs antialiased w-full h-14 mt-2 flex items-center justify-center gap-2"
-            onClick={handlePlaceOrder}
-          >
-            {isLoading ? (
-              <>
-                <Loader className="h-5 w-5 animate-spin" />
-                <span>Processing...</span>
-              </>
-            ) : (
-              <>
-                <ShoppingCart className="h-5 w-5" />
-                <span className="text-base">Place Order</span>
-              </>
-            )}
-          </Button>
-        </div>
-      </div>
-    ),
-    [
-      productBasedDiscountApplied,
-      affiliateDiscount,
-      coupon,
-      setCoupon,
-      isLoading,
-      handleCouponAction,
-      isCouponApplied,
-      selectedOptionTitle,
-      subTotalCost,
-      validatedZipCode,
-      cartType,
-      discount,
-      totalCost,
-      handleToggleTerms,
-      orderInfo.termsAndConditions,
-      showTermsAlert,
-      shouldDisableButton,
-      handlePlaceOrder,
-    ]
-  );
-
-  const paymentElement = useRef<StripePaymentElement | null>(null);
-  useEffect(() => {
-    if (paymentElement?.current) paymentElement?.current.collapse();
-  }, [activeAccordion]);
-
-  return (
-    <div>
-      {/* Payment Error Alert */}
-      {showPaymentError && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-red-700">
-            <AlertCircle className="h-5 w-5" />
-            <span>
-              Payment failed. Please try again or choose a different payment
-              method.
-            </span>
-          </div>
-          <button
-            onClick={handleCloseAlert}
-            className="text-red-700 hover:text-red-900"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-      )}
-
-      {/* Main Layout */}
-      <div className="grid grid-cols-11 gap-8">
-        {/* Payment Methods */}
-        <div className="w-full col-span-11 lg:col-span-7 flex flex-col gap-y-8 ">
-          <h3 className="text-2xl font-bold">Select Payment Option</h3>
-
-          <div>
-            <div className="flex flex-col space-y-4">
-              <PaymentElement
-                onFocus={() => {
-                  setActiveAccordion('');
-                }}
-                onReady={(element) => {
-                  paymentElement.current = element;
-                }}
-                options={{
-                  layout: {
-                    type: 'accordion',
-                    spacedAccordionItems: true,
-                    radios: true,
-                    visibleAccordionItemsCount: 10,
-                  },
-                }}
-                onChange={handlePaymentElementChange}
-              />
-              {/* 
-              {renderPaymentOption(
-                'paypal',
-                '',
-                <Image
-                  src="/images/financing/PayPal.png"
-                  width={100}
-                  height={50}
-                  alt="PayPal"
-                  className="h-8"
-                />
-              )} */}
-
-              {renderPaymentOption(
-                'pay-tomorrow',
-                '',
-                <Image
-                  src="/PTLogo.png"
-                  width={100}
-                  height={50}
-                  alt="PayTomorrow"
-                  className="h-8"
-                />
-              )}
-
-              {renderPaymentOption(
-                'snap-finance',
-                '',
-                <img
-                  src="https://snapfinance.com/assets/icons/logo.svg"
-                  className="w-auto h-8 mr-2"
-                  alt="Snap Finance"
-                />
-              )}
-            </div>
-
-            <div className="mt-2">
-              {activeAccordion === 'card' && (
-                <div className="flex items-center gap-1 text-primary">
-                  <InfoIcon />
-                  <p>
-                    Note: If you pay with credit card, we will ship these
-                    products to provided Billing Address
-                  </p>
+          <div className="space-y-4 py-5 px-md">
+            <div ref={newsLetterRef} className="grid gap-y-3">
+              <p className="text-lg">
+                Would you like to recive emails with special offers and new
+                production information?
+              </p>
+              <div className="grid gap-3 font-semibold">
+                <div
+                  className="flex items-center gap-2 cursor-pointer"
+                  onClick={() =>
+                    dispatch(setOrderInfo({ ...orderInfo, newsLetter: 'yes' }))
+                  }
+                >
+                  <Checkbox
+                    checked={orderInfo?.newsLetter === 'yes'}
+                    className="rounded-full data-[state=checked]:border-none bg-white h-6 w-6 border border-[#AAAAAA]"
+                  />
+                  <p className="text-sm">Yes</p>
                 </div>
-              )}
+                <div
+                  onClick={() =>
+                    dispatch(setOrderInfo({ ...orderInfo, newsLetter: 'no' }))
+                  }
+                  className="flex items-center gap-2 cursor-pointer"
+                >
+                  <Checkbox
+                    checked={orderInfo?.newsLetter === 'no'}
+                    className="rounded-full data-[state=checked]:border-none  bg-white h-6 w-6 border border-[#AAAAAA]"
+                  />
+                  <p className="text-sm">No, thanks.</p>
+                </div>
+              </div>
             </div>
           </div>
-
-          <BillingAndShippingInput
-            activeAccordion={activeAccordion}
-            billingSameAsShipping={billingSameAsShipping}
-            selectedOptionTitle={selectedOptionTitle ?? ''}
-            setBillingSameAsShipping={setShippingSameAsBilling}
-            setShouldDisableButton={setShouldDisableButton}
-          />
-        </div>
-
-        {/* Desktop Order Summary */}
-        <div className="hidden w-full col-span-11 lg:col-span-4 space-y-6 md:flex flex-col">
-          <Sticky>
-            <div className="space-y-6">{OrderSummary}</div>
-            <WhatWeAccept />
-          </Sticky>
-        </div>
-
-        {/* Mobile Order Summary */}
-        <div className="w-full md:hidden col-span-11 lg:col-span-4 space-y-6 flex flex-col">
-          <div className="space-y-6">{OrderSummary}</div>
-          <WhatWeAccept />
+          <div className="px-md">
+            <Button
+              disabled={shouldDisableButton}
+              onClick={handleContinue}
+              className="w-full font-bold mt-4 h-14 rounded-xs flex items-center"
+            >
+              <svg
+                width="21"
+                height="20"
+                viewBox="0 0 21 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12.166 3.33337H8.83268C5.68999 3.33337 4.11864 3.33337 3.14233 4.30968C2.43938 5.01264 2.24255 6.02406 2.18745 7.70837H18.8113C18.7561 6.02406 18.5593 5.01264 17.8564 4.30968C16.8801 3.33337 15.3087 3.33337 12.166 3.33337Z"
+                  fill="white"
+                />
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M12.166 16.6667H8.83268C5.68999 16.6667 4.11864 16.6667 3.14233 15.6904C2.16602 14.7141 2.16602 13.1427 2.16602 10C2.16602 9.63176 2.16602 9.28507 2.16759 8.95837H18.8311C18.8327 9.28507 18.8327 9.63176 18.8327 10C18.8327 13.1427 18.8327 14.7141 17.8564 15.6904C16.8801 16.6667 15.3087 16.6667 12.166 16.6667ZM13.87 10.2084C14.2307 10.2083 14.5613 10.2083 14.8304 10.2445C15.1266 10.2843 15.4397 10.378 15.6972 10.6355C15.9547 10.893 16.0484 11.2061 16.0883 11.5024C16.1244 11.7714 16.1244 12.1021 16.1244 12.4628V12.5373C16.1244 12.898 16.1244 13.2287 16.0883 13.4977C16.0484 13.7939 15.9547 14.1071 15.6972 14.3646C15.4397 14.6221 15.1266 14.7158 14.8304 14.7556C14.5613 14.7918 14.2306 14.7918 13.87 14.7917L13.8327 14.7917L13.7954 14.7917C13.4347 14.7918 13.104 14.7918 12.835 14.7556C12.5388 14.7158 12.2257 14.6221 11.9682 14.3646C11.7106 14.1071 11.6169 13.7939 11.5771 13.4977C11.5409 13.2287 11.541 12.898 11.541 12.5373L11.541 12.5L11.541 12.4628C11.541 12.1021 11.5409 11.7714 11.5771 11.5024C11.6169 11.2061 11.7106 10.893 11.9682 10.6355C12.2257 10.378 12.5388 10.2843 12.835 10.2445C13.104 10.2083 13.4347 10.2083 13.7954 10.2084H13.87ZM4.87435 11.25C4.87435 10.9049 5.15417 10.625 5.49935 10.625H7.16602C7.51119 10.625 7.79102 10.9049 7.79102 11.25C7.79102 11.5952 7.51119 11.875 7.16602 11.875H5.49935C5.15417 11.875 4.87435 11.5952 4.87435 11.25ZM4.87435 13.75C4.87435 13.4049 5.15417 13.125 5.49935 13.125H8.83268C9.17786 13.125 9.45768 13.4049 9.45768 13.75C9.45768 14.0952 9.17786 14.375 8.83268 14.375H5.49935C5.15417 14.375 4.87435 14.0952 4.87435 13.75Z"
+                  fill="white"
+                />
+                <path
+                  d="M12.8521 11.5193L12.8541 11.5183C12.8557 11.5174 12.8584 11.5161 12.8627 11.5143C12.8808 11.5069 12.9211 11.4941 13.0016 11.4833C13.1772 11.4597 13.4222 11.4584 13.8327 11.4584C14.2432 11.4584 14.4882 11.4597 14.6638 11.4833C14.7443 11.4941 14.7846 11.5069 14.8027 11.5143C14.8069 11.5161 14.8097 11.5174 14.8113 11.5183L14.8133 11.5194L14.8145 11.5214C14.8153 11.523 14.8167 11.5258 14.8184 11.53C14.8259 11.5482 14.8386 11.5885 14.8494 11.6689C14.873 11.8445 14.8743 12.0895 14.8743 12.5C14.8743 12.9105 14.873 13.1556 14.8494 13.3312C14.8386 13.4116 14.8259 13.4519 14.8184 13.4701C14.8167 13.4743 14.8153 13.477 14.8145 13.4786L14.8133 13.4807L14.8113 13.4818C14.8097 13.4827 14.8069 13.484 14.8027 13.4857C14.7846 13.4932 14.7443 13.506 14.6638 13.5168C14.4882 13.5404 14.2432 13.5417 13.8327 13.5417C13.4222 13.5417 13.1772 13.5404 13.0016 13.5168C12.9211 13.506 12.8808 13.4932 12.8627 13.4857C12.8584 13.484 12.8557 13.4827 12.8541 13.4818L12.852 13.4807L12.8509 13.4786C12.8501 13.477 12.8487 13.4743 12.847 13.4701C12.8395 13.4519 12.8268 13.4116 12.816 13.3312C12.7923 13.1556 12.791 12.9105 12.791 12.5C12.791 12.0895 12.7923 11.8445 12.816 11.6689C12.8268 11.5885 12.8395 11.5482 12.847 11.53C12.8487 11.5258 12.8501 11.523 12.8509 11.5214L12.8521 11.5193Z"
+                  fill="white"
+                />
+              </svg>
+              <span className="text-[18px]">Continue to Payment</span>
+            </Button>
+          </div>
         </div>
       </div>
     </div>

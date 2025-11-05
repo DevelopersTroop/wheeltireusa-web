@@ -1,18 +1,6 @@
 'use client';
-import { GooglePlacesInput } from '@/components/shared/googlePlaceInput';
+
 import { Checkbox } from '@/components/ui/checkbox';
-import {
-  setBillingAddress,
-  setShippingAddress,
-} from '@/redux/features/checkoutSlice';
-import { useAppDispatch, useTypedSelector } from '@/redux/store';
-import { TBillingAddress } from '@/types/order';
-import debounce from 'lodash.debounce';
-import isEqual from 'lodash.isequal';
-import React, { useEffect, useMemo, useRef } from 'react';
-import { useForm } from 'react-hook-form';
-import { Input } from '../ShippingAddress';
-import { PhoneInput } from './PhoneInput';
 import { FormField, FormItem } from '@/components/ui/form';
 import { Label } from '@/components/ui/label';
 import {
@@ -22,26 +10,36 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import debounce from 'lodash.debounce';
+import isEqual from 'lodash.isequal';
+import React, { useEffect, useMemo, useRef } from 'react';
+import { useForm } from 'react-hook-form';
+import { Input } from '../ShippingAddress';
+import { PhoneInput } from './PhoneInput';
+import { useAppDispatch, useTypedSelector } from '@/redux/store';
+import { TBillingAddress } from '@/types/order';
+import { useCheckout } from '@/context/checkoutContext';
+import {
+  setBillingAddress,
+  setShippingAddress,
+} from '@/redux/features/checkoutSlice';
+import { GooglePlacesInput } from '@/components/shared/googlePlaceInput';
 import { US_STATES } from '../../states';
 
 interface ICompProps {
-  selectedOptionTitle: string;
   setBillingSameAsShipping: React.Dispatch<React.SetStateAction<boolean>>;
   billingSameAsShipping: boolean;
-  activeAccordion: string;
   setShouldDisableButton: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const BillingAndShippingInput: React.FC<ICompProps> = ({
-  selectedOptionTitle,
   setBillingSameAsShipping,
   billingSameAsShipping,
-  activeAccordion,
   setShouldDisableButton,
 }) => {
-  const { orderInfo, billingAddress, shippingAddress } = useTypedSelector(
-    (state) => state.persisted.checkout
-  );
+  const { orderInfo, billingAddress, shippingAddress, selectedOptionTitle } =
+    useTypedSelector((state) => state.persisted.checkout);
+  const { setValidatedZipCode } = useCheckout();
   const dispatch = useAppDispatch();
   const prevShippingRef = useRef<TBillingAddress | null>(null);
 
@@ -92,11 +90,15 @@ export const BillingAndShippingInput: React.FC<ICompProps> = ({
 
         const finalBilling = {
           ...billingData,
-          name: `${billingData.fname?.trim() || ''} ${billingData.lname?.trim() || ''}`.trim(),
+          name: `${billingData.fname?.trim() || ''} ${
+            billingData.lname?.trim() || ''
+          }`.trim(),
         };
         const finalShipping = {
           ...shippingData,
-          name: `${shippingData.fname?.trim() || ''} ${shippingData.lname?.trim() || ''}`.trim(),
+          name: `${shippingData.fname?.trim() || ''} ${
+            shippingData.lname?.trim() || ''
+          }`.trim(),
         };
 
         if (!isEqual(billingAddress, finalBilling)) {
@@ -189,23 +191,22 @@ export const BillingAndShippingInput: React.FC<ICompProps> = ({
     }
 
     // 🔥 Disable button if anything missing/invalid or terms not accepted
-    const shouldDisable =
-      hasBillingInvalid || hasShippingInvalid || !orderInfo.termsAndConditions;
-    console.log('TCL: hasShippingInvalid', hasShippingInvalid);
-    console.log('TCL: hasBillingInvalid', hasBillingInvalid);
-
-    console.log('TCL: shouldDisable', shouldDisable);
+    const shouldDisable = hasBillingInvalid || hasShippingInvalid;
     setShouldDisableButton(shouldDisable);
   }, [
-    activeAccordion,
     billingValues, // ✅ now changes on every keystroke
     shippingValues, // ✅ now changes on every keystroke
     billingErrors,
     shippingErrors,
     orderInfo.termsAndConditions,
     selectedOptionTitle,
-    setShouldDisableButton,
   ]);
+
+  const zipCode = shippingValues.zipCode || billingValues.zipCode;
+
+  useEffect(() => {
+    setValidatedZipCode(zipCode);
+  }, [zipCode]);
 
   return (
     <div className="w-full">
@@ -249,6 +250,7 @@ export const BillingAndShippingInput: React.FC<ICompProps> = ({
                   error={shippingErrors.address1?.message}
                   value={shippingWatch('address1')}
                   onSelect={(address) => {
+                    console.log('TCL: address', address);
                     address.addressLines.forEach((line, i) => {
                       shippingSetValue(`address${i + 1}` as any, line);
                     });
@@ -284,6 +286,7 @@ export const BillingAndShippingInput: React.FC<ICompProps> = ({
 
               <Input
                 label="Country"
+                disabled
                 required
                 placeholder="Enter country"
                 error={shippingErrors.country?.message}
@@ -480,7 +483,10 @@ export const BillingAndShippingInput: React.FC<ICompProps> = ({
                         onValueChange={field.onChange}
                       >
                         <SelectTrigger className="h-14">
-                          <SelectValue />
+                          <SelectValue
+                            placeholder="Select state"
+                            className="text-[24px]"
+                          />
                         </SelectTrigger>
                         <SelectContent>
                           {US_STATES.map((s) => {
