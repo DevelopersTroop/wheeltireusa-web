@@ -39,6 +39,8 @@ export const useStripeCheckout = () => {
     existingOrderId,
     referralCode,
     affiliateDiscount,
+    taxAmount,
+    totalWithTax,
   } = useTypedSelector((state) => state.persisted.checkout);
   const initiateCheckout = async () => {
     try {
@@ -72,6 +74,8 @@ export const useStripeCheckout = () => {
         existingOrderId,
         referralCode,
         affiliateDiscount,
+        taxAmount,
+        totalWithTax,
       };
       const response = await apiInstance.post<{ data: { orderId: string } }>(
         '/payments/stripe/checkout',
