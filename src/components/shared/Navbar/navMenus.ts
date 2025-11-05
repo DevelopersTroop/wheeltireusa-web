@@ -29,20 +29,20 @@ const navMenus: NavMenu[] = [
         image: '/images/header/tires.webp',
         children: [
           {
-            label: 'All Tires By',
-            href: '/collections/product-category/tires',
+            label: 'Vehicle',
+            href: '#tiresByVehicle',
           },
           {
             label: 'Size',
-            href: '#',
+            href: '#tiresBySize',
           },
           {
             label: 'Brand',
-            href: '#',
+            href: '#tiresByBrand',
           },
           {
             label: 'Category',
-            href: '#',
+            href: '#tiresByCategory',
           },
         ],
         exploreLinks: [

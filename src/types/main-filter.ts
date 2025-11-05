@@ -69,9 +69,9 @@ export type TMainFilter = {
     };
     byTireSize: {
       list: {
-        diameters: string[];
-        widths: string[];
-        aspectRatios: string[];
+        diameters: import('./filter').TSingleFilter[];
+        widths: import('./filter').TSingleFilter[];
+        aspectRatios: import('./filter').TSingleFilter[];
       };
       current: {
         frontTireDiameter: string;

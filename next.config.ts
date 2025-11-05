@@ -63,6 +63,10 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'images.customwheeloffset.com',
+      },
+      {
+        protocol: 'https',
         hostname: 'example.com',
       },
       {

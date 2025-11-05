@@ -17,6 +17,7 @@ import { useTypedSelector } from '@/redux/store';
 import { useDispatch } from 'react-redux';
 import FilterByTireBrand from './components/FilterByTireBrand/FilterByTireBrand';
 import FilterByTireSize from './components/FilterByTireSize/FilterByTireSize';
+// import FilterByTireSizeOld from './components/FilterByTireSizeOld/FilterByTireSize';
 import FilterByVehicle from './components/FilterByVehicle/FilterByVehicle';
 
 const YmmForm = () => {
