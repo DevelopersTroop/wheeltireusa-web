@@ -1,13 +1,21 @@
 'use client';
 
+import { useStripeContext } from '@/app/checkout/stripe';
 import { useCheckout } from '@/context/checkoutContext';
 import { apiInstance } from '@/redux/apis/base';
 import { useTypedSelector } from '@/redux/store';
+import { useElements, useStripe } from '@stripe/react-stripe-js';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
+import useAuth from './useAuth';
 
 export const useStripeCheckout = () => {
-  const user = {};
+  const { cartType, subTotalCost, totalCost } = useCheckout();
+  const { paymentIntentId } = useStripeContext();
+
+  const stripe = useStripe();
+  const elements = useElements();
+  const { user } = useAuth();
   const {
     billingAddress,
     shippingAddress,
@@ -31,17 +39,17 @@ export const useStripeCheckout = () => {
     existingOrderId,
     referralCode,
     affiliateDiscount,
-    cartType,
   } = useTypedSelector((state) => state.persisted.checkout);
-  const { totalCost, subTotalCost } = useCheckout();
-  const initiateCheckout = async (paymentMethod: string) => {
+  const initiateCheckout = async () => {
     try {
+      if (!stripe || !elements) return;
       const orderData = {
         orderInfo,
         shippingMethod,
         shippingAddress,
         billingAddress,
         discount,
+        cartType,
         totalCost: parseFloat(subTotalCost).toFixed(2),
         netCost: parseFloat(totalCost).toFixed(2),
         selectedDealer,
@@ -57,7 +65,7 @@ export const useStripeCheckout = () => {
         user,
         localDealerSelected,
         localDealerInfo,
-        paymentMethod,
+        paymentMethod: 'Stripe',
         vehicleInformation,
         productBasedDiscount,
         productBasedDiscountApplied,
@@ -65,24 +73,27 @@ export const useStripeCheckout = () => {
         referralCode,
         affiliateDiscount,
       };
-
-      const response = await apiInstance.post('/payments/stripe/checkout', {
-        orderData,
-      });
-
-      const result = response;
-      console.log(
-        '🚀 ~ initiateCheckout ~ result:',
-        result.data.data.sessionUrl
+      const response = await apiInstance.post<{ data: { orderId: string } }>(
+        '/payments/stripe/checkout',
+        { orderData, paymentIntentId }
       );
 
-      if (result.data.data.sessionUrl) {
-        window.location.href = result.data.data.sessionUrl;
+      await new Promise((r) => setTimeout(r, 2000));
+
+      const { error } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout?step=3&order_id=${response.data.data.orderId}&method=stripe`,
+        },
+        redirect: 'if_required',
+      });
+      if (error && error.message) {
+        window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}/checkout?step=2&order_status=false`;
       }
     } catch (err) {
-      const error = err as AxiosError<{ errors: string[]; message: string }>;
-      toast('Error', {
-        description: error.response?.data.message,
+      window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}/checkout?step=2&order_status=false`;
+      toast.error('Error', {
+        description: (err as Error).message,
       });
     }
   };

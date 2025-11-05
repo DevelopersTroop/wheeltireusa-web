@@ -14,19 +14,6 @@ import { useForm } from 'react-hook-form';
 import { Input } from '../ShippingAddress';
 import { PhoneInput } from './PhoneInput';
 
-const paymentMethodsRequiringValidation = new Set([
-  'card',
-  'affirm',
-  'cashapp',
-  'klarna',
-  'paypal',
-  'applepay',
-  'google_pay',
-  'amazon_pay',
-  'pay-tomorrow',
-  'snap-finance',
-]);
-
 interface ICompProps {
   selectedOptionTitle: string;
   setBillingSameAsShipping: React.Dispatch<React.SetStateAction<boolean>>;
@@ -168,8 +155,6 @@ export const BillingAndShippingInput: React.FC<ICompProps> = ({
   const shippingValues = shippingWatch();
 
   useEffect(() => {
-    if (!paymentMethodsRequiringValidation.has(activeAccordion)) return;
-
     // 🧩 Check billing form completeness and errors
     const hasBillingInvalid = requiredFields.some((field) => {
       const value = billingValues[field];

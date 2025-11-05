@@ -1,16 +1,6 @@
 'use client';
 
 import {
-  revokeCouponCode,
-  setBillingAddress,
-  setOrderId,
-  setOrderInfo,
-  setShippingAddress,
-} from '@/redux/features/checkoutSlice';
-import { useTypedSelector } from '@/redux/store';
-import { TBillingAddress } from '@/types/order';
-import { apiBaseUrl } from '@/utils/api';
-import {
   TSnapCheckoutReturn,
   TSnapInputCheckout,
 } from '@/components/shared/snapLoader';
@@ -25,31 +15,38 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
+import { useCheckout } from '@/context/checkoutContext';
+import { usePaypalCheckout } from '@/hooks/usePaypalCheckout';
+import { usePaytomorrowCheckout } from '@/hooks/usePayTomorrowCheckout';
+import { useStripeCheckout } from '@/hooks/useStripeCheckout';
 import { getLatestOrderId, useSnapFinanceOrderData } from '@/lib/order';
 import { getSnapFinanceToken } from '@/lib/snapFinance';
-import isEqual from 'lodash.isequal';
+import {
+  revokeCouponCode,
+  setOrderId,
+  setOrderInfo,
+} from '@/redux/features/checkoutSlice';
+import { useTypedSelector } from '@/redux/store';
+import { apiBaseUrl } from '@/utils/api';
 import { AlertCircle, InfoIcon, Loader, ShoppingCart, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import Sticky from 'react-sticky-el';
+import { toast } from 'sonner';
 import { BillingAndShippingInput } from './BillingAndShippingInput';
 import { ICheckoutStepProps } from './StepOne';
-import { useStripeCheckout } from '@/hooks/useStripeCheckout';
-import { usePaytomorrowCheckout } from '@/hooks/usePayTomorrowCheckout';
-import { toast } from 'sonner';
-import { useCheckout } from '@/context/checkoutContext';
-import { usePaypalCheckout } from '@/hooks/usePaypalCheckout';
+import { PaymentElement } from '@stripe/react-stripe-js';
+import { StripePaymentElement } from '@stripe/stripe-js';
 
 // StepFour Component
 export const StepFour: React.FC<ICheckoutStepProps> = () => {
   // const { showNotice } = useShippingRestrictionLocationNotice();
 
   // Component state
-  const [activeAccordion, setActiveAccordion] = useState('card');
+  const [activeAccordion, setActiveAccordion] = useState('');
 
   const [showTermsAlert, setShowTermsAlert] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -212,15 +209,6 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
 
   const processPayment = useCallback(async () => {
     switch (activeAccordion) {
-      case 'card':
-      case 'affirm':
-      case 'cashapp':
-      case 'klarna':
-      case 'applepay':
-      case 'google_pay':
-      case 'amazon_pay':
-        await initiateCheckout(activeAccordion);
-        break;
       case 'paypal':
         await initiatePaypalCheckout();
         break;
@@ -231,7 +219,7 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
         await handleSnapFinanceCheckout();
         break;
       default:
-        console.warn('No valid payment method selected.');
+        await initiateCheckout();
     }
   }, [
     activeAccordion,
@@ -315,20 +303,23 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
       <div
         key={method}
         onClick={() => toggleAccordion(method)}
-        className="relative border rounded-lg p-2.5 cursor-pointer"
+        className="relative border border-[#f0efef] rounded-[12px] px-2.5 h-[48px] cursor-pointer"
       >
-        <div className="flex items-center justify-between">
-          <div className="flex items-center cursor-pointer min-w-0">
-            <div className="absolute left-2.5 top-1/2 -translate-y-1/2">
-              <span
-                className={`inline-block w-5 h-5 rounded-full border ${
-                  activeAccordion === method
-                    ? 'border-4 border-black'
-                    : 'border-gray-600'
-                }`}
-              />
+        <div className="flex items-center justify-between h-full">
+          <div className="flex items-center cursor-pointer min-w-0 gap-3">
+            <div className="ml-2 flex items-center">
+              {activeAccordion === method ? (
+                <div className="relative w-[15px] h-[15px]">
+                  <span className="absolute inset-0 rounded-full border-2 border-black"></span>
+                  <span className="absolute inset-[4px] rounded-full bg-black"></span>
+                </div>
+              ) : (
+                <span
+                  className={`inline-block w-[15px] h-[15px] rounded-full border-[2px] border-[#6d6e78]`}
+                />
+              )}
             </div>
-            <div className="flex items-center pl-10">
+            <div className="flex items-center h-full">
               {icon}
               {label && (
                 <span className="font-semibold text-gray-900 text-xl truncate">
@@ -520,6 +511,11 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
     ]
   );
 
+  const paymentElement = useRef<StripePaymentElement | null>(null);
+  useEffect(() => {
+    if (paymentElement?.current) paymentElement?.current.collapse();
+  }, [activeAccordion]);
+
   return (
     <div>
       {/* Payment Error Alert */}
@@ -549,15 +545,22 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
 
           <div>
             <div className="flex flex-col space-y-4">
-              {renderPaymentOption(
-                'card',
-                'Card',
-                <img
-                  src="https://js.stripe.com/v3/fingerprinted/img/card-ce24697297bd3c6a00fdd2fb6f760f0d.svg"
-                  className="w-4 h-4 mr-2"
-                  alt="Credit Card"
-                />
-              )}
+              <PaymentElement
+                onFocus={() => {
+                  setActiveAccordion('');
+                }}
+                onReady={(element) => {
+                  paymentElement.current = element;
+                }}
+                options={{
+                  layout: {
+                    type: 'accordion',
+                    spacedAccordionItems: true,
+                    radios: true,
+                    visibleAccordionItemsCount: 10,
+                  },
+                }}
+              />
               {/* 
               {renderPaymentOption(
                 'paypal',
@@ -583,35 +586,6 @@ export const StepFour: React.FC<ICheckoutStepProps> = () => {
                 />
               )}
 
-              {renderPaymentOption(
-                'affirm',
-                'Affirm',
-                <img
-                  src="https://js.stripe.com/v3/fingerprinted/img/affirm-bce57680b3d99bf1f1390bda5d024909.svg"
-                  className="w-4 h-4 mr-2"
-                  alt="Affirm"
-                />
-              )}
-
-              {renderPaymentOption(
-                'amazon_pay',
-                '',
-                <img
-                  src="https://amazon-pay.brightspotcdn.com/75/8c/05780a7c41eb91759c77310a6f85/amazonpay-logo-rgb-clr.svg"
-                  className="w-full h-7 mr-2"
-                  alt="Amazon Pay"
-                />
-              )}
-
-              {renderPaymentOption(
-                'cashapp',
-                'Cash App Pay',
-                <img
-                  src="https://js.stripe.com/v3/fingerprinted/img/payment-methods/icon-pm-cashapp-981164a833e417d28a8ac2684fda2324.svg"
-                  className="w-4 h-4 mr-2"
-                  alt="Cash App"
-                />
-              )}
               {renderPaymentOption(
                 'snap-finance',
                 '',
