@@ -60,7 +60,7 @@ const TireQuantity: React.FC<TireQuantityProps> = ({
       {/* Decrease quantity button */}
       <button
         onClick={() => updateQuantity('decrease')}
-        disabled={isDisabledDecrease}
+        disabled={true}
         className="rounded-tl-xl rounded-bl-xl border border-[#cfcfcf] p-3 flex gap-2 justify-center items-center relative w-10 h-10 bg-white disabled:cursor-not-allowed disabled:text-gray-500"
       >
         <Minus size={18} />
