@@ -33,7 +33,7 @@ export function isSale(
 export function getPrice(
   product: TInventoryItem | TProductInfo | TCartProduct
 ): number {
-  const numberMap = Number(product?.price);
+  const numberMap = Number(product?.sellingPrice);
   const numberMsrp = Number(product?.msrp);
   const msrp = Number.isNaN(numberMsrp) || !numberMsrp ? 0 : numberMsrp;
   const map = Number.isNaN(numberMap) || !numberMap ? 0 : numberMap;

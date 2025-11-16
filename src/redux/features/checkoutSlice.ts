@@ -342,6 +342,9 @@ const checkoutSlice = createSlice({
     setPaymentMethod: (state, action: PayloadAction<string>) => {
       state.paymentMethod = action.payload;
     },
+    setShippingCharge: (state, action: PayloadAction<number>) => {
+      state.deliveryCharge = action.payload;
+    },
   },
 });
 
@@ -378,4 +381,5 @@ export const {
   updateValidatedZipCode,
   setTaxAmount,
   setPaymentMethod,
+  setShippingCharge,
 } = checkoutSlice.actions;

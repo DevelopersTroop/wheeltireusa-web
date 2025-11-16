@@ -11,8 +11,10 @@ import { loadStripe, StripeElementsOptions } from '@stripe/stripe-js';
 import { useCheckout } from '@/context/checkoutContext';
 import { useAppDispatch, useTypedSelector } from '@/redux/store';
 import { apiInstance } from '@/redux/apis/base';
-import { setTaxAmount } from '@/redux/features/checkoutSlice';
-import LoadingSpinner from '@/components/shared/loading/spinner';
+import {
+  setShippingCharge,
+  setTaxAmount,
+} from '@/redux/features/checkoutSlice';
 import { useSearchParams } from 'next/navigation';
 
 // --------------------
@@ -40,7 +42,7 @@ export default function StripeProvider({ children }: React.PropsWithChildren) {
   const searchParams = useSearchParams();
   const step = searchParams.get('step');
   console.log('TCL: StripeProvider -> step', step);
-  const { billingAddress, shippingAddress } = useTypedSelector(
+  const { billingAddress, shippingAddress, productsInfo } = useTypedSelector(
     (state) => state.persisted.checkout
   );
   const [loading, setLoading] = useState(false);
@@ -70,12 +72,17 @@ export default function StripeProvider({ children }: React.PropsWithChildren) {
           id: string;
           taxAmount: number;
           totalWithTax: number;
+          shippingCharge: number;
         };
       }>('/payments/stripe/intent', {
         amount,
         currency: 'USD',
         billingAddress,
         shippingAddress,
+        products: productsInfo.map((p) => ({
+          sku: p.sku,
+          quantity: p.quantity,
+        })),
       })
       .then((res) => {
         console.log('StripeProvider -> PaymentIntent created:', res.data);
@@ -87,6 +94,7 @@ export default function StripeProvider({ children }: React.PropsWithChildren) {
             totalWithTax: res.data.data.totalWithTax / 100,
           })
         );
+        dispatch(setShippingCharge(res.data.data.shippingCharge));
       })
       .catch((err) => {
         setErr(

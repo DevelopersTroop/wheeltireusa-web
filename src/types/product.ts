@@ -72,6 +72,7 @@ export type TInventoryItem = TInventoryBase & {
   sidewall: string | null;
   loadRating: string | null;
   rawSize: string | null;
+  sellingPrice: number | null;
   shipWeight: string | null;
   shipWidth: string | null;
   shipHeight: string | null;
