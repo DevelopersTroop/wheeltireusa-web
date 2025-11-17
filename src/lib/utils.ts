@@ -38,7 +38,7 @@ export function parseTireSize(size: string) {
   };
 }
 export function removeDuplicateDataWithRemovingFloatingPoint(data: string[]) {
-  let uniqueData: number[] = [];
+  const uniqueData: number[] = [];
   for (const datum of data) {
     if (parseFloat(datum)) {
       uniqueData.push(Math.floor(parseFloat(datum)));

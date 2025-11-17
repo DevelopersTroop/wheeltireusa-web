@@ -72,7 +72,8 @@ const TireSize = (props: TireSizeProps) => {
                         const uniqueValues = removeDuplicateDataWithRemovingFloatingPoint(values);
                         return <>
                           {uniqueValues.map((item) => (
-                            <SelectItem
+                            <SelectItem 
+                              key={item}
                               value={item.toString()}
                             >
                               {item}
@@ -104,7 +105,8 @@ const TireSize = (props: TireSizeProps) => {
                         const uniqueValues = removeDuplicateDataWithRemovingFloatingPoint(values);
                         return <>
                           {uniqueValues.map((item) => (
-                            <SelectItem
+                            <SelectItem 
+                              key={item}
                               value={item.toString()}
                             >
                               {item}
@@ -137,6 +139,7 @@ const TireSize = (props: TireSizeProps) => {
                         return <>
                           {uniqueValues.map((item) => (
                             <SelectItem
+                              key={item}
                               value={item.toString()}
                             >
                               {item}
@@ -174,6 +177,7 @@ const TireSize = (props: TireSizeProps) => {
                           return <>
                             {uniqueValues.map((item) => (
                               <SelectItem
+                                key={item}
                                 value={item.toString()}
                               >
                                 {item}
@@ -206,6 +210,7 @@ const TireSize = (props: TireSizeProps) => {
                           return <>
                             {uniqueValues.map((item) => (
                               <SelectItem
+                                key={item}
                                 value={item.toString()}
                               >
                                 {item}
@@ -238,6 +243,7 @@ const TireSize = (props: TireSizeProps) => {
                           return <>
                             {uniqueValues.map((item) => (
                               <SelectItem
+                                key={item}
                                 value={item.toString()}
                               >
                                 {item}
