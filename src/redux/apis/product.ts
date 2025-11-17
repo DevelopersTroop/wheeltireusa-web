@@ -60,6 +60,12 @@ const products = baseApi.injectEndpoints({
         });
 
         console.log('Shallow params', shallowParams);
+
+        if (shallowParams.frontParams && !shallowParams.rearParams) {
+          Object.assign(shallowParams, {
+            rearParams: shallowParams.frontParams,
+          });
+        }
         const result = await baseQuery({
           url: '/products/list',
           method: 'POST',

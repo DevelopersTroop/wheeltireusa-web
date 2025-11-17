@@ -13,6 +13,7 @@ import NoProductsFound from '../NoProductsFound';
 import ProductPagination from '../ProductPagination';
 import TireCard from './_components/TireCard/TireCard';
 import ActiveFiltersWithSorting from '../ActiveFiltersWithSorting';
+import { useMemo } from 'react';
 
 // Type definition for page props, optional page parameter
 type ProductsPageProps = {
@@ -24,11 +25,13 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
   const { categorySlug } = useParams(); // Getting the category slug from the URL parameters
   const { filters } = useFilter();
   const { data, isLoading, isFetching } = useGetProductsQuery(
-    { page, category: 'tire', ...filters },
+    {
+      page,
+      category: 'tire',
+      ...filters,
+    },
     { refetchOnMountOrArgChange: true }
   );
-
-  console.log('data =======    ', data);
 
   return (
     <>
