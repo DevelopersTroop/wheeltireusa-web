@@ -303,44 +303,46 @@ export const BillingAndShippingInput: React.FC<ICompProps> = ({
                 {...shippingRegister('city', { required: 'City is required' })}
               />
 
-              <FormField
-                render={({ field, fieldState }) => {
-                  return (
-                    <FormItem>
-                      <Label className="block text-lg mb-1 font-medium leading-[24px]">
-                        State <span className="text-red-600">*</span>
-                      </Label>
-                      <Select
-                        value={field.value}
-                        onValueChange={field.onChange}
-                      >
-                        <SelectTrigger className="h-14">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {US_STATES.map((s) => {
-                            return (
-                              <SelectItem
-                                key={s.abbreviation}
-                                value={s.abbreviation}
-                              >
-                                {s.name}
-                              </SelectItem>
-                            );
-                          })}
-                        </SelectContent>
-                      </Select>
-                      {fieldState.error?.message && (
-                        <p className="text-red-600">
-                          {fieldState.error?.message}
-                        </p>
-                      )}
-                    </FormItem>
-                  );
-                }}
-                control={shippingControl}
-                name="cityState"
-              />
+              <div className="w-full">
+                <FormField
+                  render={({ field, fieldState }) => {
+                    return (
+                      <FormItem>
+                        <Label className="block text-lg mb-1 font-medium leading-[24px]">
+                          State <span className="text-red-600">*</span>
+                        </Label>
+                        <Select
+                          value={field.value}
+                          onValueChange={field.onChange}
+                        >
+                          <SelectTrigger className="h-14! rounded-lg w-full">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {US_STATES.map((s) => {
+                              return (
+                                <SelectItem
+                                  key={s.abbreviation}
+                                  value={s.abbreviation}
+                                >
+                                  {s.name}
+                                </SelectItem>
+                              );
+                            })}
+                          </SelectContent>
+                        </Select>
+                        {fieldState.error?.message && (
+                          <p className="text-red-600">
+                            {fieldState.error?.message}
+                          </p>
+                        )}
+                      </FormItem>
+                    );
+                  }}
+                  control={shippingControl}
+                  name="cityState"
+                />
+              </div>
 
               <PhoneInput
                 billingErrors={shippingErrors}
@@ -471,47 +473,46 @@ export const BillingAndShippingInput: React.FC<ICompProps> = ({
                 {...billingRegister('city', { required: 'City is required' })}
               />
 
-              <FormField
-                render={({ field, fieldState }) => {
-                  return (
-                    <FormItem>
-                      <Label className="block text-lg mb-1 font-medium leading-[24px]">
-                        State <span className="text-red-600">*</span>
-                      </Label>
-                      <Select
-                        value={field.value}
-                        onValueChange={field.onChange}
-                      >
-                        <SelectTrigger className="h-14">
-                          <SelectValue
-                            placeholder="Select state"
-                            className="text-[24px]"
-                          />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {US_STATES.map((s) => {
-                            return (
-                              <SelectItem
-                                key={s.abbreviation}
-                                value={s.abbreviation}
-                              >
-                                {s.name}
-                              </SelectItem>
-                            );
-                          })}
-                        </SelectContent>
-                      </Select>
-                      {fieldState.error?.message && (
-                        <p className="text-red-600">
-                          {fieldState.error?.message}
-                        </p>
-                      )}
-                    </FormItem>
-                  );
-                }}
-                control={billingControl}
-                name="cityState"
-              />
+              <div className="w-full">
+                <FormField
+                  render={({ field, fieldState }) => {
+                    return (
+                      <FormItem>
+                        <Label className="block text-lg mb-1 font-medium leading-[24px]">
+                          State <span className="text-red-600">*</span>
+                        </Label>
+                        <Select
+                          value={field.value}
+                          onValueChange={field.onChange}
+                        >
+                          <SelectTrigger className="h-14! rounded-lg w-full">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {US_STATES.map((s) => {
+                              return (
+                                <SelectItem
+                                  key={s.abbreviation}
+                                  value={s.abbreviation}
+                                >
+                                  {s.name}
+                                </SelectItem>
+                              );
+                            })}
+                          </SelectContent>
+                        </Select>
+                        {fieldState.error?.message && (
+                          <p className="text-red-600">
+                            {fieldState.error?.message}
+                          </p>
+                        )}
+                      </FormItem>
+                    );
+                  }}
+                  control={shippingControl}
+                  name="cityState"
+                />
+              </div>
 
               <PhoneInput
                 billingErrors={billingErrors}
