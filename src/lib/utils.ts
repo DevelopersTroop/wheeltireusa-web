@@ -37,3 +37,12 @@ export function parseTireSize(size: string) {
     diameter: parseInt(match[3], 10).toString(), // 24
   };
 }
+export function removeDuplicateDataWithRemovingFloatingPoint(data: string[]) {
+  let uniqueData: number[] = [];
+  for (const datum of data) {
+    if (parseFloat(datum)) {
+      uniqueData.push(Math.floor(parseFloat(datum)));
+    }
+  }
+  return Array.from(new Set(uniqueData));
+}

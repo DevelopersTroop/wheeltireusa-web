@@ -13,6 +13,8 @@ import { TSingleFilter } from '@/types/filter';
 import { Controller } from 'react-hook-form';
 import FilterHeading from '../../../template/FilterHeading';
 import useTireSize from './useTireSize';
+import { Fragment } from 'react';
+import { removeDuplicateDataWithRemovingFloatingPoint } from '@/lib/utils';
 
 export type TireSizeProps = {
   width: TSingleFilter[];
@@ -65,14 +67,19 @@ const TireSize = (props: TireSizeProps) => {
                     </SelectTrigger>
                     <SelectContent className="z-[2000]">
                       {/* <SelectItem value="">Width</SelectItem> */}
-                      {props.width.map((item) => (
-                        <SelectItem
-                          key={item.value}
-                          value={item.value.toString()}
-                        >
-                          {item.value}
-                        </SelectItem>
-                      ))}
+                      {(() => {
+                        const values = props.width.map((item) => item.value.toString());
+                        const uniqueValues = removeDuplicateDataWithRemovingFloatingPoint(values);
+                        return <>
+                          {uniqueValues.map((item) => (
+                            <SelectItem
+                              value={item.toString()}
+                            >
+                              {item}
+                            </SelectItem>
+                          ))}
+                        </>
+                      })()}
                     </SelectContent>
                   </Select>
                 )}
@@ -92,14 +99,19 @@ const TireSize = (props: TireSizeProps) => {
                     </SelectTrigger>
                     <SelectContent className="z-[2000]">
                       {/* <SelectItem value="">Ratio</SelectItem> */}
-                      {props.aspectRatio.map((item) => (
-                        <SelectItem
-                          key={item.value}
-                          value={item.value.toString()}
-                        >
-                          {item.value}
-                        </SelectItem>
-                      ))}
+                      {(() => {
+                        const values = props.aspectRatio.map((item) => item.value.toString());
+                        const uniqueValues = removeDuplicateDataWithRemovingFloatingPoint(values);
+                        return <>
+                          {uniqueValues.map((item) => (
+                            <SelectItem
+                              value={item.toString()}
+                            >
+                              {item}
+                            </SelectItem>
+                          ))}
+                        </>
+                      })()}
                     </SelectContent>
                   </Select>
                 )}
@@ -119,14 +131,19 @@ const TireSize = (props: TireSizeProps) => {
                     </SelectTrigger>
                     <SelectContent className="z-[2000]">
                       {/* <SelectItem value="">Diameter</SelectItem> */}
-                      {props.diameter.map((item) => (
-                        <SelectItem
-                          key={item.value}
-                          value={item.value.toString()}
-                        >
-                          {item.value}
-                        </SelectItem>
-                      ))}
+                      {(() => {
+                        const values = props.diameter.map((item) => item.value.toString());
+                        const uniqueValues = removeDuplicateDataWithRemovingFloatingPoint(values);
+                        return <>
+                          {uniqueValues.map((item) => (
+                            <SelectItem
+                              value={item.toString()}
+                            >
+                              {item}
+                            </SelectItem>
+                          ))}
+                        </>
+                      })()}
                     </SelectContent>
                   </Select>
                 )}
@@ -151,14 +168,19 @@ const TireSize = (props: TireSizeProps) => {
                       </SelectTrigger>
                       <SelectContent className="z-[2000]">
                         {/* <SelectItem value="">Width</SelectItem> */}
-                        {props.width.map((item) => (
-                          <SelectItem
-                            key={item.value}
-                            value={item.value.toString()}
-                          >
-                            {item.value}
-                          </SelectItem>
-                        ))}
+                        {(() => {
+                          const values = props.width.map((item) => item.value.toString());
+                          const uniqueValues = removeDuplicateDataWithRemovingFloatingPoint(values);
+                          return <>
+                            {uniqueValues.map((item) => (
+                              <SelectItem
+                                value={item.toString()}
+                              >
+                                {item}
+                              </SelectItem>
+                            ))}
+                          </>
+                        })()}
                       </SelectContent>
                     </Select>
                   )}
@@ -178,14 +200,19 @@ const TireSize = (props: TireSizeProps) => {
                       </SelectTrigger>
                       <SelectContent className="z-[2000]">
                         {/* <SelectItem value="">Ratio</SelectItem> */}
-                        {props.aspectRatio.map((item) => (
-                          <SelectItem
-                            key={item.value}
-                            value={item.value.toString()}
-                          >
-                            {item.value}
-                          </SelectItem>
-                        ))}
+                        {(() => {
+                          const values = props.aspectRatio.map((item) => item.value.toString());
+                          const uniqueValues = removeDuplicateDataWithRemovingFloatingPoint(values);
+                          return <>
+                            {uniqueValues.map((item) => (
+                              <SelectItem
+                                value={item.toString()}
+                              >
+                                {item}
+                              </SelectItem>
+                            ))}
+                          </>
+                        })()}
                       </SelectContent>
                     </Select>
                   )}
@@ -205,14 +232,19 @@ const TireSize = (props: TireSizeProps) => {
                       </SelectTrigger>
                       <SelectContent className="z-[2000]">
                         {/* <SelectItem value="">Diameter</SelectItem> */}
-                        {props.diameter.map((item) => (
-                          <SelectItem
-                            key={item.value}
-                            value={item.value.toString()}
-                          >
-                            {item.value}
-                          </SelectItem>
-                        ))}
+                        {(() => {
+                          const values = props.diameter.map((item) => item.value.toString());
+                          const uniqueValues = removeDuplicateDataWithRemovingFloatingPoint(values);
+                          return <>
+                            {uniqueValues.map((item) => (
+                              <SelectItem
+                                value={item.toString()}
+                              >
+                                {item}
+                              </SelectItem>
+                            ))}
+                          </>
+                        })()}
                       </SelectContent>
                     </Select>
                   )}
