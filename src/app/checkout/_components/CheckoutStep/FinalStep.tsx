@@ -107,7 +107,7 @@ export const FinalStep: React.FC = () => {
 
         let response;
 
-        if (method==="stripe") {
+        if (method === 'stripe') {
           // Stripe
           response = await fetch(
             `${apiBaseUrl}/payments/stripe/verify-payment?orderId=${orderId}`
@@ -267,11 +267,17 @@ export const FinalStep: React.FC = () => {
           <OrderSummary
             totalCost={orderSuccessData?.data?.totalCost}
             taxAmount={orderSuccessData?.data?.taxAmount}
-            totalWithTax={orderSuccessData?.data?.totalWithTax||orderSuccessData?.data?.netCost?parseFloat(orderSuccessData?.data?.netCost):0}
+            totalWithTax={
+              orderSuccessData?.data?.totalWithTax ||
+              orderSuccessData?.data?.netCost
+                ? parseFloat(orderSuccessData?.data?.netCost)
+                : 0
+            }
             netCost={orderSuccessData?.data?.netCost}
             cartType={orderSuccessData?.data?.cartType}
             discount={orderSuccessData?.data?.discount}
             zipCode={orderSuccessData?.data?.shippingAddress?.zipCode}
+            deliveryCharge={orderSuccessData?.data?.deliveryCharge}
           />
         </div>
       </div>

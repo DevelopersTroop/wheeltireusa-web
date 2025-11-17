@@ -5,19 +5,14 @@ import {
   TSnapInputCheckout,
 } from '@/components/shared/snapLoader';
 import { WhatWeAccept } from '@/components/shared/what-we-accept';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
 import { useCheckout } from '@/context/checkoutContext';
+import { useApplyCoupon } from '@/hooks/useApplyCoupon';
 import { usePaypalCheckout } from '@/hooks/usePaypalCheckout';
 import { usePaytomorrowCheckout } from '@/hooks/usePayTomorrowCheckout';
+import { useShippingRestrictionLocationNotice } from '@/hooks/useShippingRestriction';
 import { useStripeCheckout } from '@/hooks/useStripeCheckout';
 import { getLatestOrderId, useSnapFinanceOrderData } from '@/lib/order';
 import { getSnapFinanceToken } from '@/lib/snapFinance';
@@ -29,6 +24,11 @@ import {
 } from '@/redux/features/checkoutSlice';
 import { useTypedSelector } from '@/redux/store';
 import { apiBaseUrl } from '@/utils/api';
+import { PaymentElement } from '@stripe/react-stripe-js';
+import {
+  StripePaymentElement,
+  StripePaymentElementChangeEvent,
+} from '@stripe/stripe-js';
 import { AlertCircle, InfoIcon, Loader, ShoppingCart, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -37,15 +37,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Sticky from 'react-sticky-el';
 import { toast } from 'sonner';
-import { BillingAndShippingInput } from './BillingAndShippingInput';
 import { ICheckoutStepProps } from './StepOne';
-import { PaymentElement } from '@stripe/react-stripe-js';
-import {
-  StripePaymentElement,
-  StripePaymentElementChangeEvent,
-} from '@stripe/stripe-js';
-import { useShippingRestrictionLocationNotice } from '@/hooks/useShippingRestriction';
-import { useApplyCoupon } from '@/hooks/useApplyCoupon';
 
 // StepFour Component
 export const StepThree: React.FC<ICheckoutStepProps> = () => {
@@ -80,6 +72,7 @@ export const StepThree: React.FC<ICheckoutStepProps> = () => {
     couponCode,
     taxAmount,
     totalWithTax,
+    deliveryCharge,
   } = useTypedSelector((state) => state.persisted.checkout);
   const [isCard, setIsCard] = useState(false);
 
@@ -413,6 +406,8 @@ export const StepThree: React.FC<ICheckoutStepProps> = () => {
                   <span className="text-[#210203] text-2xl font-bold">
                     {cartType === 'CENTER_CAP_ONLY' ? (
                       '$14.99'
+                    ) : deliveryCharge ? (
+                      `$${deliveryCharge.toFixed(2)}`
                     ) : !showNotice ? (
                       'Free'
                     ) : (
