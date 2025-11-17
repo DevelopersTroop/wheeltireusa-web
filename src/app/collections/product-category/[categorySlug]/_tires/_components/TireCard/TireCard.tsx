@@ -40,7 +40,7 @@ const TireCard = ({ products, wheelInfo }: TireCardProps) => {
       <div className={`flex flex-col gap-4 ${!isSquare && 'border-b'}`}>
         <div className="px-4  flex flex-col gap-2 justify-center items-start relative w-full">
           <div className="flex justify-between items-center w-full">
-            <h1 className="text-[#464853] text-lg">Brand Name</h1>
+            <h1 className="text-[#464853] text-lg">{products?.[0]?.brand}</h1>
             <button className="border border-[#CCC9CF] px-3 py-2 rounded-md text-[14px]">
               Grand Touring Summer
             </button>
