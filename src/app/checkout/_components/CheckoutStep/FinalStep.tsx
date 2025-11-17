@@ -13,6 +13,10 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
+import StaticImage from '@/components/ui/staticImage';
+import { useCheckout } from '@/context/checkoutContext';
+import useAuth from '@/hooks/useAuth';
+import { emptyCart } from '@/redux/features/cartSlice';
 import {
   revokeCouponCode,
   updateOrderSuccessData,
@@ -21,6 +25,7 @@ import { useTypedSelector } from '@/redux/store';
 import { TOrder } from '@/types/order';
 import { triggerGaPurchaseEvent } from '@/utils/analytics';
 import { apiBaseUrl } from '@/utils/api';
+import { toast } from 'sonner';
 import { CartSummary } from './CartSummary';
 import { CreateAccountSection } from './CreateAccountSection';
 import { DeliveryOptions } from './DeliveryOptions';
@@ -28,11 +33,6 @@ import { OrderConfirmation } from './OrderConfirmation';
 import { OrderSummary } from './OrderSummary';
 import { PaymentInfo } from './PaymentInfo';
 import { ShippingDetails } from './ShippingDetails';
-import StaticImage from '@/components/ui/staticImage';
-import { useCheckout } from '@/context/checkoutContext';
-import useAuth from '@/hooks/useAuth';
-import { emptyCart } from '@/redux/features/cartSlice';
-import { toast } from 'sonner';
 
 // Interface for checkout step props
 
