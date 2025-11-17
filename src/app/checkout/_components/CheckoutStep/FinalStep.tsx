@@ -22,7 +22,7 @@ import {
   updateOrderSuccessData,
 } from '@/redux/features/checkoutSlice';
 import { useTypedSelector } from '@/redux/store';
-import { TOrder } from '@/types/order';
+import { TOrder, TOrderData } from '@/types/order';
 import { triggerGaPurchaseEvent } from '@/utils/analytics';
 import { apiBaseUrl } from '@/utils/api';
 import { toast } from 'sonner';
@@ -177,8 +177,8 @@ export const FinalStep: React.FC = () => {
   // Render loading state while verifying payment
   if (verifying) {
     return (
-      <div className="min-h-[60vh] flex items-center justify-center p-4">
-        <div className="w-full max-w-md space-y-4">
+      <div className="min-h-[60vh]  flex items-center justify-center p-4">
+        <div className="w-full max-w-2xl space-y-4">
           <div className="text-center pb-2">
             <div className="mx-auto mb-4 bg-blue-50 w-16 h-16 rounded-full flex items-center justify-center">
               <Clock className="h-8 w-8 text-blue-500 animate-pulse" />
@@ -268,10 +268,11 @@ export const FinalStep: React.FC = () => {
             totalCost={orderSuccessData?.data?.totalCost}
             taxAmount={orderSuccessData?.data?.taxAmount}
             totalWithTax={
-              orderSuccessData?.data?.totalWithTax ||
-              orderSuccessData?.data?.netCost
-                ? parseFloat(orderSuccessData?.data?.netCost)
-                : 0
+              orderSuccessData?.data?.totalWithTax
+                ? orderSuccessData?.data?.totalWithTax
+                : orderSuccessData?.data?.netCost
+                  ? parseFloat(orderSuccessData?.data?.netCost)
+                  : 0
             }
             netCost={orderSuccessData?.data?.netCost}
             cartType={orderSuccessData?.data?.cartType}

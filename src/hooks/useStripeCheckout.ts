@@ -41,6 +41,7 @@ export const useStripeCheckout = () => {
     affiliateDiscount,
     taxAmount,
     totalWithTax,
+    deliveryCharge,
   } = useTypedSelector((state) => state.persisted.checkout);
   const initiateCheckout = async () => {
     try {
@@ -58,7 +59,12 @@ export const useStripeCheckout = () => {
         selectedOptionTitle,
         requestedDealer,
         selectedDealerInfo,
-        deliveryCharge: cartType === 'CENTER_CAP_ONLY' ? 14.99 : 0,
+        deliveryCharge:
+          cartType === 'CENTER_CAP_ONLY'
+            ? 14.99
+            : deliveryCharge
+              ? deliveryCharge
+              : 0,
         isAccountCreated,
         productsInfo,
         isCouponApplied,
