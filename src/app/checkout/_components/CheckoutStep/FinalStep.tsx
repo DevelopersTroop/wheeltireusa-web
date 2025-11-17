@@ -22,7 +22,7 @@ import {
   updateOrderSuccessData,
 } from '@/redux/features/checkoutSlice';
 import { useTypedSelector } from '@/redux/store';
-import { TOrder } from '@/types/order';
+import { TOrder, TOrderData } from '@/types/order';
 import { triggerGaPurchaseEvent } from '@/utils/analytics';
 import { apiBaseUrl } from '@/utils/api';
 import { toast } from 'sonner';
@@ -268,10 +268,11 @@ export const FinalStep: React.FC = () => {
             totalCost={orderSuccessData?.data?.totalCost}
             taxAmount={orderSuccessData?.data?.taxAmount}
             totalWithTax={
-              orderSuccessData?.data?.totalWithTax ||
-              orderSuccessData?.data?.netCost
-                ? parseFloat(orderSuccessData?.data?.netCost)
-                : 0
+              orderSuccessData?.data?.totalWithTax
+                ? orderSuccessData?.data?.totalWithTax
+                : orderSuccessData?.data?.netCost
+                  ? parseFloat(orderSuccessData?.data?.netCost)
+                  : 0
             }
             netCost={orderSuccessData?.data?.netCost}
             cartType={orderSuccessData?.data?.cartType}
