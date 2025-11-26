@@ -597,7 +597,7 @@ export const StepThree: React.FC<ICheckoutStepProps> = () => {
                 'paypal',
                 '',
                 <Image
-                  src="/paypal.png"
+                  src="/images/financing/PayPal.png"
                   width={100}
                   height={50}
                   alt="PayPal"
