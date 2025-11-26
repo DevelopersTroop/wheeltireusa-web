@@ -20,7 +20,7 @@ export const prepareWishlistData = (
   slug: string
 ) => {
   return {
-    slug,
+    slug: product[0].slug,
     data: {
       title:
         product.length > 1
