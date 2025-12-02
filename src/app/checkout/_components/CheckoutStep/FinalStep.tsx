@@ -33,8 +33,12 @@ import { OrderConfirmation } from './OrderConfirmation';
 import { OrderSummary } from './OrderSummary';
 import { PaymentInfo } from './PaymentInfo';
 import { ShippingDetails } from './ShippingDetails';
+import { loadStripe } from '@stripe/stripe-js';
 
 // Interface for checkout step props
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
+);
 
 // FinalStep Component
 export const FinalStep: React.FC = () => {
@@ -85,6 +89,9 @@ export const FinalStep: React.FC = () => {
         //Stripe params
         const sessionId = searchParams.get('session_id');
         const orderId = searchParams.get('order_id');
+        const paymentIntentClientSecret = searchParams.get(
+          'payment_intent_client_secret'
+        );
 
         //PayPal params
         const paymentId = searchParams.get('paymentId');
@@ -94,6 +101,16 @@ export const FinalStep: React.FC = () => {
         if (!orderId) {
           throw new Error('Missing order information');
         }
+
+        const stripe = await stripePromise;
+
+        if (method === 'stripe' && !stripe)
+          throw new Error('Expected stripe promise to be resolved');
+
+        const paymentIntentResult = await stripe?.retrievePaymentIntent(
+          paymentIntentClientSecret as string
+        );
+        const paymentIntent = paymentIntentResult?.paymentIntent;
 
         const interval = setInterval(() => {
           setProgress((prev) => {
@@ -133,6 +150,11 @@ export const FinalStep: React.FC = () => {
         if (response.ok && result.data?.order) {
           const order = result.data.order as TOrder;
           setProgress(100);
+
+          if (method === 'stripe' && paymentIntent?.status !== 'succeeded') {
+            router.push('/checkout?step=3&order_status=false');
+            return;
+          }
           // Update Redux state with order success data
           dispatch(updateOrderSuccessData(result.data.order));
           setPaymentData(result.data.payment);

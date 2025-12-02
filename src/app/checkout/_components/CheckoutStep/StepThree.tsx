@@ -38,6 +38,7 @@ import { useDispatch } from 'react-redux';
 import Sticky from 'react-sticky-el';
 import { toast } from 'sonner';
 import { ICheckoutStepProps } from './StepOne';
+import { triggerGaAddPaymentInfoEvent } from '@/utils/analytics';
 
 // StepFour Component
 export const StepThree: React.FC<ICheckoutStepProps> = () => {
@@ -73,6 +74,7 @@ export const StepThree: React.FC<ICheckoutStepProps> = () => {
     taxAmount,
     totalWithTax,
     deliveryCharge,
+    productsInfo,
   } = useTypedSelector((state) => state.persisted.checkout);
   const [isCard, setIsCard] = useState(false);
 
@@ -242,6 +244,11 @@ export const StepThree: React.FC<ICheckoutStepProps> = () => {
       }
 
       setIsLoading(true);
+      triggerGaAddPaymentInfoEvent(
+        totalWithTax ?? 0,
+        productsInfo,
+        activeAccordion ? activeAccordion : 'Stripe'
+      );
       await processPayment();
 
       // Subscribe to newsletter
