@@ -23,67 +23,15 @@ const useSelectedItem = () => {
   // Check if we're in rear tire mode (has any rear selections or rear tire mode is active)
   const isRearTireMode = Boolean(rearWidth || rearAspectRatio || rearDiameter);
 
-  const clearWidth = () => {
-    // Clearing width clears all downstream selections
+  const updateFrontWidth = (newWidth: string) => {
     dispatch(
       setMainFilter({
         filters: {
           byTireSize: {
             current: {
-              frontTireWidth: '',
-              rearTireWidth: '',
+              frontTireWidth: newWidth,
               frontTireAspectRatio: '',
-              rearTireAspectRatio: '',
               frontTireDiameter: '',
-              rearTireDiameter: '',
-            },
-          },
-        },
-      })
-    );
-  };
-
-  const clearAspectRatio = () => {
-    // Clearing aspect ratio clears diameter but keeps width
-    dispatch(
-      setMainFilter({
-        filters: {
-          byTireSize: {
-            current: {
-              frontTireAspectRatio: '',
-              rearTireAspectRatio: '',
-              frontTireDiameter: '',
-              rearTireDiameter: '',
-            },
-          },
-        },
-      })
-    );
-  };
-
-  const clearDiameter = () => {
-    // Clearing diameter only clears diameter, keeps width and aspect ratio
-    dispatch(
-      setMainFilter({
-        filters: {
-          byTireSize: {
-            current: {
-              frontTireDiameter: '',
-              rearTireDiameter: '',
-            },
-          },
-        },
-      })
-    );
-  };
-
-  const clearRearWidth = () => {
-    // Clearing rear width clears all rear downstream selections
-    dispatch(
-      setMainFilter({
-        filters: {
-          byTireSize: {
-            current: {
               rearTireWidth: '',
               rearTireAspectRatio: '',
               rearTireDiameter: '',
@@ -94,13 +42,15 @@ const useSelectedItem = () => {
     );
   };
 
-  const clearRearAspectRatio = () => {
-    // Clearing rear aspect ratio clears rear diameter but keeps rear width
+  const updateFrontAspectRatio = (newAspectRatio: string) => {
     dispatch(
       setMainFilter({
         filters: {
           byTireSize: {
             current: {
+              frontTireAspectRatio: newAspectRatio,
+              frontTireDiameter: '',
+              rearTireWidth: '',
               rearTireAspectRatio: '',
               rearTireDiameter: '',
             },
@@ -110,14 +60,61 @@ const useSelectedItem = () => {
     );
   };
 
-  const clearRearDiameter = () => {
-    // Clearing rear diameter only clears rear diameter, keeps rear width and aspect ratio
+  const updateFrontDiameter = (newDiameter: string) => {
     dispatch(
       setMainFilter({
         filters: {
           byTireSize: {
             current: {
+              frontTireDiameter: newDiameter,
+              rearTireWidth: '',
+              rearTireAspectRatio: '',
               rearTireDiameter: '',
+            },
+          },
+        },
+      })
+    );
+  };
+
+  const updateRearWidth = (newRearWidth: string) => {
+    dispatch(
+      setMainFilter({
+        filters: {
+          byTireSize: {
+            current: {
+              rearTireWidth: newRearWidth,
+              rearTireAspectRatio: '',
+              rearTireDiameter: '',
+            },
+          },
+        },
+      })
+    );
+  };
+
+  const updateRearAspectRatio = (newRearAspectRatio: string) => {
+    dispatch(
+      setMainFilter({
+        filters: {
+          byTireSize: {
+            current: {
+              rearTireAspectRatio: newRearAspectRatio,
+              rearTireDiameter: '',
+            },
+          },
+        },
+      })
+    );
+  };
+
+  const updateRearDiameter = (newRearDiameter: string) => {
+    dispatch(
+      setMainFilter({
+        filters: {
+          byTireSize: {
+            current: {
+              rearTireDiameter: newRearDiameter,
             },
           },
         },
@@ -132,12 +129,12 @@ const useSelectedItem = () => {
     rearWidth,
     rearAspectRatio,
     rearDiameter,
-    clearWidth,
-    clearAspectRatio,
-    clearDiameter,
-    clearRearWidth,
-    clearRearAspectRatio,
-    clearRearDiameter,
+    updateFrontWidth,
+    updateFrontAspectRatio,
+    updateFrontDiameter,
+    updateRearWidth,
+    updateRearAspectRatio,
+    updateRearDiameter,
     selectedItemRef,
     isRearTireMode,
   };

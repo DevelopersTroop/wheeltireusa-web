@@ -1,8 +1,13 @@
 import React from 'react';
-import BrickBox from '../../../BrickBox/BrickBox';
+import SelectBox from '../../../SelectBox/SelectBox';
 import useSelectedItem from './useSelectedItem';
+import useSelectWidth from '../SelectWidth/useSelectWidth';
+import useSelectAspectRatio from '../SelectAspectRatio/useSelectAspectRatio';
+import useSelectDiameter from '../SelectDiameter/useSelectDiameter';
 
-const SelectedItem = () => {
+type Props = { onFrontUpdate?: () => void };
+
+const SelectedItem = ({ onFrontUpdate }: Props) => {
   const {
     width,
     aspectRatio,
@@ -10,15 +15,23 @@ const SelectedItem = () => {
     rearWidth,
     rearAspectRatio,
     rearDiameter,
-    clearWidth,
-    clearAspectRatio,
-    clearDiameter,
-    clearRearWidth,
-    clearRearAspectRatio,
-    clearRearDiameter,
+    updateFrontWidth,
+    updateFrontAspectRatio,
+    updateFrontDiameter,
+    updateRearWidth,
+    updateRearAspectRatio,
+    updateRearDiameter,
     selectedItemRef,
     isRearTireMode,
   } = useSelectedItem();
+
+  const { filteredWidths: frontFilteredWidths } = useSelectWidth({ isRearMode: false });
+  const { filteredAspectRatios: frontFilteredAspectRatios } = useSelectAspectRatio({ isRearMode: false });
+  const { filteredDiameters: frontFilteredDiameters } = useSelectDiameter({ isRearMode: false });
+
+  const { filteredWidths: rearFilteredWidths } = useSelectWidth({ isRearMode: true });
+  const { filteredAspectRatios: rearFilteredAspectRatios } = useSelectAspectRatio({ isRearMode: true });
+  const { filteredDiameters: rearFilteredDiameters } = useSelectDiameter({ isRearMode: true });
 
   const hasRearSelections = rearWidth || rearAspectRatio || rearDiameter;
 
@@ -30,41 +43,36 @@ const SelectedItem = () => {
       {/* Front tire selections */}
       <div className="flex flex-col lg:flex-row gap-2 lg:overflow-x-auto lg:selected-item-scrollbar">
         {width && (
-          <BrickBox
-            checked={true}
-            filterType="byTireSize"
-            fieldName="frontTireWidth"
-            text={isRearTireMode ? `Front Width: ${width}` : `Width: ${width}`}
-            isDismissable={true}
-            onClick={clearWidth}
+          <SelectBox
+            label={isRearTireMode ? 'Front Width' : 'Width'}
+            value={width}
+            options={frontFilteredWidths ?? []}
+            onChange={(v) => {
+              updateFrontWidth(v);
+              onFrontUpdate?.();
+            }}
           />
         )}
         {aspectRatio && (
-          <BrickBox
-            checked={true}
-            filterType="byTireSize"
-            fieldName="frontTireAspectRatio"
-            text={
-              isRearTireMode
-                ? `Front Ratio: ${aspectRatio}`
-                : `Ratio: ${aspectRatio}`
-            }
-            isDismissable={true}
-            onClick={clearAspectRatio}
+          <SelectBox
+            label={isRearTireMode ? 'Front Ratio' : 'Ratio'}
+            value={aspectRatio}
+            options={frontFilteredAspectRatios ?? []}
+            onChange={(v) => {
+              updateFrontAspectRatio(v);
+              onFrontUpdate?.();
+            }}
           />
         )}
         {diameter && (
-          <BrickBox
-            checked={true}
-            filterType="byTireSize"
-            fieldName="frontTireDiameter"
-            text={
-              isRearTireMode
-                ? `Front Diameter: ${diameter}`
-                : `Diameter: ${diameter}`
-            }
-            isDismissable={true}
-            onClick={clearDiameter}
+          <SelectBox
+            label={isRearTireMode ? 'Front Diameter' : 'Diameter'}
+            value={diameter}
+            options={frontFilteredDiameters ?? []}
+            onChange={(v) => {
+              updateFrontDiameter(v);
+              onFrontUpdate?.();
+            }}
           />
         )}
       </div>
@@ -75,33 +83,27 @@ const SelectedItem = () => {
           <div className="border-t border-gray-200 my-1"></div>
           <div className="flex flex-col lg:flex-row gap-2 lg:overflow-x-auto lg:selected-item-scrollbar">
             {rearWidth && (
-              <BrickBox
-                checked={true}
-                filterType="byTireSize"
-                fieldName="rearTireWidth"
-                text={`Rear Width: ${rearWidth}`}
-                isDismissable={true}
-                onClick={clearRearWidth}
+              <SelectBox
+                label={'Rear Width'}
+                value={rearWidth}
+                options={rearFilteredWidths ?? []}
+                onChange={updateRearWidth}
               />
             )}
             {rearAspectRatio && (
-              <BrickBox
-                checked={true}
-                filterType="byTireSize"
-                fieldName="rearTireAspectRatio"
-                text={`Rear Ratio: ${rearAspectRatio}`}
-                isDismissable={true}
-                onClick={clearRearAspectRatio}
+              <SelectBox
+                label={'Rear Ratio'}
+                value={rearAspectRatio}
+                options={rearFilteredAspectRatios ?? []}
+                onChange={updateRearAspectRatio}
               />
             )}
             {rearDiameter && (
-              <BrickBox
-                checked={true}
-                filterType="byTireSize"
-                fieldName="rearTireDiameter"
-                text={`Rear Diameter: ${rearDiameter}`}
-                isDismissable={true}
-                onClick={clearRearDiameter}
+              <SelectBox
+                label={'Rear Diameter'}
+                value={rearDiameter}
+                options={rearFilteredDiameters ?? []}
+                onChange={updateRearDiameter}
               />
             )}
           </div>

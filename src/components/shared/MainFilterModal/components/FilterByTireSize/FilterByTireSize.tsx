@@ -56,6 +56,7 @@ const FilterByTireSize = () => {
     isFrontTireComplete,
     isRearTireComplete,
     handleRearTireSizeLinkClick,
+    exitRearTireMode,
   } = useFilterByTireSize();
 
   // Determine which component to show based on selection state
@@ -124,7 +125,9 @@ const FilterByTireSize = () => {
         )}
       >
         <div className="flex flex-col gap-4 relative">
-          {(Boolean(width) || Boolean(rearWidth)) && <SelectedItem />}
+          {(Boolean(width) || Boolean(rearWidth)) && (
+            <SelectedItem onFrontUpdate={exitRearTireMode} />
+          )}
           {renderCurrentStep()}
         </div>
       </ScrollArea>

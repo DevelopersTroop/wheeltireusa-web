@@ -107,6 +107,11 @@ const useFilterByTireSize = () => {
   // Determine if we should show rear tire selections
   const hasRearSelections =
     selectedRearWidth || selectedRearAspectRatio || selectedRearDiameter;
+
+  console.log('hasRearSelections', hasRearSelections);
+  console.log('isRearTireMode', isRearTireMode);
+
+
   const shouldShowRearSelections = isRearTireMode || hasRearSelections;
 
   const isDisabled =
@@ -153,6 +158,10 @@ const useFilterByTireSize = () => {
     setIsRearTireMode(true);
   };
 
+  const exitRearTireMode = () => {
+    setIsRearTireMode(false);
+  };
+
   return {
     width: selectedWidth,
     aspectRatio: selectedAspectRatio,
@@ -168,6 +177,7 @@ const useFilterByTireSize = () => {
     isFrontTireComplete,
     isRearTireComplete,
     handleRearTireSizeLinkClick,
+    exitRearTireMode,
   };
 };
 
