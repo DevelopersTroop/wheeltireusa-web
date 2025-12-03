@@ -21,6 +21,12 @@ const SelectedItem = ({ onFrontUpdate }: Props) => {
     updateRearWidth,
     updateRearAspectRatio,
     updateRearDiameter,
+    clearFrontWidth,
+    clearFrontAspectRatio,
+    clearFrontDiameter,
+    clearRearWidth,
+    clearRearAspectRatio,
+    clearRearDiameter,
     selectedItemRef,
     isRearTireMode,
   } = useSelectedItem();
@@ -51,6 +57,10 @@ const SelectedItem = ({ onFrontUpdate }: Props) => {
               updateFrontWidth(v);
               onFrontUpdate?.();
             }}
+            onClear={() => {
+              clearFrontWidth();
+              onFrontUpdate?.();
+            }}
           />
         )}
         {aspectRatio && (
@@ -62,6 +72,10 @@ const SelectedItem = ({ onFrontUpdate }: Props) => {
               updateFrontAspectRatio(v);
               onFrontUpdate?.();
             }}
+            onClear={() => {
+              clearFrontAspectRatio();
+              onFrontUpdate?.();
+            }}
           />
         )}
         {diameter && (
@@ -71,6 +85,10 @@ const SelectedItem = ({ onFrontUpdate }: Props) => {
             options={frontFilteredDiameters ?? []}
             onChange={(v) => {
               updateFrontDiameter(v);
+              onFrontUpdate?.();
+            }}
+            onClear={() => {
+              clearFrontDiameter();
               onFrontUpdate?.();
             }}
           />
@@ -88,6 +106,7 @@ const SelectedItem = ({ onFrontUpdate }: Props) => {
                 value={rearWidth}
                 options={rearFilteredWidths ?? []}
                 onChange={updateRearWidth}
+                onClear={clearRearWidth}
               />
             )}
             {rearAspectRatio && (
@@ -96,6 +115,7 @@ const SelectedItem = ({ onFrontUpdate }: Props) => {
                 value={rearAspectRatio}
                 options={rearFilteredAspectRatios ?? []}
                 onChange={updateRearAspectRatio}
+                onClear={clearRearAspectRatio}
               />
             )}
             {rearDiameter && (
@@ -104,6 +124,7 @@ const SelectedItem = ({ onFrontUpdate }: Props) => {
                 value={rearDiameter}
                 options={rearFilteredDiameters ?? []}
                 onChange={updateRearDiameter}
+                onClear={clearRearDiameter}
               />
             )}
           </div>

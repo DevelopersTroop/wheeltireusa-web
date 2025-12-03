@@ -122,6 +122,96 @@ const useSelectedItem = () => {
     );
   };
 
+  const clearFrontWidth = () => {
+    dispatch(
+      setMainFilter({
+        filters: {
+          byTireSize: {
+            current: {
+              frontTireWidth: '',
+              frontTireAspectRatio: '',
+              frontTireDiameter: '',
+            },
+          },
+        },
+      })
+    );
+  };
+
+  const clearFrontAspectRatio = () => {
+    dispatch(
+      setMainFilter({
+        filters: {
+          byTireSize: {
+            current: {
+              frontTireAspectRatio: '',
+              frontTireDiameter: '',
+            },
+          },
+        },
+      })
+    );
+  };
+
+  const clearFrontDiameter = () => {
+    dispatch(
+      setMainFilter({
+        filters: {
+          byTireSize: {
+            current: {
+              frontTireDiameter: '',
+            },
+          },
+        },
+      })
+    );
+  };
+
+  const clearRearWidth = () => {
+    dispatch(
+      setMainFilter({
+        filters: {
+          byTireSize: {
+            current: {
+              rearTireWidth: '',
+              rearTireAspectRatio: '',
+              rearTireDiameter: '',
+            },
+          },
+        },
+      })
+    );
+  };
+
+  const clearRearAspectRatio = () => {
+    dispatch(
+      setMainFilter({
+        filters: {
+          byTireSize: {
+            current: {
+              rearTireAspectRatio: '',
+              rearTireDiameter: '',
+            },
+          },
+        },
+      })
+    );
+  };
+
+  const clearRearDiameter = () => {
+    dispatch(
+      setMainFilter({
+        filters: {
+          byTireSize: {
+            current: {
+              rearTireDiameter: '',
+            },
+          },
+        },
+      })
+    );
+  };
+
   return {
     width,
     aspectRatio,
@@ -135,6 +225,12 @@ const useSelectedItem = () => {
     updateRearWidth,
     updateRearAspectRatio,
     updateRearDiameter,
+    clearFrontWidth,
+    clearFrontAspectRatio,
+    clearFrontDiameter,
+    clearRearWidth,
+    clearRearAspectRatio,
+    clearRearDiameter,
     selectedItemRef,
     isRearTireMode,
   };
