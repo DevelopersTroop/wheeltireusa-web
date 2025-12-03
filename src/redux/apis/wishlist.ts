@@ -43,7 +43,7 @@ const wishlist = baseApi.injectEndpoints({
     >({
       query: (body) => {
         return {
-          url: `/wishlists`,
+          url: `/wishlists/${body.slug}`,
           method: 'POST',
           data: body,
         };

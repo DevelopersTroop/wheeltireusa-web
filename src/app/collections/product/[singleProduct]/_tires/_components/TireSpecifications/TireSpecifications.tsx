@@ -104,8 +104,9 @@ const TireSpecifications = ({
                   </p>
                 </div>
 
+                { <>
                 <div className="flex w-full flex-row gap-2">
-                  <div className="relative flex w-1/2 flex-col items-start justify-start gap-2 rounded-md border border-[#cfcfcf] bg-[#FFFFFF] px-3 py-2">
+                  {product?.spokeStyle && <div className="relative flex w-1/2 flex-col items-start justify-start gap-2 rounded-md border border-[#cfcfcf] bg-[#FFFFFF] px-3 py-2">
                     <div className="relative flex items-center gap-1">
                       <svg
                         width="12"
@@ -141,8 +142,8 @@ const TireSpecifications = ({
                         {product?.spokeStyle ? product?.spokeStyle : 'N/A'}
                       </span>
                     </p>
-                  </div>
-                  <div className="relative flex w-1/2 flex-col items-start justify-start gap-2 rounded-md border border-[#cfcfcf] bg-[#FFFFFF] px-3 py-2">
+                  </div>}
+                  {product?.loadRating && <div className="relative flex w-1/2 flex-col items-start justify-start gap-2 rounded-md border border-[#cfcfcf] bg-[#FFFFFF] px-3 py-2">
                     <div className="relative flex items-center gap-1">
                       <small className="text-xs leading-[14px] text-[#504949]">
                         <span className="text-xs font-normal text-[#504949]">
@@ -169,11 +170,13 @@ const TireSpecifications = ({
                         {product?.loadRating ? product?.loadRating : 'N/A'}
                       </span>
                     </p>
-                  </div>
+                  </div>}
                 </div>
+                </>}
 
+{ <>
                 <div className="flex w-full flex-row gap-2">
-                  <div className="relative flex w-1/2 flex-col items-start justify-start gap-2 rounded-md border border-[#cfcfcf] bg-[#FFFFFF] px-3 py-2">
+                 {product?.serviceDescription && <div className="relative flex w-1/2 flex-col items-start justify-start gap-2 rounded-md border border-[#cfcfcf] bg-[#FFFFFF] px-3 py-2">
                     <div className="relative flex items-center gap-1">
                       <small className="text-xs leading-[14px] text-[#504949]">
                         <span className="text-xs font-normal text-[#504949]">
@@ -202,8 +205,8 @@ const TireSpecifications = ({
                           : 'N/A'}
                       </span>
                     </p>
-                  </div>
-                  <div className="relative flex w-1/2 flex-col items-start justify-start gap-2 rounded-md border border-[#cfcfcf] bg-[#FFFFFF] px-3 py-2">
+                  </div>}
+                  {product?.utqg && <div className="relative flex w-1/2 flex-col items-start justify-start gap-2 rounded-md border border-[#cfcfcf] bg-[#FFFFFF] px-3 py-2">
                     <div className="relative flex items-center gap-1">
                       <small className="text-xs leading-[14px] text-[#504949]">
                         <span className="text-xs font-normal text-[#504949]">
@@ -230,8 +233,9 @@ const TireSpecifications = ({
                         {product?.utqg ? product?.utqg : 'N/A'}
                       </span>
                     </p>
-                  </div>
+                  </div>}
                 </div>
+</>}
               </div>
             </AccordionContent>
           </AccordionItem>

@@ -67,7 +67,7 @@ export const CheckoutProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   // Redux Checkout Store
-  const { discount, productsInfo } = useTypedSelector(
+  const { discount, productsInfo, deliveryCharge } = useTypedSelector(
     (state) => state.persisted.checkout
   );
   const router = useRouter();
@@ -183,7 +183,6 @@ export const CheckoutProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [productsInfo]);
 
   // Define the delivery charge, sales tax, and total cost based on the cart type
-  const deliveryCharge = 0;
   const salesTax = 0;
   const totalCost = subTotalCost - discount + salesTax + deliveryCharge;
 

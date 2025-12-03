@@ -1,3 +1,4 @@
+import { removeDuplicateDataWithRemovingFloatingPoint } from '@/lib/utils';
 import BrickBox from '../../../BrickBox/BrickBox';
 import ListSkeleton from '../../../ListSkeleton/ListSkeleton';
 import Search from '../../../Search/Search';
@@ -21,20 +22,23 @@ const SelectDiameter = ({ isRearMode = false }: SelectDiameterProps) => {
       </div>
       <div className="text-muted-dark text-[20px] px-6 order-3">{title}</div>
       {filteredDiameters ? (
-        <>
-          <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 px-6 order-5">
-            {filteredDiameters?.map((diameter) => (
-              <BrickBox
-                showTooltip={true}
-                onClick={setDiameter}
-                key={diameter}
-                text={diameter}
-                filterType="byTireSize"
-                fieldName={fieldName}
-              />
-            ))}
-          </div>
-        </>
+        (() => {
+          const uniqueDiameters = removeDuplicateDataWithRemovingFloatingPoint(filteredDiameters);
+          return <>
+            <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 px-6 order-5">
+              {uniqueDiameters?.map((diameter) => (
+                <BrickBox
+                  showTooltip={true}
+                  onClick={setDiameter}
+                  key={diameter}
+                  text={diameter}
+                  filterType="byTireSize"
+                  fieldName={fieldName}
+                />
+              ))}
+            </div>
+          </>
+        })()
       ) : (
         <>
           <ListSkeleton onlyItem={true} mobile={2} desktop={5} />

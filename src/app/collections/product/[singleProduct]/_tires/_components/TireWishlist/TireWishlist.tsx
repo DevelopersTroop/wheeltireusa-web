@@ -49,7 +49,7 @@ const TireWishlist = ({ product }: { product: TInventoryItem[] }) => {
     <button
       onClick={() => {
         saveToLater({
-          slug: singleTirePageLink,
+          slug: product[0].slug,
           data: {
             title: title,
             category: product[0]?.category,

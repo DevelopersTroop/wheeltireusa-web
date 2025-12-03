@@ -1,7 +1,9 @@
+import { Fragment } from 'react';
 import BrickBox from '../../../BrickBox/BrickBox';
 import ListSkeleton from '../../../ListSkeleton/ListSkeleton';
 import Search from '../../../Search/Search';
 import useSelectWidth from './useSelectWidth';
+import { removeDuplicateDataWithRemovingFloatingPoint } from '@/lib/utils';
 
 interface SelectWidthProps {
   isRearMode?: boolean;
@@ -32,7 +34,7 @@ const SelectWidth = ({ isRearMode = false }: SelectWidthProps) => {
               showTooltip={true}
               onClick={setWidth}
               key={`popular-${width}`}
-              text={width}
+              text={parseFloat(width)}
               filterType="byTireSize"
               fieldName={fieldName}
             />
@@ -48,20 +50,25 @@ const SelectWidth = ({ isRearMode = false }: SelectWidthProps) => {
       </div>
 
       {filteredWidths ? (
-        <>
-          <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 px-6 order-5">
-            {filteredWidths?.map((width) => (
-              <BrickBox
-                showTooltip={true}
-                onClick={setWidth}
-                key={width}
-                text={width}
-                filterType="byTireSize"
-                fieldName={fieldName}
-              />
-            ))}
-          </div>
-        </>
+        (() => {
+          const uniqueWidths = removeDuplicateDataWithRemovingFloatingPoint(filteredWidths);
+          return <>
+            <>
+              <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 px-6 order-5">
+                {uniqueWidths?.map((width) => (
+                  width ? <BrickBox
+                    showTooltip={true}
+                    onClick={setWidth}
+                    key={width}
+                    text={width}
+                    filterType="byTireSize"
+                    fieldName={fieldName}
+                  /> : <Fragment key={`empty-${width}`}></Fragment>
+                ))}
+              </div>
+            </>
+          </>
+        })()
       ) : (
         <>
           <ListSkeleton onlyItem={true} mobile={2} desktop={5} />

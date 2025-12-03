@@ -13,14 +13,19 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
+import StaticImage from '@/components/ui/staticImage';
+import { useCheckout } from '@/context/checkoutContext';
+import useAuth from '@/hooks/useAuth';
+import { emptyCart } from '@/redux/features/cartSlice';
 import {
   revokeCouponCode,
   updateOrderSuccessData,
 } from '@/redux/features/checkoutSlice';
 import { useTypedSelector } from '@/redux/store';
-import { TOrder } from '@/types/order';
+import { TOrder, TOrderData } from '@/types/order';
 import { triggerGaPurchaseEvent } from '@/utils/analytics';
 import { apiBaseUrl } from '@/utils/api';
+import { toast } from 'sonner';
 import { CartSummary } from './CartSummary';
 import { CreateAccountSection } from './CreateAccountSection';
 import { DeliveryOptions } from './DeliveryOptions';
@@ -28,13 +33,12 @@ import { OrderConfirmation } from './OrderConfirmation';
 import { OrderSummary } from './OrderSummary';
 import { PaymentInfo } from './PaymentInfo';
 import { ShippingDetails } from './ShippingDetails';
-import StaticImage from '@/components/ui/staticImage';
-import { useCheckout } from '@/context/checkoutContext';
-import useAuth from '@/hooks/useAuth';
-import { emptyCart } from '@/redux/features/cartSlice';
-import { toast } from 'sonner';
+import { loadStripe } from '@stripe/stripe-js';
 
 // Interface for checkout step props
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
+);
 
 // FinalStep Component
 export const FinalStep: React.FC = () => {
@@ -85,6 +89,9 @@ export const FinalStep: React.FC = () => {
         //Stripe params
         const sessionId = searchParams.get('session_id');
         const orderId = searchParams.get('order_id');
+        const paymentIntentClientSecret = searchParams.get(
+          'payment_intent_client_secret'
+        );
 
         //PayPal params
         const paymentId = searchParams.get('paymentId');
@@ -94,6 +101,16 @@ export const FinalStep: React.FC = () => {
         if (!orderId) {
           throw new Error('Missing order information');
         }
+
+        const stripe = await stripePromise;
+
+        if (method === 'stripe' && !stripe)
+          throw new Error('Expected stripe promise to be resolved');
+
+        const paymentIntentResult = await stripe?.retrievePaymentIntent(
+          paymentIntentClientSecret as string
+        );
+        const paymentIntent = paymentIntentResult?.paymentIntent;
 
         const interval = setInterval(() => {
           setProgress((prev) => {
@@ -107,7 +124,7 @@ export const FinalStep: React.FC = () => {
 
         let response;
 
-        if (method==="stripe") {
+        if (method === 'stripe') {
           // Stripe
           response = await fetch(
             `${apiBaseUrl}/payments/stripe/verify-payment?orderId=${orderId}`
@@ -133,6 +150,11 @@ export const FinalStep: React.FC = () => {
         if (response.ok && result.data?.order) {
           const order = result.data.order as TOrder;
           setProgress(100);
+
+          if (method === 'stripe' && paymentIntent?.status !== 'succeeded') {
+            router.push('/checkout?step=3&order_status=false');
+            return;
+          }
           // Update Redux state with order success data
           dispatch(updateOrderSuccessData(result.data.order));
           setPaymentData(result.data.payment);
@@ -177,8 +199,8 @@ export const FinalStep: React.FC = () => {
   // Render loading state while verifying payment
   if (verifying) {
     return (
-      <div className="min-h-[60vh] flex items-center justify-center p-4">
-        <div className="w-full max-w-md space-y-4">
+      <div className="min-h-[60vh]  flex items-center justify-center p-4">
+        <div className="w-full max-w-2xl space-y-4">
           <div className="text-center pb-2">
             <div className="mx-auto mb-4 bg-blue-50 w-16 h-16 rounded-full flex items-center justify-center">
               <Clock className="h-8 w-8 text-blue-500 animate-pulse" />
@@ -267,11 +289,18 @@ export const FinalStep: React.FC = () => {
           <OrderSummary
             totalCost={orderSuccessData?.data?.totalCost}
             taxAmount={orderSuccessData?.data?.taxAmount}
-            totalWithTax={orderSuccessData?.data?.totalWithTax||orderSuccessData?.data?.netCost?parseFloat(orderSuccessData?.data?.netCost):0}
+            totalWithTax={
+              orderSuccessData?.data?.totalWithTax
+                ? orderSuccessData?.data?.totalWithTax
+                : orderSuccessData?.data?.netCost
+                  ? parseFloat(orderSuccessData?.data?.netCost)
+                  : 0
+            }
             netCost={orderSuccessData?.data?.netCost}
             cartType={orderSuccessData?.data?.cartType}
             discount={orderSuccessData?.data?.discount}
             zipCode={orderSuccessData?.data?.shippingAddress?.zipCode}
+            deliveryCharge={orderSuccessData?.data?.deliveryCharge}
           />
         </div>
       </div>

@@ -11,6 +11,12 @@ import { BsQuestionCircleFill } from 'react-icons/bs';
 
 // Component to display tire attributes
 const TireAttributes = ({ product }: { product: TInventoryItem }) => {
+  let tireSize = "N/A";
+  if(product?.tireSize) {
+    tireSize = product?.tireSize;
+  } else if(product?.width || product?.diameter || product?.aspectRatio){
+    tireSize = `${product?.width}/${product?.aspectRatio}-${product?.diameter}`;
+  }
   return (
     <>
       <div className="flex gap-2 items-start self-stretch flex-wrap relative w-full">
@@ -18,7 +24,7 @@ const TireAttributes = ({ product }: { product: TInventoryItem }) => {
         <div
           className="hover:bg-[#210203] bg-white group cursor-pointer rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative"
           data-tooltip-id="my-tooltip"
-          data-tooltip-content={product?.tireSize}
+          data-tooltip-content={tireSize}
           data-tooltip-place="top"
         >
           <div className="flex gap-1 items-center relative">
@@ -31,12 +37,13 @@ const TireAttributes = ({ product }: { product: TInventoryItem }) => {
           </div>
           <p className="text-base leading-[19px] text-[#210203]">
             <span className="text-[#212227] text-base font-normal group-hover:text-[#ffffff]">
-              {product?.tireSize ? product?.tireSize : 'N/A'}
+              {tireSize}
             </span>
           </p>
         </div>
 
-        <div
+        {product?.serviceDescription && <>
+         <div
           className="hover:bg-[#210203] bg-white group cursor-pointer rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative"
           data-tooltip-id="my-tooltip"
           data-tooltip-content={product?.serviceDescription}
@@ -70,9 +77,11 @@ const TireAttributes = ({ product }: { product: TInventoryItem }) => {
                 : 'N/A'}
             </span>
           </p>
-        </div>
+        </div></>}
+       
 
         {/* UTQG */}
+        {product?.utqg && <>
         <div
           className="hover:bg-[#210203] bg-white group cursor-pointer rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative"
           data-tooltip-id="my-tooltip"
@@ -106,8 +115,11 @@ const TireAttributes = ({ product }: { product: TInventoryItem }) => {
             </span>
           </p>
         </div>
+        </>}
+        
 
         {/* Display sidewall style if available */}
+        {product?.sidewall && <>
         <div
           className="hover:bg-[#210203] bg-white group cursor-pointer rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative"
           data-tooltip-id="my-tooltip"
@@ -128,8 +140,12 @@ const TireAttributes = ({ product }: { product: TInventoryItem }) => {
             </span>
           </p>
         </div>
+        
+        </>}
+        
 
         {/* Display Eco Focus if available */}
+        {product?.ecoFocus && <>
         <div
           className="hover:bg-[#210203] bg-white group cursor-pointer rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative"
           data-tooltip-id="my-tooltip"
@@ -149,8 +165,11 @@ const TireAttributes = ({ product }: { product: TInventoryItem }) => {
             </span>
           </p>
         </div>
+        
+        </>}
 
         {/* Display load rating if available */}
+        {product?.loadRating && <>
         <div
           className="hover:bg-[#210203] bg-white group cursor-pointer rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative"
           data-tooltip-id="my-tooltip"
@@ -170,8 +189,11 @@ const TireAttributes = ({ product }: { product: TInventoryItem }) => {
             </span>
           </p>
         </div>
+        
+        </>}
 
         {/* Hazard Protection */}
+        {product?.hazardProtection && <>
         <div
           className="hover:bg-[#210203] bg-white group cursor-pointer rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative"
           data-tooltip-id="my-tooltip"
@@ -205,6 +227,8 @@ const TireAttributes = ({ product }: { product: TInventoryItem }) => {
             </span>
           </p>
         </div>
+        
+        </>}
       </div>
     </>
   );

@@ -16,6 +16,7 @@ import {
   setTaxAmount,
 } from '@/redux/features/checkoutSlice';
 import { useSearchParams } from 'next/navigation';
+import LoadingSpinner from '@/components/shared/loading/spinner';
 
 // --------------------
 // Types
@@ -108,6 +109,14 @@ export default function StripeProvider({ children }: React.PropsWithChildren) {
 
   // Wait until clientSecret is ready
   // if (loading) return <LoadingSpinner />;
+
+  if (loading) {
+    return (
+      <div className='h-[40vh] flex items-center justify-center'>
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   if (!clientSecret) {
     return (

@@ -7,15 +7,16 @@ import {
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCheckout } from '@/context/checkoutContext';
+import { useApplyCoupon } from '@/hooks/useApplyCoupon';
+import { useShippingRestrictionLocationNotice } from '@/hooks/useShippingRestriction';
+import { revokeCouponCode, setOrderInfo } from '@/redux/features/checkoutSlice';
+import { useTypedSelector } from '@/redux/store';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { BillingAndShippingInput } from './BillingAndShippingInput';
 import { ICheckoutStepProps } from './StepOne';
-import { useTypedSelector } from '@/redux/store';
-import { useCheckout } from '@/context/checkoutContext';
-import { useShippingRestrictionLocationNotice } from '@/hooks/useShippingRestriction';
-import { useApplyCoupon } from '@/hooks/useApplyCoupon';
-import { revokeCouponCode, setOrderInfo } from '@/redux/features/checkoutSlice';
+import { triggerGaAddShippingInfoEvent } from '@/utils/analytics';
 
 // StepThree Component
 export const StepTwo: React.FC<ICheckoutStepProps> = ({
@@ -23,7 +24,6 @@ export const StepTwo: React.FC<ICheckoutStepProps> = ({
   handleContinue,
 }) => {
   const {
-    selectedOptionTitle,
     discount,
     orderInfo,
     couponCode,
@@ -35,7 +35,6 @@ export const StepTwo: React.FC<ICheckoutStepProps> = ({
   const newsLetterRef = useRef<HTMLDivElement>(null); // Ref for newsletter section
   const phoneNumberRef = useRef<HTMLDivElement>(null); // Ref for phone number section
   const { showNotice } = useShippingRestrictionLocationNotice();
-  console.log('TCL: showNotice', showNotice);
   const [billingSameAsShipping, setShippingSameAsBilling] = useState(true);
   /**
    * Redux Store & Dispatch
@@ -102,7 +101,7 @@ export const StepTwo: React.FC<ICheckoutStepProps> = ({
                       value={coupon}
                       onChange={(e) => setCoupon(e.target.value)}
                       placeholder="Enter your coupon "
-                      className="h-12 !bg-white"
+                      className="h-12 bg-white!"
                     />
                     <Button
                       disabled={isLoading}
@@ -113,7 +112,7 @@ export const StepTwo: React.FC<ICheckoutStepProps> = ({
                           applyCoupon(coupon);
                         }
                       }}
-                      className="!h-12 font-semibold"
+                      className="h-12! font-semibold"
                     >
                       {isLoading
                         ? 'Loading'
@@ -242,7 +241,14 @@ export const StepTwo: React.FC<ICheckoutStepProps> = ({
           <div className="px-md">
             <Button
               disabled={shouldDisableButton}
-              onClick={handleContinue}
+              onClick={(e) => {
+                handleContinue?.(e);
+                triggerGaAddShippingInfoEvent(
+                  totalCost,
+                  productsInfo,
+                  'unknown'
+                );
+              }}
               className="w-full font-bold mt-4 h-14 rounded-xs flex items-center"
             >
               <svg

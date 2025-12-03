@@ -19,8 +19,6 @@ const SingleProductClient = ({
     slugTwo: slugTwo ?? '',
   }); // Fetch product data using the singleProduct slug.
 
-  console.log('SingleProductClient', data, isLoading);
-
   if (isLoading) {
     return <SingleProductSkeleton />;
   }
