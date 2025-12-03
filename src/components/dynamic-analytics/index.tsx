@@ -88,7 +88,7 @@ export const DynamicAnalytics = () => {
       let eventName = null;
       let label = null;
       let category = '';
-      let isMobile = screenSize.screenSize < 768;
+      const isMobile = screenSize.screenSize < 768;
       let elementFound = false;
       const headerLink = target.closest('header a');
       const homeInstock = instock && instock.contains(target);
