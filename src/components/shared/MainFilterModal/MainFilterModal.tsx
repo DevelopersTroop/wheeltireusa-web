@@ -17,6 +17,7 @@ import { useTypedSelector } from '@/redux/store';
 import { useDispatch } from 'react-redux';
 import FilterByTireBrand from './components/FilterByTireBrand/FilterByTireBrand';
 import FilterByTireSize from './components/FilterByTireSize/FilterByTireSize';
+import { RearModeProvider } from './components/FilterByTireSize/context/RearModeContext';
 // import FilterByTireSizeOld from './components/FilterByTireSizeOld/FilterByTireSize';
 import FilterByVehicle from './components/FilterByVehicle/FilterByVehicle';
 
@@ -79,7 +80,9 @@ const YmmForm = () => {
                   <FilterByVehicle />
                 </TabsContent>
                 <TabsContent value="TireSize">
-                  <FilterByTireSize />
+                  <RearModeProvider>
+                    <FilterByTireSize />
+                  </RearModeProvider>
                 </TabsContent>
                 <TabsContent value="TireBrand">
                   <FilterByTireBrand />
@@ -131,7 +134,9 @@ const YmmForm = () => {
                   <FilterByVehicle />
                 </TabsContent>
                 <TabsContent value="TireSize">
-                  <FilterByTireSize />
+                  <RearModeProvider>
+                    <FilterByTireSize />
+                  </RearModeProvider>
                 </TabsContent>
                 <TabsContent value="TireBrand">
                   <FilterByTireBrand />

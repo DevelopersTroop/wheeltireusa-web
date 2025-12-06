@@ -123,11 +123,9 @@ const FilterByTireSize = () => {
             (rearWidth && rearAspectRatio && rearDiameter)) &&
             'lg:h-[calc(70dvh-90px)] pb-0'
         )}
-      >
+      >    
         <div className="flex flex-col gap-4 relative">
-          {(Boolean(width) || Boolean(rearWidth)) && (
-            <SelectedItem onFrontUpdate={exitRearTireMode} />
-          )}
+          <SelectedItem onFrontUpdate={exitRearTireMode} />
           {renderCurrentStep()}
         </div>
       </ScrollArea>

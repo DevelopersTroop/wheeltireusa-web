@@ -2,6 +2,7 @@ import { setMainFilter } from '@/redux/features/mainFilterSlice';
 import { useTypedSelector } from '@/redux/store';
 import { useRef } from 'react';
 import { useDispatch } from 'react-redux';
+import { useRearMode } from '../../context/RearModeContext';
 
 const useSelectedItem = () => {
   const dispatch = useDispatch();
@@ -20,8 +21,7 @@ const useSelectedItem = () => {
   const rearDiameter =
     mainFilterState.filters.byTireSize.current.rearTireDiameter;
 
-  // Check if we're in rear tire mode (has any rear selections or rear tire mode is active)
-  const isRearTireMode = Boolean(rearWidth || rearAspectRatio || rearDiameter);
+  const { isRearTireMode, setIsRearTireMode } = useRearMode();
 
   const updateFrontWidth = (newWidth: string) => {
     dispatch(
@@ -233,6 +233,7 @@ const useSelectedItem = () => {
     clearRearDiameter,
     selectedItemRef,
     isRearTireMode,
+    setIsRearTireMode
   };
 };
 

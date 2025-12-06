@@ -28,7 +28,7 @@ const SelectedItem = ({ onFrontUpdate }: Props) => {
     clearRearAspectRatio,
     clearRearDiameter,
     selectedItemRef,
-    isRearTireMode,
+    isRearTireMode
   } = useSelectedItem();
 
   const { filteredWidths: frontFilteredWidths } = useSelectWidth({ isRearMode: false });
@@ -40,7 +40,11 @@ const SelectedItem = ({ onFrontUpdate }: Props) => {
   const { filteredDiameters: rearFilteredDiameters } = useSelectDiameter({ isRearMode: true });
 
   const hasRearSelections = rearWidth || rearAspectRatio || rearDiameter;
-
+  const isFrontWidthSelected = Boolean(width);
+  const isFrontRatioSelected = Boolean(aspectRatio);
+  const isRearWidthSelected = Boolean(rearWidth);
+  const isRearRatioSelected = Boolean(rearAspectRatio);
+  console.log("isRearTireMode", isRearTireMode)
   return (
     <div
       ref={selectedItemRef}
@@ -48,85 +52,83 @@ const SelectedItem = ({ onFrontUpdate }: Props) => {
     >
       {/* Front tire selections */}
       <div className="flex flex-col lg:flex-row gap-2 lg:overflow-x-auto lg:selected-item-scrollbar">
-        {width && (
-          <SelectBox
-            label={isRearTireMode ? 'Front Width' : 'Width'}
-            value={width}
-            options={frontFilteredWidths ?? []}
-            onChange={(v) => {
-              updateFrontWidth(v);
-              onFrontUpdate?.();
-            }}
-            onClear={() => {
-              clearFrontWidth();
-              onFrontUpdate?.();
-            }}
-          />
-        )}
-        {aspectRatio && (
-          <SelectBox
-            label={isRearTireMode ? 'Front Ratio' : 'Ratio'}
-            value={aspectRatio}
-            options={frontFilteredAspectRatios ?? []}
-            onChange={(v) => {
-              updateFrontAspectRatio(v);
-              onFrontUpdate?.();
-            }}
-            onClear={() => {
-              clearFrontAspectRatio();
-              onFrontUpdate?.();
-            }}
-          />
-        )}
-        {diameter && (
-          <SelectBox
-            label={isRearTireMode ? 'Front Diameter' : 'Diameter'}
-            value={diameter}
-            options={frontFilteredDiameters ?? []}
-            onChange={(v) => {
-              updateFrontDiameter(v);
-              onFrontUpdate?.();
-            }}
-            onClear={() => {
-              clearFrontDiameter();
-              onFrontUpdate?.();
-            }}
-          />
-        )}
+        <SelectBox
+          label={isRearTireMode ? 'Front Width' : 'Width'}
+          value={width}
+          options={frontFilteredWidths ?? []}
+          disabled={false}
+          onChange={(v) => {
+            updateFrontWidth(v);
+            onFrontUpdate?.();
+          }}
+          onClear={() => {
+            clearFrontWidth();
+            onFrontUpdate?.();
+          }}
+        />
+
+        <SelectBox
+          label={isRearTireMode ? 'Front Ratio' : 'Ratio'}
+          value={aspectRatio}
+          options={frontFilteredAspectRatios ?? []}
+          disabled={!isFrontWidthSelected}
+          onChange={(v) => {
+            updateFrontAspectRatio(v);
+            onFrontUpdate?.();
+          }}
+          onClear={() => {
+            clearFrontAspectRatio();
+            onFrontUpdate?.();
+          }}
+        />
+
+        <SelectBox
+          label={isRearTireMode ? 'Front Diameter' : 'Diameter'}
+          value={diameter}
+          options={frontFilteredDiameters ?? []}
+          disabled={!(isFrontWidthSelected && isFrontRatioSelected)}
+          onChange={(v) => {
+            updateFrontDiameter(v);
+            onFrontUpdate?.();
+          }}
+          onClear={() => {
+            clearFrontDiameter();
+            onFrontUpdate?.();
+          }}
+        />
       </div>
 
-      {/* Rear tire selections - only show if in rear tire mode and has rear selections */}
-      {isRearTireMode && hasRearSelections && (
+      {/* Rear tire selections - only show if in rear tire mode */}
+      {isRearTireMode && (
         <>
           <div className="border-t border-gray-200 my-1"></div>
           <div className="flex flex-col lg:flex-row gap-2 lg:overflow-x-auto lg:selected-item-scrollbar">
-            {rearWidth && (
-              <SelectBox
-                label={'Rear Width'}
-                value={rearWidth}
-                options={rearFilteredWidths ?? []}
-                onChange={updateRearWidth}
-                onClear={clearRearWidth}
-              />
-            )}
-            {rearAspectRatio && (
+            <SelectBox
+              label={'Rear Width'}
+              value={rearWidth}
+              options={rearFilteredWidths ?? []}
+              disabled={false}
+              onChange={updateRearWidth}
+              onClear={clearRearWidth}
+            />
               <SelectBox
                 label={'Rear Ratio'}
                 value={rearAspectRatio}
                 options={rearFilteredAspectRatios ?? []}
+                disabled={!isRearWidthSelected}
                 onChange={updateRearAspectRatio}
                 onClear={clearRearAspectRatio}
               />
-            )}
-            {rearDiameter && (
-              <SelectBox
-                label={'Rear Diameter'}
-                value={rearDiameter}
-                options={rearFilteredDiameters ?? []}
-                onChange={updateRearDiameter}
-                onClear={clearRearDiameter}
-              />
-            )}
+                    
+                    <SelectBox
+                      label={'Rear Diameter'}
+                      value={rearDiameter}
+                      options={rearFilteredDiameters ?? []}
+                      disabled={!(isRearWidthSelected && isRearRatioSelected)}
+                      onChange={updateRearDiameter}
+                      onClear={clearRearDiameter}
+                    />
+
           </div>
         </>
       )}

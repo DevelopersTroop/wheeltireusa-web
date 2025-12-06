@@ -6,8 +6,9 @@ import {
 import { useTypedSelector } from '@/redux/store';
 import { getFiltersExceptPriceFilterBy } from '@/utils/filter';
 import { useRouter } from 'next/navigation';
-import { MouseEvent, useEffect, useRef, useState } from 'react';
+import { MouseEvent, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
+import { useRearMode } from './context/RearModeContext';
 
 const useFilterByTireSize = () => {
   const dispatch = useDispatch();
@@ -63,8 +64,7 @@ const useFilterByTireSize = () => {
     }
   }, [data, isLoading, dispatch]);
 
-  // State to track if we're in rear tire selection mode
-  const [isRearTireMode, setIsRearTireMode] = useState(false);
+  const { isRearTireMode, setIsRearTireMode } = useRearMode();
 
   // scroll to top when main filter state changes
   useEffect(() => {
@@ -153,6 +153,9 @@ const useFilterByTireSize = () => {
     router.push(url);
     dispatch(closeMainFilterModal());
   };
+  useEffect(() => {
+    console.log("setIsRearTireMode", setIsRearTireMode)
+  }, [setIsRearTireMode]);
 
   const handleRearTireSizeLinkClick = () => {
     setIsRearTireMode(true);
