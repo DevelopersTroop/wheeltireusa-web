@@ -230,69 +230,64 @@ export default function OrderTracking() {
                       sales@wheeltireusa.com
                     </a>
                   </p>
-
-                  {/* Track by Email */}
-                  <>
-                    <div className="flex flex-wrap gap-4 items-end">
-                      <div className="flex-1 min-w-[200px]">
-                        <Label
-                          htmlFor="email"
-                          className="text-sm font-medium text-gray-700 mb-2"
-                        >
-                          Order Email Address:
-                        </Label>
-                        <Input
-                          id="email"
-                          type="email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          className="w-full h-12"
-                          disabled={isLoadingOrders}
-                        />
-                      </div>
-
-                      <div className="flex-1 min-w-[200px]">
-                        <Label
-                          htmlFor="zipCode2"
-                          className="text-sm font-medium text-gray-700 mb-2"
-                        >
-                          Billing ZIP/Postal Code:
-                        </Label>
-                        <Input
-                          id="zipCode2"
-                          type="text"
-                          value={zipCode2}
-                          onChange={(e) => setZipCode2(e.target.value)}
-                          className="w-full h-12"
-                          disabled={isLoadingOrders}
-                        />
-                      </div>
-
-                      <Button
-                        onClick={handleView}
-                        className="bg-red-600 hover:bg-red-700 text-white px-8 h-12"
-                        disabled={isLoadingOrders || !email || !zipCode2}
+                  <div className="flex flex-wrap gap-4 items-end">
+                    <div className="flex-1 min-w-[200px]">
+                      <Label
+                        htmlFor="email"
+                        className="text-sm font-medium text-gray-700 mb-2"
                       >
-                        {isLoadingOrders ? (
-                          <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Loading...
-                          </>
-                        ) : (
-                          'View'
-                        )}
-                      </Button>
+                        Order Email Address:
+                      </Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full h-12"
+                        disabled={isLoadingOrders}
+                      />
                     </div>
-                  </>
-                  {/* Error Message for Email Tracking */}
-                  {ordersError && (
+
+                    <div className="flex-1 min-w-[200px]">
+                      <Label
+                        htmlFor="zipCode2"
+                        className="text-sm font-medium text-gray-700 mb-2"
+                      >
+                        Billing ZIP/Postal Code:
+                      </Label>
+                      <Input
+                        id="zipCode2"
+                        type="text"
+                        value={zipCode2}
+                        onChange={(e) => setZipCode2(e.target.value)}
+                        className="w-full h-12"
+                        disabled={isLoadingOrders}
+                      />
+                    </div>
+
+                    <Button
+                      onClick={handleView}
+                      className="bg-red-600 hover:bg-red-700 text-white px-8 h-12"
+                      disabled={isLoadingOrders || !email || !zipCode2}
+                    >
+                      {isLoadingOrders ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Loading...
+                        </>
+                      ) : (
+                        'View'
+                      )}
+                    </Button>
+                  </div>
+                  {ordersError ? (
                     <Alert variant="destructive" className="mt-4">
                       <AlertDescription>
                         {(ordersError as any)?.data?.message ||
                           'No orders found. Please verify your email and ZIP code.'}
                       </AlertDescription>
                     </Alert>
-                  )}
+                  ) : null}
 
                   {/* Orders List Display */}
                   {ordersList?.orders && ordersList.orders.length > 0 && (
