@@ -45,7 +45,7 @@ jobs:
             git reset --hard origin/main &&
             sudo rm -rf .next/ && echo ".next deleted" || echo "Failed to delete .next" &&
 
-            npm install --legacy-peer-deps &&
+            npm install --legacy-peer-deps --jobs=1 &&
             
             # NEXT_PUBLIC_ENV=stage NEXT_PUBLIC_STATIC_CDN_BASE_URL=\$CDN_BASE_URL NEXT_PUBLIC_ASSET_CDN_BASE_URL=\$ASSET_CDN_BASE_URL npm install --legacy-peer-deps &&
             NEXT_PUBLIC_ENV=stage NEXT_PUBLIC_STATIC_CDN_BASE_URL=\$CDN_BASE_URL NEXT_PUBLIC_ASSET_CDN_BASE_URL=\$ASSET_CDN_BASE_URL npm run build:stage &&
