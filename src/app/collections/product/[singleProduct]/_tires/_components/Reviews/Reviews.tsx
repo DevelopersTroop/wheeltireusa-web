@@ -6,7 +6,7 @@ import ReviewPagination from '../ReviewPagination/ReviewPagination';
 
 export const Reviews: React.FC<{ productId: number }> = ({ productId }) => {
   const [page, setPage] = useState(1);
-  console.log('page', page);
+
   const { isLoading, isFetching, data } = useGetReviewsQuery({
     productId,
     page: 1,
