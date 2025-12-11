@@ -130,6 +130,10 @@ const navMenus: NavMenu[] = [
         label: 'FAQ',
         href: '/frequently-asked-questions',
       },
+      {
+        label: 'Track your order',
+        href: '/track-order',
+      },
       // {
       //   label: 'Sponsorship',
       //   href: '#',

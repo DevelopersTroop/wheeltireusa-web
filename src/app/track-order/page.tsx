@@ -16,7 +16,14 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { format } from 'date-fns';
-import { CheckCircle, Clock, Loader2, Package, XCircle } from 'lucide-react';
+import {
+  Car,
+  CheckCircle,
+  Clock,
+  Loader2,
+  Package,
+  XCircle,
+} from 'lucide-react';
 import { useState } from 'react';
 
 export default function OrderTracking() {
@@ -29,7 +36,6 @@ export default function OrderTracking() {
     trackByNumber,
     { data: orderData, isLoading: isLoadingOrder, error: orderError },
   ] = useTrackByOrderMutation();
-  console.log('TCL: orderData', orderData);
   const [
     trackByEmail,
     { data: ordersList, isLoading: isLoadingOrders, error: ordersError },
@@ -87,7 +93,6 @@ export default function OrderTracking() {
 
         <Card className="shadow-sm">
           <CardContent className="p-8">
-            {/* Track by Order Number */}
             <div className="flex flex-wrap gap-4 items-end mb-6">
               <div className="flex-1 min-w-[200px]">
                 <Label
@@ -139,18 +144,16 @@ export default function OrderTracking() {
               </Button>
             </div>
 
-            {/* Error Message for Order Tracking */}
-            {!isLoadingOrder && (orderError || !orderData?.order) && (
+            {!isLoadingOrder && orderError ? (
               <Alert variant="destructive" className="mb-6">
                 <AlertDescription>
                   {(orderError as any)?.data?.message ||
                     'Order not found. Please verify your order number and ZIP code.'}
                 </AlertDescription>
               </Alert>
-            )}
+            ) : null}
 
-            {/* Order Details Display */}
-            {orderData?.order && (
+            {orderData?.order ? (
               <Card className="mb-6 border-2 border-blue-200">
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between mb-4">
@@ -212,7 +215,7 @@ export default function OrderTracking() {
                   </div>
                 </CardContent>
               </Card>
-            )}
+            ) : null}
 
             <Accordion type="single" collapsible className="mb-6">
               <AccordionItem value="order-help" className="border-none">
