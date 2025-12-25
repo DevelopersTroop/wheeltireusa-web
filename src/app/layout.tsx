@@ -1,3 +1,4 @@
+import { DynamicAnalytics } from '@/components/dynamic-analytics';
 import { Footer } from '@/components/shared/Footer/Footer';
 import { GoogleMapScriptLoader } from '@/components/shared/googleMapScriptLoader';
 import { Header } from '@/components/shared/Header/Header';
@@ -7,8 +8,6 @@ import '@/styles/globals.css';
 import { metaDataHelper } from '@/utils/metadata';
 import { DM_Sans } from 'next/font/google';
 import { Toaster } from 'sonner';
-import { GoogleAnalytics } from '@next/third-parties/google';
-import { DynamicAnalytics } from '@/components/dynamic-analytics';
 
 const dmSans = DM_Sans({
   variable: '--font-dm-sans',
@@ -45,7 +44,6 @@ export default function RootLayout({
         />
         <link rel="icon" href="/images/fav.ico" />
       </head>
-      <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GID as string} />
       <body className={`${dmSans.variable} antialiased`}>
         <GoogleMapScriptLoader>
           <ReduxWrapper>
