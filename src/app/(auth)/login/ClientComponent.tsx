@@ -5,10 +5,11 @@ import Item from '@/components/ui/breadcrumb/item';
 import Container from '@/components/ui/container/container';
 import Link from 'next/link';
 import LoginForm from './_components/LoginForm/LoginForm';
+import GoogleAuth from '@/components/shared/GoogleAuth';
 
 const ClientComponent = () => {
   const icons = [
-    { src: '/google-icon-logo.svg', alt: 'Google' },
+    // { src: '/google-icon-logo.svg', alt: 'Google' },
     { src: '/facebook.png', alt: 'Facebook' },
     { src: '/Apple_logo.svg', alt: 'Apple' },
   ];
@@ -51,6 +52,7 @@ const ClientComponent = () => {
         </div>
 
         <div className="flex items-center justify-center gap-4">
+          <GoogleAuth />
           {icons.map((icon, idx) => (
             <button
               key={idx}
