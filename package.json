@@ -6,7 +6,7 @@
     "dev": "dotenv -e ./.env.dev -- next dev -p 3000 --turbo",
     "build": "dotenv -e ./.env.staging -- next build",
     "build:stage": "dotenv -e ./.env.staging -- next build",
-    "start": "next start",
+    "start": "next start -p 3001",
     "lint": "next lint",
     "prepare": "husky",
     "lint-staged": "lint-staged && dotenv -e ./.env.production -- next build"
