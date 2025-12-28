@@ -11,6 +11,7 @@ import {
 import useAuth from '@/hooks/useAuth';
 import { useScreenSize } from '@/hooks/useScreenSize';
 import { triggerEvent } from '@/utils/analytics';
+import { isTireAfterMarketTireSizePossible } from '@/utils/product';
 
 const pathMap = {
   '/': 'home',
@@ -65,6 +66,13 @@ const pathMap = {
   '/checkout': 'checkout',
   '/cart': 'cart',
 };
+
+declare global {
+  interface Window {
+    dataLayer: any;
+    isTireAfterMarketTireSizePossible: typeof isTireAfterMarketTireSizePossible;
+  }
+}
 
 export const DynamicAnalytics = () => {
   const { user } = useAuth();
