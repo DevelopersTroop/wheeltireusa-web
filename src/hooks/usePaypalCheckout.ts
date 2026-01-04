@@ -30,6 +30,9 @@ export const usePaypalCheckout = () => {
     existingOrderId,
     referralCode,
     affiliateDiscount,
+    taxAmount,
+    totalWithTax,
+    deliveryCharge,
   } = useTypedSelector((state) => state.persisted.checkout);
 
   const { user } = useAuth();
@@ -50,7 +53,12 @@ export const usePaypalCheckout = () => {
         selectedDealerInfo,
         isAccountCreated,
         shippingMethod,
-        deliveryCharge: cartType === 'CENTER_CAP_ONLY' ? 14.99 : 0,
+        deliveryCharge:
+          cartType === 'CENTER_CAP_ONLY'
+            ? 14.99
+            : deliveryCharge
+              ? deliveryCharge
+              : 0,
         productsInfo,
         isCouponApplied,
         couponCode,
@@ -62,19 +70,18 @@ export const usePaypalCheckout = () => {
         existingOrderId,
         referralCode,
         affiliateDiscount,
+        taxAmount,
+        totalWithTax,
+        paymentMethod: 'Paypal',
       };
 
-      const response = await fetch(
-        `${apiBaseUrl}/payments/paypal/checkout`,
-        // `http://localhost:8080/api/v1/payments/create-paypal-payment`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            orderData,
-          }),
-        }
-      );
+      const response = await fetch(`${apiBaseUrl}/payments/paypal/checkout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orderData,
+        }),
+      });
       if (!response.ok) {
         const error = await response.text();
 
