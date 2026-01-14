@@ -12,7 +12,7 @@ export const metadata = metaDataHelper({
     description: '',
   },
   alternates: {
-    canonical: 'https://amaniforged.com/checkout',
+    canonical: 'https://tirematic.com/checkout',
   },
 });
 

@@ -23,6 +23,7 @@ export const metadata = metaDataHelper({
   openGraph: {
     title: '',
     description: '',
+    images: ['/images/header/TirematicLogo.png'],
   },
   alternates: {
     canonical: 'https://tirematic.com',

@@ -3,6 +3,10 @@ import { Metadata } from 'next';
 export const metaDataHelper = (metaData: Partial<Metadata>): Metadata => {
   return {
     ...metaData,
+    openGraph: {
+      images: ['/images/header/TirematicLogo.png'],
+      ...metaData.openGraph,
+    },
     robots: {
       follow: true,
       index: true,
