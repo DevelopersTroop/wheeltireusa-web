@@ -17,9 +17,8 @@ const AddZipCode: React.FC<AddZipCodeProps> = ({
   showRearTireSizeLink = false,
   onRearTireSizeLinkClick,
 }) => {
-  const { onChangeZipCode, zipCode, handleDetectZipCode, loading } =
+  const { updateZipInput, zipCode, handleDetectZipCode, loading } =
     useAddZipCode();
-
 
   return (
     <>
@@ -44,7 +43,7 @@ const AddZipCode: React.FC<AddZipCodeProps> = ({
             value={zipCode}
             maxLength={5}
             pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
-            onChange={(value) => onChangeZipCode(value, true)}
+            onChange={(value) => updateZipInput(value, true)}
           >
             <InputOTPGroup>
               <InputOTPSlot index={0} />
