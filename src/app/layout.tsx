@@ -8,6 +8,7 @@ import '@/styles/globals.css';
 import { metaDataHelper } from '@/utils/metadata';
 import { DM_Sans } from 'next/font/google';
 import { Toaster } from 'sonner';
+import CartSystem from './cart/v2/page';
 
 const dmSans = DM_Sans({
   variable: '--font-dm-sans',
@@ -54,6 +55,7 @@ export default function RootLayout({
               <main>{children}</main>
               <Footer />
             </CheckoutProvider>
+            <CartSystem />
           </ReduxWrapper>
           <Toaster richColors />
         </GoogleMapScriptLoader>

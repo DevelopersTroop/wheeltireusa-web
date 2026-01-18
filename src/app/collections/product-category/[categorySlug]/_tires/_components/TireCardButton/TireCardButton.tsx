@@ -7,6 +7,7 @@ import {
   prepareCartProducts,
   TireCardButtonProps,
 } from './utils/tireCardButton';
+import { useCartHook } from '@/hooks/useCartHook';
 
 const TireCardButton = ({
   products,
@@ -14,7 +15,7 @@ const TireCardButton = ({
   rearTireQuantity,
 }: TireCardButtonProps) => {
   const dispatch = useAppDispatch();
-  const router = useRouter();
+  const { setOpen } = useCartHook();
   const handleAddToCart = async () => {
     const cartProducts = prepareCartProducts(
       products,
@@ -31,7 +32,7 @@ const TireCardButton = ({
     <button
       onClick={() => {
         if (addToCartText === 'View Cart') {
-          router.push('/cart');
+          setOpen();
           return;
         }
         setAddToCartText('Adding to cart...');

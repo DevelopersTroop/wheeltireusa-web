@@ -12,9 +12,12 @@ import UserAccountLink from './components/user-account-link/user-account-link';
 import HeaderProvider from './context/header-provider';
 import TopBar from './components/top-bar';
 import { Tooltip } from 'react-tooltip';
+import { Button } from '@/components/ui/button';
+import { useCartHook } from '@/hooks/useCartHook';
 
 export const Header = () => {
   const { products } = useTypedSelector((state) => state.persisted.cart);
+  const { setOpen } = useCartHook();
   return (
     <>
       <HeaderProvider>
@@ -47,8 +50,8 @@ export const Header = () => {
                   <UserCircle />
                 </Link> */}
                 <UserAccountLink />
-                <Link
-                  href={'/cart'}
+                <Button
+                  onClick={setOpen}
                   data-tooltip-id="my-tooltip"
                   data-tooltip-content="Cart"
                   data-tooltip-place="top"
@@ -58,7 +61,7 @@ export const Header = () => {
                   <span className="absolute w-5 h-5 flex items-center justify-center font-semibold bg-primary text-white rounded-full text-[12px] z-0 firefox-badge chrome-badge">
                     {products.reduce((a, p) => a + p.quantity, 0)}
                   </span>
-                </Link>
+                </Button>
               </div>
             </div>
           </header>

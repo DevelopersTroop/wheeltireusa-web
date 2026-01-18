@@ -15,10 +15,11 @@ import {
   calculateTotalPrice,
   prepareCartData,
 } from './utils/tireActionButtons';
+import { useCartHook } from '@/hooks/useCartHook';
 
 const TireActionButtons = ({ product }: { product: TInventoryItem[] }) => {
   // Redux dispatch and router hooks
-
+  const { setOpen } = useCartHook();
   const isSquare = product[1] === null; // Check if the tire set is square (all tires same size)
   const [frontTireQuantity, setFrontTireQuantity] = useState(2);
   const [rearTireQuantity, setRearTireQuantity] = useState(2);
@@ -81,7 +82,7 @@ const TireActionButtons = ({ product }: { product: TInventoryItem[] }) => {
         <button
           onClick={() => {
             if (addToCartText === 'View Cart') {
-              router.push('/cart');
+              setOpen();
               return;
             }
             setAddToCartText('Adding to cart...');

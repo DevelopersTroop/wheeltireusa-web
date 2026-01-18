@@ -59,8 +59,7 @@ const ClientComponent: React.FC = () => {
         description:
           'Your cart is empty. Please add items before proceeding to checkout.',
       });
-      // Show a toast notification
-      router.push('/cart'); // Redirect the user to the cart page
+      router.back();
       return;
     }
     setIsLoading(false); // Set loading to false once the cart is validated
