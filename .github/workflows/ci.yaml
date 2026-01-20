@@ -1,12 +1,66 @@
-name: Tiremetic Web
+name: Amani Forged Web
 
 on:
   push:
     branches:
       - main
+      - staging
 
 jobs:
-  main:
+  # deploy-staging:
+  #   runs-on: ubuntu-latest
+  #   if: github.ref == 'refs/heads/staging'
+
+  #   steps:
+  #     - name: Checkout Code
+  #       uses: actions/checkout@v3
+
+  #     - name: Set up Node.js
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 20
+
+  #     - name: Install Dependencies and Build
+  #       run: |
+  #         npm install --force
+  #         npm run build
+
+  #     - name: Add EC2 Host to Known Hosts
+  #       run: |
+  #         mkdir -p ~/.ssh
+  #         ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
+  #       shell: /usr/bin/bash -e {0}
+  #       env:
+  #         HOST: ${{ secrets.STAGING_HOST }}
+
+  #     - name: Install dependencies
+  #       run: npm install --force
+
+  #     - name: Deploy to EC2
+  #       run: |
+  #         echo "$KEY" > private_key.pem
+  #         chmod 600 private_key.pem
+  #         ssh -i private_key.pem $USER@$HOST "
+  #           sudo dnf update -y &&
+  #           sudo dnf install -y git &&
+  #           cd $APP_DIR &&
+  #           git fetch --all &&
+  #           git reset --hard origin/staging &&
+  #           rm -rf .next/ &&
+  #           npm install --legacy-peer-deps &&
+  #           npm run build &&
+  #           pm2 restart amani-forged-stage-web &&
+  #           pm2 save
+  #         "
+  #         rm private_key.pem
+  #       shell: /usr/bin/bash -e {0}
+  #       env:
+  #         HOST: ${{ secrets.STAGING_HOST }}
+  #         USER: ${{ secrets.STAGING_USER }}
+  #         KEY: ${{ secrets.STAGING_KEY }}
+  #         APP_DIR: ${{ secrets.STAGING_DIR }}
+
+  deploy-production:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
 
@@ -19,96 +73,38 @@ jobs:
         with:
           node-version: 20
 
-      - name: Get Commit SHA
-        run: echo "COMMIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-
       - name: Add EC2 Host to Known Hosts
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
         shell: /usr/bin/bash -e {0}
         env:
-          HOST: ${{ secrets.STAGING_HOST }}
+          HOST: ${{ secrets.PROD_HOST }}
 
-      - name: Deploy to Staging
+      - name: Deploy to EC2
         run: |
           echo "$KEY" > private_key.pem
           chmod 600 private_key.pem
           ssh -i private_key.pem $USER@$HOST "
-            export COMMIT_SHA=${{ env.COMMIT_SHA }}
-            export CDN_BASE_URL=https://d3pl580m833nyd.cloudfront.net/tiremetic-web/\$COMMIT_SHA
-            export ASSET_CDN_BASE_URL=https://d3pl580m833nyd.cloudfront.net/tiremetic-web/\$COMMIT_SHA/public
-            echo \"Using CDN Base: \$CDN_BASE_URL\"
-
+            sudo dnf update -y &&
+            sudo dnf install -y git &&
             cd $APP_DIR &&
             git fetch --all &&
             git reset --hard origin/main &&
-            sudo rm -rf .next/ && echo ".next deleted" || echo "Failed to delete .next" &&
-
-            npm install --legacy-peer-deps --jobs=1 &&
-            
-            # NEXT_PUBLIC_ENV=stage NEXT_PUBLIC_STATIC_CDN_BASE_URL=\$CDN_BASE_URL NEXT_PUBLIC_ASSET_CDN_BASE_URL=\$ASSET_CDN_BASE_URL npm install --legacy-peer-deps &&
-            NEXT_PUBLIC_ENV=stage NEXT_PUBLIC_STATIC_CDN_BASE_URL=\$CDN_BASE_URL NEXT_PUBLIC_ASSET_CDN_BASE_URL=\$ASSET_CDN_BASE_URL npm run build:stage &&
-
-            sudo yum install -y awscli
-
-            export AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
-            export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            export AWS_DEFAULT_REGION=${{ secrets.AWS_REGION }}
-            export S3_PATH=tiremetic-web/\$COMMIT_SHA
-
-            if [ -d '.next/static' ]; then
-              aws s3 sync .next/static s3://$BUCKET_NAME/\$S3_PATH/_next/static --cache-control 'public,max-age=31536000,immutable'
-            fi
-
-            if [ -d 'public' ]; then
-              aws s3 sync public s3://$BUCKET_NAME/\$S3_PATH/public --cache-control 'public,max-age=31536000,immutable'
-            fi
-
-            sudo rm -rf .next/cache &&
-            npm cache clean --force
-          "
-          rm private_key.pem
-        shell: /usr/bin/bash -e {0}
-        env:
-          HOST: ${{ secrets.STAGING_HOST }}
-          USER: ${{ secrets.STAGING_USER }}
-          KEY: ${{ secrets.STAGING_KEY }}
-          APP_DIR: ${{ secrets.STAGING_PROJECT_DIR }}
-          BUCKET_NAME: ${{ secrets.STAGING_S3_BUCKET_NAME }}
-
-      - name: Start or Restart App with PM2
-        run: |
-          echo "$KEY" > private_key.pem
-          chmod 600 private_key.pem
-          ssh -i private_key.pem $USER@$HOST "
-            cd $APP_DIR &&
-            if pm2 show tiremetic-stage-web | grep -q 'online'; then
-              pm2 restart tiremetic-stage-web
+            rm -rf .next/ &&
+            npm install --legacy-peer-deps &&
+            npm run build &&
+            if pm2 show ktc-web | grep -q 'online'; then
+              pm2 restart ktc-web
             else
-              pm2 start ecosystem.config.js --only tiremetic-stage-web
+              pm2 start ecosystem.config.js --only ktc-web
             fi &&
             pm2 save
           "
           rm private_key.pem
+        shell: /usr/bin/bash -e {0}
         env:
-          HOST: ${{ secrets.STAGING_HOST }}
-          USER: ${{ secrets.STAGING_USER }}
-          KEY: ${{ secrets.STAGING_KEY }}
-          APP_DIR: ${{ secrets.STAGING_PROJECT_DIR }}
-
-      - name: Inject Commit SHA and Reload NGINX using stage-setup.sh
-        run: |
-          echo "$KEY" > private_key.pem
-          chmod 600 private_key.pem
-          ssh -i private_key.pem $USER@$HOST "
-            cd $APP_DIR/nginx &&
-            bash stage-setup.sh ${COMMIT_SHA}
-          "
-          rm private_key.pem
-        env:
-          HOST: ${{ secrets.STAGING_HOST }}
-          USER: ${{ secrets.STAGING_USER }}
-          KEY: ${{ secrets.STAGING_KEY }}
-          COMMIT_SHA: ${{ env.COMMIT_SHA }}
-          APP_DIR: ${{ secrets.STAGING_PROJECT_DIR }}
+          HOST: ${{ secrets.PROD_HOST }}
+          USER: ${{ secrets.PROD_USER }}
+          KEY: ${{ secrets.PROD_KEY }}
+          APP_DIR: ${{ secrets.PROD_DIR }}
