@@ -1,5 +1,5 @@
 import DeliveryWithStock from '@/app/cart/_components/TiresCard/components/DeliveryWithStock/DeliveryWithStock';
-import PaymentMessaging from '@/components/shared/payment-method-messaging';
+import PaymentMessaging from '@/components/shared-old/payment-method-messaging';
 import { TInventoryItem } from '@/types/product';
 import { getProductThumbnail } from '@/utils/product';
 import Image from 'next/image';

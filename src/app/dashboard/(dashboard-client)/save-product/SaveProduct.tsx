@@ -1,6 +1,6 @@
 'use client'; // Enables client-side rendering for this component
 
-import LoadingSpinner from '@/components/shared/loading/spinner';
+import LoadingSpinner from '@/components/shared-old/loading/spinner';
 import {
   useGetWishlistQuery,
   useRemoveWishlistMutation,

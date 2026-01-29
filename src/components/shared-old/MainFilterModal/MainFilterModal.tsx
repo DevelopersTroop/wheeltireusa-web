@@ -1,5 +1,5 @@
 'use client';
-import useMainFilterModal from '@/components/shared/MainFilterModal/useMainFilterModal.';
+import useMainFilterModal from '@/components/shared-old/MainFilterModal/useMainFilterModal.';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet';
 import {

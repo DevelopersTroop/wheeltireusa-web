@@ -1,5 +1,5 @@
 'use client';
-import TireQuantity from '@/components/shared/TireQuantity/TireQuantity';
+import TireQuantity from '@/components/shared-old/TireQuantity/TireQuantity';
 import { removeFromCart, TCartProduct } from '@/redux/features/cartSlice';
 import { getPrice } from '@/utils/price';
 import { getProductThumbnail } from '@/utils/product';

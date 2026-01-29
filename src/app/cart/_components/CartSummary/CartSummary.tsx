@@ -1,16 +1,16 @@
 'use client';
 import { FaShippingFast } from 'react-icons/fa';
 
-// import PaymentMessaging from '@/components/shared/payment-method-messaging';
-import { WhatWeAccept } from '@/components/shared/what-we-accept';
+// import PaymentMessaging from '@/components/shared-old/payment-method-messaging';
+import { WhatWeAccept } from '@/components/shared-old/what-we-accept';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '@/redux/store';
 import { calculateCartTotal, formatPrice } from '@/utils/price';
 import { initiateCheckout } from '@/redux/features/checkoutSlice';
-import PaymentMessaging from '@/components/shared/payment-method-messaging';
-import { ApplyCoupon } from '@/components/shared/applyCoupon';
+import PaymentMessaging from '@/components/shared-old/payment-method-messaging';
+import { ApplyCoupon } from '@/components/shared-old/applyCoupon';
 import { useCheckout } from '@/context/checkoutContext';
 
 const CartSummary = () => {

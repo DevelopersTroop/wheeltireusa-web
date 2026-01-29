@@ -5,8 +5,8 @@ import Item from '@/components/ui/breadcrumb/item';
 import Container from '@/components/ui/container/container';
 import Link from 'next/link';
 import RegisterForm from './_components/RegisterForm/RegisterForm';
-import GoogleAuth from '@/components/shared/GoogleAuth';
-import FacebookAuth from '@/components/shared/FacebookAuth';
+import GoogleAuth from '@/components/shared-old/GoogleAuth';
+import FacebookAuth from '@/components/shared-old/FacebookAuth';
 
 const ClientComponent = () => {
   const icons = [

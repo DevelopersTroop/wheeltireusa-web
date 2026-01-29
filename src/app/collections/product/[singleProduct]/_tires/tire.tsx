@@ -1,4 +1,4 @@
-import { ImageGallery } from '@/components/shared/imageGallery';
+import { ImageGallery } from '@/components/shared-old/imageGallery';
 import Breadcrumb from '@/components/ui/breadcrumb/breadcrumb';
 import Item from '@/components/ui/breadcrumb/item';
 import { TInventoryItem } from '@/types/product';

@@ -1,4 +1,4 @@
-import StarRating from '@/components/shared/StarRating';
+import StarRating from '@/components/shared-old/StarRating';
 import { useGetReviewsQuery } from '@/redux/apis/reviews';
 import React from 'react';
 

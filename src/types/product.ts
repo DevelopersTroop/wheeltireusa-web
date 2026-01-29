@@ -128,6 +128,7 @@ export type TInventoryItem = TInventoryBase & {
   // pricingId: string | null;
   inventory: TInventoryItem['inventoryId'] | null;
   pricing: TInventoryItem['pricingId'] | null;
+  title: string
 };
 
 export type TInventoryListItem = TInventoryBase & {

@@ -9,7 +9,7 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import { useZipCodePopup } from '@/hooks/useZipcodePopup';
-import useAddZipCode from '@/components/shared/MainFilterModal/components/AddZipCode/useAddZipCode';
+import useAddZipCode from '@/components/shared-old/MainFilterModal/components/AddZipCode/useAddZipCode';
 
 const ZipCodeModal = () => {
   const { open, setOpen } = useZipCodePopup();

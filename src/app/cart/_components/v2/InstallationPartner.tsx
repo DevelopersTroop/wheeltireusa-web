@@ -9,7 +9,7 @@ import {
 import { Star, MapPin, Clock, Users, ChevronRight } from 'lucide-react';
 import InstallerSelectionModal from './InstallerSelectionModal';
 import { useZipCodePopup } from '@/hooks/useZipcodePopup';
-import useAddZipCode from '@/components/shared/MainFilterModal/components/AddZipCode/useAddZipCode';
+import useAddZipCode from '@/components/shared-old/MainFilterModal/components/AddZipCode/useAddZipCode';
 
 const InstallationSection = () => {
   const [open, setOpen] = useState(false);

@@ -1,7 +1,7 @@
 'use client';
 
 import { generateProductLink } from '@/app/collections/product-category/[categorySlug]/_tires/_components/TireCard/utils/tireCard';
-import TireQuantity from '@/components/shared/TireQuantity/TireQuantity';
+import TireQuantity from '@/components/shared-old/TireQuantity/TireQuantity';
 import Container from '@/components/ui/container/container';
 import { useGetProductsQuery } from '@/redux/apis/product';
 import { getPrice } from '@/utils/price';

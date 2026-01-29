@@ -1,6 +1,6 @@
 'use client';
 
-import TireQuantity from '@/components/shared/TireQuantity/TireQuantity';
+import TireQuantity from '@/components/shared-old/TireQuantity/TireQuantity';
 import { TInventoryItem } from '@/types/product';
 import { getPrice } from '@/utils/price';
 import { getProductThumbnail } from '@/utils/product';

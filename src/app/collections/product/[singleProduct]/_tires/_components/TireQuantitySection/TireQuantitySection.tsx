@@ -2,7 +2,7 @@
 
 import { TInventoryItem } from '@/types/product';
 import { useEffect, useState } from 'react';
-import TireQuantity from '@/components/shared/TireQuantity/TireQuantity';
+import TireQuantity from '@/components/shared-old/TireQuantity/TireQuantity';
 import { getPrice } from '@/utils/price';
 
 const TireQuantitySection = ({ product }: { product: TInventoryItem[] }) => {

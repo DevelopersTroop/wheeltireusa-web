@@ -23,7 +23,7 @@ import {
   setBillingAddress,
   setShippingAddress,
 } from '@/redux/features/checkoutSlice';
-import { GooglePlacesInput } from '@/components/shared/googlePlaceInput';
+import { GooglePlacesInput } from '@/components/shared-old/googlePlaceInput';
 import { US_STATES } from '../../states';
 
 interface ICompProps {

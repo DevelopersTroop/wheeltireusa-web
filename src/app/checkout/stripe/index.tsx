@@ -16,7 +16,7 @@ import {
   setTaxAmount,
 } from '@/redux/features/checkoutSlice';
 import { useSearchParams } from 'next/navigation';
-import LoadingSpinner from '@/components/shared/loading/spinner';
+import LoadingSpinner from '@/components/shared-old/loading/spinner';
 
 // --------------------
 // Types

@@ -2,7 +2,7 @@
 
 import { useGetProductQuery } from '@/redux/apis/product';
 import Tire from './_tires/tire';
-import { SingleProductSkeleton } from '@/components/shared/SingleProductSkeleton';
+import { SingleProductSkeleton } from '@/components/shared-old/SingleProductSkeleton';
 /**
  * SingleProductClient Component
  * Fetches product details based on the route params and displays the corresponding product component.

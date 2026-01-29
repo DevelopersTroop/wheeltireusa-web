@@ -6,8 +6,8 @@ import { mapPendingOrderToCheckout } from './helper/map-pending-order-to-checkou
 import { useCheckout } from '@/context/checkoutContext';
 import { useAppDispatch, useTypedSelector } from '@/redux/store';
 import { toast } from 'sonner';
-import LoadingSpinner from '@/components/shared/loading/spinner';
-import { LocationAccess } from '@/components/shared/locationAccess';
+import LoadingSpinner from '@/components/shared-old/loading/spinner';
+import { LocationAccess } from '@/components/shared-old/locationAccess';
 import Stepper from './_components/stepper';
 import { Renderer } from './_components/stepRenderer';
 

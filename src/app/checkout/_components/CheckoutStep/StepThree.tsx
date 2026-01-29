@@ -3,8 +3,8 @@
 import {
   TSnapCheckoutReturn,
   TSnapInputCheckout,
-} from '@/components/shared/snapLoader';
-import { WhatWeAccept } from '@/components/shared/what-we-accept';
+} from '@/components/shared-old/snapLoader';
+import { WhatWeAccept } from '@/components/shared-old/what-we-accept';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
