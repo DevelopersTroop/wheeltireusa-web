@@ -4,7 +4,7 @@ import HeroFilter from '../filter/HeroFilter';
 export const HomeHero = () => {
   return (
     <div
-      className={`bg-[url(/images/home/hero.png)] bg-no-repeat bg-cover bg-right-top`}
+      className={`bg-[url(/images/home/hero.png)] bg-no-repeat bg-cover bg-top-right`}
     >
       <Container>
         <div className="h-[90vh] mx-auto flex flex-col justify-center items-center ">

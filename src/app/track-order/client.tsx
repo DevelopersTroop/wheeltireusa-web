@@ -338,13 +338,13 @@ export default function OrderTracking() {
             <div className="flex justify-center">
               <div className="flex gap-4">
                 <div className="w-32 h-40 bg-gray-200 rounded-lg overflow-hidden">
-                  <div className="w-full h-full bg-gradient-to-br from-blue-100 to-blue-200"></div>
+                  <div className="w-full h-full bg-linear-to-br from-blue-100 to-blue-200"></div>
                 </div>
                 <div className="w-32 h-40 bg-gray-200 rounded-lg overflow-hidden">
-                  <div className="w-full h-full bg-gradient-to-br from-cyan-100 to-cyan-200"></div>
+                  <div className="w-full h-full bg-linear-to-br from-cyan-100 to-cyan-200"></div>
                 </div>
                 <div className="w-32 h-40 bg-gray-200 rounded-lg overflow-hidden">
-                  <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200"></div>
+                  <div className="w-full h-full bg-linear-to-br from-gray-100 to-gray-200"></div>
                 </div>
               </div>
             </div>

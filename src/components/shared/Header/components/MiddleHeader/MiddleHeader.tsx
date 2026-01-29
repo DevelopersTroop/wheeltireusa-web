@@ -6,7 +6,7 @@ import { HeartIcon, Phone, ShoppingCart, User } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import MobileNavbar from "./components/MobileNavBar/MobileNavBar";
-import HeaderSearchButton from "../HeaderSearchButton/HeaderSearchButton";
+import HeaderSearchButton from "./components/HeaderSearchButton/HeaderSearchButton";
 
 export default function MiddleHeader() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -43,7 +43,7 @@ export default function MiddleHeader() {
             <MobileNavbar />
 
             <div className="flex items-center">
-              <Link href="/" className="flex-shrink-0">
+              <Link href="/" className="shrink-0">
                 <img
                   src="/images/logo.png"
                   alt="Custom Offsets"

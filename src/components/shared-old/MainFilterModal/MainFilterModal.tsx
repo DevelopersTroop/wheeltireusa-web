@@ -41,7 +41,7 @@ const YmmForm = () => {
           <Dialog open={isFilterModalOpen} onOpenChange={handleDialogChange}>
             <DialogContent className="sm:max-w-1/2 bg-muted p-0 lg:max-w-2/3">
               <Tabs value={activeTab ?? 'Vehicle'}>
-                <TabsList className="p-6 bg-muted border-b-1 border-muted-dark rounded-none w-full flex justify-start pb-[30px] mt-4">
+                <TabsList className="p-6 bg-muted border-b border-muted-dark rounded-none w-full flex justify-start pb-[30px] mt-4">
                   <div className="flex items-center space-x-6">
                     <DialogTitle className="text-lg">
                       Select your vehicle
@@ -99,7 +99,7 @@ const YmmForm = () => {
                 Select your vehicle
               </SheetTitle>
               <Tabs value={activeTab ?? 'Vehicle'}>
-                <TabsList className="pt-3 bg-muted border-b-1 border-muted-dark rounded-none w-full flex justify-start pb-[30px]">
+                <TabsList className="pt-3 bg-muted border-b border-muted-dark rounded-none w-full flex justify-start pb-[30px]">
                   <div className="flex items-center space-x-2 pl-1.5">
                     <TabsTriggerMainFilter
                       onClick={() =>

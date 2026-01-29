@@ -103,7 +103,7 @@ export default function Navbar() {
             {menu.megaMenu && (
               <div
                 className={cn(
-                  'absolute left-[10%] top-[100%] w-[850px] text-black bg-white flex shadow-lg transition-opacity duration-300 z-50',
+                  'absolute left-[10%] top-full w-[850px] text-black bg-white flex shadow-lg transition-opacity duration-300 z-50',
                   openMenu === menu.label
                     ? 'opacity-100'
                     : 'opacity-0 pointer-events-none'

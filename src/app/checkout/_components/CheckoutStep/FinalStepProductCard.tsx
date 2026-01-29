@@ -158,7 +158,7 @@ const QuantityInput: React.FC<QuantityInputProps> = ({
     inputName,
 }) => {
     return (
-        <div className="flex items-center w-fit border rounded-xs !py-0 !my-0 h-14">
+        <div className="flex items-center w-fit border rounded-xs py-0! my-0! h-14">
             {/* Decrease Button */}
             <div
                 onClick={onDecrease}

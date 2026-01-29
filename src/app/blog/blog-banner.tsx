@@ -14,7 +14,7 @@ const BlogBanner = () => {
     // Outer container for the banner with full width and fixed height
     <div className="w-full relative h-[150px] sm:h-[280px]" style={bannerImg}>
       {/* Dark gradient overlay for better text visibility */}
-      <div className="absolute left-0 top-0 w-full h-full bg-gradient-to-r from-black/90 to-black/0"></div>
+      <div className="absolute left-0 top-0 w-full h-full bg-linear-to-r from-black/90 to-black/0"></div>
       {/* Using the Container component to wrap the content */}
       <Container>
         {/* Flex container for positioning text content */}

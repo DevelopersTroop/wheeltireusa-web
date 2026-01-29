@@ -34,7 +34,7 @@ const MergedBrickBoxProvider = ({
       <div
         className={cn(
           'mergedBrickBox',
-          'bg-white border-muted-dark border-1 rounded px-3 py-[7.5px] inline-flex items-center space-x-2 text-lg text-muted-foreground cursor-pointer hover:text-black hover:border-black h-full',
+          'bg-white border-muted-dark border rounded px-3 py-[7.5px] inline-flex items-center space-x-2 text-lg text-muted-foreground cursor-pointer hover:text-black hover:border-black h-full',
           className
         )}
         {...props}

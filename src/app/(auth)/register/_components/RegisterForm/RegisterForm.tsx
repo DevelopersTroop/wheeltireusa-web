@@ -104,7 +104,7 @@ const RegisterForm = () => {
 
         <div>
           <Button
-            className="w-full !h-11 bg-[#F6511D] hover:bg-orange-500"
+            className="w-full h-11! bg-[#F6511D] hover:bg-orange-500"
             type="submit"
             disabled={isLoadingRegister}
           >

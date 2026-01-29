@@ -58,7 +58,7 @@ export const StepOne: React.FC<ICheckoutStepProps> = ({
             onClick={async () => {
               await handleValidate(code);
             }}
-            className="flex w-full !h-12 items-center justify-center gap-2"
+            className="flex w-full h-12! items-center justify-center gap-2"
             disabled={loading}
           >
             {loading ? (

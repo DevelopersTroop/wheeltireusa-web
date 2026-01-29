@@ -70,7 +70,7 @@ export const Header = () => {
             <MobileMenuWrapper />
           </div>
         </div>
-        <div className={'z-[15]'}>
+        <div className={'z-15'}>
           <TopBar />
         </div>
       </HeaderProvider>

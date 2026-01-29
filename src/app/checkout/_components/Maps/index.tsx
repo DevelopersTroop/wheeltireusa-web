@@ -163,7 +163,7 @@ const Map = () => {
       {/* Optional loading spinner */}
 
       {isLoading && (
-        <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-[rgba(0,0,0,0.2)] z-[9999]">
+        <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-[rgba(0,0,0,0.2)] z-9999">
           <ImSpinner size={38} className="animate-spin text-primary" />
         </div>
       )}

@@ -38,7 +38,7 @@ export const ApplyCoupon = () => {
               value={couponCode || coupon}
               onChange={(e) => setCoupon(e.target.value)}
               placeholder="Enter your coupon "
-              className="h-12 !bg-white"
+              className="h-12 bg-white!"
             />
             <Button
               onClick={async () => {
@@ -89,7 +89,7 @@ export const ApplyCoupon = () => {
                   toast.error(err.message);
                 }
               }}
-              className="!h-12 font-semibold"
+              className="h-12! font-semibold"
             >
               {isLoading ? 'Loading' : isCouponApplied ? 'Revoke' : 'Apply'}
             </Button>

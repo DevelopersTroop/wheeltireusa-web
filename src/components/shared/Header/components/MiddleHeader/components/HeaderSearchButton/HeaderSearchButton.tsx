@@ -61,7 +61,7 @@ const HeaderSearchButton: React.FC<HeaderSearchButtonProps> = ({
     <>
       {/* FULLSCREEN SEARCH OVERLAY */}
       {open && (
-        <div className="fixed inset-0 z-[150]">
+        <div className="fixed inset-0 z-150">
           {/* Background overlay */}
           <button
             onClick={() => setOpen(false)}

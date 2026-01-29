@@ -54,7 +54,7 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
           </div>
         </div>
       </Container>
-      <div className="max-w-[93.75rem] mx-auto w-full px-5 lg:px-16 pb-20 lg:pb-30 pt-3">
+      <div className="max-w-375 mx-auto w-full px-5 lg:px-16 pb-20 lg:pb-30 pt-3">
         {/* Mobile filter sidebar */}
         <div className="w-full min-[81.25rem]:hidden pb-3 pt-1 lg:pt-3">
           <SidebarTireFilters>
@@ -66,7 +66,7 @@ const TireCategory = ({ page = 1 }: ProductsPageProps) => {
           {/* Filters section (visible on large screens) */}
           <div
             className={
-              'hidden min-[81.25rem]:block min-[81.25rem]:w-[20.3125rem] mt-3'
+              'hidden min-[81.25rem]:block min-[81.25rem]:w-81.25 mt-3'
             }
           >
             <TireFilters />

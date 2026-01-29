@@ -64,7 +64,7 @@ const ActiveFiltersWithSorting = () => {
                 <button
                   onClick={() => removeFilterValue(key, value)}
                   key={index}
-                  className="bg-white border-black border-1 rounded px-3 py-[7.5px] inline-flex items-center space-x-2 text-lg text-muted-foreground cursor-pointer hover:text-black hover:border-black font-semibold"
+                  className="bg-white border-black border rounded px-3 py-[7.5px] inline-flex items-center space-x-2 text-lg text-muted-foreground cursor-pointer hover:text-black hover:border-black font-semibold"
                 >
                   {key === 'minPrice' ? (
                     <span className="text-[#210203] text-base font-normal">{`From $${value}`}</span>
@@ -123,7 +123,7 @@ const ActiveFiltersWithSorting = () => {
               Sort by
             </span>
           </p>
-          <SelectTrigger className="w-full max-w-[180px] !h-[41px] ">
+          <SelectTrigger className="w-full max-w-[180px] h-[41px]! ">
             <SelectValue placeholder="Sort options" />
           </SelectTrigger>
           <SelectContent>

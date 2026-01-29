@@ -5,7 +5,7 @@ import { Menu, X, ChevronDown, ChevronUp, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import navMenus, { NavMenu } from "./config";
-import SearchUnderMenu from "../../../SearchUnderMenu/SearchUnderMenu";
+// import SearchUnderMenu from "../../../SearchUnderMenu/SearchUnderMenu";
 
 
 // Recursive Mobile Navbar with Drawer
@@ -95,7 +95,7 @@ export default function MobileNavbar() {
       <button
         onClick={() => setIsOpen(true)}
         aria-label="Open menu"
-        className="p-2 text-black block min-[1160px]:hidden"
+        className="p-2 text-black block custom-lg:hidden"
       >
         <Menu className="w-7 h-7" />
       </button>
@@ -111,8 +111,8 @@ export default function MobileNavbar() {
       {/* Drawer */}
       <div
         className={cn(
-          "fixed top-0 left-0 z-50 h-full w-4/5 max-w-sm bg-white text-black shadow-lg transform transition-transform duration-300 ease-in-out overflow-y-auto",
-          isOpen ? "translate-x-0" : "-translate-x-full"
+          "fixed top-0 left-0 z-50 h-full w-4/5 bg-white text-black shadow-lg transition-all duration-300 ease-in-out overflow-y-auto",
+          isOpen ? "translate-x-0 visible" : "-translate-x-full invisible"
         )}
       >
         {/* Header */}
@@ -135,7 +135,7 @@ export default function MobileNavbar() {
         >
           Sign in or Create Account
         </Link>
-        <SearchUnderMenu isHomepage={false} />
+        {/* <SearchUnderMenu isHomepage={false} /> */}
 
         {/* Navigation */}
         <nav className="py-2 uppercase">{renderMenuItems(navMenus)}</nav>

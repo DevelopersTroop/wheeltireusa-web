@@ -349,7 +349,7 @@ export const StepThree: React.FC<ICheckoutStepProps> = () => {
                 </div>
               ) : (
                 <span
-                  className={`inline-block w-[15px] h-[15px] rounded-full border-[2px] border-[#6d6e78]`}
+                  className={`inline-block w-[15px] h-[15px] rounded-full border-2 border-[#6d6e78]`}
                 />
               )}
             </div>

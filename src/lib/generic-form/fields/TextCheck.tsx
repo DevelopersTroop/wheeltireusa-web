@@ -31,7 +31,7 @@ const TextCheckBox = <T extends FieldValues>({
             checked={field.value}
             onCheckedChange={field.onChange}
           />
-          <FormLabel htmlFor="rememberMe" className="!mt-0 cursor-pointer">
+          <FormLabel htmlFor="rememberMe" className="mt-0! cursor-pointer">
             Remember Me
           </FormLabel>
         </FormItem>

@@ -49,7 +49,7 @@ export const Stepper: React.FC<StepperProps> = ({
           {/* --- Line Container --- */}
           {/* This container defines the "track" from the center of the first circle to the center of the last. */}
           <div
-            className="absolute top-[14px] h-[1px]"
+            className="absolute top-[14px] h-px"
             style={{
               left: '14px', // Half the width of the circle (w-7)
               right: '14px', // Half the width of the circle (w-7)

@@ -3,7 +3,7 @@ import Link from 'next/link';
 const ReliableTires = () => {
   return (
     <div
-      className={`flex my-4 relative bg-[url(/images/home/hero.png)] bg-no-repeat bg-cover bg-right-top h-[320px] rounded-xs`}
+      className={`flex my-4 relative bg-[url(/images/home/hero.png)] bg-no-repeat bg-cover bg-top-right h-[320px] rounded-xs`}
     >
       <div className="absolute top-1/2 -translate-y-1/2 text-left w-full text-white pl-5 sm:pl-10 pr-5 space-y-3">
         <h1 className="text-2xl sm:text-[40px] font-bold">

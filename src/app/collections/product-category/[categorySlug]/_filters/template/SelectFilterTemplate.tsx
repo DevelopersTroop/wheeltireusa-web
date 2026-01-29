@@ -103,7 +103,7 @@ const SelectFilterTemplate = ({
     <>
       {/* ScrollArea allows the filter options to be scrollable when there are many options */}
       <ScrollArea
-        className={cn(shouldScroll ? 'h-[18.5rem] w-full pb-2' : 'w-full pb-2')}
+        className={cn(shouldScroll ? 'h-74 w-full pb-2' : 'w-full pb-2')}
       >
         <div ref={ref}>
           {/* Form to handle the checkbox selections */}

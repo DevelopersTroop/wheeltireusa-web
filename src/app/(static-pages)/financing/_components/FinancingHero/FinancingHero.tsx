@@ -20,7 +20,7 @@ const FinancingHero = () => {
         style={bannerImg}
       >
         {/* Gradient overlay for the banner */}
-        <div className="absolute left-0 top-0 w-full h-full bg-gradient-to-r from-orange-700/100 via-orange-700/100 via-30% to-orange-700/0 rounded-[10px]"></div>
+        <div className="absolute left-0 top-0 w-full h-full bg-linear-to-r from-orange-700 via-orange-700 via-30% to-orange-700/0 rounded-[10px]"></div>
         {/* Content inside the hero banner */}
         <div className="flex flex-col gap-4 justify-center items-start absolute inset-0 m-auto">
           {/* Hero title */}

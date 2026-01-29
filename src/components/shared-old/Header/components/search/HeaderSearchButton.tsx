@@ -60,7 +60,7 @@ const HeaderSearchButton = () => {
             className="bg-gray-900/20 border-none cursor-default h-dvh w-full fixed left-0"
           ></button>
           {/* Search bar container */}
-          <div className="bg-white h-20 z-[150] fixed top-0  left-1/2 -translate-x-1/2 w-full max-w-7xl">
+          <div className="bg-white h-20 z-150 fixed top-0  left-1/2 -translate-x-1/2 w-full max-w-7xl">
             <form
               className=" h-full flex items-center border-b border-gray-300"
               onSubmit={handleSubmit(onSubmit)}

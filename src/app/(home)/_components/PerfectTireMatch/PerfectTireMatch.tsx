@@ -3,7 +3,7 @@ import Link from 'next/link';
 const PerfectTireMatch = () => {
   return (
     <div className="bg-[#131316]">
-      <div className="!py-0">
+      <div className="py-0!">
         <div className="w-full lg:h-[548px] flex flex-col lg:flex-row gap-8 pt-16 lg:pt-0">
           <div className="w-full px-4 lg:px-8 xl:px-16 py-2 lg:w-2/5 flex flex-col gap-6 lg:gap-8 items-start justify-center">
             <div className="flex flex-col gap-4">

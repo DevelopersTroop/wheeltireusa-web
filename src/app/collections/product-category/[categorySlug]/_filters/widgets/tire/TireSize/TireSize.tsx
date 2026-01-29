@@ -65,7 +65,7 @@ const TireSize = (props: TireSizeProps) => {
                     <SelectTrigger className="w-full text-[0.75rem] font-semibold">
                       <SelectValue placeholder="Width" />
                     </SelectTrigger>
-                    <SelectContent className="z-[2000]">
+                    <SelectContent className="z-2000">
                       {/* <SelectItem value="">Width</SelectItem> */}
                       {(() => {
                         const values = props.width.map((item) => item.value.toString());
@@ -98,7 +98,7 @@ const TireSize = (props: TireSizeProps) => {
                     <SelectTrigger className="w-full text-[0.75rem] font-semibold">
                       <SelectValue placeholder="Ratio" />
                     </SelectTrigger>
-                    <SelectContent className="z-[2000]">
+                    <SelectContent className="z-2000">
                       {/* <SelectItem value="">Ratio</SelectItem> */}
                       {(() => {
                         const values = props.aspectRatio.map((item) => item.value.toString());
@@ -131,7 +131,7 @@ const TireSize = (props: TireSizeProps) => {
                     <SelectTrigger className="w-full text-[0.75rem] font-semibold">
                       <SelectValue placeholder="Diameter" />
                     </SelectTrigger>
-                    <SelectContent className="z-[2000]">
+                    <SelectContent className="z-2000">
                       {/* <SelectItem value="">Diameter</SelectItem> */}
                       {(() => {
                         const values = props.diameter.map((item) => item.value.toString());
@@ -169,7 +169,7 @@ const TireSize = (props: TireSizeProps) => {
                       <SelectTrigger className="w-full text-[0.75rem] font-semibold">
                         <SelectValue placeholder="Width" />
                       </SelectTrigger>
-                      <SelectContent className="z-[2000]">
+                      <SelectContent className="z-2000">
                         {/* <SelectItem value="">Width</SelectItem> */}
                         {(() => {
                           const values = props.width.map((item) => item.value.toString());
@@ -202,7 +202,7 @@ const TireSize = (props: TireSizeProps) => {
                       <SelectTrigger className="w-full text-[0.75rem] font-semibold">
                         <SelectValue placeholder="Ratio" />
                       </SelectTrigger>
-                      <SelectContent className="z-[2000]">
+                      <SelectContent className="z-2000">
                         {/* <SelectItem value="">Ratio</SelectItem> */}
                         {(() => {
                           const values = props.aspectRatio.map((item) => item.value.toString());
@@ -235,7 +235,7 @@ const TireSize = (props: TireSizeProps) => {
                       <SelectTrigger className="w-full text-[0.75rem] font-semibold">
                         <SelectValue placeholder="Diameter" />
                       </SelectTrigger>
-                      <SelectContent className="z-[2000]">
+                      <SelectContent className="z-2000">
                         {/* <SelectItem value="">Diameter</SelectItem> */}
                         {(() => {
                           const values = props.diameter.map((item) => item.value.toString());

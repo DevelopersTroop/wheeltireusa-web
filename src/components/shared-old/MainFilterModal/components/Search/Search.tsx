@@ -33,8 +33,8 @@ const Search = ({
         onFocus={onDivFocus}
         onBlur={onDivBlur}
         className={cn(
-          'w-full lg:w-[25%] bg-white border-muted-dark border-1 rounded px-4 py-[9.5px] inline-flex text-lg text-muted-foreground justify-between items-center z-50 relative',
-          isInputFocused && 'border-1 border-gray-500',
+          'w-full lg:w-[25%] bg-white border-muted-dark border rounded px-4 py-[9.5px] inline-flex text-lg text-muted-foreground justify-between items-center z-50 relative',
+          isInputFocused && 'border border-gray-500',
           props.className
         )}
         {...props}

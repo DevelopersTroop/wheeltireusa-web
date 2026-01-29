@@ -13,7 +13,7 @@ const ContactHero = () => {
   return (
     <div className="w-full relative h-[150px] sm:h-[280px]">
       {/* Gradient overlay for the banner */}
-      <div className="absolute left-0 top-0 w-full h-full bg-gradient-to-r from-black/90 to-black/0"></div>
+      <div className="absolute left-0 top-0 w-full h-full bg-linear-to-r from-black/90 to-black/0"></div>
       {/* Content inside the hero banner */}
       <Container>
         <div className="flex flex-col gap-2 sm:gap-6 justify-center -top-[11px] items-start self-stretch relative h-[150px] sm:h-[280px]">

@@ -27,7 +27,7 @@ const TireFilters: React.FC = () => {
         <FilterLoadingSkeleton />
       ) : (
         <div
-          className={'w-[20.3125rem] filter-shadow rounded-2xl bg-[#F7F7F7]'}
+          className={'w-81.25 filter-shadow rounded-2xl bg-[#F7F7F7]'}
         >
           <div className={'px-5 py-3 border-b'}>
             <TireSize

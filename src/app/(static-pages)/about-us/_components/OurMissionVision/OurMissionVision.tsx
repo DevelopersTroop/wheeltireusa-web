@@ -12,7 +12,7 @@ const OurMissionVision: React.FC = () => {
               <h2 className="text-[40px] sm:text-5xl lg:text-[64px] font-bold text-white">
                 Our Mission
               </h2>
-              <p className="text-base sm:text-xl font-normal  leading-relaxed text-[#F5F4F6] break-words">
+              <p className="text-base sm:text-xl font-normal  leading-relaxed text-[#F5F4F6] wrap-break-word">
                 To deliver exceptional tire solutions at unbeatable value. At
                 Tirematic, we strive to make tire buying an effortless,
                 customer-first experience that empowers drivers with confidence
@@ -27,7 +27,7 @@ const OurMissionVision: React.FC = () => {
                 <h2 className="text-[40px] sm:text-5xl lg:text-[64px] font-bold text-white">
                   Our Vision
                 </h2>
-                <p className="text-base sm:text-xl font-normal leading-relaxed text-[#F5F4F6] break-words">
+                <p className="text-base sm:text-xl font-normal leading-relaxed text-[#F5F4F6] wrap-break-word">
                   We envision a future where every driver has access to
                   top-quality tires, trusted expertise, and seamless services,
                   making road safety and reliability accessible for all.

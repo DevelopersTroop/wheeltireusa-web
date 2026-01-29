@@ -49,7 +49,7 @@ const InstallerSelectionModal = ({
   ];
 
   return (
-    <div className="fixed inset-0 bg-white z-[120] flex flex-col font-sans overflow-hidden animate-in fade-in duration-200">
+    <div className="fixed inset-0 bg-white z-120 flex flex-col font-sans overflow-hidden animate-in fade-in duration-200">
       {/* Header Section */}
       <div className="p-8 pb-4 max-w-6xl mx-auto w-full">
         <div className="flex justify-between items-start mb-6">

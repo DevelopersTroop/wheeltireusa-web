@@ -68,7 +68,7 @@ function TabsTriggerMainFilter({
         'hover:text-black',
 
         // Active state styles
-        'data-[state=active]:!bg-muted dark:data-[state=active]:bg-input/30',
+        'data-[state=active]:bg-muted! dark:data-[state=active]:bg-input/30',
         'data-[state=active]:text-black data-[state=active]:border-b-3 data-[state=active]:border-primary',
 
         // Focus styles

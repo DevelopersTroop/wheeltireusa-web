@@ -30,7 +30,7 @@ const ZipCodeModal = () => {
   ];
 
   return (
-    <div className="fixed inset-0 bg-white z-[100] flex flex-col font-sans animate-in slide-in-from-right duration-300">
+    <div className="fixed inset-0 bg-white z-100 flex flex-col font-sans animate-in slide-in-from-right duration-300">
       <div className="p-6 flex justify-end">
         <button
           onClick={setOpen}

@@ -64,7 +64,7 @@ const BrickBoxWithoutTooltip = ({
       type={type}
       className={cn(
         !isMerged
-          ? 'bg-white border-muted-dark border-1 rounded px-3 py-[7.5px] inline-flex items-center space-x-2 text-lg text-muted-foreground cursor-pointer hover:text-black hover:border-black'
+          ? 'bg-white border-muted-dark border rounded px-3 py-[7.5px] inline-flex items-center space-x-2 text-lg text-muted-foreground cursor-pointer hover:text-black hover:border-black'
           : 'inline-flex items-center space-x-2 text-lg text-muted-foreground cursor-pointer',
         !isMerged && isCheckedState ? 'border-black' : '',
         className
