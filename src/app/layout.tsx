@@ -1,5 +1,5 @@
 import { DynamicAnalytics } from '@/components/dynamic-analytics';
-import { Footer } from '@/components/shared-old/Footer/Footer';
+import Footer from '@/components/shared/Footer/Footer';
 import { GoogleMapScriptLoader } from '@/components/shared-old/googleMapScriptLoader';
 import Header from '@/components/shared/Header/Header';
 import { CheckoutProvider } from '@/context/checkoutContext';
@@ -11,6 +11,7 @@ import { Toaster } from 'sonner';
 import CartSystem from './cart/v2/page';
 import { Metadata } from 'next';
 import Script from 'next/script';
+import Newsletter from '@/components/shared/Newsletter/Newsletter';
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -41,7 +42,7 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href="/images/fav.ico" />
       </head>
-       <body
+      <body
         className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen flex-col justify-between antialiased`}
       >
         <Script
@@ -82,10 +83,11 @@ export default function RootLayout({
               <DynamicAnalytics />
               <main>{children}</main>
               <Footer />
+              <Toaster richColors />
             </CheckoutProvider>
+            <Newsletter />
             <CartSystem />
           </ReduxWrapper>
-          <Toaster richColors />
         </GoogleMapScriptLoader>
       </body>
     </html>

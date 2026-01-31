@@ -65,76 +65,69 @@ export type TInventoryBase = {
   comparedData: unknown[] | null;
   category: TCategory | null;
 };
-export type TInventoryItem = TInventoryBase & {
-  model: string | null;
-  imageUrl: string | null;
-  originalImage: string | null;
+
+export type TTireProduct = {
+  tireSize: string;
+  rawSize: string;
+  approvedRimContours: string | null;
   sidewall: string | null;
+  ply: string | null;
+  speedRating: string | null;
+  loadIndex: string | null;
+  stdRim: string | null;
+  maxAirPressureKpa: string | null;
+  staticLoadRadiusIn: string | null;
+  theoreticalRollingRadius: string | null;
+  utqg: string | null;
+  treadDepthIn: string | null;
+  treadDepthMm: string | null;
+  staticLoadRadiusMm: string | null;
+  sectionWidthIn: string | null;
+  sectionWidthMm: string | null;
+  runFlat: string | null;
+  maxAirPressurePsi: string | null;
+  tireClass: string | null;
+  overallDiameterIn: string | null;
+  overallDiameterMm: string | null;
+}
+
+export type TWheelProduct = {
   loadRating: string | null;
-  rawSize: string | null;
-  sellingPrice: number | null;
+  maxLoadKg: string | null;
+  maxLoadLbs: string | null;
+  maxLoad2Kg: string | null;
+  maxLoad2Lbs: string | null;
+}
+export type TInventoryItem = TTireProduct & TWheelProduct & {
+  id: number;
+  brand: string;
+  model: string;
+  title: string;
+  category: {
+    id: number,
+    title: string;
+    slug: string,
+    description: string
+  };
+  itemImage: string | null;
+  slug: string;
+  vendorName: string;
+  partNumber: string;
   shipWeight: string | null;
   shipWidth: string | null;
   shipHeight: string | null;
   shipDepth: string | null;
-  spokeStyle: string[] | null;
-  speedRating: string | null;
-  ply: string | null;
-  approvedRimContours: string | null;
-  treadDepthMm: string | null;
-  stdRim: string | null;
-  sortPrice: number | null;
-  maxAirPressureKpa: string | null;
-  maxAirPressurePsi: string | null;
-  imageUploaded: boolean | null;
-  transferImage: boolean | null;
-  categoryId: string | null;
-  stockAvailable: boolean | null;
-  loadRange: string | null;
-  hazardProtection: string | null;
-  maxInflactionPressure: string | null;
-  rimWidth: string | null;
-  measRimWidth: string | null;
-  revsPerMile: string | null;
-  tireWeight: string | null;
-  countryOfOrigin: string | null;
-  sku: string | null;
-  inventoryId: {
-    Id: string;
-    internalId: string;
-    partnumber: string;
-    availability: {
-      atlantaAvailable: number;
-      dallasAvailable: number;
-      decaturAvailable: number;
-      fresnoAvailable: number;
-      miamiAvailable: number;
-      tampaAvailable: number;
-      totalAvailable: number;
-    };
-  } | null;
-  pricingId: {
-    id: string;
-    internalId: string;
-    partnumber: string;
-    pricing: {
-      price: number;
-      msrp: number;
-      map: number;
-    };
-  } | null;
-  // inventoryId: string | null;
-  itemImage: string | null;
-  // pricingId: string | null;
-  inventory: TInventoryItem['inventoryId'] | null;
-  pricing: TInventoryItem['pricingId'] | null;
-  title: string
+  shortDescription: string | null;
+  availableStock: number | null;
+  sellingPrice: number | null;
+  vehicleCategory: string | null;
+  gtin: string | null;
 };
 
 export type TInventoryListItem = TInventoryBase & {
   inventoryId: string | null;
   itemImage: string | null;
   pricingId: string | null;
-  inventory: TInventoryItem['inventoryId'] | null;
-  pricing: TInventoryItem['pricingId'] | null;
+  inventory: TInventoryItem['id'] | null;
+  pricing: TInventoryItem['sellingPrice'] | null;
 };

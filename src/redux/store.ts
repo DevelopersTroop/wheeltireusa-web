@@ -3,7 +3,8 @@ import mailFilterReducer from './features/mainFilterSlice';
 import userReducer from './features/userSlice';
 import checkoutReducer from './features/checkoutSlice';
 import cartReducer from './features/cartSlice';
-
+import newsletterModalReducer from "./features/newsletterModalSlice";
+import yearMakeModelReducer from "./features/yearMakeModelSlice";
 import {
   FLUSH,
   PAUSE,
@@ -28,6 +29,7 @@ const persistingReducer = combineReducers({
   user: userReducer,
   checkout: checkoutReducer,
   cart: cartReducer,
+  newsletterModal: newsletterModalReducer,
 });
 
 const persistedReducer = persistReducer(rootPersistConfig, persistingReducer);
@@ -36,6 +38,7 @@ const persistedReducer = persistReducer(rootPersistConfig, persistingReducer);
 const rootReducer = combineReducers({
   persisted: persistedReducer,
   mainFilter: mailFilterReducer,
+  yearMakeModel: yearMakeModelReducer,
   [baseApi.reducerPath]: baseApi.reducer,
 });
 
