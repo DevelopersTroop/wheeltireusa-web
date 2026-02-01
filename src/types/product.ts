@@ -68,6 +68,9 @@ export type TInventoryBase = {
 
 export type TTireProduct = {
   tireSize: string;
+  tireWidth: string;
+  tireRatio: string;
+  tireDiameter: string;
   rawSize: string;
   approvedRimContours: string | null;
   sidewall: string | null;

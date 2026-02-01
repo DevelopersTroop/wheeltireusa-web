@@ -10,7 +10,7 @@ import TireCardDescription from "./TireCardDescription";
 const TireCard = ({ product }: { product: TInventoryItem }) => {
   const searchparams = useSearchParams();
   const cartPackage = searchparams.get("cartPackage");
-  const productLink = `/collections/product/${product.slug}?cartPackage=${cartPackage}`;
+  const productLink = `/collections/product/${product.id}?cartPackage=${cartPackage}`;
   const [imageErr, setImageErr] = useState(false);
   return (
     <div

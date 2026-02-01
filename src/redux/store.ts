@@ -3,6 +3,7 @@ import mailFilterReducer from './features/mainFilterSlice';
 import userReducer from './features/userSlice';
 import checkoutReducer from './features/checkoutSlice';
 import cartReducer from './features/cartSlice';
+import packageReducer from './features/packageSlice';
 import newsletterModalReducer from "./features/newsletterModalSlice";
 import yearMakeModelReducer from "./features/yearMakeModelSlice";
 import {
@@ -29,6 +30,7 @@ const persistingReducer = combineReducers({
   user: userReducer,
   checkout: checkoutReducer,
   cart: cartReducer,
+  package: packageReducer,
   newsletterModal: newsletterModalReducer,
 });
 

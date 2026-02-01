@@ -1,7 +1,6 @@
 import { TInventoryItem, TInventoryListItem } from './product';
 
-export type TCartProduct = TInventoryItem &
-  TInventoryListItem & {
+export type TCartProduct = {
     singleQuantityPrice?: number;
     totalPrice?: number;
     quantity: number;
@@ -47,3 +46,7 @@ export type TCartProduct = TInventoryItem &
       totalProvidedDiscount?: number;
     };
   } & Partial<TInventoryItem>;
+export interface CartData {
+  cartSerial: string;
+  cartPackage: string;
+}

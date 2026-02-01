@@ -5,6 +5,8 @@ import { toast } from 'sonner';
 export type TCartProduct = TInventoryItem & {
   cartPackage: string;
   quantity: number;
+  cartSerial: string;
+  metaData: Record<string, string>;
 };
 
 type TCartSliceState = {
@@ -36,11 +38,11 @@ const cartSlice = createSlice({
         if (existingProduct) {
           if (
             existingProduct.quantity + newProduct.quantity >
-            (existingProduct?.inventoryAvailable || 4)
+            (existingProduct?.availableStock || 4)
           ) {
             // If the new quantity exceeds available inventory, set it to available inventory
             newProduct.quantity =
-              (existingProduct?.inventoryAvailable || 4) -
+              (existingProduct?.availableStock || 4) -
               existingProduct.quantity;
             toast.error(
               `You can only add ${newProduct.quantity} more of this product to your cart.`

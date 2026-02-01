@@ -48,6 +48,9 @@ export function removeDuplicateDataWithRemovingFloatingPoint(data: string[]) {
   }
   return Array.from(new Set(uniqueData));
 }
+export function removeHtmlTags(input: string): string {
+  return input.replace(/<[^>]*>/g, "");
+}
 export function normalizeImageUrl(
   url?: string | null,
   notAvailableImage?: string

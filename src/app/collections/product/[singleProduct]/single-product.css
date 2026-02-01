@@ -1,0 +1,30 @@
+@reference "../../../../styles/globals.css";
+
+.box-button-bordered {
+    @apply py-2 border-[3px] border-primary px-2 bg-white rounded-none text-btext font-semibold transition duration-300 ease-in-out;
+}
+.box-button-bordered:hover {
+    @apply bg-primary text-white;
+}
+.image-gallery-thumbnail.active, .image-gallery-thumbnail:focus, .image-gallery-thumbnail:hover {
+    @apply border-primary border-2
+}
+.box-select {
+    @apply border border-btext py-3 px-2 focus:outline-none font-medium
+}
+.image-gallery-thumbnail {
+    width: 75px
+}
+.image-gallery-left-nav .image-gallery-svg, .image-gallery-right-nav .image-gallery-svg {
+    height: 70px;
+}
+.image-gallery-right-nav {
+    @apply -right-[15%]
+}
+.image-gallery-left-nav {
+    @apply -left-[15%]
+}
+.image-gallery-center {
+    display: flex!important;
+    justify-content: center;
+}
