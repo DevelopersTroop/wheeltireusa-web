@@ -14,10 +14,14 @@ interface TProductSummary {
 export interface TReview {
   id: string;
   productId: TProductSummary;
-  userId: TUserSummary;
+  userId?: TUserSummary;
+  name?: string;
+  email?: string;
   rating: number;
   comment: string;
   status: TReviewStatus;
+  photos?: string[];
+  videos?: string[];
   createdAt: string; // ISO Date string
   updatedAt: string; // ISO Date string
 }

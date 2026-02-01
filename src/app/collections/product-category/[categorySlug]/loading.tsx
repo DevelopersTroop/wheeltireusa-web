@@ -12,36 +12,21 @@ type ProductsPageProps = {
   page?: number;
 };
 
-// The ProductCategory component renders a page with breadcrumb, filters, and product cards
-const ProductCategory = async ({
-  searchParams,
-  params,
-  page = 1,
-}: ProductsPageProps) => {
-  console.log('searchParams', searchParams);
-  console.log('params', params);
-  console.log('page', page);
-
+// type ProductsPageProps = {
+//   searchParams: Promise<{ [key: string]: string | undefined }>;
+//   params: Promise<{ categorySlug: string }>;
+//   page?: number;
+// };
+const ProductCategory = async () => {
   return (
     <Container>
-      {/* Breadcrumb navigation for the page */}
-      <Breadcrumb>
-        <Item href={'#'}>Home</Item>
-        <Item href={'#'}>Collection</Item>
-        <Item href={'#'} isEnd={true}>
-          Tire
-        </Item>
-      </Breadcrumb>
-      {/* Main content section, split into filter and product grid */}
       <div className="flex w-full gap-6 pt-6">
-        {/* Filter sidebar - hidden on smaller screens */}
-        <div className={'hidden lg:block lg:w-1/4'}>
+        <div className={"hidden lg:block lg:w-1/4"}>
           <FilterLoadingSkeleton />
         </div>
-        {/* Product grid section - displays product card skeletons */}
         <div
           className={
-            'w-full lg:w-3/4 grid gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 auto-rows-min'
+            "w-full lg:w-3/4 grid gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 auto-rows-min"
           }
         >
           {Array(12)

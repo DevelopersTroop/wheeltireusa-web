@@ -7,7 +7,7 @@ const reviews = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     createReview: builder.mutation<
       { review: TReview },
-      { productId: number; comment: string; rating: number }
+      FormData
     >({
       query(data) {
         return {

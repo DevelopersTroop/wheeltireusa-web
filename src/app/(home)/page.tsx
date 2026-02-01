@@ -1,7 +1,15 @@
 import { metaDataHelper } from '@/utils/metadata';
 import HeroSection from './_components/HeroSection/HeroSection';
 import { Categories } from './_components/Categories/Categories';
-import WheelCategories from './_components/HeroSection/components/WheelCategories/WheelCategories';
+import WheelCategories from './_components/WheelCategories/WheelCategories';
+import WheelsGallery from './_components/WheelsGallery/WheelsGallery';
+import TodaysDeals from './_components/TodaysDeals/TodaysDeals';
+import HomeBlogList from './_components/HomeBlogList/HomeBlogList';
+import BannerAndPoster from './_components/BannerAndPoster/BannerAndPoster';
+import WheelsSection from './_components/WheelsSection/WheelsSection';
+import ViewGallery from './_components/ViewGallery/ViewGallery';
+import SuspensionBrands from './_components/SuspensionBrands/SuspensionBrands';
+import SuspensionSection from './_components/SuspensionSection/SuspensionSection';
 
 // Metadata for the page
 export const metadata = metaDataHelper({
@@ -23,6 +31,14 @@ export default function Homepage() {
       <HeroSection />
       <Categories />
       <WheelCategories />
+      <WheelsGallery />
+      <TodaysDeals/>
+      <HomeBlogList/>
+      <BannerAndPoster/>
+      <WheelsSection/>
+      <ViewGallery/>
+      <SuspensionBrands/>
+      <SuspensionSection/>
     </div>
   );
 }

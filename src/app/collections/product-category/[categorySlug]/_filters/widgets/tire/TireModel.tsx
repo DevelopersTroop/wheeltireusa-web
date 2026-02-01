@@ -1,9 +1,8 @@
-'use client';
-import { TSingleFilter } from '@/types/filter';
-import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
-import FilterHeading from '../../template/FilterHeading';
-import SelectFilterTemplate from '../../template/SelectFilterTemplate';
+"use client";
+import { TSingleFilter } from "@/types/filter";
+import { useState } from "react";
+import FilterHeading from "../../template/FilterHeading";
+import SelectFilterTemplate from "../../template/SelectFilterTemplate";
 
 const TireModel = ({
   model,
@@ -12,11 +11,7 @@ const TireModel = ({
   filterKey: string;
   model: TSingleFilter[];
 }) => {
-  const searchParams = useSearchParams();
-  const modelGroupToggle = searchParams.get(filterKey);
-  const [showFilter, setshowFilter] = useState(
-    modelGroupToggle === null ? false : true
-  );
+  const [showFilter, setshowFilter] = useState(false);
 
   const toggleFilter = () => {
     setshowFilter(!showFilter);
@@ -28,9 +23,8 @@ const TireModel = ({
         showFilter={showFilter}
         toggleFilter={toggleFilter}
         title="Model"
-        disabled={model.length === 0}
       />
-      {showFilter && model.length > 0 && (
+      {showFilter && (
         <SelectFilterTemplate filterKey={filterKey} filterData={model} />
       )}
     </>

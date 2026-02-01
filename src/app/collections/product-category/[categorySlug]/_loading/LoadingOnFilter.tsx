@@ -1,28 +1,16 @@
-'use client';
+"use client"
 import React, { createContext, useState } from 'react';
 import ProductCardSkeleton from './ProductCardSkeleton';
 
-// Create a context to manage loading state globally
-export const LoadingProvider = createContext<{
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-} | null>(null);
-
-// LoadingOnFilter component manages loading state and displays skeleton loaders while data is being fetched
+export const LoadingProvider = createContext<{setLoading: React.Dispatch<React.SetStateAction<boolean>>}|null>(null);
 const LoadingOnFilter = ({ children }: { children: React.ReactNode }) => {
-  const [loading, setLoading] = useState<boolean>(false); // State to track loading status
-  return (
-    <LoadingProvider.Provider value={{ setLoading }}>
-      {' '}
-      {/* Provide setLoading function to child components */}
-      {loading
-        ? Array(12)
-            .fill(0)
-            .map((_, index) => (
-              <ProductCardSkeleton key={`widget-filter-loading-${index}`} />
-            ))
-        : children}
-    </LoadingProvider.Provider>
-  );
+    const [loading, setLoading] = useState<boolean>(false);
+    return (
+        <LoadingProvider.Provider value={{setLoading}} >
+            {loading ? Array(12).fill(0).map((_, index) => <ProductCardSkeleton key={`widget-filter-loading-${index}`} />) :
+                children}
+        </LoadingProvider.Provider>
+    );
 };
 
 export default LoadingOnFilter;

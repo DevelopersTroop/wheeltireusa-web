@@ -4,6 +4,7 @@ import { TInventoryItem, TTireSpec } from '@/types/product';
 import { TWishListData } from '@/types/wishlist';
 import { s3BucketUrl } from './api';
 import allTireSizes from '../../public/data/tireSizes.json';
+import { addDays, format } from 'date-fns';
 
 export const isInventoryItem = (
   product: TInventoryItem | TCartProduct | TWishListData
@@ -18,37 +19,23 @@ export const isWishListData = (
 };
 
 export const getProductThumbnail = (product: {
-  imageUrl?: string | null;
   itemImage?: string | null;
-  originalImage?: string | null;
 }) => {
-  // const imageUrl = isInventoryItem(product)
-  //   ? product?.imageUrl
-  //   : isWishListData(product)
-  //     ? product?.imageUrl
-  //     : product?.itemImage;
 
-  if (!product) {
-    return '/tire-not-available.png';
+  if (!product || (product && !product.itemImage)) {
+    return '/images/not-available.webp';
   }
-
-  const imageUrl: string | null | undefined =
-    product.imageUrl || product?.itemImage || product?.originalImage;
-  // if (isInventoryItem(product)) {
-  //   imageUrl = product.imageUrl || product.itemImage || product?.originalImage;
-  // } else if (isWishListData(product)) {
-  //   imageUrl = product.imageUrl;
-  // }
-
-  if (!imageUrl?.length) {
-    return '/tire-not-available.png';
-  }
-  if (imageUrl.startsWith('https') || imageUrl.startsWith('http')) {
-    return imageUrl;
-  }
-  return `${s3BucketUrl}/${imageUrl}`;
+  if(product.itemImage?.startsWith('https') || product.itemImage?.startsWith('http')) {
+    return product.itemImage;
+  } 
+  return `${s3BucketUrl}/${product.itemImage}`;
 };
-
+export const getProductDeliveryDate = (product: TInventoryItem) => {
+  if (!product) {
+    return 'N/A';
+  }
+  return format(addDays(new Date(), 5), 'd MMMM, yyyy');
+}
 export function matchMetricTireSize(tireSize: string): RegExpMatchArray | null {
   return tireSize.match(/^(\d+)\/(\d+)([A-Z])(\d+)([A-Z+&]+)?$/i);
 }

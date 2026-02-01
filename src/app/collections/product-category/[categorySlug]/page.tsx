@@ -1,47 +1,97 @@
-// Importing necessary components and types
+import { metaDataHelper } from "@/utils/metadata";
+import { Metadata } from "next";
+import TireCategory from "./_tire/TireCategory";
+import AccessoriesCategory from "./_accessories/AccessoriesCategory";
 
-// import { Metadata } from 'next'; // Metadata handling for page SEO
-// import { PageProps } from '@/app/types/page';
-import { PageProps } from '@/types/page';
-import FilterProvider from './_filters/filter-store/FilterProvider';
-import TireCategory from './_tires/TireCategory';
-import { metaDataHelper } from '@/utils/metadata';
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ categorySlug: string }>;
+}): Promise<Metadata> {
+  try {
+    const { categorySlug } = await params;
+    const categoryCase = `${categorySlug[0].toUpperCase()}${categorySlug.slice(
+      1
+    )}`;
+    return {
+      ...metaDataHelper({
+        title: `${categoryCase} - Wheel Tire USA`,
+        description: "",
+      }),
+      alternates: {
+        canonical: `https://wheeltireusa.com/collections/product-category/${categorySlug}`,
+      },
+    };
+  } catch (error) {
+    // Return default metadata in case of error
+    return {
+      title: "Error",
+    };
+  }
+}
 
-// Metadata for the page
-export const metadata = metaDataHelper({
-  title: 'Tires - Tirematic',
-  keywords: '',
-  description: '',
-  openGraph: {
-    title: '',
-    description: '',
-  },
-  alternates: {
-    canonical: 'https://tirematic.com/tires',
-  },
-});
-
-// Main Collection component that renders the appropriate category collection based on categorySlug
 const Collection = async ({
   params,
-  searchParams,
-}: PageProps<{
-  params: Promise<{ categorySlug: string }>;
-  searchParams: Promise<{ page: string }>;
-}>) => {
-  // Extracting categorySlug from params
-  const { categorySlug } = await params;
-  console.log('Category Slug:', categorySlug);
-  const { page } = await searchParams;
-  // Variable to hold the collection component to render based on category
-  const collection = <TireCategory page={Number(page) || 1} />;
+}: {
+  params: Promise<{ categorySlug: string; page: string }>;
+}) => {
+  const { categorySlug, page } = await params;
 
-  // Wrapping the selected collection with FilterProvider to apply filters
-  return (
-    <FilterProvider>
-      {collection} {/* Render the appropriate collection */}
-    </FilterProvider>
-  );
+  let categoryDetails = null;
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/categories/details-by-slug/${categorySlug}`,
+      { cache: "no-store" }
+    );
+    const data = await res.json();
+    if (data?.statusCode === 200) {
+      categoryDetails = data.data.category;
+    }
+  } catch (error) {
+    console.error("Error fetching category details:", error);
+  }
+
+  const topDescription = categoryDetails?.topDescription || "";
+  const bottomDescription = categoryDetails?.bottomDescription || "";
+
+  let collection = <></>;
+  // if (categorySlug === "wheels") {
+  //   collection = (
+  //     <WheelsCategory
+  //       page={Number(page)}
+  //       topDescription={topDescription}
+  //       bottomDescription={bottomDescription}
+  //     />
+  //   );
+  // } else
+     if (categorySlug === "tires") {
+    collection = (
+      <TireCategory
+        page={Number(page)}
+        topDescription={topDescription}
+        bottomDescription={bottomDescription}
+      />
+    );
+  } 
+  // else if (categorySlug === "suspension") {
+  //   collection = (
+  //     <SuspensionCategory
+  //       topDescription={topDescription}
+  //       bottomDescription={bottomDescription}
+  //     />
+  //   );
+  // }
+   else if (categorySlug === "accessories") {
+    collection = (
+      <AccessoriesCategory
+        page={Number(page)}
+        topDescription={topDescription}
+        bottomDescription={bottomDescription}
+      />
+    );
+  }
+
+  return collection;
 };
 
 export default Collection;
