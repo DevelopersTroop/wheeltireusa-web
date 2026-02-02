@@ -24,7 +24,7 @@ export const useApplyCoupon = () => {
         }
         if (validatedData?.percentage) {
           const productsPrice = Object.values(productsInfo).reduce(
-            (a, b) => a + (b?.price ?? 0) * (b?.quantity ?? 1),
+            (a, b) => a + (b?.sellingPrice ?? 0) * (b?.quantity ?? 1),
             0
           );
           const discountAmount = Math.round(

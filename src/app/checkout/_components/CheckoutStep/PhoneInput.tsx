@@ -1,7 +1,7 @@
 import { TBillingAddress } from "@/types/order";
 import { useMask } from "@react-input/mask";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
-import { Input } from "../ShippingAddress";
+import { Input } from "./Input";
 
 export function PhoneInput({
   billingRegister,

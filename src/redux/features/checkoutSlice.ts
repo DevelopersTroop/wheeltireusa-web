@@ -14,12 +14,16 @@ export type TCheckoutState = TOrderData & {
   orderSuccessData: TOrder | undefined;
   newCoupon: string | undefined | null;
   orderId: string;
+  funnelId: string;
+  paymentIntentId: string;
 };
 
 const initialState: TCheckoutState = {
+  paymentIntentId: '',
   discount: 0,
   selectedDealer: undefined,
   referralCode: '',
+  funnelId: '',
   billingAddress: {
     address1: '',
     cityState: '',
@@ -345,6 +349,9 @@ const checkoutSlice = createSlice({
     setShippingCharge: (state, action: PayloadAction<number>) => {
       state.deliveryCharge = action.payload;
     },
+    setPaymentIntentId(state, action: PayloadAction<string>) {
+      state.paymentIntentId = action.payload;
+    },
   },
 });
 
@@ -382,4 +389,5 @@ export const {
   setTaxAmount,
   setPaymentMethod,
   setShippingCharge,
+  setPaymentIntentId,
 } = checkoutSlice.actions;

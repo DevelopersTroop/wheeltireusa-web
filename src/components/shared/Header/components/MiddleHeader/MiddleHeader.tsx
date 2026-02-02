@@ -1,24 +1,26 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import useAuth from "@/hooks/useAuth";
-import { HeartIcon, Phone, ShoppingCart, User } from "lucide-react";
-import Link from "next/link";
-import { useMemo, useState } from "react";
-import MobileNavbar from "./components/MobileNavBar/MobileNavBar";
-import HeaderSearchButton from "./components/HeaderSearchButton/HeaderSearchButton";
+'use client';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import useAuth from '@/hooks/useAuth';
+import { HeartIcon, Phone, ShoppingCart, User } from 'lucide-react';
+import Link from 'next/link';
+import { useMemo, useState } from 'react';
+import MobileNavbar from './components/MobileNavBar/MobileNavBar';
+import HeaderSearchButton from './components/HeaderSearchButton/HeaderSearchButton';
+import { useCartHook } from '@/hooks/useCartHook';
 
 export default function MiddleHeader() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { user } = useAuth();
-//   const { products } = useTypedSelector((state) => state.persisted.cart);
+  const { setOpen } = useCartHook();
+  //   const { products } = useTypedSelector((state) => state.persisted.cart);
 
-//   const cartQuantity = useMemo(() => {
-//     return Object.values(products).reduce(
-//       (acc, product) => acc + product.quantity,
-//       0
-//     );
-//   }, [JSON.stringify(products)]);
+  //   const cartQuantity = useMemo(() => {
+  //     return Object.values(products).reduce(
+  //       (acc, product) => acc + product.quantity,
+  //       0
+  //     );
+  //   }, [JSON.stringify(products)]);
 
   return (
     <div className="container">
@@ -66,7 +68,7 @@ export default function MiddleHeader() {
                 />
               </div>
               <Link
-                href={"/dashboard/save-product"}
+                href={'/dashboard/save-product'}
                 className="hidden items-center gap-2 md:flex"
               >
                 <HeartIcon size={34} className=" text-gray-600" />
@@ -74,19 +76,23 @@ export default function MiddleHeader() {
 
               <div className="hidden items-center gap-8 md:flex">
                 <Link
-                  href={user?.email ? "/dashboard" : "/login"}
+                  href={user?.email ? '/dashboard' : '/login'}
                   className="flex items-center gap-2"
                 >
                   <User className="h-5 w-5 text-gray-600" />
                   <div>
                     <p className="text-sm font-medium">MY ACCOUNT</p>
                     <p className="text-xs text-gray-500">
-                      Hello, {user?.email ? user.email : "Login"}{" "}
+                      Hello, {user?.email ? user.email : 'Login'}{' '}
                     </p>
                   </div>
                 </Link>
 
-                <Link href="/cart" className="relative flex items-center gap-2">
+                <Button
+                  className="relative flex items-center gap-2 cursor-pointer"
+                  variant={'ghost'}
+                  onClick={setOpen}
+                >
                   <div className="relative">
                     <ShoppingCart className="h-5 w-5 text-gray-600" />
                     <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-xs text-white">
@@ -97,19 +103,19 @@ export default function MiddleHeader() {
                     <p className="text-sm font-medium">MY CART</p>
                     {/* <p className="text-xs text-gray-500">$0.00</p> */}
                   </div>
-                </Link>
+                </Button>
               </div>
 
               <div className="flex items-center gap-2 md:hidden">
-                <Link href={user?.email ? "/dashboard" : "/login"}>
+                <Link href={user?.email ? '/dashboard' : '/login'}>
                   <User className="h-6 w-6 text-gray-600" />
                 </Link>
-                <Link href="/cart" className="relative">
+                <Button onClick={setOpen} className="relative">
                   <ShoppingCart className="h-6 w-6 text-gray-600" />
                   <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-xs text-white">
                     {/* {cartQuantity} */} 0
                   </span>
-                </Link>
+                </Button>
               </div>
             </div>
           </div>

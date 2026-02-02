@@ -1,28 +1,27 @@
 'use client';
+import { getPrice } from '@/utils/price';
 import { TOrder } from '@/types/order';
 import { Document, Page, StyleSheet, Text, View } from '@react-pdf/renderer';
 import React from 'react';
 
-// Define primary colors and styles for the PDF
 const primaryColor = '#DB1922';
 const lightGray = '#F5F5F5';
 
-// Define styles for the PDF document
 const styles = StyleSheet.create({
   page: {
-    fontSize: 12, // Default font size
-    backgroundColor: 'white', // Background color for the page
+    fontSize: 12,
+    backgroundColor: 'white',
   },
   headerBand: {
-    backgroundColor: primaryColor, // Header background color
-    padding: 20, // Padding for the header
-    marginBottom: 20, // Space below the header
+    backgroundColor: primaryColor,
+    padding: 20,
+    marginBottom: 20,
   },
   headerContent: {
-    flexDirection: 'row', // Arrange content in a row
-    justifyContent: 'space-between', // Space between elements
-    color: 'white', // Text color
-    alignItems: 'center', // Align items vertically
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    color: 'white',
+    alignItems: 'center',
   },
   headerTitle: {
     fontSize: 24,
@@ -117,98 +116,11 @@ const styles = StyleSheet.create({
   },
 });
 
-// Mapping for wheel configuration fields
-const wheelConfigurationMapping = {
-  centerCapTitle: 'Center Cap',
-  customFinish: 'Custom Finish',
-  customFinishExtraInfo1: 'Custom Finish Extra Info 1',
-  customFinishExtraInfo2: 'Custom Finish Extra Info 2',
-  customFinishExtraInfo3: 'Custom Finish Extra Info 3',
-  finishType: 'Finish Type',
-  frontDiameter: 'Front Wheel Diameter',
-  frontForging: 'Front Wheel Forging Type',
-  frontLipSize: 'Front Lip Size',
-  frontWidth: 'Front Wheel Width',
-  hardwareFinishes: 'Hardware Finishes',
-  innerBarrelLipFinish: 'Inner Barrel Lip Finish',
-  multiPiece: 'Multi-Piece Construction',
-  outerBarrelLipFinish: 'Outer Barrel Lip Finish',
-  rearDiameter: 'Rear Wheel Diameter',
-  rearForging: 'Rear Wheel Forging Type',
-  rearLipSize: 'Rear Lip Size',
-  rearWidth: 'Rear Wheel Width',
-  standardFinish: 'Standard Finish',
-  wantWidestPossibleWidth: 'Maximize Wheel Width',
-  horn: 'Horn',
-  letAmaniForgedDetermineSize: 'Amani Forged Determine Tire Size',
-  year: 'Year',
-  make: 'Make',
-  model: 'Model',
-  bodyType: 'Body Type',
-  subModel: 'Sub Model',
-};
-
-// Helper function to format values
-const formatValue = (value: any, key: string, shouldInch: string[]) => {
-  if (typeof value === 'object') {
-    return JSON.stringify(value); // Convert objects to JSON strings
-  }
-
-  if (typeof value === 'boolean') {
-    return value ? 'Yes' : 'No'; // Convert booleans to "Yes" or "No"
-  }
-
-  if (shouldInch.includes(key)) {
-    return `${value} "`; // Append inches for specific fields
-  }
-
-  if (typeof value === 'string') {
-    return value.length > 0 ? value : 'N/A'; // Return "N/A" for empty strings
-  }
-
-  return value; // Return the value as-is
-};
-
-// Helper function to manipulate wheel configuration mapping
-const maniPulatedWheelConfigurationMapping = ([key, value]: [string, any]) => {
-  const shouldSkip = [
-    'centerCapTitle',
-    'customFinish',
-    'customFinishExtraInfo1',
-    'customFinishExtraInfo2',
-    'customFinishExtraInfo3',
-    'finishType',
-    'hardwareFinishes',
-    'innerBarrelLipFinish',
-    'outerBarrelLipFinish',
-    'totalProvidedDiscount',
-    'coupon',
-  ];
-  const shouldInch = [
-    'frontDiameter',
-    'frontLipSize',
-    'frontWidth',
-    'rearDiameter',
-    'rearLipSize',
-    'rearWidth',
-  ];
-  if (shouldSkip.includes(key)) return null;
-
-  return {
-    key: wheelConfigurationMapping[
-      key as keyof typeof wheelConfigurationMapping
-    ],
-    value: formatValue(value, key, shouldInch),
-  };
-};
-
-// Main OrderInvoicePDF Component
 const OrderInvoicePDF: React.FC<{ order: TOrder | undefined }> = ({
   order,
 }) => {
   if (!order) return null;
 
-  // Helper function to format dates
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -217,9 +129,11 @@ const OrderInvoicePDF: React.FC<{ order: TOrder | undefined }> = ({
     });
   };
 
-  // Helper function to format currency
   const formatCurrency = (amount: number) => {
-    return `$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    return `$${amount.toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`;
   };
 
   return (
@@ -227,20 +141,11 @@ const OrderInvoicePDF: React.FC<{ order: TOrder | undefined }> = ({
       <Page size="A4" style={styles.page}>
         {/* Header */}
         <View style={styles.headerBand}>
-          <Text style={styles.headerTitle}>Order Invoice</Text>
           <View style={styles.headerContent}>
-            <View>
-              <Text>Date: {formatDate(order.createdAt)}</Text>
-              <Text>Order ID: {order?.orderId}</Text>
-              <Text>
-                Order Email:{' '}
-                {order.data?.user?.email
-                  ? order.data.user.email
-                  : order.data?.billingAddress?.email}
-              </Text>
-            </View>
+            <Text>Date: {formatDate(order.createdAt)}</Text>
             <Text>Status: {order.status.toUpperCase()}</Text>
           </View>
+          <Text style={styles.headerTitle}>Order Invoice</Text>
         </View>
 
         <View style={styles.contentContainer}>
@@ -255,95 +160,51 @@ const OrderInvoicePDF: React.FC<{ order: TOrder | undefined }> = ({
           >
             <View style={[styles.section, { width: '100%' }]}>
               <Text style={styles.sectionTitle}>Shipping Address</Text>
-              {order.data.paymentMethod === 'card' ? (
-                <View style={styles.sectionContent}>
+              <View style={styles.sectionContent}>
+                <Text style={styles.addressText}>
+                  {order.data.selectedDealerInfo?.address ||
+                    order.data.shippingAddress.name}
+                </Text>
+                {order.data.shippingAddress.company && (
                   <Text style={styles.addressText}>
-                    {order.data.shippingAddress.name}
+                    {order.data.shippingAddress.company}
                   </Text>
-                  {order.data.shippingAddress.company && (
-                    <Text style={styles.addressText}>
-                      {order.data.shippingAddress.company}
-                    </Text>
-                  )}
+                )}
+                <Text style={styles.addressText}>
+                  {order.data.selectedDealerInfo?.address1 ||
+                    order.data.shippingAddress.address1}
+                </Text>
+                {(order.data.selectedDealerInfo?.address2 ||
+                  order.data.shippingAddress.address2) && (
                   <Text style={styles.addressText}>
-                    {order.data.shippingAddress.address1}
+                    {order.data.selectedDealerInfo?.address2 ||
+                      order.data.shippingAddress.address2}
                   </Text>
-                  {order.data.shippingAddress.address2 && (
-                    <Text style={styles.addressText}>
-                      {order.data.shippingAddress.address2}
-                    </Text>
-                  )}
+                )}
+                <Text style={styles.addressText}>
+                  {order.data.selectedDealerInfo?.stateProvince ||
+                    order.data.shippingAddress.cityState}
+                </Text>
+                <Text style={styles.addressText}>
+                  {order.data.selectedDealerInfo?.country ||
+                    order.data.shippingAddress.country}{' '}
+                  -{' '}
+                  {order.data.shippingAddress.zipCode ||
+                    order.data.selectedDealerInfo?.zipCode}
+                </Text>
+                <Text style={styles.addressText}>
+                  Phone:{' '}
+                  {order.data.selectedDealerInfo?.addressPhone ||
+                    order.data.shippingAddress.phone}
+                </Text>
+                {order.data.shippingAddress.email && (
                   <Text style={styles.addressText}>
-                    {order.data.shippingAddress.cityState}
+                    Email: {order.data.shippingAddress.email}
                   </Text>
-                  <Text style={styles.addressText}>
-                    {order.data.shippingAddress.country} -{' '}
-                    {order.data.shippingAddress.zipCode}
-                  </Text>
-                  <Text style={styles.addressText}>
-                    Phone: {order.data.shippingAddress.phone}
-                  </Text>
-                  {order.data.shippingAddress.email && (
-                    <Text style={styles.addressText}>
-                      Email: {order.data.shippingAddress.email}
-                    </Text>
-                  )}
-                </View>
-              ) : (
-                <View style={styles.sectionContent}>
-                  <Text style={styles.addressText}>
-                    {!order.data.shippingAddress.name
-                      ? order.data.selectedDealerInfo?.address ||
-                        order.data.localDealerInfo?.name
-                      : order.data.shippingAddress.name}
-                  </Text>
-                  {order.data.shippingAddress.company &&
-                    !order.data.selectedDealer &&
-                    !order.data.localDealerInfo && (
-                      <Text style={styles.addressText}>
-                        {order.data.shippingAddress?.company}
-                      </Text>
-                    )}
-                  <Text style={styles.addressText}>
-                    {order.data.selectedDealerInfo?.address1 ||
-                      order.data.localDealerInfo?.address ||
-                      order.data.shippingAddress.address1}
-                  </Text>
-                  {(order.data.selectedDealerInfo?.address2 ||
-                    order.data.shippingAddress.address2) && (
-                    <Text style={styles.addressText}>
-                      {order.data.selectedDealerInfo?.address2 ||
-                        order.data.shippingAddress.address2}
-                    </Text>
-                  )}
-                  <Text style={styles.addressText}>
-                    {order.data.selectedDealerInfo?.stateProvinceDisplayName ||
-                      order.data.shippingAddress.cityState}
-                  </Text>
-                  <Text style={styles.addressText}>
-                    {order.data.selectedDealerInfo?.country ||
-                      order.data.shippingAddress.country}{' '}
-                    -{' '}
-                    {order.data.shippingAddress.zipCode ||
-                      order.data.selectedDealerInfo?.zipCode}
-                  </Text>
-                  <Text style={styles.addressText}>
-                    Phone:{' '}
-                    {order.data.selectedDealerInfo?.addressPhone ||
-                      order.data.shippingAddress.phone ||
-                      order.data.localDealerInfo?.phone}
-                  </Text>
-                  {order.data.shippingAddress.email &&
-                    !order.data.selectedDealer &&
-                    !order.data.localDealerInfo && (
-                      <Text style={styles.addressText}>
-                        Email: {order.data.shippingAddress.email}
-                      </Text>
-                    )}
-                </View>
-              )}
+                )}
+              </View>
             </View>
-            {/* Billing Address */}
+
             <View style={[styles.section, { width: '100%' }]}>
               <Text style={styles.sectionTitle}>Billing Address</Text>
               <View style={styles.sectionContent}>
@@ -389,46 +250,17 @@ const OrderInvoicePDF: React.FC<{ order: TOrder | undefined }> = ({
               <Text style={[styles.tableCell, styles.qtyCell]}>Qty</Text>
               <Text style={[styles.tableCell, styles.totalCell]}>Total</Text>
             </View>
-            {/* Render each product */}
+
             {order.data.productsInfo.map((product: any, index: number) => (
               <View key={index} style={styles.tableRow}>
-                <View style={[styles.tableCell, styles.productCell]}>
-                  <Text>{product.title}</Text>
-                  {product.metaData ? (
-                    <View>
-                      <Text
-                        style={{
-                          marginTop: 5,
-                          borderBottom: '1px solid #f7f7f7',
-                          fontSize: '12px',
-                          marginBottom: 3,
-                        }}
-                      >
-                        Customized Data
-                      </Text>
-                      {Object.entries(product.metaData)
-                        .map(maniPulatedWheelConfigurationMapping)
-                        .filter((p) => p !== null)
-                        .map(({ key, value }) => {
-                          return (
-                            <View key={key}>
-                              <Text>
-                                <Text style={{ fontWeight: 'semibold' }}>
-                                  {key}:
-                                </Text>{' '}
-                                {value}
-                              </Text>
-                            </View>
-                          );
-                        })}
-                    </View>
-                  ) : null}
-                </View>
+                <Text style={[styles.tableCell, styles.productCell]}>
+                  {product.title}
+                </Text>
                 <Text style={[styles.tableCell, styles.skuCell]}>
                   {product.sku}
                 </Text>
                 <Text style={[styles.tableCell, styles.priceCell]}>
-                  {formatCurrency(product.price)}
+                  {formatCurrency(getPrice(product))}
                 </Text>
                 <Text style={[styles.tableCell, styles.qtyCell]}>
                   {product.quantity}
@@ -452,7 +284,7 @@ const OrderInvoicePDF: React.FC<{ order: TOrder | undefined }> = ({
               <View style={styles.totalRow}>
                 <Text style={styles.totalLabel}>Discount:</Text>
                 <Text style={styles.totalAmount}>
-                  - {formatCurrency(order.data.discount)}
+                  {formatCurrency(order.data.discount)}
                 </Text>
               </View>
             ) : (
@@ -462,17 +294,18 @@ const OrderInvoicePDF: React.FC<{ order: TOrder | undefined }> = ({
               <View style={styles.totalRow}>
                 <Text style={styles.totalLabel}>Delivery Charge:</Text>
                 <Text style={styles.totalAmount}>
-                  + {formatCurrency(Number(order.data.deliveryCharge))}
+                  {formatCurrency(Number(order.data.deliveryCharge))}
                 </Text>
               </View>
             ) : (
               ''
             )}
+
             {order.data.taxAmount ? (
               <View style={styles.totalRow}>
-                <Text style={styles.totalLabel}>Sales Tax:</Text>
+                <Text style={styles.totalLabel}>Tax:</Text>
                 <Text style={styles.totalAmount}>
-                  + {formatCurrency(Number(order.data.taxAmount))}
+                  {formatCurrency(Number(order.data.taxAmount))}
                 </Text>
               </View>
             ) : (
@@ -492,7 +325,7 @@ const OrderInvoicePDF: React.FC<{ order: TOrder | undefined }> = ({
           <View style={styles.footer}>
             <Text>Thank you for your purchase!</Text>
             <Text style={{ marginTop: 5 }}>
-              For questions, contact sales@amaniforged.com
+              For questions, contact sales@ktcaudio.com
             </Text>
           </View>
         </View>

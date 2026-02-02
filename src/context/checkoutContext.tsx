@@ -70,6 +70,7 @@ export const CheckoutProvider: React.FC<{ children: React.ReactNode }> = ({
   const { discount, productsInfo, deliveryCharge } = useTypedSelector(
     (state) => state.persisted.checkout
   );
+  console.log('TCL: productsInfo', productsInfo);
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -176,11 +177,12 @@ export const CheckoutProvider: React.FC<{ children: React.ReactNode }> = ({
   // Calculate the subtotal of the cart
   const subTotalCost = useMemo(() => {
     if (!productsInfo) return 0;
-    return productsInfo?.reduce(
-      (acc, product) => acc + getPrice(product) * product.quantity,
-      0
-    );
+    return productsInfo?.reduce((acc, product) => {
+      console.log('TCL: subTotalCost -> product', product);
+      return acc + getPrice(product) * product.quantity;
+    }, 0);
   }, [productsInfo]);
+  console.log('TCL: subTotalCost -> subTotalCost', subTotalCost);
 
   // Define the delivery charge, sales tax, and total cost based on the cart type
   const salesTax = 0;

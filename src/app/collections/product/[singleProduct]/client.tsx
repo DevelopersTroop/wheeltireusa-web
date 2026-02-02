@@ -16,15 +16,15 @@ const SingleProductClient: React.FC<{ product: TInventoryItem }> = ({
     if (analyticsSend.current) return;
 
     // 3. Ensure product data is loaded before tracking
-    if (product) {
-      trackEvent("product_view", {
-        productId: String(product.id),
-        productName: product.title, // Good practice to include name for marketing logs
-      });
+    // if (product) {
+    //   trackEvent("product_view", {
+    //     productId: String(product.id),
+    //     productName: product.title, // Good practice to include name for marketing logs
+    //   });
 
-      // 4. Update the .current property to true
-      analyticsSend.current = true;
-    }
+    //   // 4. Update the .current property to true
+    //   analyticsSend.current = true;
+    // }
   }, [product]); // Dependency ensures this runs when data arrives
 
   if (!product) {

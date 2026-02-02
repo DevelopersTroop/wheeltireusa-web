@@ -1,29 +1,19 @@
 'use client';
-import React, { useMemo, useState } from 'react';
-import {
-  X,
-  Trash2,
-  Truck,
-  Lock,
-  Plus,
-  Minus,
-  ChevronRight,
-  Info,
-  ArrowRight,
-  ShoppingBag,
-} from 'lucide-react';
-import InstallationSection from '../_components/v2/InstallationPartner';
-import ZipCodeEntryModal from '../_components/v2/ZipCode';
 import { useCartHook } from '@/hooks/useCartHook';
-import Link from 'next/link';
-import { useTypedSelector } from '@/redux/store';
 import { useGroupedProducts } from '@/hooks/useGroupedProducts';
-import ProductCard from '../_components/v2/ProductCard';
+import { useAppDispatch, useTypedSelector } from '@/redux/store';
 import { calculateCartTotal, getPrice } from '@/utils/price';
+import { ArrowRight, Info, Lock, ShoppingBag, X } from 'lucide-react';
+import Link from 'next/link';
+import { useMemo } from 'react';
+import ProductCard from '../_components/v2/ProductCard';
 import { ProductQuantity } from '../_components/v2/ProductQuantity';
+import ZipCodeEntryModal from '../_components/v2/ZipCode';
+import { initiateCheckout } from '@/redux/features/checkoutSlice';
 
 const CartSystem = () => {
   const { open, setOpen } = useCartHook();
+  const dispatch = useAppDispatch();
   const cart = useTypedSelector((state) => state.persisted.cart);
   const groupedProducts = useGroupedProducts(cart?.products || []);
   const subTotalCost = calculateCartTotal(cart.products);
@@ -43,12 +33,12 @@ const CartSystem = () => {
     <div className="relative h-screen w-full bg-gray-100 overflow-hidden font-sans">
       {/* Background Overlay for the Side Drawer */}
       {open && (
-        <div className="fixed inset-0 bg-black/40 z-40 transition-opacity" />
+        <div className="fixed inset-0 bg-black/40 z-50 transition-opacity" />
       )}
 
       {/* MAIN CART DRAWER */}
       <div
-        className={`fixed inset-y-0 right-0 w-full max-w-4xl bg-white z-40 transform transition-transform duration-300 shadow-2xl ${open ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`fixed inset-y-0 right-0 w-full max-w-4xl bg-white z-50 transform transition-transform duration-300 shadow-2xl ${open ? 'translate-x-0' : 'translate-x-full'}`}
       >
         {!groupedProducts.length ? (
           <div className="flex flex-col h-full bg-white">
@@ -190,6 +180,7 @@ const CartSystem = () => {
                 <Link
                   href={'/checkout'}
                   onClick={() => {
+                    dispatch(initiateCheckout());
                     setOpen();
                   }}
                   className="flex-[2.5] bg-[#ff5a13] hover:bg-[#e84e0e] text-white font-black text-lg italic rounded-full h-14 flex items-center justify-center gap-2 shadow-lg shadow-orange-100"
