@@ -40,7 +40,7 @@ const TiresCard = ({ tires }: { tires: TCartProduct[] }) => {
           <h4 className="text-2xl leading-[29px] text-[#210203]">
             <span className="text-[#210203] text-2xl font-bold">
               <Link href={singleTirePageLink}>
-                {tires[0]?.brand} {tires[0]?.modelGroup} {tires[0]?.tireSize}{' '}
+                {tires[0]?.brand} {tires[0]?.model} {tires[0]?.tireSize}{' '}
                 {tires[0]?.tireSize !== tires[1]?.tireSize &&
                 typeof tires[1]?.tireSize !== 'undefined'
                   ? `AND ${tires[1]?.tireSize}`
@@ -86,7 +86,7 @@ const TiresCard = ({ tires }: { tires: TCartProduct[] }) => {
             <h4 className="text-2xl leading-[29px] text-[#210203]">
               <span className="text-[#210203] text-2xl font-bold">
                 <Link href={singleTirePageLink}>
-                  {tires[0]?.brand} {tires[0]?.modelGroup} {tires[0]?.tireSize}{' '}
+                  {tires[0]?.brand} {tires[0]?.model} {tires[0]?.tireSize}{' '}
                   {tires[0]?.tireSize !== tires[1]?.tireSize &&
                   typeof tires[1]?.tireSize !== 'undefined'
                     ? `AND ${tires[1]?.tireSize}`
