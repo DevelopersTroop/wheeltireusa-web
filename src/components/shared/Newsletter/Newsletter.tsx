@@ -54,8 +54,8 @@ const Newsletter = () => {
         onOpenChange={() => dispatch(closeNewsletterModal())}
       >
         <DialogContent
-          closeIconStyle="h-6 w-6 !text-white md:mr-0 md:mt-0 mt-5 mr-5"
-          className="max-w-3xl !rounded-none bg-transparent border-none md:p-0 p-6 bg-black"
+          closeIconStyle="h-6 w-6 !text-white md:mr-0 md:mt-0 mt-5 mr-5 text-black"
+          className="max-w-3xl !rounded-none border-none md:p-0 p-6"
         >
           <DialogTitle className="sr-only">Newsletter Subscription</DialogTitle>
           <div className="flex flex-col md:flex-row  ">
@@ -87,7 +87,7 @@ const Newsletter = () => {
               <div className="relative z-10 ">
                 {isSuccess ? (
                   <div className="text-center">
-                    <div className="leading-[1.3] text-4xl font-extrabold text-gray-400 uppercase">
+                    <div className="leading-[1.3] text-4xl font-extrabold text-gray-800 uppercase">
                       Thank you!
                     </div>
                     <div className="flex justify-center items-center mt-4">
@@ -96,7 +96,7 @@ const Newsletter = () => {
                           if (couponCode)
                             window.navigator.clipboard.writeText(couponCode);
                         }}
-                        className="text-center text-gray-400 font-semibold text-base tracking-wide cursor-pointer"
+                        className="text-center text-gray-800 font-semibold text-base tracking-wide cursor-pointer"
                       >
                         Use code{" "}
                         <span className="text-base font-bold text-primary">
@@ -108,12 +108,11 @@ const Newsletter = () => {
                   </div>
                 ) : (
                   <>
-                    <div className="text-center leading-[1.3] text-2xl md:text-[27px] font-extrabold text-gray-300 uppercase">
-                      Unlock Exclusive Savings!
+                    <div className="text-center leading-[1.3] text-2xl md:text-[27px] font-extrabold text-gray-800 uppercase">
+                      Get $50 Off Your First Order!
                     </div>
-                    <div className="text-center text-gray-200 font-semibold text-base tracking-wide py-2.5">
-                      Sign up now and enjoy a 5% discount on your first Amani
-                      Forged order.
+                    <div className="text-center text-gray-800 font-semibold text-base tracking-wide py-2.5">
+                      Sign up to receive your exclusive discount instantly.
                     </div>
                     <div>
                       <Formik
