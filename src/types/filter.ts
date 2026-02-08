@@ -9,8 +9,6 @@ export type TSingleFilter = {
 
 export type TFilters = {
   price: TPriceFilter;
-} & {
-  [filterType: string]: TSingleFilter[];
   model: TSingleFilter[];
   tire_size: TSingleFilter[];
   tire_type: TSingleFilter[];

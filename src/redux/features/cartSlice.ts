@@ -42,8 +42,7 @@ const cartSlice = createSlice({
           ) {
             // If the new quantity exceeds available inventory, set it to available inventory
             newProduct.quantity =
-              (existingProduct?.availableStock || 4) -
-              existingProduct.quantity;
+              (existingProduct?.availableStock || 4) - existingProduct.quantity;
             toast.error(
               `You can only add ${newProduct.quantity} more of this product to your cart.`
             );
@@ -73,9 +72,33 @@ const cartSlice = createSlice({
         existingProduct.quantity += quantity;
       }
     },
+    // Update quantity for all products in a package
+    updatePackageQuantity: (
+      state,
+      action: PayloadAction<{ cartPackage: string; quantity: number }>
+    ) => {
+      const { cartPackage, quantity } = action.payload;
+      state.products.forEach((product) => {
+        if (product.cartPackage === cartPackage) {
+          const newQuantity = product.quantity + quantity;
+          // Ensure quantity doesn't go below 1
+          product.quantity = Math.max(1, newQuantity);
+        }
+      });
+    },
+    // Remove a single product by its ID (for removing from packages)
+    removeProductById: (state, action: PayloadAction<number>) => {
+      state.products = state.products.filter((p) => p.id !== action.payload);
+    },
   },
 });
 
-export const { addToCart, removeFromCart, updateCartQuantity, emptyCart } =
-  cartSlice.actions;
+export const {
+  addToCart,
+  removeFromCart,
+  updateCartQuantity,
+  updatePackageQuantity,
+  removeProductById,
+  emptyCart,
+} = cartSlice.actions;
 export default cartSlice.reducer;

@@ -130,7 +130,6 @@ const TireAttributes = ({ product }: { product: TCartProduct }) => {
       <div
         className="hover:bg-[#210203] bg-white group cursor-pointer rounded-md border border-[#cfcfcf] px-3 py-2 flex flex-col gap-2 justify-center items-start relative"
         data-tooltip-id="my-tooltip"
-        data-tooltip-content={product?.ecoFocus}
         data-tooltip-place="top"
       >
         <div className="flex gap-1 items-center relative">

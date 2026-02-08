@@ -10,6 +10,7 @@ const SingleProductClient: React.FC<{ product: TInventoryItem }> = ({
   product,
 }) => {
   const analyticsSend = useRef(false);
+  console.log(product);
 
   useEffect(() => {
     // 2. Check the .current property
@@ -32,17 +33,19 @@ const SingleProductClient: React.FC<{ product: TInventoryItem }> = ({
   }
 
   let productBasedOnCategory = <></>;
-//   if (product.category.title === "wheels") {
-//     productBasedOnCategory = <Wheels product={product} />;
-//   } else 
-    if (product.category.title === "tires") {
+  //   if (product.category.title === "wheels") {
+  //     productBasedOnCategory = <Wheels product={product} />;
+  //   } else 
+  if (product.category.title === "tires") {
     productBasedOnCategory = <Tire product={product} />;
-  } 
-//   else if (product.category.title === "accessories") {
-//     productBasedOnCategory = <Accessory product={product} />;
-//   } else {
-//     productBasedOnCategory = <Wheels product={product} />;
-//   }
+  } else {
+    productBasedOnCategory = <Tire product={product} />;
+  }
+  //   else if (product.category.title === "accessories") {
+  //     productBasedOnCategory = <Accessory product={product} />;
+  //   } else {
+  //     productBasedOnCategory = <Wheels product={product} />;
+  //   }
   return <Container>{productBasedOnCategory}</Container>;
 };
 

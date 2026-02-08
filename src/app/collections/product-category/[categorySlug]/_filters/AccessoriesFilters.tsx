@@ -20,14 +20,14 @@ const AccessoriesFilters = () => {
     <div className={"filter-shadow bg-gray-200"}>
       <ActionFilter />
 
-      <div className={"border-y border-gray-300 px-5 py-3"}>
+      {/* <div className={"border-y border-gray-300 px-5 py-3"}>
         <AccessoriesSubCategory
           filterKey={"product_sub_type"}
-          subCategory={filters?.product_sub_type || []}
+          subCategory={filters?. || []}
         />
-      </div>
+      </div> */}
       <div className={"border-b border-gray-300 px-5 py-3"}>
-        <AccessoriesBrand filterKey={"brand_desc"} brand={filters?.brand_desc || []} />
+        <AccessoriesBrand filterKey={"brand_desc"} brand={filters?.brand || []} />
       </div>
 
       <div className={"border-b border-gray-300 px-5 py-3"}>

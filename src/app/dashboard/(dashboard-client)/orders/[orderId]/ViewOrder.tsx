@@ -66,7 +66,7 @@ const ViewOrder = () => {
                         <p className="text-sm text-gray-600">
                           {' '}
                           <span className="font-medium">SKU:</span>{' '}
-                          {product?.sku}
+                          {product?.partNumber}
                         </p>
                         <p className="text-sm text-gray-600">
                           {' '}
@@ -92,12 +92,12 @@ const ViewOrder = () => {
                         </p>
                         <p className="text-sm text-gray-600">
                           <span className="font-medium">Price:</span> $
-                          {product?.price}
+                          {product?.sellingPrice}
                         </p>
                       </div>
                     </div>
                     <p className="text-right text-lg text-red-600">
-                      ${(product?.price ?? 0) * (product?.quantity ?? 0)}
+                      ${(product?.sellingPrice ?? 0) * (product?.quantity ?? 0)}
                     </p>
                   </div>
                 );

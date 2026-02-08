@@ -83,12 +83,12 @@ const InstallerSelectionModal = ({
 
         {/* Installer Type Selector */}
         <div className="flex gap-4 mb-10">
-          <button className="flex-1 max-w-[180px] p-4 rounded-2xl border-2 border-orange-600 bg-white relative text-left">
+          <button className="flex-1 max-w-[180px] p-4 rounded-2xl border-2 border-indigo-600 bg-indigo-50/30 relative text-left">
             <div className="font-black text-sm text-slate-900">Local shops</div>
             <div className="text-[10px] text-gray-500 font-bold">
               Installers in your area.
             </div>
-            <div className="absolute top-2 right-2 bg-orange-600 text-white rounded-full p-0.5">
+            <div className="absolute top-2 right-2 bg-gradient-to-br from-indigo-600 to-violet-600 text-white rounded-full p-0.5">
               <div className="w-2 h-2 border-r-2 border-b-2 border-white rotate-45 transform -translate-y-0.5" />
             </div>
           </button>
@@ -126,9 +126,8 @@ const InstallerSelectionModal = ({
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`pb-4 text-sm font-bold transition-all relative ${
-                activeTab === tab ? 'text-black' : 'text-gray-400'
-              }`}
+              className={`pb-4 text-sm font-bold transition-all relative ${activeTab === tab ? 'text-black' : 'text-gray-400'
+                }`}
             >
               {tab}
               {activeTab === tab && (
@@ -178,8 +177,8 @@ const InstallerSelectionModal = ({
                       <Star
                         key={i}
                         size={14}
-                        fill={i < 4 ? '#ff5a13' : 'none'}
-                        stroke={i < 4 ? '#ff5a13' : '#d1d5db'}
+                        fill={i < 4 ? '#4f46e5' : 'none'}
+                        stroke={i < 4 ? '#4f46e5' : '#d1d5db'}
                       />
                     ))}
                   </div>
@@ -192,8 +191,8 @@ const InstallerSelectionModal = ({
                 </div>
 
                 {/* Social Proof */}
-                <div className="flex items-center gap-2 text-orange-600 mb-8">
-                  <Users size={18} fill="#ff5a13" className="opacity-80" />
+                <div className="flex items-center gap-2 text-indigo-600 mb-8">
+                  <Users size={18} fill="#4f46e5" className="opacity-80" />
                   <span className="text-xs font-black tracking-tight">
                     {shop.recentCustomers} people chose this shop recently
                   </span>
@@ -219,10 +218,10 @@ const InstallerSelectionModal = ({
                   </div>
 
                   <div className="flex gap-3">
-                    <button className="flex-1 border-2 border-gray-100 rounded-full py-4 text-sm font-black text-slate-900 hover:bg-gray-50 transition-colors">
+                    <button className="flex-1 border-2 border-indigo-100 rounded-xl py-4 text-sm font-bold text-indigo-700 hover:bg-indigo-50 transition-colors">
                       Change Time
                     </button>
-                    <button className="flex-[1.2] bg-orange-600 text-white rounded-full py-4 text-sm font-black hover:bg-orange-700 transition-colors">
+                    <button className="flex-[1.2] bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-xl py-4 text-sm font-bold hover:from-indigo-700 hover:to-violet-700 transition-all shadow-md">
                       Confirm
                     </button>
                   </div>

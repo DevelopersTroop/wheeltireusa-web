@@ -1,7 +1,7 @@
 // hooks/useRestrictedLocationNotice.ts
 'use client';
 
-import { US_STATES } from '@/app/checkout/states';
+import { US_STATES } from '@/states';
 import { useTypedSelector } from '@/redux/store';
 import { useEffect, useState } from 'react';
 

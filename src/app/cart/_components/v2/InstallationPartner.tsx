@@ -139,8 +139,8 @@ const InstallationSection = () => {
                         <Star
                           key={i}
                           size={12}
-                          fill={i < 4 ? '#ff5a13' : 'none'}
-                          stroke={i < 4 ? '#ff5a13' : '#d1d5db'}
+                          fill={i < 4 ? '#4f46e5' : 'none'}
+                          stroke={i < 4 ? '#4f46e5' : '#d1d5db'}
                         />
                       ))}
                     </div>
@@ -153,8 +153,8 @@ const InstallationSection = () => {
                   </div>
 
                   {/* Social Proof */}
-                  <div className="flex items-center gap-2 text-[#ff5a13] bg-orange-50/50 p-2 rounded-lg mb-6">
-                    <Users size={14} fill="#ff5a13" />
+                  <div className="flex items-center gap-2 text-indigo-600 bg-indigo-50/50 p-2 rounded-lg mb-6">
+                    <Users size={14} fill="#4f46e5" />
                     <span className="text-[11px] font-black uppercase tracking-tight">
                       {shop.socialProof}
                     </span>
@@ -172,7 +172,7 @@ const InstallationSection = () => {
                           <span className="text-xs font-bold text-slate-800">
                             {shop.earliestTime.split(' . ')[0]}
                           </span>
-                          <span className="bg-emerald-50 text-emerald-700 text-[9px] font-black px-2 py-0.5 rounded uppercase">
+                          <span className="bg-violet-50 text-violet-700 text-[9px] font-black px-2 py-0.5 rounded uppercase">
                             Earliest time available
                           </span>
                         </div>
@@ -183,10 +183,10 @@ const InstallationSection = () => {
                     </div>
 
                     <div className="flex gap-2">
-                      <button className="flex-1 border-2 border-gray-100 rounded-full py-2.5 text-sm font-black text-slate-800 hover:bg-gray-50 transition-colors">
+                      <button className="flex-1 border-2 border-indigo-100 rounded-xl py-2.5 text-sm font-bold text-indigo-700 hover:bg-indigo-50 transition-colors">
                         Change Time
                       </button>
-                      <button className="flex-1 bg-[#ff5a13] text-white rounded-full py-2.5 text-sm font-black hover:bg-[#e84e0e] transition-colors">
+                      <button className="flex-1 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-xl py-2.5 text-sm font-bold hover:from-indigo-700 hover:to-violet-700 transition-all shadow-sm">
                         Confirm
                       </button>
                     </div>

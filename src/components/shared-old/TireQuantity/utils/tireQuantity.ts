@@ -20,10 +20,7 @@ export const isIncreaseDisabled = (
   product?: TInventoryItem,
   cartProduct?: TCartProduct
 ) => {
-  return (
-    quantityStep + otherQuantity + quantity >
-    (product?.inventoryAvailable || cartProduct?.inventoryAvailable || 4)
-  );
+  return quantityStep + otherQuantity + quantity > 4;
 };
 
 // Check if decreasing quantity should be disabled

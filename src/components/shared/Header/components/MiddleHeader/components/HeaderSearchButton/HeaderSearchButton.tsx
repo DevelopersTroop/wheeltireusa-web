@@ -160,15 +160,13 @@ const HeaderSearchButton: React.FC<HeaderSearchButtonProps> = ({
                 variant="ghost"
                 aria-label="Submit desktop search"
               >
-                <Search className="h-5 w-5" />
+                <Search className="h-6 w-6" />
               </Button>
             </div>
           </div>
 
           {/* MOBILE SEARCH ICON */}
-          <Button
-            variant="ghost"
-            size="icon"
+          <div
             className="lg:hidden"
             onClick={(e) => {
               e.preventDefault();
@@ -176,8 +174,8 @@ const HeaderSearchButton: React.FC<HeaderSearchButtonProps> = ({
             }}
             aria-label={ariaLabel || "Open mobile search"}
           >
-            <Search size={32} />
-          </Button>
+            <Search className="w-5 h-5" />
+          </div>
         </form>
       </div>
     </>
