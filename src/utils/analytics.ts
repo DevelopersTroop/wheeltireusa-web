@@ -40,7 +40,7 @@ export const triggerGaAddToCart = (
       currency: 'USD',
       items: [
         {
-          item_id: product?.sku || product?.inventoryId || product?.id,
+          item_id: product?.partNumber || product?.id,
           item_name: product.title,
           item_category: product?.category?.title,
           price: getPrice(product),
@@ -89,7 +89,7 @@ export const triggerGaBeginCheckoutEvent = (
         item_variant: `Front:${
           product?.metaData?.frontForging || 'N/A'
         } | Rear:${product?.metaData?.rearForging || 'N/A'}`,
-        price: getPrice(product),
+        price: product?.sellingPrice,
         quantity: product.quantity || 1,
         index,
       })),
@@ -108,12 +108,12 @@ export const triggerGaAddShippingInfoEvent = (
       currency: 'USD',
       shipping_tier: shippingTier, // Add the selected shipping tier
       items: products.map((product, index) => ({
-        item_id: product.sku || product.id,
+        item_id: product.partNumber || product.id,
         item_name: product.title,
         item_category: product.category?.title || 'Uncategorized',
         item_brand: product.brand,
 
-        price: getPrice(product),
+        price: product?.sellingPrice,
         quantity: product.quantity || 1,
         index,
       })),
@@ -137,11 +137,11 @@ export const triggerGaAddPaymentInfoEvent = (
       currency: 'USD',
       payment_type: paymentType, // Add the selected payment type
       items: products.map((product, index) => ({
-        item_id: product.sku || product.id,
+        item_id: product.partNumber || product.id,
         item_name: product.title,
         item_category: product.category?.title || 'Uncategorized',
         item_brand: product.brand,
-        price: getPrice(product),
+        price: product?.sellingPrice,
         quantity: product.quantity || 1,
         index,
       })),
@@ -160,11 +160,11 @@ export const triggerGaPurchaseEvent = (order: TOrder) => {
       shipping: order.data.deliveryCharge,
       coupon: order.data.couponCode || undefined,
       items: order.data.productsInfo.map((product, index) => ({
-        item_id: product.sku || product.id,
+        item_id: product.partNumber || product.id,
         item_name: product.title,
         item_category: product.category?.title || 'Uncategorized',
         item_brand: product.brand,
-        price: product.price,
+        price: product.sellingPrice,
         quantity: product.quantity,
         index,
       })),

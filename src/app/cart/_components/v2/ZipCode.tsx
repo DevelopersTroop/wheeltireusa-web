@@ -88,25 +88,25 @@ const ZipCodeModal = () => {
             </button>
 
             <div className="pt-8">
-              <h3 className="text-[11px] font-black text-gray-900 uppercase tracking-[0.15em] mb-6">
+              <h3 className="text-[11px] font-black text-indigo-600 uppercase tracking-[0.15em] mb-6">
                 Why share your location?
               </h3>
               <div className="grid grid-cols-3 gap-4">
                 {benefits.map((b, i) => (
                   <div
                     key={i}
-                    className="bg-[#f8f7f2] p-5 rounded-2xl flex flex-col justify-between aspect-square border border-transparent hover:border-gray-200 cursor-pointer group"
+                    className="bg-gradient-to-br from-indigo-50/50 to-violet-50/50 p-5 rounded-2xl flex flex-col justify-between aspect-square border border-indigo-100/50 hover:border-indigo-200 hover:shadow-md cursor-pointer group transition-all"
                   >
-                    <div className="bg-white w-12 h-12 rounded-xl flex items-center justify-center shadow-sm text-gray-800">
+                    <div className="bg-white w-12 h-12 rounded-xl flex items-center justify-center shadow-sm text-indigo-600 group-hover:text-violet-600 transition-colors">
                       {b.icon}
                     </div>
                     <div className="flex justify-between items-end">
-                      <p className="text-xs font-black text-gray-900 leading-tight w-2/3">
+                      <p className="text-xs font-black text-slate-800 leading-tight w-2/3">
                         {b.label}
                       </p>
                       <ChevronRight
                         size={16}
-                        className="text-gray-400 group-hover:text-black"
+                        className="text-indigo-300 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition-all"
                       />
                     </div>
                   </div>
@@ -141,7 +141,7 @@ const ZipCodeModal = () => {
                       {c.locationName}
                     </span>
                   </div>
-                  <button className="bg-white border-2 border-gray-100 rounded-full px-10 py-3 text-base font-black text-slate-900 hover:shadow-md transition-all active:scale-95">
+                  <button className="bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 rounded-xl px-10 py-3 text-base font-bold text-white shadow-md hover:shadow-lg transition-all active:scale-95">
                     Select
                   </button>
                 </div>

@@ -1,117 +1,78 @@
+/** eslint-disable @next/next/no-img-element */
 'use client';
 
-import { Checkbox } from '@/components/ui/checkbox';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
 import { Progress } from '@/components/ui/progress';
 import { Clock, Loader2 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-
-import StaticImage from '@/components/ui/staticImage';
-import { useCheckout } from '@/context/checkoutContext';
-import useAuth from '@/hooks/useAuth';
-import { emptyCart } from '@/redux/features/cartSlice';
+import { toast } from 'sonner';
+import { loadStripe } from '@stripe/stripe-js';
+import { OrderConfirmation } from './OrderConfirmation';
+import { OrderSummary } from './OrderSummary';
+import { PaymentData, PaymentInfo } from './PaymentInfo';
+import { ShippingInfo } from './ShippingInfo';
+import { trackEvent } from '@/lib/tracker';
+import { useTypedSelector } from '@/redux/store';
+import { customFetch } from '@/lib/commonFetch';
+import { IApiRes } from '@/types/reduxHelper';
+import { TOrder } from '@/types/order';
 import {
   revokeCouponCode,
   updateOrderSuccessData,
 } from '@/redux/features/checkoutSlice';
-import { useTypedSelector } from '@/redux/store';
-import { TOrder, TOrderData } from '@/types/order';
 import { triggerGaPurchaseEvent } from '@/utils/analytics';
-import { apiBaseUrl } from '@/utils/api';
-import { toast } from 'sonner';
-import { CartSummary } from './CartSummary';
-import { CreateAccountSection } from './CreateAccountSection';
-import { DeliveryOptions } from './DeliveryOptions';
-import { OrderConfirmation } from './OrderConfirmation';
-import { OrderSummary } from './OrderSummary';
-import { PaymentInfo } from './PaymentInfo';
-import { ShippingDetails } from './ShippingDetails';
-import { loadStripe } from '@stripe/stripe-js';
 
-// Interface for checkout step props
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
 );
 
-// FinalStep Component
 export const FinalStep: React.FC = () => {
   /**
    * Redux Store & Dispatch hook
    */
-  const { orderSuccessData, isAccountCreated } = useTypedSelector(
+  const { orderSuccessData } = useTypedSelector(
     (state) => state.persisted.checkout
   );
-  const dispatch = useDispatch(); // Redux dispatch hook
-
-  // Use a ref to track if verification has already been attempted
-  const hasVerified = useRef(false);
+  const dispatch = useDispatch();
 
   /**
    * Checkout context
    */
-  const { clearCheckoutState, setStep } = useCheckout(); // Functions to clear checkout state and set the current step
-  const { user }: any = useAuth(); // Authentication context
-  const searchParams = useSearchParams(); // Hook to access query parameters
-  const router = useRouter(); // Hook for navigation
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const [verifying, setVerifying] = useState(true);
+  const [progress, setProgress] = useState(0);
+  const [paymentData, setPaymentData] = useState<PaymentData | null>(null);
 
-  // Component state
-  const [showSurvey, setShowSurvey] = useState(false); // State to show the survey modal
-  const [survey, setSurvey] = useState<'yes' | 'no' | ''>(''); // State to track survey response
-  const [verifying, setVerifying] = useState(true); // State to track payment verification
-  const [progress, setProgress] = useState(0); // State to track progress bar value
-  const [paymentData, setPaymentData] = useState(null); // State to store payment data
+  const queryParams = useMemo(
+    () => ({
+      sessionId: searchParams.get('session_id'),
+      orderId: searchParams.get('order_id'),
+      paymentId: searchParams.get('paymentId'),
+      PayerID: searchParams.get('PayerID'),
+      method: searchParams.get('method'),
+    }),
+    [searchParams]
+  );
 
-  // Function to handle survey submission
-  const handleSumbitSurvey = (data: typeof survey) => {
-    setSurvey(data);
-    setShowSurvey(false);
-  };
+  const { sessionId, orderId, paymentId, PayerID, method } = queryParams;
 
-  // Effect to verify payment
   useEffect(() => {
+    if (!orderId || !method) {
+      return; // Prevent unnecessary effect execution
+    }
+
+    let isMounted = true; // Prevent state updates on unmounted component
+    setVerifying(true);
+
     const verifyPayment = async () => {
-      // Prevent multiple verification attempts
-      if (hasVerified.current) return;
-      hasVerified.current = true;
-
       try {
-        setVerifying(true);
-
-        const method = searchParams.get('method');
-
-        //Stripe params
-        const sessionId = searchParams.get('session_id');
-        const orderId = searchParams.get('order_id');
+        // Start progress animation only if below 90
+        const stripe = await stripePromise;
         const paymentIntentClientSecret = searchParams.get(
           'payment_intent_client_secret'
         );
-
-        //PayPal params
-        const paymentId = searchParams.get('paymentId');
-        const PayerID = searchParams.get('PayerID');
-
-        // Early return if no order ID is present
-        if (!orderId) {
-          throw new Error('Missing order information');
-        }
-
-        const stripe = await stripePromise;
-
-        if (method === 'stripe' && !stripe)
-          throw new Error('Expected stripe promise to be resolved');
-
-        const paymentIntentResult = await stripe?.retrievePaymentIntent(
-          paymentIntentClientSecret as string
-        );
-        const paymentIntent = paymentIntentResult?.paymentIntent;
-
         const interval = setInterval(() => {
           setProgress((prev) => {
             if (prev >= 90) {
@@ -124,91 +85,105 @@ export const FinalStep: React.FC = () => {
 
         let response;
 
+        if (method === 'stripe' && !stripe)
+          throw new Error('Expected stripe promise to be resolved');
+
+        const paymentIntentResult = await stripe?.retrievePaymentIntent(
+          paymentIntentClientSecret as string
+        );
+        const paymentIntent = paymentIntentResult?.paymentIntent;
+
+        if (method === 'stripe' && !paymentIntent)
+          throw new Error('Expected payment intent to be resolved');
+
         if (method === 'stripe') {
-          // Stripe
-          response = await fetch(
-            `${apiBaseUrl}/payments/stripe/verify-payment?orderId=${orderId}`
+          response = await customFetch(
+            `payments/stripe/verify-payment?orderId=${orderId}`
           );
         } else if (method === 'pay_tomorrow') {
-          response = await fetch(
-            `${apiBaseUrl}/payments/pay-tomorrow/status?orderId=${orderId}`
+          response = await customFetch(
+            `payments/pay-tomorrow/status?orderId=${orderId}`
           );
         } else if (method === 'snap_finance') {
-          response = await fetch(
-            `${apiBaseUrl}/payments/snap-finance/status?orderId=${orderId}`
+          response = await customFetch(
+            `payments/snap-finance/status?orderId=${orderId}`
           );
         } else {
-          // PayPal
-          response = await fetch(
-            `${apiBaseUrl}/payments/verify-paypal-payment?paymentId=${paymentId}&PayerID=${PayerID}&orderId=${orderId}`
+          response = await customFetch<
+            IApiRes<{ order: TOrder; payment: PaymentData }>
+          >(
+            `payments/verify-paypal-payment?paymentId=${paymentId}&PayerID=${PayerID}&orderId=${orderId}`
           );
         }
 
-        const result = await response.json();
+        clearInterval(interval); // Stop progress animation
 
-        // Handle successful payment verification
-        if (response.ok && result.data?.order) {
-          const order = result.data.order as TOrder;
-          setProgress(100);
+        if (!isMounted) return;
 
+        if (!response || !response.data) {
+          throw new Error('Invalid response from payment verification');
+        }
+
+        const result = response.data as { order: TOrder; payment: any };
+        console.log('TCL: verifyPayment -> result', result);
+
+        if (result?.order) {
+          setProgress(80);
           if (method === 'stripe' && paymentIntent?.status !== 'succeeded') {
-            router.push('/checkout?step=3&order_status=false');
+            router.push('/checkout?step=1&order_status=false');
             return;
           }
-          // Update Redux state with order success data
-          dispatch(updateOrderSuccessData(result.data.order));
-          setPaymentData(result.data.payment);
-          // Trigger Google Analytics purchase event
-          triggerGaPurchaseEvent(order);
-          toast.success('Order Confirmed', {
-            description: 'Your payment has been processed successfully.',
+
+          setProgress(100);
+          dispatch(updateOrderSuccessData(result.order));
+          setPaymentData(result.payment);
+          triggerGaPurchaseEvent(result.order);
+          trackEvent('checkout_complete', {
+            order_id: result.order.orderId,
+            payment_id: result.payment._id,
           });
-          clearCheckoutState();
-          setStep(4);
-          dispatch(emptyCart());
+          toast.success('Order Placed Successfully');
+          // dispatch(emptyCart());
           dispatch(revokeCouponCode());
         } else {
-          // throw new Error(result.message || "Payment verification failed");
+          throw new Error('Payment verification failed');
         }
       } catch (err) {
-        // Redirect to checkout page with error status
-        router.push('/checkout?step=3&order_status=false');
+        console.error('Payment verification error:', err);
+        toast.error('Payment verification failed. Please try again.');
+        if (isMounted) {
+          router.push('/checkout?step=1&order_status=false');
+        }
       } finally {
-        setVerifying(false);
+        if (isMounted) {
+          setVerifying(false);
+        }
       }
     };
 
-    // Only run verification if we have URL parameters indicating a payment return
-    const hasPaymentParams =
-      searchParams.get('session_id') ||
-      (searchParams.get('paymentId') && searchParams.get('PayerID')) ||
-      searchParams.get('method');
+    verifyPayment();
 
-    if (hasPaymentParams && searchParams.get('order_id')) {
-      verifyPayment();
-    }
+    return () => {
+      isMounted = false;
+    };
+  }, [sessionId, orderId, paymentId, PayerID, dispatch, router]);
 
-    // Empty dependency array to ensure this effect runs only once on component mount
-  }, []);
-
-  // Effect to scroll to the top of the page on component mount
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  // Render loading state while verifying payment
   if (verifying) {
     return (
-      <div className="min-h-[60vh]  flex items-center justify-center p-4">
-        <div className="w-full max-w-2xl space-y-4">
-          <div className="text-center pb-2">
-            <div className="mx-auto mb-4 bg-blue-50 w-16 h-16 rounded-full flex items-center justify-center">
-              <Clock className="h-8 w-8 text-blue-500 animate-pulse" />
+      <div className="flex min-h-[60vh] items-center justify-center p-4">
+        <div className="w-full max-w-4xl mx-auto space-y-4">
+          <div className="pb-2 text-center">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-50">
+              <Clock className="h-8 w-8 animate-pulse text-blue-500" />
             </div>
             <h2 className="text-2xl font-bold text-gray-900">
               Verifying Payment
             </h2>
-            <p className="text-gray-600 mt-2">
+            <p className="mt-2 text-gray-600">
               Please wait while we confirm your payment...
             </p>
           </div>
@@ -222,7 +197,6 @@ export const FinalStep: React.FC = () => {
     );
   }
 
-  // Render final step content
   return (
     <div>
       {searchParams.get('method') === 'pay_tomorrow' && (
@@ -239,8 +213,7 @@ export const FinalStep: React.FC = () => {
           </p>
         </div>
       )}
-      <div className="grid grid-cols-11 gap-6 lg:gap-8 pt-8 pb-20">
-        {/* Left Section: Order Details */}
+      <div className="grid grid-cols-11 gap-6 pb-20 pt-8 lg:gap-8">
         <div className="col-span-11 lg:col-span-7">
           <OrderConfirmation
             email={orderSuccessData?.data?.shippingAddress?.email}
@@ -248,101 +221,45 @@ export const FinalStep: React.FC = () => {
           />
 
           <div className="flex flex-col gap-8">
-            <CartSummary
-              productsInfo={orderSuccessData?.data?.productsInfo as any}
+            {/* <CartSummary
+              productsInfo={orderSuccessData?.data?.productsInfo}
               totalCost={orderSuccessData?.data?.totalCost}
-            />
+            /> */}
 
-            <DeliveryOptions
+            {/* <DeliveryOptions
               requestedDealer={orderSuccessData?.data?.requestedDealer}
               selectedDealerInfo={orderSuccessData?.data?.selectedDealerInfo}
               selectedOptionTitle={orderSuccessData?.data?.selectedOptionTitle}
-            />
+            /> */}
 
-            <ShippingDetails
-              localDealerInfo={orderSuccessData?.data?.localDealerInfo}
-              selectedDealer={orderSuccessData?.data?.selectedDealer}
+            <ShippingInfo
               shippingAddress={orderSuccessData?.data?.shippingAddress}
-              selectedOptionTitle={orderSuccessData?.data?.selectedOptionTitle}
-              // shippingAddress={orderSuccessData?.data?.shippingAddress}
-              // selectedDealer={orderSuccessData?.data?.selectedDealer}
+              selectedDealer={orderSuccessData?.data?.selectedDealer}
             />
 
             {paymentData && (
-              <PaymentInfo
-                paymentData={
-                  {
-                    ...(paymentData as any),
-                    orderId: orderSuccessData?.orderId,
-                  } as any
-                }
-              />
+              <PaymentInfo paymentData={paymentData as PaymentData} />
             )}
           </div>
         </div>
 
-        {/* Right Section: Order Summary and Account Creation */}
-        <div className="col-span-11 lg:col-span-4 sticky top-0 flex flex-col gap-8">
-          {!isAccountCreated && !user?._id && (
-            <CreateAccountSection orderSuccessData={orderSuccessData} />
-          )}
+        <div className="sticky top-0 col-span-11 flex flex-col gap-8 lg:col-span-4">
           <OrderSummary
             totalCost={orderSuccessData?.data?.totalCost}
             taxAmount={orderSuccessData?.data?.taxAmount}
             totalWithTax={
-              orderSuccessData?.data?.totalWithTax
-                ? orderSuccessData?.data?.totalWithTax
-                : orderSuccessData?.data?.netCost
-                  ? parseFloat(orderSuccessData?.data?.netCost)
-                  : 0
+              orderSuccessData?.data?.totalWithTax ||
+              (orderSuccessData?.data?.netCost
+                ? parseFloat(orderSuccessData?.data?.netCost)
+                : parseFloat('0.00'))
             }
             netCost={orderSuccessData?.data?.netCost}
             cartType={orderSuccessData?.data?.cartType}
             discount={orderSuccessData?.data?.discount}
             zipCode={orderSuccessData?.data?.shippingAddress?.zipCode}
-            deliveryCharge={orderSuccessData?.data?.deliveryCharge}
           />
         </div>
       </div>
-      {/* Survey Modal */}
-      <Dialog open={showSurvey} onOpenChange={setShowSurvey}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className="relative w-fit">
-              <StaticImage
-                src="images/AmaniLogo.webp"
-                className="w-20 h-20 rounded-full"
-              />
-            </DialogTitle>
-          </DialogHeader>
-          <h2 className="font-bold text-lg mt-2">Your Opinion Counts</h2>
-          <h3 className="font-bold">
-            Is this your first time placing an order with us?
-          </h3>
-          <div className="flex items-center gap-4">
-            <div
-              onClick={() => handleSumbitSurvey('yes')}
-              className="flex items-center font-bold gap-2 cursor-pointer"
-            >
-              <Checkbox
-                checked={survey === 'yes'}
-                className="rounded-full border-slate-300"
-              />
-              <p>Yes</p>
-            </div>
-            <div
-              onClick={() => handleSumbitSurvey('no')}
-              className="flex items-center font-bold gap-2 cursor-pointer"
-            >
-              <Checkbox
-                checked={survey === 'no'}
-                className="rounded-full border-slate-300"
-              />
-              <p>No</p>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };

@@ -9,10 +9,11 @@ import { ActionFilter } from "@/components/shared/ActionFilter/ActionFilter";
 import TireImage from "./widgets/tire/TireImage";
 import PriceRange from "./widgets/components/PriceRange";
 import TireLoadIndex from "./widgets/tire/TireLoadIndex";
+import TireBrand from "./widgets/tire/TireBrand";
 
 const TireFilters = () => {
   const { filters } = useFetchFilters("tires");
-	console.log("TCL: TireFilters -> filters", filters)
+  console.log("TCL: TireFilters -> filters", filters)
 
   return (
     <div className={"filter-shadow bg-gray-200"}>
@@ -44,16 +45,16 @@ const TireFilters = () => {
       </div>
       <div className={"border-y border-gray-300 px-5 py-3"}>
         <TireWheelDiameter
-          filterKey={"rim_diameter"}
-          diameter={filters?.rim_diameter}
+          filterKey={"diameter"}
+          diameter={filters?.diameter}
         />
       </div>
       {/* <div className={"border-b border-gray-300 px-5 py-3"}>
         <TireHeight filterKey={"tire_height"} height={filters?.tire_height || []} />
       </div> */}
-      <div className={"border-b border-gray-300 px-5 py-3"}>
-        <TireWidth filterKey={"width"} width={filters?.width || []} />
-      </div>
+      {/* <div className={"border-b border-gray-300 px-5 py-3"}>
+        <TireWidth filterKey={"width"} width={filters?.wid || []} />
+      </div> */}
       <div className={"border-b border-gray-300 px-5 py-3"}>
         <TireType filterKey={"tire_type"} tireType={filters?.tire_type || []} />
       </div>
@@ -66,11 +67,11 @@ const TireFilters = () => {
           loadIndex={filters?.load_index || []}
         />
       </div>
-      {/* <div className={"border-b border-gray-300 px-5 py-3"}>
-        <TireBrand filterKey={"brand_desc"} brand={filters?.brand_desc || []} />
-      </div> */}
       <div className={"border-b border-gray-300 px-5 py-3"}>
-        <TireModel filterKey={"display_model_no"} model={filters?.display_model_no || []} />
+        <TireBrand filterKey={"brand"} brand={filters?.brand || []} />
+      </div>
+      <div className={"border-b border-gray-300 px-5 py-3"}>
+        <TireModel filterKey={"model"} model={filters?.model || []} />
       </div>
     </div>
   );

@@ -1,19 +1,19 @@
-"use client";
-import { useCheckout } from "@/context/checkoutContext";
-// Context to manage checkout-related state
-import React from "react";
+'use client';
+
+import { useCheckout } from '@/context/checkoutContext';
+import React from 'react';
 
 // OrderSummary Component
 const OrderSummary: React.FC = () => {
-
   // Destructure values from the checkout context
-  const { // Type of cart (e.g., CENTER_CAP_ONLY)
+  const {
+    cartType, // Type of cart (e.g., CENTER_CAP_ONLY)
     subTotalCost, // Subtotal cost of items in the cart
     discount, // Discount applied to the order
-    cartType, // Sales tax for the order
+    salesTax, // Sales tax for the order
     totalCost, // Total cost of the order
     validatedZipCode, // Validated ZIP code for delivery
-    setIsValidZipCode // Function to update ZIP code validation state
+    setIsValidZipCode, // Function to update ZIP code validation state
   } = useCheckout();
 
   return (
@@ -25,11 +25,18 @@ const OrderSummary: React.FC = () => {
       {/* ZIP Code Information */}
       <p className="text-sm text-gray-600 mb-4">
         You are viewing the best delivery and installation options for{' '}
-        <span className="underline font-semibold font-mono text-primary">{validatedZipCode}</span>{' '}
+        <span className="underline font-semibold font-mono text-primary">
+          {validatedZipCode}
+        </span>{' '}
         ZIP Code.
       </p>
       {/* Option to Change ZIP Code */}
-      <p className="underline cursor-pointer font-semibold text-primary" onClick={() => setIsValidZipCode(false)}>Change ZIP Code</p>
+      <p
+        className="underline cursor-pointer font-semibold text-primary"
+        onClick={() => setIsValidZipCode(false)}
+      >
+        Change ZIP Code
+      </p>
       <div className="space-y-2">
         {/* Subtotal */}
         <div className="flex justify-between py-2">
@@ -43,10 +50,12 @@ const OrderSummary: React.FC = () => {
             <span className="text-gray-600">Discount:</span>
             <span className="text-red-600">-${discount}</span>
           </div>
-        ) : ''}
+        ) : (
+          ''
+        )}
 
         {/* Delivery Charge (if cart type is CENTER_CAP_ONLY) */}
-        {cartType === "CENTER_CAP_ONLY" && (
+        {cartType === 'CENTER_CAP_ONLY' && (
           <div className="flex justify-between py-2">
             <span className="text-gray-600">Delivery Charge:</span>
             <span className="text-red-600">$14.99</span>

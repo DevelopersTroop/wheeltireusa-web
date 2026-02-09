@@ -38,7 +38,7 @@ const SelectBox: React.FC<SelectBoxProps> = ({
   return (
     <div className={cn('relative inline-flex items-center', className)}>
       <Select value={value} onValueChange={onChange}>
-        <SelectTrigger size={size} className={cn('w-fit pl-6')} disabled={disabled}>
+        <SelectTrigger className={cn('w-fit pl-6')} disabled={disabled}>
           <span className="text-muted-foreground">{label}:</span>
           <SelectValue placeholder="Select" />
         </SelectTrigger>

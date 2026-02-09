@@ -64,7 +64,6 @@ const pathMap = {
   '/dealer-register': 'become_a_dealer',
   '/affiliates': 'affiliate_program',
   '/checkout': 'checkout',
-  '/cart': 'cart',
 };
 
 declare global {

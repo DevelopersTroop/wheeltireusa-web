@@ -28,6 +28,8 @@ export const usePaytomorrowCheckout = () => {
     existingOrderId,
     referralCode,
     affiliateDiscount,
+    totalWithTax,
+    taxAmount,
   } = useTypedSelector((state) => state.persisted.checkout);
   const { user } = useAuth();
 

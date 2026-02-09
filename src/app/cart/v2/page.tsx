@@ -1,38 +1,184 @@
 'use client';
-import React, { useMemo, useState } from 'react';
-import {
-  X,
-  Trash2,
-  Truck,
-  Lock,
-  Plus,
-  Minus,
-  ChevronRight,
-  Info,
-  ArrowRight,
-  ShoppingBag,
-} from 'lucide-react';
-import InstallationSection from '../_components/v2/InstallationPartner';
-import ZipCodeEntryModal from '../_components/v2/ZipCode';
 import { useCartHook } from '@/hooks/useCartHook';
-import Link from 'next/link';
-import { useTypedSelector } from '@/redux/store';
-import { useGroupedProducts } from '@/hooks/useGroupedProducts';
-import ProductCard from '../_components/v2/ProductCard';
+import { useGroupedProducts, TGroupedProducts } from '@/hooks/useGroupedProducts';
+import { useAppDispatch, useTypedSelector } from '@/redux/store';
 import { calculateCartTotal, getPrice } from '@/utils/price';
+import { ArrowRight, Info, Lock, ShoppingBag, Truck, X } from 'lucide-react';
+import Link from 'next/link';
+import { useMemo } from 'react';
+import ProductCard from '../_components/v2/ProductCard';
 import { ProductQuantity } from '../_components/v2/ProductQuantity';
+import ZipCodeEntryModal from '../_components/v2/ZipCode';
+import { initiateCheckout } from '@/redux/features/checkoutSlice';
+import InstallationSection from '../_components/v2/InstallationPartner';
+import { TCartProduct } from '@/redux/features/cartSlice';
+
+// Helper to get all products from a package group
+const getPackageProducts = (group: TGroupedProducts) => {
+  return [group.tire, group.wheel, group.accessory].filter(Boolean);
+};
+
+// ==================== DEMO DATA FOR TESTING ====================
+const createDemoProduct = (overrides: Partial<TCartProduct>): TCartProduct => ({
+  id: Math.random() * 10000,
+  brand: 'MILESTAR',
+  model: 'Weatherguard AW365',
+  title: 'Milestar Weatherguard AW365',
+  category: { id: 1, title: 'Tires', slug: 'tires', description: '' },
+  itemImage: '/placeholder-tire.png',
+  slug: 'milestar-weatherguard-aw365',
+  vendorName: 'Milestar',
+  partNumber: 'MS-AW365-001',
+  shipWeight: null,
+  shipWidth: null,
+  shipHeight: null,
+  shipDepth: null,
+  shortDescription: 'All-weather tire',
+  availableStock: 10,
+  sellingPrice: 129.99,
+  vehicleCategory: 'Passenger',
+  gtin: null,
+  tireSize: '225/65R17',
+  tireWidth: '225',
+  tireRatio: '65',
+  tireDiameter: '17',
+  rawSize: '225/65R17',
+  approvedRimContours: null,
+  sidewall: null,
+  ply: null,
+  speedRating: 'H',
+  loadIndex: '102',
+  stdRim: null,
+  maxAirPressureKpa: null,
+  staticLoadRadiusIn: null,
+  theoreticalRollingRadius: null,
+  utqg: null,
+  treadDepthIn: null,
+  treadDepthMm: null,
+  staticLoadRadiusMm: null,
+  sectionWidthIn: null,
+  sectionWidthMm: null,
+  runFlat: null,
+  maxAirPressurePsi: null,
+  tireClass: null,
+  overallDiameterIn: null,
+  overallDiameterMm: null,
+  loadRating: null,
+  maxLoadKg: null,
+  maxLoadLbs: null,
+  maxLoad2Kg: null,
+  maxLoad2Lbs: null,
+  cartPackage: 'pkg-1',
+  quantity: 4,
+  cartSerial: 'serial-1',
+  metaData: {},
+  ecoFocus: null,
+  hazardProtection: null,
+  ...overrides,
+});
+
+// Demo grouped products for testing package bundle UI
+const demoGroupedProducts: TGroupedProducts[] = [
+  // Package 1: Tire + Wheel Bundle
+  {
+    tire: createDemoProduct({
+      id: 1,
+      brand: 'MICHELIN',
+      model: 'Pilot Sport 4S',
+      title: 'Michelin Pilot Sport 4S',
+      tireSize: '245/40R18',
+      sellingPrice: 289.99,
+      quantity: 4,
+      cartPackage: 'bundle-1',
+      category: { id: 1, title: 'Tires', slug: 'tires', description: '' },
+    }),
+    wheel: createDemoProduct({
+      id: 2,
+      brand: 'ENKEI',
+      model: 'RPF1',
+      title: 'Enkei RPF1 18x8.5',
+      tireSize: '18x8.5',
+      sellingPrice: 349.99,
+      quantity: 4,
+      cartPackage: 'bundle-1',
+      category: { id: 2, title: 'Wheels', slug: 'wheels', description: '' },
+    }),
+  },
+  // Package 2: Single Tire Only
+  {
+    tire: createDemoProduct({
+      id: 3,
+      brand: 'CONTINENTAL',
+      model: 'ExtremeContact DWS06',
+      title: 'Continental ExtremeContact DWS06+',
+      tireSize: '235/55R19',
+      sellingPrice: 199.99,
+      quantity: 2,
+      cartPackage: 'single-1',
+      category: { id: 1, title: 'Tires', slug: 'tires', description: '' },
+    }),
+  },
+  // Package 3: Tire + Wheel + Accessory Bundle
+  {
+    tire: createDemoProduct({
+      id: 4,
+      brand: 'BRIDGESTONE',
+      model: 'Potenza RE-71RS',
+      title: 'Bridgestone Potenza RE-71RS',
+      tireSize: '255/35R18',
+      sellingPrice: 329.99,
+      quantity: 4,
+      cartPackage: 'bundle-2',
+      category: { id: 1, title: 'Tires', slug: 'tires', description: '' },
+    }),
+    wheel: createDemoProduct({
+      id: 5,
+      brand: 'BBS',
+      model: 'RS-GT',
+      title: 'BBS RS-GT 18x9',
+      tireSize: '18x9',
+      sellingPrice: 599.99,
+      quantity: 4,
+      cartPackage: 'bundle-2',
+      category: { id: 2, title: 'Wheels', slug: 'wheels', description: '' },
+    }),
+    accessory: createDemoProduct({
+      id: 6,
+      brand: 'GORILLA',
+      model: 'Lug Nut Set',
+      title: 'Gorilla Lug Nut Set - Chrome',
+      tireSize: '',
+      sellingPrice: 49.99,
+      quantity: 1,
+      cartPackage: 'bundle-2',
+      category: { id: 3, title: 'Accessories', slug: 'accessories', description: '' },
+    }),
+  },
+];
+// ==================== END DEMO DATA ====================
 
 const CartSystem = () => {
   const { open, setOpen } = useCartHook();
+  const dispatch = useAppDispatch();
   const cart = useTypedSelector((state) => state.persisted.cart);
-  const groupedProducts = useGroupedProducts(cart?.products || []);
+  const realGroupedProducts = useGroupedProducts(cart?.products || []);
   const subTotalCost = calculateCartTotal(cart.products);
+
+  // Toggle between demo and real data (set to true for demo, false for real)
+  const USE_DEMO_DATA = false;
+  const groupedProducts = USE_DEMO_DATA ? demoGroupedProducts : realGroupedProducts;
+
   const quantity = useMemo(() => {
-    return groupedProducts.map((product) => {
+    return groupedProducts.map((group) => {
+      const products = getPackageProducts(group);
+      const totalQty = products.reduce((p, q) => p + (q?.quantity || 0), 0);
+      const totalPrice = products.reduce((p, q) => p + getPrice(q!) * (q?.quantity || 0), 0);
+      const firstProduct = products[0];
+
       return {
-        quantity: product.tires.reduce((p, q) => p + q.quantity, 0),
-        price: product.tires.reduce((p, q) => getPrice(q) * q.quantity + p, 0),
-        title: product.tires[0].title,
+        quantity: totalQty,
+        price: totalPrice,
+        title: firstProduct?.title || 'Product',
       };
     });
   }, [groupedProducts]);
@@ -43,12 +189,12 @@ const CartSystem = () => {
     <div className="relative h-screen w-full bg-gray-100 overflow-hidden font-sans">
       {/* Background Overlay for the Side Drawer */}
       {open && (
-        <div className="fixed inset-0 bg-black/40 z-40 transition-opacity" />
+        <div className="fixed inset-0 bg-black/40 z-50 transition-opacity" />
       )}
 
       {/* MAIN CART DRAWER */}
       <div
-        className={`fixed inset-y-0 right-0 w-full max-w-4xl bg-white z-40 transform transition-transform duration-300 shadow-2xl ${open ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`fixed inset-y-0 right-0 w-full max-w-4xl bg-white z-50 transform transition-transform duration-300 shadow-2xl ${open ? 'translate-x-0' : 'translate-x-full'}`}
       >
         {!groupedProducts.length ? (
           <div className="flex flex-col h-full bg-white">
@@ -81,8 +227,8 @@ const CartSystem = () => {
 
               <Link
                 href={'/collections/product-category/tires'}
-                onClick={setOpen} // Or navigate to shop
-                className="group flex items-center gap-2 bg-slate-900 text-white px-8 py-3 rounded-full font-bold hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                onClick={setOpen}
+                className="group flex items-center gap-2 bg-primary text-primary-foreground px-8 py-3 rounded-lg font-semibold hover:bg-primary-hover transition-all"
               >
                 Start Shopping
                 <ArrowRight
@@ -99,108 +245,88 @@ const CartSystem = () => {
             </div>
 
             {/* Header */}
-            <div className="p-8 flex justify-between items-center bg-white border-b border-gray-50">
-              <h2 className="text-3xl font-extrabold text-slate-800 tracking-tight">
-                Cart summary
-              </h2>
-              <button onClick={setOpen}>
-                <X size={28} className="text-gray-400" />
+            <div className="px-6 py-5 flex justify-between items-center bg-card border-b border-border">
+              <div>
+                <h2 className="text-2xl font-bold text-foreground">
+                  Your Cart
+                </h2>
+                <p className="text-sm text-muted-foreground mt-0.5">
+                  {cart.products.length} item{cart.products.length !== 1 ? 's' : ''} in your cart
+                </p>
+              </div>
+              <button
+                onClick={setOpen}
+                className="p-2 hover:bg-secondary rounded-lg transition-colors"
+              >
+                <X size={24} className="text-muted-foreground" />
               </button>
             </div>
 
             {/* Scrollable Content */}
-            <div className="overflow-y-auto h-[calc(100vh-140px)] p-8 pb-40 space-y-10">
-              {/* Tire Section */}
-              <div>
-                <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">
-                  Tires
+            <div className="overflow-y-auto h-[calc(100vh-180px)] px-6 py-6 pb-48 space-y-6 bg-secondary/30">
+              {/* Products Section */}
+              <div className="space-y-3">
+                {groupedProducts.map((group, id) => {
+                  return <ProductCard key={id} packageGroup={group} />;
+                })}
+              </div>
+
+              {/* Order Summary */}
+              <div className="bg-card rounded-xl border border-border p-5 space-y-4">
+                <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide">
+                  Order Summary
                 </h3>
-                <div className="flex flex-col gap-y-2">
-                  {groupedProducts.map((p, id) => {
-                    return <ProductCard key={id} product={p.tires} />;
-                  })}
-                </div>
-              </div>
 
-              {/* Shipping Selectors */}
-              {/* <section>
-            <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">
-              Shipping & Shop Services
-            </h3>
-            <div className="grid grid-cols-4 gap-3">
-              <div className="relative p-3 border-2 border-[#ff5a13] rounded-xl flex flex-col items-center justify-center text-center bg-white h-28">
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#ff5a13] text-white text-[8px] font-black px-2 py-1 rounded w-max tracking-tighter">
-                  MOST POPULAR
-                </span>
-                <Truck className="text-[#ff5a13] mb-1" size={24} />
-                <p className="text-[10px] font-bold leading-tight">
-                  Ship to local installer
-                </p>
-                <p className="text-[9px] text-gray-400 mt-1">
-                  Shipping & installation
-                </p>
-                <div className="absolute top-1 right-1 bg-[#ff5a13] text-white rounded-full p-0.5">
-                  <div className="w-1.5 h-1.5 border-r-2 border-b-2 border-white rotate-45 transform -translate-y-0.5" />
-                </div>
-              </div>
-              <div className="border border-gray-200 rounded-xl p-3 flex flex-col items-center justify-center opacity-40 h-28 grayscale">
-                <Truck size={24} className="mb-1" />
-                <p className="text-[10px] font-bold">Ship to mobile</p>
-              </div>
-            </div>
-          </section> */}
-
-              {/* <InstallationSection /> */}
-
-              {/* Breakdown Section */}
-              <section className="space-y-4 pt-4">
-                {quantity.map((p) => {
-                  return (
-                    <div className="flex justify-between text-sm font-medium text-gray-600">
-                      <span>
+                <div className="space-y-3">
+                  {quantity.map((p, idx) => (
+                    <div key={idx} className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">
                         {p.title} × {p.quantity}
                       </span>
-                      <span className="text-slate-900 font-bold">
-                        ${p.price}
+                      <span className="text-foreground font-medium">
+                        ${p.price.toFixed(2)}
                       </span>
                     </div>
-                  );
-                })}
-                <div className="flex justify-between text-sm font-medium text-gray-600 pb-4 border-b border-gray-100">
-                  <span className="flex items-center gap-1 italic">
-                    Shipping & handling <Info size={14} />
-                  </span>
-                  <span className="text-black font-black tracking-widest">
-                    FREE
-                  </span>
+                  ))}
+
+                  <div className="flex justify-between text-sm pt-3 border-t border-border">
+                    <span className="text-muted-foreground flex items-center gap-1">
+                      Shipping & handling
+                      <Info size={14} className="text-muted-foreground/50" />
+                    </span>
+                    <span className="text-primary font-semibold">
+                      FREE
+                    </span>
+                  </div>
                 </div>
 
-                <div className="flex justify-between text-sm font-medium text-gray-600">
-                  <span>Subtotal</span>
-                  <span className="text-slate-900 font-bold">
+                <div className="flex justify-between pt-3 border-t border-border">
+                  <span className="text-foreground font-semibold">Subtotal</span>
+                  <span className="text-foreground text-lg font-bold">
                     ${subTotalCost}
                   </span>
                 </div>
-              </section>
+              </div>
             </div>
 
             {/* STICKY FOOTER */}
-            <div className="absolute bottom-0 inset-x-0 bg-white border-t border-gray-100 p-6 shadow-[0_-20px_40px_rgba(0,0,0,0.08)] z-50">
-              <div className="flex gap-4">
-                <Link
-                  href={'/checkout'}
-                  onClick={() => {
-                    setOpen();
-                  }}
-                  className="flex-[2.5] bg-[#ff5a13] hover:bg-[#e84e0e] text-white font-black text-lg italic rounded-full h-14 flex items-center justify-center gap-2 shadow-lg shadow-orange-100"
-                >
-                  <Lock size={18} fill="white" /> Checkout
-                </Link>
-              </div>
-              <p className="text-[9px] text-gray-400 text-center mt-4 px-10 leading-tight">
-                By placing an order, you agree and accept the{' '}
-                <span className="underline">terms of sale</span>. SimpleTire is
-                not liable if the tire does not fit correctly.
+            <div className="absolute bottom-0 inset-x-0 bg-card border-t border-border p-5 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
+              <Link
+                href={'/checkout'}
+                onClick={() => {
+                  dispatch(initiateCheckout());
+                  setOpen();
+                }}
+                className="w-full bg-primary hover:bg-primary-hover text-primary-foreground font-semibold text-base rounded-lg h-12 flex items-center justify-center gap-2 transition-colors"
+              >
+                <Lock size={16} />
+                Proceed to Checkout
+              </Link>
+              <p className="text-[10px] text-muted-foreground text-center mt-3 leading-relaxed">
+                By placing an order, you agree to our{' '}
+                <span className="underline cursor-pointer hover:text-primary transition-colors">
+                  terms of sale
+                </span>
               </p>
             </div>
           </>

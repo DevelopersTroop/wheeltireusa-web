@@ -58,31 +58,31 @@ const WheelsBySizeAndBrand = () => {
                 }
               />
 
-              <SelectInput
+              {/* <SelectInput
                 control={form.control}
                 className="h-10 bg-white text-lg font-normal text-black"
                 placeholder="Select Width"
                 name="width"
                 options={
-                  filters?.width?.map((option) => ({
+                  filters?.?.map((option) => ({
                     id: option.value,
                     name: option.value,
                   })) || []
                 }
-              />
+              /> */}
 
-              <SelectInput
+              {/* <SelectInput
                 className="h-10 bg-white text-lg font-normal text-black"
                 control={form.control}
                 placeholder="Select Bolt Pattern Metric"
                 name="bolt_pattern_metric"
                 options={
-                  filters?.bolt_pattern_metric?.map((option) => ({
+                  filters??.map((option) => ({
                     id: option.value,
                     name: option.value,
                   })) || []
                 }
-              />
+              /> */}
 
               <SelectInput
                 className="h-10 bg-white text-lg font-normal text-black"

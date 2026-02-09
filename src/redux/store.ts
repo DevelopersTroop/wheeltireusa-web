@@ -4,8 +4,8 @@ import userReducer from './features/userSlice';
 import checkoutReducer from './features/checkoutSlice';
 import cartReducer from './features/cartSlice';
 import packageReducer from './features/packageSlice';
-import newsletterModalReducer from "./features/newsletterModalSlice";
-import yearMakeModelReducer from "./features/yearMakeModelSlice";
+import newsletterModalReducer from './features/newsletterModalSlice';
+import yearMakeModelReducer from './features/yearMakeModelSlice';
 import {
   FLUSH,
   PAUSE,
@@ -20,6 +20,7 @@ import storage from 'redux-persist/lib/storage';
 import { baseApi } from './apis/base';
 import { TypedUseSelectorHook, useSelector, useDispatch } from 'react-redux';
 import { checkoutListenerMiddleware } from './middleware/checkoutMiddleware';
+import { cartListenerMiddleware } from './middleware/cartListener';
 const rootPersistConfig = {
   key: 'tirematic-store',
   storage,
@@ -53,7 +54,8 @@ const store = configureStore({
       },
     })
       .concat(baseApi.middleware)
-      .concat(checkoutListenerMiddleware.middleware),
+      .concat(checkoutListenerMiddleware.middleware)
+      .concat(cartListenerMiddleware.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

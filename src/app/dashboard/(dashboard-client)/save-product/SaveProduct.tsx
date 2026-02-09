@@ -47,7 +47,7 @@ const SaveProduct = () => {
                         title={product?.title}
                       >
                         <img
-                          src={getProductThumbnail(product)}
+                          src={product?.imageUrl}
                           alt={product?.title ?? ''}
                           // width={66}
                           // height={66}
@@ -98,10 +98,10 @@ const SaveProduct = () => {
               <div className="flex justify-center mb-2">
                 <img
                   className="w-[150px]"
-                  src={getProductThumbnail(product)}
+                  src={product?.imageUrl}
                   alt={product?.title ?? ''}
-                  // width={150}
-                  // height={150}
+                // width={150}
+                // height={150}
                 />
               </div>
               <div className="flex justify-between mb-2">

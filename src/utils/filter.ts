@@ -45,17 +45,16 @@ export const getFiltersExceptPriceFilterBy = (
   filters: TFilters,
   filterKey: string
 ) => {
-  console.log(filters?.[filterKey], filterKey);
-  return !isPriceFilter(filters?.[filterKey])
-    ? typeof filters[filterKey][0] === 'string'
-      ? (filters[filterKey] as unknown as string[]).map(
+  return !isPriceFilter(filters?.price)
+    ? typeof filters.price[filterKey][0] === 'string'
+      ? (filters.price[filterKey] as unknown as string[]).map(
           (item) =>
             ({
               value: item,
               count: 0,
             }) as TSingleFilter
         )
-      : filters[filterKey]
+      : filters.price[filterKey]
     : ([] as TSingleFilter[]);
 };
 

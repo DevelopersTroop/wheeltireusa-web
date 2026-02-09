@@ -1,106 +1,220 @@
 import { useQuantityModal } from '@/hooks/useQuantityModal';
-import { updateCartQuantity } from '@/redux/features/cartSlice';
+import { updateCartQuantity, removeProductById, TCartProduct } from '@/redux/features/cartSlice';
 import { useAppDispatch, useTypedSelector } from '@/redux/store';
-import { calculateCartTotal, getPrice } from '@/utils/price';
-import { Minus, Plus, Truck, X } from 'lucide-react';
-import { useMemo } from 'react';
+import { getPrice } from '@/utils/price';
+import { getProductThumbnail } from '@/utils/product';
+import { Minus, Plus, Truck, X, Trash2 } from 'lucide-react';
+import { useMemo, useState, useEffect } from 'react';
+
+// Helper to format currency
+const formatPrice = (price: number) =>
+  new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(
+    price
+  );
+
+// Individual product row in package
+type ProductRowProps = {
+  product: TCartProduct;
+  onUpdateQuantity: (id: number, change: number) => void;
+  onRemove: (id: number) => void;
+  canRemove: boolean;
+  isDemo?: boolean;
+};
+
+function ProductRow({ product, onUpdateQuantity, onRemove, canRemove, isDemo }: ProductRowProps) {
+  const itemTotal = getPrice(product) * product.quantity;
+
+  return (
+    <div className="flex items-center gap-4 py-4 border-b border-border last:border-b-0">
+      {/* Product Image */}
+      <div className="w-14 h-14 bg-secondary rounded-lg flex items-center justify-center overflow-hidden shrink-0">
+        <img
+          src={getProductThumbnail(product)}
+          alt={product.title ?? ''}
+          className="w-full h-full object-contain p-1"
+        />
+      </div>
+
+      {/* Product Info */}
+      <div className="flex-1 min-w-0">
+        <h4 className="font-semibold text-sm text-foreground truncate">
+          {product.brand} {product.model}
+        </h4>
+        {product.tireSize && (
+          <p className="text-xs text-muted-foreground">
+            {product.tireSize}
+          </p>
+        )}
+        <p className="text-xs text-muted-foreground mt-0.5">
+          {formatPrice(getPrice(product))} each
+        </p>
+      </div>
+
+      {/* Quantity Controls */}
+      <div className="flex items-center gap-2">
+        <button
+          onClick={() => onUpdateQuantity(product.id, -1)}
+          disabled={product.quantity <= 1 || isDemo}
+          className="w-8 h-8 rounded-lg border border-border flex items-center justify-center text-muted-foreground hover:border-primary hover:text-primary transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <Minus size={14} />
+        </button>
+        <span className="text-base font-semibold text-foreground w-8 text-center tabular-nums">
+          {product.quantity}
+        </span>
+        <button
+          onClick={() => onUpdateQuantity(product.id, 1)}
+          disabled={isDemo}
+          className="w-8 h-8 rounded-lg border border-border flex items-center justify-center text-muted-foreground hover:border-primary hover:text-primary transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <Plus size={14} />
+        </button>
+      </div>
+
+      {/* Item Total */}
+      <div className="text-right w-20">
+        <p className="font-semibold text-foreground">
+          {formatPrice(itemTotal)}
+        </p>
+      </div>
+
+      {/* Remove Button */}
+      {canRemove && (
+        <button
+          onClick={() => onRemove(product.id)}
+          disabled={isDemo}
+          className="p-2 text-muted-foreground/50 hover:text-destructive hover:bg-destructive/10 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          aria-label="Remove from package"
+        >
+          <Trash2 size={16} />
+        </button>
+      )}
+    </div>
+  );
+}
 
 export const ProductQuantity = () => {
-  const { open, setOpen, product } = useQuantityModal();
+  const { open, setOpen, product, cartPackage } = useQuantityModal();
   const dispatch = useAppDispatch();
 
   const { products } = useTypedSelector((state) => state.persisted.cart);
 
-  const cartProduct = useMemo(() => {
-    return products.find((p) => p.id === product?.id);
-  }, [product, products]);
+  // Get all products in this package from Redux store
+  const storePackageProducts = useMemo(() => {
+    if (!cartPackage) return [];
+    return products.filter((p) => p.cartPackage === cartPackage);
+  }, [cartPackage, products]);
 
-  const updateQuantity = (type: 'increase' | 'decrease') => {
-    if (product) {
-      dispatch(
-        updateCartQuantity({
-          id: product.id,
-          quantity: type === 'decrease' ? -1 : 2,
-        })
-      );
+  // Check if this is demo data (product exists but not in store)
+  const isDemo = product && storePackageProducts.length === 0;
+
+  // Use store products if available, otherwise use the product passed to modal (for demo)
+  const packageProducts = storePackageProducts.length > 0
+    ? storePackageProducts
+    : product ? [product] : [];
+
+  // Calculate total price for all items in the package
+  const packageTotal = useMemo(() => {
+    return packageProducts.reduce((acc, p) => acc + getPrice(p) * p.quantity, 0);
+  }, [packageProducts]);
+
+  const handleUpdateQuantity = (id: number, change: number) => {
+    if (isDemo) return; // Don't dispatch for demo data
+    dispatch(updateCartQuantity({ id, quantity: change }));
+  };
+
+  const handleRemoveProduct = (id: number) => {
+    if (isDemo) return; // Don't dispatch for demo data
+    dispatch(removeProductById(id));
+    // If no more products in package, close modal
+    if (packageProducts.length <= 1) {
+      setOpen(false);
     }
   };
 
-  if (!cartProduct || !product) return null;
+  if (!product || !cartPackage) return null;
+
+  const isBundle = packageProducts.length > 1;
+
   return (
     <div
-      className={`absolute inset-0 bg-white z-60 transform transition-transform duration-300 flex flex-col ${open ? 'translate-y-0' : 'translate-y-full'}`}
+      className={`absolute inset-0 bg-card z-60 transform transition-transform duration-300 flex flex-col ${open ? 'translate-y-0' : 'translate-y-full'}`}
     >
-      <div className="p-8 flex justify-end">
-        <button onClick={() => setOpen(false)}>
-          <X size={28} className="text-gray-400" />
+      {/* Header */}
+      <div className="px-6 py-5 flex justify-between items-center border-b border-border shrink-0">
+        <div>
+          <h2 className="text-lg font-semibold text-foreground">
+            {isBundle ? 'Edit Package' : 'Update Quantity'}
+          </h2>
+          {isBundle && (
+            <p className="text-sm text-muted-foreground">
+              {packageProducts.length} items in this package
+            </p>
+          )}
+          {isDemo && (
+            <p className="text-xs text-primary mt-1">
+              Demo mode - changes won't persist
+            </p>
+          )}
+        </div>
+        <button
+          onClick={() => setOpen(false)}
+          className="p-2 hover:bg-secondary rounded-lg transition-colors"
+        >
+          <X size={24} className="text-muted-foreground" />
         </button>
       </div>
 
-      <div className="flex-1 flex flex-col items-center px-10 pt-4">
+      <div className="flex-1 overflow-y-auto">
         {/* Pro Tip Section */}
-        <div className="flex flex-col items-center text-center mb-16">
-          <div className="relative mb-2">
-            <div className="text-orange-600 bg-orange-50 p-2 rounded-full">
-              <Truck size={32} />
-            </div>
-            <div className="absolute -top-1 -right-1 bg-white p-0.5 rounded-full">
-              <div className="bg-orange-600 w-3 h-3 rounded-full border-2 border-white" />
-            </div>
+        <div className="flex flex-col items-center text-center py-8 px-6 bg-secondary/30">
+          <div className="text-primary bg-primary/10 p-3 rounded-xl mb-3">
+            <Truck size={24} />
           </div>
-          <h3 className="text-2xl font-black text-[#ff5a13] italic uppercase">
-            PRO tip
+          <h3 className="text-xs font-semibold text-primary uppercase tracking-wide">
+            Pro Tip
           </h3>
-          <p className="text-2xl font-black text-slate-800 leading-tight mt-2 px-8">
+          <p className="text-lg font-bold text-foreground leading-tight mt-1 max-w-2xl">
             Replace tires in pairs for better traction and braking
           </p>
-          <p className="text-sm text-gray-500 mt-4 leading-snug">
-            Most drivers replace 4 tires. If you had a flat tire, replace at
-            least two.
+          <p className="text-sm text-muted-foreground mt-2 max-w-2xl">
+            Most drivers replace 4 tires. If you had a flat tire, replace at least two.
           </p>
         </div>
 
-        {/* Selector Section */}
-        <div className="w-full max-w-xl">
-          <div className="flex justify-between items-center mb-6">
-            <span className="text-[11px] font-black text-gray-400 uppercase tracking-widest">
-              Select tire quantity
-            </span>
-            <span className="text-sm text-gray-400">
-              Total price •{' '}
-              <span className="font-bold text-gray-900">
-                {calculateCartTotal([cartProduct])}
-              </span>
+        {/* Package Items List */}
+        <div className="px-6 py-4">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+              {isBundle ? 'Package Items' : 'Your Item'}
+            </h3>
+            <span className="text-sm text-muted-foreground">
+              Total: <span className="font-bold text-foreground">{formatPrice(packageTotal)}</span>
             </span>
           </div>
 
-          <div className="flex items-center justify-center border-y border-gray-100 py-10 gap-2">
-            <button
-              onClick={() => updateQuantity('decrease')}
-              className="w-16 h-16 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:border-gray-400 transition-all"
-            >
-              <Minus size={24} />
-            </button>
-            <span className="text-6xl font-black italic text-[#ff5a13]">
-              {cartProduct.quantity}
-            </span>
-            <button
-              onClick={() => updateQuantity('increase')}
-              className="w-16 h-16 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:border-gray-400 transition-all"
-            >
-              <Plus size={24} />
-            </button>
+          <div className="bg-secondary/30 rounded-xl px-4">
+            {packageProducts.map((p) => (
+              <ProductRow
+                key={p.id}
+                product={p}
+                onUpdateQuantity={handleUpdateQuantity}
+                onRemove={handleRemoveProduct}
+                canRemove={isBundle} // Can only remove if there are multiple items
+                isDemo={isDemo}
+              />
+            ))}
           </div>
         </div>
       </div>
 
       {/* Modal Footer */}
-      <div className="p-8 pb-12">
+      <div className="p-6 border-t border-border shrink-0">
         <button
           onClick={() => setOpen(false)}
-          className="w-full border-2 border-[#ff5a13] text-[#ff5a13] hover:bg-orange-50 font-black text-lg italic py-4 rounded-full transition-colors"
+          className="w-full bg-primary hover:bg-primary-hover text-primary-foreground font-semibold text-base py-3 rounded-lg transition-colors"
         >
-          Confirm
+          Done
         </button>
       </div>
     </div>

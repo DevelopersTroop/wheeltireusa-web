@@ -92,7 +92,7 @@ export type TTireProduct = {
   tireClass: string | null;
   overallDiameterIn: string | null;
   overallDiameterMm: string | null;
-}
+};
 
 export type TWheelProduct = {
   loadRating: string | null;
@@ -100,32 +100,35 @@ export type TWheelProduct = {
   maxLoadLbs: string | null;
   maxLoad2Kg: string | null;
   maxLoad2Lbs: string | null;
-}
-export type TInventoryItem = TTireProduct & TWheelProduct & {
-  id: number;
-  brand: string;
-  model: string;
-  title: string;
-  category: {
-    id: number,
-    title: string;
-    slug: string,
-    description: string
-  };
-  itemImage: string | null;
-  slug: string;
-  vendorName: string;
-  partNumber: string;
-  shipWeight: string | null;
-  shipWidth: string | null;
-  shipHeight: string | null;
-  shipDepth: string | null;
-  shortDescription: string | null;
-  availableStock: number | null;
-  sellingPrice: number | null;
-  vehicleCategory: string | null;
-  gtin: string | null;
 };
+export type TInventoryItem = TTireProduct &
+  TWheelProduct & {
+    id: number;
+    brand: string;
+    model: string;
+    title: string;
+    category: {
+      id: number;
+      title: string;
+      slug: string;
+      description: string;
+    };
+    itemImage: string | null;
+    slug: string;
+    vendorName: string;
+    partNumber: string;
+    shipWeight: string | null;
+    shipWidth: string | null;
+    shipHeight: string | null;
+    shipDepth: string | null;
+    shortDescription: string | null;
+    availableStock: number | null;
+    sellingPrice: number | null;
+    vehicleCategory: string | null;
+    gtin: string | null;
+    ecoFocus: string | null;
+    hazardProtection: string | null;
+  };
 
 export type TInventoryListItem = TInventoryBase & {
   inventoryId: string | null;

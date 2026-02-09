@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 // OrderSummary Component
 interface OrderSummaryProps {
@@ -9,7 +9,6 @@ interface OrderSummaryProps {
   netCost?: string;
   taxAmount?: number;
   totalWithTax?: number;
-  deliveryCharge?: number;
 }
 
 export const OrderSummary: React.FC<OrderSummaryProps> = ({
@@ -20,10 +19,9 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
   netCost,
   taxAmount,
   totalWithTax,
-  deliveryCharge,
 }) => {
   return (
-    <div className="bg-[#F7F7F7] h-fit py-5 rounded-xs">
+    <div className="bg-[#F7F7F7] h-fit py-5 rounded-xs px-4">
       {/* Container for order summary details */}
       <div className="space-y-2">
         {/* Display total cost if available */}
@@ -64,11 +62,7 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
           </div>
           <h4 className="text-2xl leading-[29px] text-[#210203]">
             <span className="text-[#210203] text-2xl font-bold">
-              {cartType === 'CENTER_CAP_ONLY'
-                ? '$14.99'
-                : deliveryCharge
-                  ? `$${deliveryCharge.toFixed(2)}`
-                  : 'Free'}
+              {cartType === "CENTER_CAP_ONLY" ? "$14.99" : "Free"}
             </span>
           </h4>
         </div>
@@ -107,7 +101,7 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
             <p className="text-[32px] leading-[38px] text-[#210203] font-bold">
               $
               {isNaN(Number(totalWithTax))
-                ? '0.00'
+                ? "0.00"
                 : Number(totalWithTax).toFixed(2)}
             </p>
           </div>

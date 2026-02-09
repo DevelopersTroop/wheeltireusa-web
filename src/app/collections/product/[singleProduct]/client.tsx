@@ -10,21 +10,22 @@ const SingleProductClient: React.FC<{ product: TInventoryItem }> = ({
   product,
 }) => {
   const analyticsSend = useRef(false);
+  console.log(product);
 
   useEffect(() => {
     // 2. Check the .current property
     if (analyticsSend.current) return;
 
     // 3. Ensure product data is loaded before tracking
-    if (product) {
-      trackEvent("product_view", {
-        productId: String(product.id),
-        productName: product.title, // Good practice to include name for marketing logs
-      });
+    // if (product) {
+    //   trackEvent("product_view", {
+    //     productId: String(product.id),
+    //     productName: product.title, // Good practice to include name for marketing logs
+    //   });
 
-      // 4. Update the .current property to true
-      analyticsSend.current = true;
-    }
+    //   // 4. Update the .current property to true
+    //   analyticsSend.current = true;
+    // }
   }, [product]); // Dependency ensures this runs when data arrives
 
   if (!product) {
@@ -32,17 +33,19 @@ const SingleProductClient: React.FC<{ product: TInventoryItem }> = ({
   }
 
   let productBasedOnCategory = <></>;
-//   if (product.category.title === "wheels") {
-//     productBasedOnCategory = <Wheels product={product} />;
-//   } else 
-    if (product.category.title === "tires") {
+  //   if (product.category.title === "wheels") {
+  //     productBasedOnCategory = <Wheels product={product} />;
+  //   } else 
+  if (product.category.title === "tires") {
     productBasedOnCategory = <Tire product={product} />;
-  } 
-//   else if (product.category.title === "accessories") {
-//     productBasedOnCategory = <Accessory product={product} />;
-//   } else {
-//     productBasedOnCategory = <Wheels product={product} />;
-//   }
+  } else {
+    productBasedOnCategory = <Tire product={product} />;
+  }
+  //   else if (product.category.title === "accessories") {
+  //     productBasedOnCategory = <Accessory product={product} />;
+  //   } else {
+  //     productBasedOnCategory = <Wheels product={product} />;
+  //   }
   return <Container>{productBasedOnCategory}</Container>;
 };
 

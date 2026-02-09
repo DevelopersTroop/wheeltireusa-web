@@ -3,7 +3,8 @@ import { removeFromCart, TCartProduct } from '@/redux/features/cartSlice';
 import { useAppDispatch } from '@/redux/store';
 import { getPrice } from '@/utils/price';
 import { getProductThumbnail } from '@/utils/product';
-import { ChevronRight, Trash2 } from 'lucide-react';
+import { ChevronDown, Trash2, Package } from 'lucide-react';
+import { TGroupedProducts } from '@/hooks/useGroupedProducts';
 
 // Helper to format currency
 const formatPrice = (price: number) =>
@@ -11,125 +12,156 @@ const formatPrice = (price: number) =>
     price
   );
 
-export default function ProductCard({ product }: { product: TCartProduct[] }) {
-  const { setOpen, open } = useQuantityModal();
-  console.log('TCL: ProductCard -> open', open);
+type ProductItemProps = {
+  product: TCartProduct;
+  type: 'tire' | 'wheel' | 'accessory';
+  isPartOfPackage?: boolean;
+  isLast?: boolean;
+};
+
+// Individual product item component
+function ProductItem({ product, type, isPartOfPackage, isLast }: ProductItemProps) {
+  const { setOpen } = useQuantityModal();
   const dispatch = useAppDispatch();
 
-  // 1. Identify setup type
-  const isStaggered = product.length > 1;
-  const frontTire = product[0];
-  const rearTire = isStaggered ? product[1] : null;
+  const typeLabels = {
+    tire: 'Tire',
+    wheel: 'Wheel',
+    accessory: 'Accessory',
+  };
 
-  // 2. Safety check
-  if (!frontTire) return null;
-
-  // 3. Construct Link
-  let singleTirePageLink = `/collections/product/${frontTire.slug}`;
-  if (rearTire) {
-    singleTirePageLink += `?slug=${rearTire.slug}`;
-  }
-
-  // 4. Calculate Totals (Assuming we sum them up for the card display)
-  // You might need to adjust this depending on if your API gives pre-calculated totals
-  const totalQuantity = product.reduce((acc, item) => acc + item.quantity, 0);
-  const totalPrice = product.reduce(
-    (acc, item) => acc + getPrice(item) * item.quantity,
-    0
-  );
-  const totalMSRP = product.reduce(
-    (acc, item) => acc + (item.msrp ?? 0) * item.quantity,
-    0
-  ); // Assuming 'msrp' exists
+  const totalPrice = getPrice(product) * product.quantity;
+  const msrpPrice = (product.sellingPrice ?? 0) * product.quantity;
 
   const removeCartProduct = () => {
-    // Assuming we remove by the ID of the main product, or a bundle ID
-    dispatch(removeFromCart(frontTire.cartPackage));
+    dispatch(removeFromCart(product.cartPackage));
   };
 
   return (
-    <div className="flex gap-6 p-6 rounded-3xl border border-gray-100 shadow-md bg-white">
-      <img
-        src={getProductThumbnail(frontTire)} // Use dynamic image if available
-        alt={frontTire.title ?? ''}
-        className="w-20 h-20 object-contain"
-      />
+    <div className={`flex gap-4 py-4 ${!isLast && isPartOfPackage ? 'border-b border-dashed border-gray-200' : ''}`}>
+      {/* Product Image */}
+      <div className="w-20 h-20 bg-gray-50 rounded-lg flex items-center justify-center overflow-hidden shrink-0 border border-gray-100">
+        <img
+          src={getProductThumbnail(product)}
+          alt={product.title ?? ''}
+          className="w-full h-full object-contain p-1"
+        />
+      </div>
 
-      <div className="flex-1">
-        <div className="flex justify-between items-start">
-          <div>
-            {/* Brand Name */}
-            <h4 className="font-black text-2xl italic uppercase border-b-4 border-black inline-block leading-none">
-              {frontTire.brand || 'MILESTAR'}
+      <div className="flex-1 min-w-0">
+        <div className="flex justify-between items-start gap-3">
+          <div className="min-w-0 flex-1">
+            {/* Type Label */}
+            <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">
+              {typeLabels[type]}
+            </span>
+
+            {/* Brand & Model */}
+            <h4 className="font-bold text-base text-foreground truncate mt-0.5">
+              {product.brand || 'Brand'}
             </h4>
-
-            {/* Model Name */}
-            <p className="text-gray-600 font-medium mt-1">
-              {frontTire.model || 'Weatherguard AW365'}
+            <p className="text-muted-foreground text-sm truncate">
+              {product.model || product.title || 'Product'}
             </p>
 
-            {/* Dynamic Specs Section */}
-            <div className="mt-1 flex flex-col gap-1">
-              {/* Front Tire (Always renders) */}
-              <p className="text-gray-400 text-xs flex items-center gap-1">
-                {isStaggered && (
-                  <span className="font-bold text-gray-500">Front:</span>
-                )}
-                {frontTire.tireSize} {frontTire.loadIndex}
-                {frontTire.speedRating}
-                {!isStaggered && (
-                  <ChevronRight size={14} className="inline text-gray-300" />
-                )}
-              </p>
-
-              {/* Rear Tire (Only renders if array > 1) */}
-              {isStaggered && rearTire && (
-                <p className="text-gray-400 text-xs flex items-center gap-1">
-                  <span className="font-bold text-gray-500">Rear:</span>
-                  {rearTire.tireSize} {rearTire.loadIndex}
-                  {rearTire.speedRating}
-                </p>
-              )}
-            </div>
-          </div>
-
-          {/* Pricing Section */}
-          <div className="text-right">
-            {/* Show MSRP if it's higher than price */}
-            {totalMSRP > totalPrice && (
-              <p className="text-xs text-gray-300 line-through font-bold">
-                {formatPrice(totalMSRP)}
+            {/* Size/Specs */}
+            {product.tireSize && (
+              <p className="text-muted-foreground/70 text-xs mt-1 font-medium">
+                {product.tireSize} {product.loadIndex && `${product.loadIndex}${product.speedRating || ''}`}
               </p>
             )}
-            <p className="text-xl font-black text-slate-800">
+          </div>
+
+          {/* Pricing */}
+          <div className="text-right shrink-0">
+            {msrpPrice > totalPrice && (
+              <p className="text-xs text-muted-foreground/50 line-through">
+                {formatPrice(msrpPrice)}
+              </p>
+            )}
+            <p className="text-lg font-bold text-foreground">
               {formatPrice(totalPrice)}
-            </p>
-            <p className="text-[10px] text-gray-400 font-bold">
-              {formatPrice(getPrice(frontTire))} / tire
             </p>
           </div>
         </div>
 
-        {/* Quantity Trigger Button */}
-        <div className="flex gap-2 mt-4">
+        {/* Actions Row */}
+        <div className="flex items-center gap-3 mt-3">
           <button
-            // Pass the whole product array or just the front depending on how your modal works
             onClick={() => {
-              if (frontTire) setOpen(true, frontTire);
+              console.log(product)
+              setOpen(true, product)
             }}
-            className="flex items-center gap-4 bg-gray-50 border border-gray-200 rounded-full px-5 py-2 text-sm font-bold hover:bg-gray-100 transition-colors"
+            className="flex items-center gap-1.5 bg-secondary hover:bg-secondary/80 border border-border rounded-lg px-3 py-1.5 text-xs font-semibold text-secondary-foreground transition-colors"
           >
-            {totalQuantity} tires{' '}
-            <ChevronRight size={14} className="rotate-90" />
+            Qty: {product.quantity}
+            <ChevronDown size={12} />
           </button>
 
           <button
             onClick={removeCartProduct}
-            className="p-2 border border-gray-200 rounded-full text-gray-300 hover:text-red-500 transition-colors"
+            className="p-1.5 text-muted-foreground/50 hover:text-destructive hover:bg-destructive/10 rounded-lg transition-all"
+            aria-label="Remove item"
           >
-            <Trash2 size={18} />
+            <Trash2 size={16} />
           </button>
         </div>
+      </div>
+    </div>
+  );
+}
+
+// Main Package Card component
+export default function ProductCard({ packageGroup }: { packageGroup: TGroupedProducts }) {
+  const { tire, wheel, accessory } = packageGroup;
+
+  // Get all items in this package
+  const items: { product: TCartProduct; type: 'tire' | 'wheel' | 'accessory' }[] = [];
+  if (tire) items.push({ product: tire, type: 'tire' });
+  if (wheel) items.push({ product: wheel, type: 'wheel' });
+  if (accessory) items.push({ product: accessory, type: 'accessory' });
+
+  const isBundle = items.length > 1;
+
+  // Calculate total package price
+  const totalPackagePrice = items.reduce(
+    (acc, { product }) => acc + getPrice(product) * product.quantity,
+    0
+  );
+
+  if (items.length === 0) return null;
+
+  return (
+    <div className="bg-card rounded-xl border border-border shadow-sm overflow-hidden">
+      {/* Package Header - Only show for bundles */}
+      {isBundle && (
+        <div className="flex items-center justify-between px-5 py-3 bg-primary/5 border-b border-border">
+          <div className="flex items-center gap-2">
+            <Package size={16} className="text-primary" />
+            <span className="text-sm font-semibold text-foreground">
+              Package Deal
+            </span>
+            <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">
+              {items.length} items
+            </span>
+          </div>
+          <span className="text-base font-bold text-foreground">
+            {formatPrice(totalPackagePrice)}
+          </span>
+        </div>
+      )}
+
+      {/* Package Items */}
+      <div className="px-5">
+        {items.map(({ product, type }, index) => (
+          <ProductItem
+            key={product.id}
+            product={product}
+            type={type}
+            isPartOfPackage={isBundle}
+            isLast={index === items.length - 1}
+          />
+        ))}
       </div>
     </div>
   );

@@ -33,20 +33,7 @@ export function isSale(
 export function getPrice(
   product: TInventoryItem | TProductInfo | TCartProduct
 ): number {
-  const numberMap = Number(product?.sellingPrice);
-  const numberMsrp = Number(product?.msrp);
-  const msrp = Number.isNaN(numberMsrp) || !numberMsrp ? 0 : numberMsrp;
-  const map = Number.isNaN(numberMap) || !numberMap ? 0 : numberMap;
-
-  if (map === 0 && msrp === 0) {
-    return 0;
-  }
-
-  if (isSale(msrp, map) || msrp === 0) {
-    return map;
-  }
-
-  return msrp;
+  return product?.sellingPrice ?? 0;
 }
 
 export function calculateCartTotal<T = string>(

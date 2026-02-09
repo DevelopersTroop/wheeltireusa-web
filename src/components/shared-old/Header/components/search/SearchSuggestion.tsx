@@ -82,7 +82,7 @@ const SearchSuggestion = ({
                       <Image
                         className="rounded w-full"
                         src={imageURL ?? ''}
-                        alt={product?.modelGroup ?? ''}
+                        alt={product?.model ?? ''}
                         width={60}
                         height={60}
                       />
@@ -90,7 +90,7 @@ const SearchSuggestion = ({
                     <div className="flex w-full flex-col gap-1 justify-start">
                       {/* Product Title */}
                       <h3 className="text-black">
-                        {product?.modelGroup || product?.model}
+                        {product?.model}
                       </h3>
                       {/* Finish */}
                       {/* {!isCustomProduct(product?.category) && product?.finish ? (

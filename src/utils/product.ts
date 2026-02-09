@@ -18,24 +18,24 @@ export const isWishListData = (
   return 'imageUrl' in product;
 };
 
-export const getProductThumbnail = (product: {
-  itemImage?: string | null;
-}) => {
-
-  if (!product || (product && !product.itemImage)) {
+export const getProductThumbnail = (product: { itemImage?: string | null }) => {
+  if (!product || (product && !product?.itemImage)) {
     return '/images/not-available.webp';
   }
-  if(product.itemImage?.startsWith('https') || product.itemImage?.startsWith('http')) {
+  if (
+    product.itemImage?.startsWith('https') ||
+    product.itemImage?.startsWith('http')
+  ) {
     return product.itemImage;
-  } 
-  return `${s3BucketUrl}/${product.itemImage}`;
+  }
+  return `${s3BucketUrl}/${product?.itemImage}`;
 };
 export const getProductDeliveryDate = (product: TInventoryItem) => {
   if (!product) {
     return 'N/A';
   }
   return format(addDays(new Date(), 5), 'd MMMM, yyyy');
-}
+};
 export function matchMetricTireSize(tireSize: string): RegExpMatchArray | null {
   return tireSize.match(/^(\d+)\/(\d+)([A-Z])(\d+)([A-Z+&]+)?$/i);
 }
@@ -147,13 +147,12 @@ export function isTireAfterMarketTireSizePossible(
   console.log('--------------------------------');
   return Boolean(
     parsedFactoryTireSpec.afterMarketTireDiameterRange.plusTireDiameterInch &&
-      parsedFactoryTireSpec.afterMarketTireDiameterRange
-        .minusTireDiameterInch &&
+    parsedFactoryTireSpec.afterMarketTireDiameterRange.minusTireDiameterInch &&
+    parsedTireSpec.tireOverallDiameterInch &&
+    parsedFactoryTireSpec.afterMarketTireDiameterRange.plusTireDiameterInch >=
       parsedTireSpec.tireOverallDiameterInch &&
-      parsedFactoryTireSpec.afterMarketTireDiameterRange.plusTireDiameterInch >=
-        parsedTireSpec.tireOverallDiameterInch &&
-      parsedFactoryTireSpec.afterMarketTireDiameterRange
-        .minusTireDiameterInch <= parsedTireSpec.tireOverallDiameterInch
+    parsedFactoryTireSpec.afterMarketTireDiameterRange.minusTireDiameterInch <=
+      parsedTireSpec.tireOverallDiameterInch
   );
 }
 // for testing
