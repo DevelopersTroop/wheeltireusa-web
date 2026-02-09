@@ -1,11 +1,10 @@
 import { apiBaseUrl } from "@/utils/api";
 import { metaDataHelper } from "@/utils/metadata";
-import { normalizeImageUrl, removeHtmlTags } from "@/lib/utils";
+import { removeHtmlTags } from "@/lib/utils";
 import { TInventoryItem } from "@/types/product";
 import { Metadata } from "next";
 import SingleProductClient from "./client";
 import { getProductThumbnail } from "@/utils/product";
-import { combineSlices } from "@reduxjs/toolkit";
 
 export async function generateMetadata({
   params,
