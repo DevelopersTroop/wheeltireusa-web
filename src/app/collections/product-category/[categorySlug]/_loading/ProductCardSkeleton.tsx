@@ -1,6 +1,6 @@
 const ProductCardSkeleton = () => {
   return (
-    <div className={"border border-white rounded-xl px-2 pb-8 w-[300px]"}>
+    <div className={"border border-white rounded-xl px-2 pb-8 w-full max-w-[300px]"}>
       <div className={"relative"}>
         <div className="animate-color-pulse mx-auto d-block rounded-xl w-full h-[238px]"></div>
       </div>

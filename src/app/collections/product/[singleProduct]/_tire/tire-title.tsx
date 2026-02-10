@@ -1,7 +1,7 @@
 import { ProductRating } from "@/components/shared/Reviews/components/ProductRating/ProductRating";
-import { TInventoryItem } from "@/types/product";
+import { TTireProduct } from "@/types/product";
 
-const TireTitle = ({ product }: { product: TInventoryItem }) => {
+const TireTitle = ({ product }: { product: TTireProduct }) => {
   return (
     <div className="flex flex-col">
       <div>
@@ -11,7 +11,7 @@ const TireTitle = ({ product }: { product: TInventoryItem }) => {
           <span className="text-lg">{product?.tireSize}</span>
         </p>
       </div>
-      <ProductRating productId={product.id}/>
+      <ProductRating productId={product.id} />
     </div>
   );
 };

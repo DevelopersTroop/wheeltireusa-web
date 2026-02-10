@@ -1,4 +1,4 @@
-import { TInventoryItem } from '@/types/product';
+import { TInventoryItem, TTireProduct, TWheelProduct } from '@/types/product';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { toast } from 'sonner';
 
@@ -6,8 +6,11 @@ export type TCartProduct = TInventoryItem & {
   cartPackage: string;
   quantity: number;
   cartSerial: string;
-  metaData: Record<string, string>;
+  metaData?: Record<string, string>;
 };
+
+export type TTireCartProduct = TTireProduct & TCartProduct;
+export type TWheelCartProduct = TWheelProduct & TCartProduct;
 
 type TCartSliceState = {
   products: TCartProduct[];
@@ -41,7 +44,7 @@ const cartSlice = createSlice({
             (existingProduct?.availableStock || 4)
           ) {
             // If the new quantity exceeds available inventory, set it to available inventory
-            newProduct.quantity =
+            (newProduct as TCartProduct).quantity =
               (existingProduct?.availableStock || 4) - existingProduct.quantity;
             toast.error(
               `You can only add ${newProduct.quantity} more of this product to your cart.`

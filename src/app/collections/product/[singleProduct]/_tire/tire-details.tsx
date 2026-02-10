@@ -1,11 +1,11 @@
-import { TInventoryItem } from "@/types/product";
+import { TTireProduct } from "@/types/product";
 import Image from "next/image";
 import Link from "next/link";
 import { LiaShippingFastSolid } from "react-icons/lia";
 import { MdOutlineLocalPhone, MdOutlineShoppingCart } from "react-icons/md";
 import { PiHandCoinsDuotone } from "react-icons/pi";
 
-const TireDetails = ({ product }: { product: TInventoryItem }) => {
+const TireDetails = ({ product }: { product: TTireProduct }) => {
   return (
     <div className="flex flex-col gap-5">
       <div>
@@ -38,20 +38,20 @@ const TireDetails = ({ product }: { product: TInventoryItem }) => {
           <p className="text-gray-600"> As Fast As: {" "}
             <span className="text-black font-semibold">
               {(() => {
-                                      const today = new Date();
-                                      const start = new Date(today);
-                                      start.setDate(today.getDate() + 3);
-                                      const end = new Date(today);
-                                      end.setDate(today.getDate() + 7);
+                const today = new Date();
+                const start = new Date(today);
+                start.setDate(today.getDate() + 3);
+                const end = new Date(today);
+                end.setDate(today.getDate() + 7);
 
-                                      const format = (date: Date) =>
-                                        date.toLocaleString("en-US", {
-                                          month: "short",
-                                          day: "2-digit",
-                                        });
+                const format = (date: Date) =>
+                  date.toLocaleString("en-US", {
+                    month: "short",
+                    day: "2-digit",
+                  });
 
-                                      return `${format(start)} - ${format(end)}`;
-                                    })()}
+                return `${format(start)} - ${format(end)}`;
+              })()}
             </span>
             {" "} to the lower 48
           </p>

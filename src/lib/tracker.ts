@@ -95,9 +95,9 @@ export const trackEvent = async (
 
   // 3. Attempt to send or Queue if offline
   try {
-    const response = await apiInstance.post("/tracking", payload);
+    // const response = await apiInstance.post("/tracking", payload);
 
-    if (!response.data) throw new Error("Network response was not ok");
+    // if (!response.data) throw new Error("Network response was not ok");
   } catch (error) {
     // If request fails (offline), save to IndexedDB queue
     await db.add(QUEUE_STORE, payload);
@@ -120,7 +120,7 @@ export const syncOfflineEvents = async () => {
 
   for (const event of events) {
     try {
-      await apiInstance.post("/tracking", event);
+      // await apiInstance.post("/tracking", event);
     } catch (e) {
       break;
     }

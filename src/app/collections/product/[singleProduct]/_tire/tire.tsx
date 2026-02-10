@@ -1,4 +1,4 @@
-import { TInventoryItem } from "@/types/product";
+import { TTireProduct } from "@/types/product";
 import ImageGallery from "../ImageGallery";
 import ActionButtons from "./action-buttons";
 import TireDescription from "./tire-description";
@@ -13,7 +13,7 @@ import { Reviews } from "@/components/shared/Reviews/Reviews";
 export const step = 4;
 export const duallyStep = 6;
 
-const Tire = ({ product }: { product: TInventoryItem }) => {
+const Tire = ({ product }: { product: TTireProduct }) => {
   return (
     <TireProvider>
       <Breadcrumb>

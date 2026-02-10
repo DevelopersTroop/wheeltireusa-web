@@ -1,7 +1,8 @@
-import { metaDataHelper } from "@/utils/metadata";
-import { Metadata } from "next";
-import TireCategory from "./_tire/TireCategory";
-import AccessoriesCategory from "./_accessories/AccessoriesCategory";
+import { metaDataHelper } from '@/utils/metadata';
+import { Metadata } from 'next';
+import TireCategory from './_tire/TireCategory';
+import AccessoriesCategory from './_accessories/AccessoriesCategory';
+import WheelCategory from './wheels/WheelCategory';
 
 export async function generateMetadata({
   params,
@@ -16,7 +17,7 @@ export async function generateMetadata({
     return {
       ...metaDataHelper({
         title: `${categoryCase} - Wheel Tire USA`,
-        description: "",
+        description: '',
       }),
       alternates: {
         canonical: `https://wheeltireusa.com/collections/product-category/${categorySlug}`,
@@ -25,7 +26,7 @@ export async function generateMetadata({
   } catch (error) {
     // Return default metadata in case of error
     return {
-      title: "Error",
+      title: 'Error',
     };
   }
 }
@@ -41,30 +42,29 @@ const Collection = async ({
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/categories/details-by-slug/${categorySlug}`,
-      { cache: "no-store" }
+      { cache: 'no-store' }
     );
     const data = await res.json();
     if (data?.statusCode === 200) {
       categoryDetails = data.data.category;
     }
   } catch (error) {
-    console.error("Error fetching category details:", error);
+    console.error('Error fetching category details:', error);
   }
 
-  const topDescription = categoryDetails?.topDescription || "";
-  const bottomDescription = categoryDetails?.bottomDescription || "";
+  const topDescription = categoryDetails?.topDescription || '';
+  const bottomDescription = categoryDetails?.bottomDescription || '';
 
   let collection = <></>;
-  // if (categorySlug === "wheels") {
-  //   collection = (
-  //     <WheelsCategory
-  //       page={Number(page)}
-  //       topDescription={topDescription}
-  //       bottomDescription={bottomDescription}
-  //     />
-  //   );
-  // } else
-     if (categorySlug === "tires") {
+  if (categorySlug === 'wheels') {
+    collection = (
+      <WheelCategory
+        page={Number(page)}
+        // topDescription={topDescription}
+        bottomDescription={bottomDescription}
+      />
+    );
+  } else if (categorySlug === 'tires') {
     collection = (
       <TireCategory
         page={Number(page)}
@@ -72,16 +72,7 @@ const Collection = async ({
         bottomDescription={bottomDescription}
       />
     );
-  } 
-  // else if (categorySlug === "suspension") {
-  //   collection = (
-  //     <SuspensionCategory
-  //       topDescription={topDescription}
-  //       bottomDescription={bottomDescription}
-  //     />
-  //   );
-  // }
-   else if (categorySlug === "accessories") {
+  } else if (categorySlug === 'accessories') {
     collection = (
       <AccessoriesCategory
         page={Number(page)}

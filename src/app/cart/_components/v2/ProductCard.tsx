@@ -65,11 +65,7 @@ function ProductItem({ product, type, isPartOfPackage, isLast }: ProductItemProp
             </p>
 
             {/* Size/Specs */}
-            {product.tireSize && (
-              <p className="text-muted-foreground/70 text-xs mt-1 font-medium">
-                {product.tireSize} {product.loadIndex && `${product.loadIndex}${product.speedRating || ''}`}
-              </p>
-            )}
+
           </div>
 
           {/* Pricing */}

@@ -1,6 +1,11 @@
 'use client';
 import { TCartProduct } from '@/redux/features/cartSlice';
-import { TInventoryItem, TTireSpec } from '@/types/product';
+import {
+  TInventoryItem,
+  TTireProduct,
+  TTireSpec,
+  TWheelProduct,
+} from '@/types/product';
 import { TWishListData } from '@/types/wishlist';
 import { s3BucketUrl } from './api';
 import allTireSizes from '../../public/data/tireSizes.json';
@@ -159,3 +164,18 @@ export function isTireAfterMarketTireSizePossible(
 if (typeof window !== 'undefined') {
   window.isTireAfterMarketTireSizePossible = isTireAfterMarketTireSizePossible;
 }
+
+type Category = 'wheels' | 'tire';
+
+type ProductByCategory<C extends Category> = C extends 'wheels'
+  ? TWheelProduct
+  : C extends 'tire'
+    ? TTireProduct
+    : never;
+
+export const productsByCategory = <C extends Category>(
+  category: C,
+  product: TInventoryItem
+) => {
+  return product as ProductByCategory<C>;
+};
