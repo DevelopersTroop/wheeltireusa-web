@@ -22,4 +22,12 @@ export type TFilters = {
   customer_rating: TSingleFilter[];
   mileage_warranty: TSingleFilter[];
   special_offers: TSingleFilter[];
+  // Wheel-specific filters
+  width: TSingleFilter[];
+  offset: TSingleFilter[];
+  brand_desc: TSingleFilter[];
+  display_model_no: TSingleFilter[];
+  fancy_finish_desc: TSingleFilter[];
+  bolt_pattern_metric: TSingleFilter[];
+  material: TSingleFilter[];
 };
