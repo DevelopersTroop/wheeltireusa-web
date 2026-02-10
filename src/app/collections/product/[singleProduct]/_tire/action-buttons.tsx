@@ -1,7 +1,7 @@
 'use client';
 
 import store, { useAppDispatch, useTypedSelector } from '@/redux/store';
-import { TInventoryItem } from '@/types/product';
+import { TTireProduct } from '@/types/product';
 import { v4 as uuidv4 } from 'uuid';
 import React, { useContext } from 'react';
 import wait from 'wait';
@@ -15,7 +15,7 @@ import { CartData } from '@/types/cart';
 import { useCartHook } from '@/hooks/useCartHook';
 // import { CenterCapContext } from "./context/CenterCapProvider";
 
-const ActionButtons = ({ product }: { product: TInventoryItem }) => {
+const ActionButtons = ({ product }: { product: TTireProduct }) => {
   const searhcParams = useSearchParams();
   const cartPackage = searhcParams.get('cartPackage') as string;
   const packages = useTypedSelector((state) => state.persisted.package);
@@ -146,7 +146,7 @@ const ActionButtons = ({ product }: { product: TInventoryItem }) => {
               setOpen();
             });
           }}
-          className={' py-1 rounded outline outline-1 outline-primary w-full'}
+          className={' py-1 rounded outline-1 outline-primary w-full'}
         >
           {addToCartText}
         </button>

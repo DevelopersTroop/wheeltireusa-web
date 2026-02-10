@@ -1,10 +1,9 @@
-import { apiBaseUrl } from "@/utils/api";
-import { metaDataHelper } from "@/utils/metadata";
 import { removeHtmlTags } from "@/lib/utils";
 import { TInventoryItem } from "@/types/product";
+import { apiBaseUrl } from "@/utils/api";
+import { metaDataHelper } from "@/utils/metadata";
 import { Metadata } from "next";
 import SingleProductClient from "./client";
-import { getProductThumbnail } from "@/utils/product";
 
 export async function generateMetadata({
   params,
@@ -36,7 +35,7 @@ export async function generateMetadata({
             url: product?.itemImage ?? '/images/not-available.webp',
             width: 1200,
             height: 630,
-            alt: product.title,
+            alt: product?.title ?? 'Wheel Tire USA',
           },
         ],
       },
@@ -65,6 +64,7 @@ export default async function Page({
 
   const result = await response.json();
 
+  console.log(result)
 
   return <SingleProductClient product={result.data.product} />;
 }

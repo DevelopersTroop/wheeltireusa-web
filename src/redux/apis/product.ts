@@ -58,9 +58,6 @@ const products = baseApi.injectEndpoints({
               typeof value === 'string' ? JSON.parse(value) : value;
           }
         });
-
-        console.log('Shallow params', shallowParams);
-
         if (shallowParams.frontParams && !shallowParams.rearParams) {
           Object.assign(shallowParams, {
             rearParams: shallowParams.frontParams,
@@ -69,7 +66,7 @@ const products = baseApi.injectEndpoints({
         const result = await baseQuery({
           url: '/products/list',
           method: 'POST',
-          data: { ...shallowParams, category: 'tire' },
+          data: { ...shallowParams },
         });
 
         if (result.error) return { error: result.error };

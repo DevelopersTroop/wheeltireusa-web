@@ -84,7 +84,7 @@ const WheelsGallery = () => {
                     <div className="p-4">
                       <img
                         src={getProductThumbnail(product)}
-                        alt={product.title}
+                        alt={product?.title || ""}
                         className="w-full p-4 h-auto object-cover"
                       />
 

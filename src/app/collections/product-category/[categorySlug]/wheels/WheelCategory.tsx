@@ -1,33 +1,35 @@
-"use client";
-import { Paginate } from "@/components/shared/Paginate/Paginate";
-import Breadcrumb from "@/components/ui/breadcrumb/breadcrumb";
-import Item from "@/components/ui/breadcrumb/item";
-import { useFilterSync } from "@/hooks/useFilterSync";
-import { useGetProductsQuery } from "@/redux/apis/product";
-import { useSearchParams } from "next/navigation";
-import React from "react";
-import ProductCategoryLoading from "../../_components/_loading";
-import SidebarFilters from "../_filters/mobile-filters/SidebarFilter";
-import MobileYmmFilter from "../_filters/mobile-ymm/MobileYmmFilter";
-import SortByFilter from "../_filters/SortByFilter";
-import TireFilters from "../_filters/TireFilters";
-import TireYMMFilters from "../_filters/widgets/tire/TireYmmFilter";
-import NoProductsFound from "../NoProductsFound";
-import TireCard from "./TireCard";
+'use client';
+import { useSearchParams } from 'next/navigation';
+import React from 'react';
+import TireCard from './WheelCard';
+import { useGetProductsQuery } from '@/redux/apis/product';
+import { useFilterSync } from '@/hooks/useFilterSync';
+import SidebarFilters from '../_filters/mobile-filters/SidebarFilter';
+import TireFilters from '../_filters/TireFilters';
+import MobileYmmFilter from '../_filters/mobile-ymm/MobileYmmFilter';
+import TireYMMFilters from '../_filters/widgets/tire/TireYmmFilter';
+import SortByFilter from '../_filters/SortByFilter';
+import ProductCardSkeleton from '../_loading/ProductCardSkeleton';
+import NoProductsFound from '../NoProductsFound';
+import Item from '@/components/ui/breadcrumb/item';
+import Breadcrumb from '@/components/ui/breadcrumb/breadcrumb';
+import { Paginate } from '@/components/shared/Paginate/Paginate';
+import ProductCategoryLoading from '../../_components/_loading';
 
-const TireCategory: React.FC<{
+const WheelCategory: React.FC<{
   page: number;
   topDescription?: string;
   bottomDescription?: string;
 }> = ({ page = 1, topDescription, bottomDescription }) => {
   const searchParams = useSearchParams();
   const { filters } = useFilterSync();
-  const { data, isLoading: loading } = useGetProductsQuery({ ...filters, category: 'tire' });
+  const { data, isLoading: loading } = useGetProductsQuery({
+    ...filters,
+    category: 'wheels',
+  });
+  console.log('TCL: data', data);
   return (
     <>
-      <div className="flex justify-center items-center my-2.5">
-        <h1 className="text-[20px] font-semibold">Aftermarket Truck Tires</h1>
-      </div>
       {topDescription && (
         <div
           className="container mx-auto px-4 my-4"
@@ -62,9 +64,9 @@ const TireCategory: React.FC<{
               <div className="flex w-full flex-row justify-between">
                 <div className="p-2">
                   <Breadcrumb>
-                    <Item href={"/"}>Home</Item>
-                    <Item href={"/"}>Collections</Item>
-                    <Item href={"/collections/product-category/tires"}>
+                    <Item href={'/'}>Home</Item>
+                    <Item href={'/'}>Collections</Item>
+                    <Item href={'/collections/product-category/tires'}>
                       Tires
                     </Item>
                   </Breadcrumb>
@@ -75,17 +77,19 @@ const TireCategory: React.FC<{
               </div>
               <div
                 className={
-                  "flex w-full flex-row flex-wrap justify-center gap-4"
+                  'flex w-full flex-row flex-wrap justify-center gap-4'
                 }
               >
                 {data?.products?.map((products) => {
                   const product = products[0];
-                  return <div
-                    key={product.id}
-                    className="max-md:border max-md:border-b max-md:first:border-t max-md:border-t-0 max-md:border-l-0 max-md:border-r-0 max-md:px-2"
-                  >
-                    <TireCard product={product} key={product.id} />
-                  </div>
+                  return (
+                    <div
+                      key={product.id}
+                      className="max-md:border max-md:border-b max-md:first:border-t max-md:border-t-0 max-md:border-l-0 max-md:border-r-0 max-md:px-2"
+                    >
+                      <TireCard product={product} key={product.id} />
+                    </div>
+                  );
                 })}
               </div>
 
@@ -94,7 +98,7 @@ const TireCategory: React.FC<{
                   searchParams={new URLSearchParams(searchParams)}
                   page={page}
                   totalPages={data?.pages}
-                  categorySlug={"tires"}
+                  categorySlug={'wheels'}
                 />
               </div>
             </div>
@@ -111,4 +115,4 @@ const TireCategory: React.FC<{
   );
 };
 
-export default TireCategory;
+export default WheelCategory;

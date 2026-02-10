@@ -1,12 +1,12 @@
 "use client";
-import { TInventoryItem } from "@/types/product";
+import { TInventoryBase } from "@/types/product";
 import { getProductThumbnail } from "@/utils/product";
 import { useEffect, useState } from "react";
 import Gallery from "react-image-gallery";
 import "react-image-gallery/styles/image-gallery.css";
 
 interface ImageGalleryProps {
-  product: TInventoryItem;
+  product: TInventoryBase;
   fallbackImage: string;
 }
 
@@ -38,11 +38,11 @@ const ImageGallery = ({ product, fallbackImage }: ImageGalleryProps) => {
       if (mainImage) urls.add(mainImage);
 
       // Add gallery images if array
-    //   if (Array.isArray(product.galleryImages)) {
-    //     product.galleryImages.forEach((img) => {
-    //       if (img) urls.add(img);
-    //     });
-    //   }
+      //   if (Array.isArray(product.galleryImages)) {
+      //     product.galleryImages.forEach((img) => {
+      //       if (img) urls.add(img);
+      //     });
+      //   }
 
       // Validate URLs and build final image list
       const validated = await Promise.all(
@@ -52,9 +52,9 @@ const ImageGallery = ({ product, fallbackImage }: ImageGalleryProps) => {
       const formatted =
         validated.length > 0
           ? validated.map((url) => ({
-              original: url,
-              thumbnail: url,
-            }))
+            original: url,
+            thumbnail: url,
+          }))
           : [{ original: fallbackImage, thumbnail: fallbackImage }];
 
       setProductImages(formatted);

@@ -1,6 +1,6 @@
-import { TInventoryItem } from "@/types/product";
+import { TTireProduct } from "@/types/product";
 
-const TireDescription = ({ product }: { product: TInventoryItem }) => {
+const TireDescription = ({ product }: { product: TTireProduct }) => {
   return (
     <div className="w-full">
       <h2 className="text-4xl text-gray-700 font-bold">

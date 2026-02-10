@@ -48,21 +48,21 @@ const TodaysDeals = () => {
 
         {isLoading
           ? // 👇 Skeleton placeholder when loading
-            Array.from({ length: 8 }).map((_, index) => (
-              <SwiperSlide key={index}>
-                <SkeletonCard />
-              </SwiperSlide>
-            ))
+          Array.from({ length: 8 }).map((_, index) => (
+            <SwiperSlide key={index}>
+              <SkeletonCard />
+            </SwiperSlide>
+          ))
           : // 👇 Actual product cards
-            data?.products.slice(0, 8).map((products, index) => {
-                const product = products[0];
-                return <>
-                <SwiperSlide key={index}>
+          data?.products.slice(0, 8).map((products, index) => {
+            const product = products[0];
+            return <>
+              <SwiperSlide key={index}>
                 <Link href={`/collections/product/${product.slug}`}>
                   <div className="p-4">
                     <img
                       src={getProductThumbnail(product)}
-                      alt={product.title}
+                      alt={product?.title || ""}
                       className="w-full p-4 h-auto object-cover"
                     />
                     <h4 className="text-lg font-semibold mt-2 text-center">
@@ -74,8 +74,8 @@ const TodaysDeals = () => {
                   </div>
                 </Link>
               </SwiperSlide>
-              </>
-            })}
+            </>
+          })}
 
         <button className="swiper-button-prev-123 w-fit text-black rounded-md absolute right-0 top-1/2 flex items-center cursor-pointer z-30">
           <ChevronRight size={38} />

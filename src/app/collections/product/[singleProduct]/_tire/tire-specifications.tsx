@@ -1,73 +1,82 @@
 import { camelCaseToWords } from "@/utils/string";
-import { TInventoryItem } from "@/types/product";
+import { TTireProduct } from "@/types/product";
 
-const tire_specs_key: string[] = [
-  "manufacturer_part_number",
-  "load_index",
-  "speed_rating",
-  "upc",
-  "width",
-  "section_width",
-  "size",
-  "load_index",
-  "load_rating_metric",
-  "load_rating_standard",
-  "max_pressure",
+const tire_specs_key: (keyof TTireProduct)[] = [
+  "tireSize",
+  "tireWidth",
+  "tireAspectRatio",
+  "tireDiameter",
+  "speedRating",
+  "loadIndex",
+  "loadRange",
   "ply",
-  "speed_rating",
-  "rim_diameter",
-  "series",
-  "max_load",
-  "division",
-  "tread_depth",
-  "weight",
-  "finish_warranty",
-  "structural_warranty",
-  "mileage_warranty",
+  "tireClass",
+  "tireType",
+  "tireStyle",
+  "terrain",
+  "runFlat",
+  "mS",
+  "treadDepth",
+  "treadDepthIn",
+  "treadDepthMm",
+  "maxAirPressurePsi",
+  "utqg",
+  "mileageWarranty",
+  "tireWeight",
+  "sidewall",
+  "revsPerMile",
+  "tireMaxLoadLbs",
+  "tireMaxLoadKg",
 ];
 
-const filterKeyValue = (key: keyof TInventoryItem, value: any) => {
-  if (tire_specs_key.includes(key)) return true;
-};
-
-const TireSpecifications = ({ product }: { product: TInventoryItem }) => {
+const TireSpecifications = ({ product }: { product: TTireProduct }) => {
   return (
     <div className="w-full">
-      <h2 className="w-full uppercase text-lg bg-gray-500 text-gray-100 text-center">
-        Tire Specs
+      <h2 className="w-full text-sm font-bold uppercase tracking-wider text-card bg-foreground/90 px-4 py-3 rounded-t-lg">
+        Tire Specifications
       </h2>
-      <div className="mt-2">
-        <div className="flex flex-col">
-          <p>
-            <span className=" font-medium text-gray-600 text-lg">Brand: </span>{" "}
-            <span className="text-gray-600 text-base">
+      <div className="border border-t-0 border-border/60 rounded-b-lg overflow-hidden">
+        <div className="grid grid-cols-1 divide-y divide-border/40">
+          {/* Brand & Model header */}
+          <div className="flex items-center justify-between px-4 py-2.5 bg-secondary/40">
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              Brand
+            </span>
+            <span className="text-sm font-bold text-foreground">
               {product?.brand}
             </span>
-          </p>
-          <p>
-            <span className=" font-medium text-gray-600 text-lg">Model: </span>{" "}
-            <span className="text-gray-600 text-base">{product.model}</span>
-          </p>
-        </div>
-        {Object.entries(product).map(([key, value]) => {
-          if (filterKeyValue(key as keyof TInventoryItem, value)) {
-            return (
-              <div key={key} className="flex items-center">
-                <p>
-                  <span className="text-lg font-medium text-gray-600">
-                    {camelCaseToWords(key)}:{" "}
-                  </span>{" "}
-                  <span className="text-base text-gray-600">
-                    {" "}
-                    {value as string}
+          </div>
+          <div className="flex items-center justify-between px-4 py-2.5">
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              Model
+            </span>
+            <span className="text-sm font-bold text-foreground">
+              {product.model}
+            </span>
+          </div>
+
+          {/* Dynamic specs */}
+          {tire_specs_key.map((key, i) => {
+            const value = product[key];
+            if (value != null && value !== "") {
+              return (
+                <div
+                  key={key}
+                  className={`flex items-center justify-between px-4 py-2.5 ${i % 2 === 0 ? "bg-secondary/40" : ""
+                    }`}
+                >
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    {camelCaseToWords(key)}
                   </span>
-                </p>
-              </div>
-            );
-          } else {
+                  <span className="text-sm font-medium text-foreground">
+                    {String(value)}
+                  </span>
+                </div>
+              );
+            }
             return null;
-          }
-        })}
+          })}
+        </div>
       </div>
     </div>
   );

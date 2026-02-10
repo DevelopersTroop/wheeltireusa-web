@@ -40,11 +40,6 @@ function ProductRow({ product, onUpdateQuantity, onRemove, canRemove, isDemo }: 
         <h4 className="font-semibold text-sm text-foreground truncate">
           {product.brand} {product.model}
         </h4>
-        {product.tireSize && (
-          <p className="text-xs text-muted-foreground">
-            {product.tireSize}
-          </p>
-        )}
         <p className="text-xs text-muted-foreground mt-0.5">
           {formatPrice(getPrice(product))} each
         </p>
