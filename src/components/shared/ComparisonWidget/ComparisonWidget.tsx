@@ -203,7 +203,7 @@ const ComparisonWidget = () => {
     return (
       <AnimatePresence mode="wait">
         <motion.div
-          className="fixed bottom-6 right-6 z-50"
+          className="fixed bottom-5 right-24 z-50 "
           initial="initial"
           animate="animate"
           exit="exit"
@@ -225,7 +225,7 @@ const ComparisonWidget = () => {
 
           <motion.button
             onClick={() => dispatch(setComparisonDrawerOpen(true))}
-            className="relative flex items-center gap-3 bg-linear-to-r from-primary to-primary/80 text-white px-5 py-3.5 rounded-full shadow-xl border border-white/20"
+            className="relative flex items-center cursor-pointer gap-3 bg-linear-to-r from-primary to-primary/80 text-white px-5 py-3.5 rounded-full shadow-xl border border-white/20"
             variants={floatingButtonVariants}
             whileHover="hover"
             whileTap="tap"
@@ -618,7 +618,7 @@ const ComparisonWidget = () => {
                 {products.length >= 2 && (
                   <motion.button
                     onClick={() => handleNavigate('/compare')}
-                    className="flex items-center gap-2 bg-linear-to-r from-primary to-primary/90 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg group"
+                    className="flex cursor-pointer items-center mr-20 gap-2 bg-linear-to-r from-primary to-primary/90 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg group"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >

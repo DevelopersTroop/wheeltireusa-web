@@ -3,8 +3,8 @@
 import { ViewMode } from './comparison-configs';
 
 interface CompareFiltersProps {
-    viewMode: 'all' | 'differences' | 'similarities';
-    setViewMode: (mode: 'all' | 'differences' | 'similarities') => void;
+    viewMode: ViewMode;
+    setViewMode: (mode: ViewMode) => void;
     highlightDifferences: boolean;
     setHighlightDifferences: (highlight: boolean) => void;
     onExpandAll: () => void;
