@@ -13,6 +13,7 @@ import { triggerGaAddToCart } from '@/utils/analytics';
 import { addToCart } from '@/redux/features/cartSlice';
 import { CartData } from '@/types/cart';
 import { useCartHook } from '@/hooks/useCartHook';
+import CompareButton from '@/components/shared/CompareButton/CompareButton';
 // import { CenterCapContext } from "./context/CenterCapProvider";
 
 const ActionButtons = ({ product }: { product: TTireProduct }) => {
@@ -123,7 +124,7 @@ const ActionButtons = ({ product }: { product: TTireProduct }) => {
         {wheel?.id ? (
           <button
             onClick={addTires}
-            className={'w-full rounded py-1 outline outline-1 outline-primary'}
+            className={'w-full rounded py-1 outline outline-primary'}
           >
             Add Tires to your package
           </button>
@@ -137,7 +138,7 @@ const ActionButtons = ({ product }: { product: TTireProduct }) => {
           </button>
         )}
       </div>
-      <div className="mt-4">
+      <div className="mt-4 flex flex-col gap-3">
         <button
           onClick={() => {
             wait(400).then(() => {
@@ -150,6 +151,7 @@ const ActionButtons = ({ product }: { product: TTireProduct }) => {
         >
           {addToCartText}
         </button>
+        <CompareButton product={product} variant="outline" />
       </div>
     </>
   );

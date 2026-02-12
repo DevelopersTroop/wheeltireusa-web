@@ -12,22 +12,23 @@ import CartSystem from './cart/v2/page';
 import { Metadata } from 'next';
 import Script from 'next/script';
 import Newsletter from '@/components/shared/Newsletter/Newsletter';
+import ComparisonWidget from '@/components/shared/ComparisonWidget/ComparisonWidget';
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
-  title: "Wheel Tire USA",
+  title: 'Wheel Tire USA',
   description:
-    "At WheelTireUSA, our goal is simple: deliver the best wheels, tires, and vehicle accessories with service you can rely on. We’re passionate about helping drivers upgrade their vehicles with confidence — whether it’s for style, performance, safety, or all three.",
+    'At WheelTireUSA, our goal is simple: deliver the best wheels, tires, and vehicle accessories with service you can rely on. We’re passionate about helping drivers upgrade their vehicles with confidence — whether it’s for style, performance, safety, or all three.',
   openGraph: {
-    images: ["/images/logo.png"],
+    images: ['/images/logo.png'],
   },
 };
 
@@ -87,6 +88,7 @@ export default function RootLayout({
             </CheckoutProvider>
             <Newsletter />
             <CartSystem />
+            <ComparisonWidget />
           </ReduxWrapper>
         </GoogleMapScriptLoader>
       </body>

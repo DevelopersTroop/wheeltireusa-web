@@ -21,6 +21,8 @@ import { baseApi } from './apis/base';
 import { TypedUseSelectorHook, useSelector, useDispatch } from 'react-redux';
 import { checkoutListenerMiddleware } from './middleware/checkoutMiddleware';
 import { cartListenerMiddleware } from './middleware/cartListener';
+import comparisonReducer from './features/comparisonSlice';
+
 const rootPersistConfig = {
   key: 'tirematic-store',
   storage,
@@ -33,6 +35,7 @@ const persistingReducer = combineReducers({
   cart: cartReducer,
   package: packageReducer,
   newsletterModal: newsletterModalReducer,
+  comparison: comparisonReducer,
 });
 
 const persistedReducer = persistReducer(rootPersistConfig, persistingReducer);

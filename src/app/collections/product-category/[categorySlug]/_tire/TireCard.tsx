@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import TireCardDescription from "./TireCardDescription";
+import CompareButton from "@/components/shared/CompareButton/CompareButton";
 
 const TireCard = ({ product }: { product: TInventoryItem }) => {
   const searchparams = useSearchParams();
@@ -15,9 +16,13 @@ const TireCard = ({ product }: { product: TInventoryItem }) => {
   return (
     <div
       className={
-        "flex w-full flex-row overflow-hidden md:rounded-xl md:border md:border-[#cfcfcf] md:bg-white min-[600px]:w-[250px] min-[600px]:flex-col md:shadow-xl gap-2 md:px-4"
+        "flex w-full flex-row overflow-hidden md:rounded-xl md:border md:border-[#cfcfcf] md:bg-white min-[600px]:w-[250px] min-[600px]:flex-col md:shadow-xl gap-2 md:px-4 relative group"
       }
     >
+      <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+        <CompareButton product={product} variant="icon" />
+      </div>
+
       <div className="flex w-full items-center justify-center pt-5">
         <Link href={productLink}>
           <Image
