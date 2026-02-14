@@ -38,68 +38,75 @@ function ProductItem({ product, type, isPartOfPackage, isLast }: ProductItemProp
   };
 
   return (
-    <div className={`flex gap-4 py-4 ${!isLast && isPartOfPackage ? 'border-b border-dashed border-gray-200' : ''}`}>
+    <div className={`flex gap-6 py-6 ${!isLast && isPartOfPackage ? 'border-b border-dashed border-slate-200' : ''} group/item transition-all hover:bg-slate-50/50 rounded-2xl px-4 -mx-4`}>
       {/* Product Image */}
-      <div className="w-20 h-20 bg-gray-50 rounded-lg flex items-center justify-center overflow-hidden shrink-0 border border-gray-100">
-        <img
-          src={getProductThumbnail(product)}
-          alt={product.title ?? ''}
-          className="w-full h-full object-contain p-1"
-        />
+      <div className="relative w-28 h-28 shrink-0">
+        <div className="absolute inset-0 bg-primary/5 blur-xl rounded-full scale-0 group-hover/item:scale-100 transition-transform duration-500" />
+        <div className="relative w-full h-full bg-white rounded-2xl flex items-center justify-center overflow-hidden border border-slate-100 shadow-sm transition-all group-hover/item:shadow-md group-hover/item:-translate-y-1">
+          <img
+            src={getProductThumbnail(product)}
+            alt={product.title ?? ''}
+            className="w-full h-full object-contain p-2"
+          />
+        </div>
+        {isPartOfPackage && (
+          <div className="absolute -bottom-2 -right-2 bg-slate-900 text-white text-[8px] font-black uppercase tracking-tighter px-2 py-1 rounded-md shadow-lg border border-white/20">
+            P-ITEM
+          </div>
+        )}
       </div>
 
-      <div className="flex-1 min-w-0">
-        <div className="flex justify-between items-start gap-3">
+      <div className="flex-1 min-w-0 py-1">
+        <div className="flex justify-between items-start gap-4">
           <div className="min-w-0 flex-1">
             {/* Type Label */}
-            <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">
-              {typeLabels[type]}
-            </span>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em]">
+                {typeLabels[type]}
+              </span>
+              <div className="h-px w-4 bg-slate-100" />
+            </div>
 
             {/* Brand & Model */}
-            <h4 className="font-bold text-base text-foreground truncate mt-0.5">
+            <h4 className="font-black text-xl text-slate-900 truncate leading-tight tracking-tight uppercase italic">
               {product.brand || 'Brand'}
             </h4>
-            <p className="text-muted-foreground text-sm truncate">
+            <p className="text-slate-500 text-sm truncate font-medium mt-0.5">
               {product.model || product.title || 'Product'}
             </p>
-
-            {/* Size/Specs */}
-
           </div>
 
           {/* Pricing */}
           <div className="text-right shrink-0">
             {msrpPrice > totalPrice && (
-              <p className="text-xs text-muted-foreground/50 line-through">
+              <p className="text-xs text-slate-400 line-through font-bold">
                 {formatPrice(msrpPrice)}
               </p>
             )}
-            <p className="text-lg font-bold text-foreground">
+            <p className="text-2xl font-black text-slate-900 tracking-tighter tabular-nums">
               {formatPrice(totalPrice)}
             </p>
           </div>
         </div>
 
         {/* Actions Row */}
-        <div className="flex items-center gap-3 mt-3">
+        <div className="flex items-center gap-4 mt-4">
           <button
             onClick={() => {
-              console.log(product)
               setOpen(true, product)
             }}
-            className="flex items-center gap-1.5 bg-secondary hover:bg-secondary/80 border border-border rounded-lg px-3 py-1.5 text-xs font-semibold text-secondary-foreground transition-colors"
+            className="group/btn flex items-center gap-2 bg-white hover:bg-slate-900 border border-slate-200 rounded-xl px-4 py-2 text-xs font-black text-slate-900 hover:text-white transition-all shadow-sm hover:shadow-md active:scale-95"
           >
-            Qty: {product.quantity}
-            <ChevronDown size={12} />
+            QTY: <span className="text-primary group-hover/btn:text-white">{product.quantity}</span>
+            <ChevronDown size={14} className="group-hover/btn:rotate-180 transition-transform" />
           </button>
 
           <button
             onClick={removeCartProduct}
-            className="p-1.5 text-muted-foreground/50 hover:text-destructive hover:bg-destructive/10 rounded-lg transition-all"
+            className="p-2.5 text-slate-300 hover:text-white hover:bg-rose-500 rounded-xl transition-all shadow-sm hover:shadow-lg active:scale-90"
             aria-label="Remove item"
           >
-            <Trash2 size={16} />
+            <Trash2 size={18} />
           </button>
         </div>
       </div>
@@ -128,36 +135,48 @@ export default function ProductCard({ packageGroup }: { packageGroup: TGroupedPr
   if (items.length === 0) return null;
 
   return (
-    <div className="bg-card rounded-xl border border-border shadow-sm overflow-hidden">
-      {/* Package Header - Only show for bundles */}
-      {isBundle && (
-        <div className="flex items-center justify-between px-5 py-3 bg-primary/5 border-b border-border">
-          <div className="flex items-center gap-2">
-            <Package size={16} className="text-primary" />
-            <span className="text-sm font-semibold text-foreground">
-              Package Deal
-            </span>
-            <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">
-              {items.length} items
-            </span>
-          </div>
-          <span className="text-base font-bold text-foreground">
-            {formatPrice(totalPackagePrice)}
-          </span>
-        </div>
-      )}
+    <div className="group relative">
+      {/* Glow Effect */}
+      <div className="absolute -inset-1 bg-linear-to-r from-primary/20 via-slate-200/20 to-primary/20 rounded-[2.5rem] blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200" />
 
-      {/* Package Items */}
-      <div className="px-5">
-        {items.map(({ product, type }, index) => (
-          <ProductItem
-            key={product.id}
-            product={product}
-            type={type}
-            isPartOfPackage={isBundle}
-            isLast={index === items.length - 1}
-          />
-        ))}
+      <div className="relative bg-white/60 backdrop-blur-xl rounded-[2rem] border border-white/50 shadow-2xl overflow-hidden transition-all duration-500 hover:-translate-y-2">
+        {/* Package Header - Only show for bundles */}
+        {isBundle && (
+          <div className="flex items-center justify-between px-8 py-5 bg-slate-900/5 backdrop-blur-sm border-b border-white/20">
+            <div className="flex items-center gap-3">
+              <div className="bg-slate-900 text-white p-2 rounded-xl">
+                <Package size={20} />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xs font-black text-slate-400 uppercase tracking-widest">
+                  Premium Bundle
+                </span>
+                <span className="text-sm font-black text-slate-900 uppercase italic">
+                  {items.length} items included
+                </span>
+              </div>
+            </div>
+            <div className="flex flex-col items-end">
+              <span className="text-xs font-black text-slate-400 uppercase tracking-widest">Package Price</span>
+              <span className="text-xl font-black text-slate-900 tabular-nums">
+                {formatPrice(totalPackagePrice)}
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* Package Items */}
+        <div className="px-8 py-4">
+          {items.map(({ product, type }, index) => (
+            <ProductItem
+              key={product.id}
+              product={product}
+              type={type}
+              isPartOfPackage={isBundle}
+              isLast={index === items.length - 1}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

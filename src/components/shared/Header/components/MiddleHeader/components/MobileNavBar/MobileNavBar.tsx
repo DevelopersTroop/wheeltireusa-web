@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Menu, X, ChevronDown, ChevronUp, ChevronRight } from "lucide-react";
+import { X, ChevronDown, ChevronUp, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import navMenus, { NavMenu } from "./config";
+import { BiMenu } from 'react-icons/bi'
 // import SearchUnderMenu from "../../../SearchUnderMenu/SearchUnderMenu";
 
 
@@ -42,8 +43,8 @@ export default function MobileNavbar() {
                   level === 0
                     ? "px-4 font-semibold text-lg"
                     : level === 1
-                    ? "px-3 text-base font-medium"
-                    : "px-2 text-sm font-normal"
+                      ? "px-3 text-base font-medium"
+                      : "px-2 text-sm font-normal"
                 )}
               >
                 {/* Navigation Link */}
@@ -97,7 +98,7 @@ export default function MobileNavbar() {
         aria-label="Open menu"
         className="p-2 text-black block custom-lg:hidden"
       >
-        <Menu className="w-7 h-7" />
+        <BiMenu className="w-7 h-7" />
       </button>
 
       {/* Overlay */}

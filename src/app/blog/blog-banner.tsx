@@ -21,7 +21,7 @@ const BlogBanner = () => {
         <div className="flex flex-col gap-2 sm:gap-6 justify-center -top-[11px] items-start self-stretch relative h-[150px] sm:h-[280px]">
           <h5 className="text-xl text-white">
             <span className="text-white text-base sm:text-xl font-normal [text-shadow:2px_2px_4px_black]">
-              {"What's new at TireMatic"}
+              {"What's new at WheelTireUSA"}
             </span>
           </h5>
           {/* Main title: "In-Stock Steering Wheel" */}

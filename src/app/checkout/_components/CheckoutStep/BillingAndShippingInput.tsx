@@ -89,15 +89,13 @@ export const BillingAndShippingInput: React.FC<ICompProps> = ({
 
         const finalBilling = {
           ...billingData,
-          name: `${billingData.fname?.trim() || ''} ${
-            billingData.lname?.trim() || ''
-          }`.trim(),
+          name: `${billingData.fname?.trim() || ''} ${billingData.lname?.trim() || ''
+            }`.trim(),
         };
         const finalShipping = {
           ...shippingData,
-          name: `${shippingData.fname?.trim() || ''} ${
-            shippingData.lname?.trim() || ''
-          }`.trim(),
+          name: `${shippingData.fname?.trim() || ''} ${shippingData.lname?.trim() || ''
+            }`.trim(),
         };
 
         if (!isEqual(billingAddress, finalBilling)) {
@@ -208,13 +206,19 @@ export const BillingAndShippingInput: React.FC<ICompProps> = ({
   }, [zipCode]);
 
   return (
-    <div className="w-full">
+    <div className="w-full space-y-8">
       {/* ===== SHIPPING INFO ===== */}
       {selectedOptionTitle === 'Direct to Customer' && (
-        <div className="flex flex-col gap-y-2 pt-8">
-          <h2 className="text-xl font-bold">Shipping Info</h2>
-          <div className="space-y-8 max-w-xl w-full">
-            <div className="flex flex-col gap-y-8 w-full">
+        <div className="space-y-4">
+          <div className="space-y-1">
+            <h2 className="text-2xl font-black text-slate-900 tracking-tighter uppercase italic">
+              Shipping Destination
+            </h2>
+            <div className="h-1 w-12 bg-primary rounded-full" />
+          </div>
+
+          <div className="bg-white rounded-3xl border border-slate-100 shadow-xl p-6 space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="flex flex-col gap-y-6 w-full">
               {/* First & Last Name */}
               <div className="flex gap-4 w-full">
                 <Input
@@ -237,11 +241,11 @@ export const BillingAndShippingInput: React.FC<ICompProps> = ({
                 />
               </div>
 
-              <Input
+              {/* <Input
                 placeholder="Company/Care of"
                 label="Company/Care of"
                 {...shippingRegister('company')}
-              />
+              /> */}
 
               <div className="flex flex-col gap-3">
                 <GooglePlacesInput
@@ -366,26 +370,43 @@ export const BillingAndShippingInput: React.FC<ICompProps> = ({
       )}
 
       {/* ===== BILLING INFO ===== */}
-      <div className="flex flex-col gap-y-2 pt-8">
-        <h2 className="text-xl font-bold">Billing Info</h2>
-
-        {selectedOptionTitle === 'Direct to Customer' && (
-          <div
-            className="flex items-center gap-1 cursor-pointer py-2"
-            onClick={() => setBillingSameAsShipping((prev) => !prev)}
-          >
-            <Checkbox
-              checked={billingSameAsShipping}
-              className="data-[state=checked]:bg-black border-black w-5 h-5"
-            />
-            <span className="text-lg">Same as shipping address</span>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="space-y-1">
+            <h2 className="text-2xl font-black text-slate-900 tracking-tighter uppercase italic">
+              Billing Profile
+            </h2>
+            <div className="h-1 w-12 bg-primary rounded-full" />
           </div>
-        )}
 
-        {selectedOptionTitle === 'Direct to Customer' &&
-        billingSameAsShipping ? null : (
-          <div className="space-y-8 max-w-xl w-full">
-            <div className="flex flex-col gap-y-8 w-full">
+          {selectedOptionTitle === 'Direct to Customer' && (
+            <div
+              className="flex items-center gap-2 cursor-pointer py-3 px-5 bg-slate-50 rounded-xl border border-slate-100 transition-all hover:bg-slate-100 active:scale-95"
+              onClick={() => setBillingSameAsShipping((prev) => !prev)}
+            >
+              <Checkbox
+                checked={billingSameAsShipping}
+                className="data-[state=checked]:bg-slate-900 border-slate-300 w-5 h-5 rounded-md"
+              />
+              <span className="text-[10px] font-black uppercase tracking-widest text-slate-900 italic">Echo Dispatch Path</span>
+            </div>
+          )}
+        </div>
+
+        <div className="bg-white rounded-3xl border border-slate-100 shadow-xl p-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          {selectedOptionTitle === 'Direct to Customer' &&
+            billingSameAsShipping ? (
+            <div className="flex flex-col items-center justify-center py-6 text-center space-y-3">
+              <div className="bg-emerald-50 text-emerald-600 p-3 rounded-full">
+                <Checkbox checked className="border-none bg-transparent h-4 w-4" />
+              </div>
+              <div>
+                <p className="text-base font-black text-slate-900 uppercase tracking-tighter italic">Sync Protocol Active</p>
+                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Billing matches dispatch destination</p>
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-y-6 w-full">
               <div className="flex gap-4 w-full">
                 <Input
                   label="First Name"
@@ -407,11 +428,11 @@ export const BillingAndShippingInput: React.FC<ICompProps> = ({
                 />
               </div>
 
-              <Input
+              {/* <Input
                 placeholder="Company/Care of"
                 label="Company/Care of"
                 {...billingRegister('company')}
-              />
+              /> */}
 
               <div className="flex flex-col gap-3">
                 <GooglePlacesInput
@@ -532,8 +553,8 @@ export const BillingAndShippingInput: React.FC<ICompProps> = ({
                 })}
               />
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

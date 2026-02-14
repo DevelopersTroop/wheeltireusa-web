@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import useAuth from '@/hooks/useAuth';
 import { HeartIcon, Phone, ShoppingCart, User } from 'lucide-react';
+import { BiUserCircle, BiShoppingBag, BiHeart } from 'react-icons/bi'
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import MobileNavbar from './components/MobileNavBar/MobileNavBar';
@@ -69,9 +70,9 @@ export default function MiddleHeader() {
               </div>
               <Link
                 href={'/dashboard/save-product'}
-                className="hidden items-center gap-2 md:flex"
+                className="flex items-center gap-2"
               >
-                <HeartIcon className="h-6 w-6 text-gray-600" />
+                <BiHeart className="h-6 w-6 text-gray-600" />
               </Link>
 
               <div className="hidden items-center gap-8 md:flex">
@@ -79,7 +80,7 @@ export default function MiddleHeader() {
                   href={user?.email ? '/dashboard' : '/login'}
                   className="flex items-center gap-2"
                 >
-                  <User className="h-6 w-6 text-gray-600" />
+                  <BiUserCircle className="h-6 w-6 text-gray-600" />
                   <div>
                     <p className="text-sm font-medium">MY ACCOUNT</p>
                     <p className="text-xs text-gray-500">
@@ -94,7 +95,7 @@ export default function MiddleHeader() {
                   onClick={setOpen}
                 >
                   <div className="relative">
-                    <ShoppingCart className="h-6 w-6 text-gray-600" />
+                    <BiShoppingBag className="h-6 w-6 text-gray-600" />
                     <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-xs text-white">
                       {cartQuantity}
                     </span>
@@ -108,10 +109,10 @@ export default function MiddleHeader() {
 
               <div className="flex items-center gap-2 md:hidden">
                 <Link href={user?.email ? '/dashboard' : '/login'}>
-                  <User className="h-6 w-6 text-gray-600" />
+                  <BiUserCircle className="h-6 w-6 text-gray-600" />
                 </Link>
                 <div onClick={setOpen} className="relative">
-                  <ShoppingCart className="h-5 w-5 text-gray-600" />
+                  <BiShoppingBag className="h-5 w-5 text-gray-600" />
                   <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-xs text-white">
                     {cartQuantity}
                   </span>

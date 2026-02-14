@@ -3,7 +3,8 @@
 import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, X } from "lucide-react";
+import { X } from "lucide-react";
+import { BiSearch } from "react-icons/bi";
 import { Controller, useForm } from "react-hook-form";
 import { trackEvent } from "@/lib/tracker";
 
@@ -115,7 +116,7 @@ const HeaderSearchButton: React.FC<HeaderSearchButtonProps> = ({
                   aria-label="Submit search"
                   className="p-2"
                 >
-                  <Search className="h-6 w-6 text-black" />
+                  <BiSearch className="h-6 w-6 text-black" />
                 </Button>
               </div>
             </form>
@@ -160,7 +161,7 @@ const HeaderSearchButton: React.FC<HeaderSearchButtonProps> = ({
                 variant="ghost"
                 aria-label="Submit desktop search"
               >
-                <Search className="h-6 w-6" />
+                <BiSearch className="h-6 w-6" />
               </Button>
             </div>
           </div>
@@ -174,7 +175,7 @@ const HeaderSearchButton: React.FC<HeaderSearchButtonProps> = ({
             }}
             aria-label={ariaLabel || "Open mobile search"}
           >
-            <Search className="w-5 h-5" />
+            <BiSearch className="w-6 h-6" />
           </div>
         </form>
       </div>

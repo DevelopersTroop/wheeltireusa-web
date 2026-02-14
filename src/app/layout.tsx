@@ -6,22 +6,18 @@ import { CheckoutProvider } from '@/context/checkoutContext';
 import ReduxWrapper from '@/redux/ReduxWrapper';
 import '@/styles/globals.css';
 import { metaDataHelper } from '@/utils/metadata';
-import { DM_Sans, Geist, Geist_Mono } from 'next/font/google';
+import { DM_Sans, Geist, Geist_Mono, Roboto_Flex } from 'next/font/google';
 import { Toaster } from 'sonner';
 import CartSystem from './cart/v2/page';
 import { Metadata } from 'next';
 import Script from 'next/script';
 import Newsletter from '@/components/shared/Newsletter/Newsletter';
 import ComparisonWidget from '@/components/shared/ComparisonWidget/ComparisonWidget';
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const robotoFlex = Roboto_Flex({
+  variable: '--font-roboto-flex',
   subsets: ['latin'],
 });
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
 
 export const metadata: Metadata = {
   title: 'Wheel Tire USA',
@@ -30,6 +26,9 @@ export const metadata: Metadata = {
   openGraph: {
     images: ['/images/logo.png'],
   },
+  verification: {
+    google: 'ecWMQ03YUP8UgAPRE7TzPxcUN8x9sOWfTYE7U5JgNgw'
+  }
 };
 
 export default function RootLayout({
@@ -44,7 +43,7 @@ export default function RootLayout({
         <link rel="icon" href="/images/fav.ico" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen flex-col justify-between antialiased`}
+        className={`${robotoFlex.variable} flex min-h-screen flex-col justify-between antialiased`}
       >
         <Script
           id="gtm-script"
@@ -88,7 +87,7 @@ export default function RootLayout({
             </CheckoutProvider>
             <Newsletter />
             <CartSystem />
-            <ComparisonWidget />
+            {/* <ComparisonWidget /> */}
           </ReduxWrapper>
         </GoogleMapScriptLoader>
       </body>

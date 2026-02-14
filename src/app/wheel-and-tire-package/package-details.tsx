@@ -37,9 +37,9 @@ const PackageDetails = ({
   const deliveryDates = useMemo(() => {
     const today = new Date();
     const start = new Date(today);
-    start.setDate(today.getDate() + 3);
+    start.setDate(today.getDate() + 1);
     const end = new Date(today);
-    end.setDate(today.getDate() + 7);
+    end.setDate(today.getDate() + 5);
 
     const format = (date: Date) =>
       date.toLocaleString("en-US", {
@@ -142,7 +142,7 @@ const PackageDetails = ({
           </p>
         </PerkRow>
 
-        <div className="border-t border-border/50 pt-3.5">
+        {/* <div className="border-t border-border/50 pt-3.5">
           <PerkRow
             icon={<CreditCard size={16} />}
             iconBg="bg-amber-50 text-amber-600"
@@ -163,7 +163,7 @@ const PackageDetails = ({
           </PerkRow>
         </div>
 
-        <div className="border-t border-border/50 pt-3.5">
+         <div className="border-t border-border/50 pt-3.5">
           <PerkRow
             icon={<CreditCard size={16} />}
             iconBg="bg-blue-50 text-blue-600"
@@ -186,7 +186,7 @@ const PackageDetails = ({
               </p>
             </div>
           </PerkRow>
-        </div>
+        </div> */}
 
         {/* Phone Support */}
         <div className="border-t border-border/50 pt-3.5">

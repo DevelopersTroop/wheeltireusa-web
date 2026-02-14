@@ -16,7 +16,7 @@ export const metadata = metaDataHelper({
       'Stay ahead in wheel customization with the Tirematic. Learn premium wheel trends, build inspiration, expert tips, and real-world performance stories.',
   },
   alternates: {
-    canonical: 'https://tirematic.com/blog',
+    canonical: 'https://wheeltireusa.com/blog',
   },
 });
 

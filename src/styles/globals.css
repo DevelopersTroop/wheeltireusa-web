@@ -29,6 +29,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+* {
+  font-family: var(--font-roboto-flex);
+}
+
 .icon-bolt-pattern:before {
   content: "\e900";
 }
@@ -69,50 +73,49 @@
   --spacing-xs: 0.75rem;
   --spacing-smx: 1.25rem;
   --breakpoint-custom-lg: 1160px;
-  
+
   /* Fonts */
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-roboto-flex);
 
   /* Colors */
   --color-black: var(--black);
   --color-btext: var(--black);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  
+
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
-  
+
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
-  
+
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary-hover: var(--primary-hover);
   --color-primary-hover-foreground: var(--primary-hover-foreground);
-  
+
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
-  
+
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
-  
+
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
-  
+
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
-  
+
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  
+
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  
+
   /* Sidebar Colors (Preserved) */
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
@@ -124,7 +127,8 @@
   --color-sidebar-ring: var(--sidebar-ring);
 
   /* Radius */
-  --radius-xs: 0.5rem; /* User's radius is 0.5rem */
+  --radius-xs: 0.5rem;
+  /* User's radius is 0.5rem */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -198,7 +202,7 @@
   --chart-5: hsl(27 87% 67%);
 
   --radius: 0.5rem;
-  
+
   /* Sidebar Colors (Preserved - using compatible defaults or existing) */
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
@@ -208,7 +212,7 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-  
+
   --black: oklch(0.25 0.0095 276.71);
 }
 
@@ -252,6 +256,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -260,9 +265,11 @@
 .box-button {
   @apply py-2 border border-primary px-8 bg-primary rounded-none text-white font-semibold transition duration-300 ease-in-out;
 }
+
 .box-button-lg {
   @apply py-3.5 border border-primary px-8 bg-primary rounded text-white font-semibold transition duration-300 ease-in-out;
 }
+
 .box-button-dark-lg {
   @apply py-3.5 border border-btext px-8 bg-btext rounded-none text-white font-semibold transition duration-300 ease-in-out;
 }
@@ -346,7 +353,8 @@
 }
 
 .thumbs-swiper .swiper-slide-thumb-active {
-  border: 2px solid #2563eb; /* Tailwind blue-600 */
+  border: 2px solid #2563eb;
+  /* Tailwind blue-600 */
 }
 
 .custom-gallery .image-gallery-image {

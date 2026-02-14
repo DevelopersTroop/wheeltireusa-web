@@ -1,5 +1,5 @@
 import { FinalStep } from './CheckoutStep/FinalStep';
-import { StepTwo } from './CheckoutStep/StepTwo';
+import { StepOne } from './CheckoutStep/StepOne';
 
 interface RendererProps {
   step: number;
@@ -23,7 +23,7 @@ export const Renderer: React.FC<RendererProps> = ({ step, setStep }) => {
   };
   switch (step) {
     case 1:
-      return <StepTwo />;
+      return <StepOne />;
     case 2:
       return <FinalStep />;
     default:

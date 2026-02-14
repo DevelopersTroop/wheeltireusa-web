@@ -7,6 +7,7 @@ import {
   Truck,
   Warehouse,
   ChevronRight,
+  MapPin,
 } from 'lucide-react';
 import { useZipCodePopup } from '@/hooks/useZipcodePopup';
 import useAddZipCode from '@/components/shared-old/MainFilterModal/components/AddZipCode/useAddZipCode';
@@ -30,84 +31,103 @@ const ZipCodeModal = () => {
   ];
 
   return (
-    <div className="fixed inset-0 bg-white z-100 flex flex-col font-sans animate-in slide-in-from-right duration-300">
-      <div className="p-6 flex justify-end">
+    <div className="fixed inset-0 bg-white/95 backdrop-blur-3xl z-100 flex flex-col font-sans animate-in slide-in-from-right duration-500 ease-out">
+      <div className="p-10 flex justify-end">
         <button
           onClick={setOpen}
-          className="p-2 hover:bg-gray-100 rounded-full"
+          className="p-4 hover:bg-slate-100 rounded-[2.5rem] transition-all hover:rotate-90 group"
         >
-          <X size={28} className="text-gray-400" />
+          <X size={32} className="text-slate-400 group-hover:text-slate-900" />
         </button>
       </div>
 
-      <div className="px-10 max-w-2xl mx-auto w-full">
+      <div className="px-10 max-w-4xl mx-auto w-full">
         {/* Input Header */}
+        <div className="space-y-2 mb-12">
+          <h2 className="text-4xl font-black text-slate-900 tracking-tighter uppercase italic">
+            Locate Partners
+          </h2>
+          <div className="h-1 w-12 bg-primary rounded-full" />
+        </div>
+
         <div
-          className={`relative mb-2 border-b-2 transition-colors ${zipCode.length > 0 ? 'border-black' : 'border-gray-200'}`}
+          className={`relative mb-8 border-b-4 transition-all duration-500 ${zipCode.length > 0 ? 'border-primary shadow-[0_4px_0_-2px_rgba(var(--primary),0.1)]' : 'border-slate-100'}`}
         >
           <input
             type="text"
-            placeholder="Enter your zip code"
+            placeholder="Enter Zip Code"
             value={zipCode}
             onChange={(e) => updateZipInput(e.target.value, true)}
-            className="w-full text-[40px] font-bold py-4 focus:outline-none placeholder:text-gray-300 tracking-tight"
+            className="w-full text-[64px] font-black py-6 focus:outline-none placeholder:text-slate-100 tracking-tighter uppercase italic transition-all"
           />
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-4">
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-6">
             {zipCode.length > 0 && (
               <button
                 onClick={() => updateZipInput('', true)}
-                className="text-sm font-bold text-gray-400 hover:text-black"
+                className="text-sm font-black text-slate-400 hover:text-rose-500 uppercase tracking-widest transition-colors"
               >
-                Clear
+                Reset
               </button>
             )}
-            <Search className="text-black" size={28} strokeWidth={3} />
+            <div className="p-4 bg-slate-900 text-white rounded-3xl shadow-2xl">
+              <Search size={32} strokeWidth={3} />
+            </div>
           </div>
         </div>
 
         {/* STATE 1: Empty / Initial */}
         {zipCode.length === 0 ? (
-          <div className="mt-4 space-y-12">
-            <p className="text-gray-500 font-medium">
-              Current location:{' '}
-              <span className="text-gray-900 font-bold">Ashburn, VA 20149</span>
-            </p>
+          <div className="mt-8 space-y-16 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <div className="flex items-center gap-4 bg-slate-50 p-6 rounded-[2rem] w-fit">
+              <MapPin size={24} className="text-primary" />
+              <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">
+                Current Location:{' '}
+                <span className="text-slate-900">Ashburn, VA 20149</span>
+              </p>
+            </div>
 
             <button
               onClick={handleDetectZipCode}
-              className="flex items-center gap-4 group"
+              className="group relative flex items-center gap-6"
             >
-              <span className="text-3xl font-black text-gray-900 tracking-tight">
-                Use current location
+              <span className="text-5xl font-black text-slate-900 tracking-tighter uppercase italic group-hover:text-primary transition-colors">
+                Auto-Detect Path
               </span>
-              <Navigation
-                size={28}
-                className="text-black transform rotate-45"
-                fill="black"
-              />
+              <div className="bg-slate-900 text-white p-4 rounded-full group-hover:rotate-360 transition-transform duration-700 shadow-2xl">
+                <Navigation
+                  size={32}
+                  className="transform rotate-45"
+                  fill="currentColor"
+                />
+              </div>
             </button>
 
-            <div className="pt-8">
-              <h3 className="text-[11px] font-black text-indigo-600 uppercase tracking-[0.15em] mb-6">
-                Why share your location?
-              </h3>
-              <div className="grid grid-cols-3 gap-4">
+            <div className="pt-10">
+              <div className="flex items-center gap-4 mb-8">
+                <h3 className="text-xs font-black text-primary uppercase tracking-[0.4em]">
+                  The Advantage
+                </h3>
+                <div className="h-px flex-1 bg-slate-100" />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {benefits.map((b, i) => (
                   <div
                     key={i}
-                    className="bg-gradient-to-br from-indigo-50/50 to-violet-50/50 p-5 rounded-2xl flex flex-col justify-between aspect-square border border-indigo-100/50 hover:border-indigo-200 hover:shadow-md cursor-pointer group transition-all"
+                    className="group relative"
                   >
-                    <div className="bg-white w-12 h-12 rounded-xl flex items-center justify-center shadow-sm text-indigo-600 group-hover:text-violet-600 transition-colors">
-                      {b.icon}
-                    </div>
-                    <div className="flex justify-between items-end">
-                      <p className="text-xs font-black text-slate-800 leading-tight w-2/3">
-                        {b.label}
-                      </p>
-                      <ChevronRight
-                        size={16}
-                        className="text-indigo-300 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition-all"
-                      />
+                    <div className="absolute -inset-1 bg-primary/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity rounded-[2.5rem]" />
+                    <div className="relative bg-white border border-slate-100 p-8 rounded-[2.5rem] flex flex-col gap-8 aspect-square shadow-sm transition-all group-hover:-translate-y-2 group-hover:shadow-2xl">
+                      <div className="bg-slate-900 text-white w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg transition-transform group-hover:scale-110">
+                        {b.icon}
+                      </div>
+                      <div className="space-y-2">
+                        <p className="text-xl font-black text-slate-900 uppercase tracking-tighter italic leading-tight">
+                          {b.label}
+                        </p>
+                        <div className="flex items-center gap-2 text-primary font-black uppercase text-[10px] tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                          Learn More <ChevronRight size={12} />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -116,36 +136,47 @@ const ZipCodeModal = () => {
           </div>
         ) : (
           /* STATE 2: Active Search / Loading */
-          <div className="mt-8 animate-in fade-in duration-200">
+          <div className="mt-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {loading ? (
               /* LOADING SKELETON */
-              <div className="flex items-center justify-between py-6 border-b border-gray-50 animate-pulse">
-                <div className="flex items-baseline gap-3 w-2/3">
-                  <div className="h-10 w-24 bg-gray-100 rounded-md" />
-                  <div className="h-6 w-48 bg-gray-50 rounded-md" />
-                </div>
-                <div className="h-12 w-32 bg-gray-100 rounded-full" />
+              <div className="space-y-8">
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} className="flex items-center justify-between p-10 bg-slate-50 rounded-[2.5rem] animate-pulse">
+                    <div className="flex items-baseline gap-6 w-2/3">
+                      <div className="h-12 w-32 bg-slate-200 rounded-xl" />
+                      <div className="h-6 w-48 bg-slate-100 rounded-lg" />
+                    </div>
+                    <div className="h-16 w-40 bg-slate-200 rounded-2xl" />
+                  </div>
+                ))}
               </div>
             ) : (
               /* RESULTS LIST */
-              addresses.map((c) => (
-                <div
-                  key={c.locationName}
-                  className="flex items-center justify-between py-6 group cursor-pointer border-b border-gray-50"
-                >
-                  <div className="flex items-baseline gap-3">
-                    <span className="text-3xl font-black text-gray-900">
-                      {c.zipCode}
-                    </span>
-                    <span className="text-lg font-medium text-gray-400">
-                      {c.locationName}
-                    </span>
+              <div className="space-y-6">
+                {addresses.map((c) => (
+                  <div
+                    key={c.locationName}
+                    className="group relative"
+                  >
+                    <div className="absolute -inset-1 bg-primary/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity rounded-[3rem]" />
+                    <div
+                      className="relative flex items-center justify-between p-10 bg-white border border-slate-100 rounded-[3rem] shadow-sm transition-all group-hover:-translate-y-1 group-hover:shadow-2xl cursor-pointer"
+                    >
+                      <div className="flex items-baseline gap-6 font-black uppercase italic tracking-tighter">
+                        <span className="text-5xl text-slate-900 group-hover:text-primary transition-colors">
+                          {c.zipCode}
+                        </span>
+                        <span className="text-xl text-slate-400">
+                          {c.locationName}
+                        </span>
+                      </div>
+                      <button className="bg-slate-900 hover:bg-primary text-white rounded-2xl px-12 py-5 text-sm font-black uppercase tracking-[0.2em] shadow-2xl transition-all active:scale-95">
+                        Activate
+                      </button>
+                    </div>
                   </div>
-                  <button className="bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 rounded-xl px-10 py-3 text-base font-bold text-white shadow-md hover:shadow-lg transition-all active:scale-95">
-                    Select
-                  </button>
-                </div>
-              ))
+                ))}
+              </div>
             )}
           </div>
         )}

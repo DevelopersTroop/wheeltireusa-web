@@ -48,6 +48,8 @@ export function PaymentFormWrapper({
         layout: {
           type: 'accordion',
           spacedAccordionItems: true,
+          radios: true,
+          defaultCollapsed: false
         },
       }}
       onChange={onPaymentElementChange}

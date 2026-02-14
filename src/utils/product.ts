@@ -23,9 +23,13 @@ export const isWishListData = (
   return 'imageUrl' in product;
 };
 
-export const getProductThumbnail = (product: { itemImage?: string | null }) => {
-  if (!product || (product && !product?.itemImage)) {
+export const getProductThumbnail = (product: TInventoryItem) => {
+  if (!product) {
     return '/images/not-available.webp';
+  } else if (product && product.category?.slug === 'tire') {
+    return '/tire-not-available.png';
+  } else if (product && product.category?.slug === 'wheels') {
+    return '/wheel-not-available.png';
   }
   if (
     product.itemImage?.startsWith('https') ||

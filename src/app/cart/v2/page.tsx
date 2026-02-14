@@ -9,7 +9,7 @@ import { useMemo } from 'react';
 import ProductCard from '../_components/v2/ProductCard';
 import { ProductQuantity } from '../_components/v2/ProductQuantity';
 import ZipCodeEntryModal from '../_components/v2/ZipCode';
-import { initiateCheckout } from '@/redux/features/checkoutSlice';
+import { initiateCheckout, setSelectedOptionTitle } from '@/redux/features/checkoutSlice';
 import InstallationSection from '../_components/v2/InstallationPartner';
 import { TCartProduct } from '@/redux/features/cartSlice';
 
@@ -55,46 +55,51 @@ const CartSystem = () => {
 
       {/* MAIN CART DRAWER */}
       <div
-        className={`fixed inset-y-0 right-0 w-full max-w-4xl bg-white z-50 transform transition-transform duration-300 shadow-2xl ${open ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`fixed inset-y-0 right-0 w-full max-w-4xl bg-white/90 backdrop-blur-2xl z-50 transform transition-all duration-500 ease-in-out shadow-[0_0_50px_rgba(0,0,0,0.1)] border-l border-white/20 ${open ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}
       >
         {!groupedProducts.length ? (
           <div className="flex flex-col h-full bg-white">
             {/* Header */}
-            <div className="p-8 flex justify-between items-center bg-white border-b border-gray-50">
-              <h2 className="text-3xl font-extrabold text-slate-800 tracking-tight">
-                Cart summary
-              </h2>
+            <div className="p-10 flex justify-between items-center">
+              <div className="space-y-1">
+                <h2 className="text-4xl font-black text-slate-900 tracking-tighter uppercase italic">
+                  Cart summary
+                </h2>
+                <div className="h-1.5 w-12 bg-primary rounded-full" />
+              </div>
               <button
                 onClick={setOpen}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                className="p-3 hover:bg-gray-100 rounded-2xl transition-all hover:rotate-90"
               >
-                <X size={24} className="text-gray-400" />
+                <X size={28} className="text-slate-400" />
               </button>
             </div>
 
             {/* Empty State Content */}
-            <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
-              <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mb-6">
-                <ShoppingBag size={40} className="text-gray-300" />
+            <div className="flex-1 flex flex-col items-center justify-center p-12 text-center">
+              <div className="relative mb-10">
+                <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full" />
+                <div className="relative w-32 h-32 bg-white rounded-3xl shadow-2xl flex items-center justify-center border border-gray-100 animate-bounce-subtle">
+                  <ShoppingBag size={56} className="text-primary" strokeWidth={1.5} />
+                </div>
               </div>
 
-              <h3 className="text-2xl font-bold text-slate-800 mb-2">
-                Your cart is empty
+              <h3 className="text-3xl font-black text-slate-900 mb-4 tracking-tight">
+                Your cart is feeling light
               </h3>
-              <p className="text-gray-500 max-w-xl mb-8">
-                Looks like you haven't added any items yet. Start browsing to
-                find the perfect tires.
+              <p className="text-slate-500 max-w-2xl mb-10 text-lg leading-relaxed">
+                Unlock the full potential of your vehicle with our premium selection of wheels and tires.
               </p>
 
               <Link
                 href={'/collections/product-category/tires'}
                 onClick={setOpen}
-                className="group flex items-center gap-2 bg-primary text-primary-foreground px-8 py-3 rounded-lg font-semibold hover:bg-primary-hover transition-all"
+                className="group relative flex items-center gap-3 bg-slate-900 text-white px-10 py-5 rounded-2xl font-bold hover:bg-primary transition-all shadow-xl hover:-translate-y-1 active:translate-y-0"
               >
-                Start Shopping
+                Start Exploring
                 <ArrowRight
-                  size={18}
-                  className="group-hover:translate-x-1 transition-transform"
+                  size={20}
+                  className="group-hover:translate-x-2 transition-transform"
                 />
               </Link>
             </div>
@@ -106,87 +111,103 @@ const CartSystem = () => {
             </div>
 
             {/* Header */}
-            <div className="px-6 py-5 flex justify-between items-center bg-card border-b border-border">
+            <div className="px-10 py-8 flex justify-between items-center">
               <div>
-                <h2 className="text-2xl font-bold text-foreground">
+                <h2 className="text-4xl font-black text-slate-900 tracking-tighter uppercase italic">
                   Your Cart
                 </h2>
-                <p className="text-sm text-muted-foreground mt-0.5">
-                  {cart.products.length} item{cart.products.length !== 1 ? 's' : ''} in your cart
-                </p>
+                <div className="flex items-center gap-2 mt-2">
+                  <div className="h-1 w-8 bg-primary rounded-full" />
+                  <p className="text-sm font-bold text-slate-500 uppercase tracking-widest">
+                    {cart.products.length} item{cart.products.length !== 1 ? 's' : ''} total
+                  </p>
+                </div>
               </div>
               <button
                 onClick={setOpen}
-                className="p-2 hover:bg-secondary rounded-lg transition-colors"
+                className="p-3 hover:bg-slate-100 rounded-2xl transition-all hover:rotate-90 group"
               >
-                <X size={24} className="text-muted-foreground" />
+                <X size={28} className="text-slate-400 group-hover:text-slate-900" />
               </button>
             </div>
 
             {/* Scrollable Content */}
-            <div className="overflow-y-auto h-[calc(100vh-180px)] px-6 py-6 pb-48 space-y-6 bg-secondary/30">
+            <div className="overflow-y-auto h-[calc(100vh-180px)] px-10 py-6 pb-64 space-y-10 custom-scrollbar">
               {/* Products Section */}
-              <div className="space-y-3">
+              <div className="space-y-6">
                 {groupedProducts.map((group, id) => {
                   return <ProductCard key={id} packageGroup={group} />;
                 })}
               </div>
 
               {/* Order Summary */}
-              <div className="bg-card rounded-xl border border-border p-5 space-y-4">
-                <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide">
-                  Order Summary
-                </h3>
+              <div className="relative group">
+                <div className="absolute inset-0 bg-primary/5 blur-2xl rounded-[2rem] -z-10 transition-all group-hover:bg-primary/10" />
+                <div className="bg-white/40 backdrop-blur-md rounded-[2.5rem] border border-white/50 p-10 space-y-8 shadow-sm">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-black text-slate-900 uppercase tracking-tighter italic">
+                      Order Summary
+                    </h3>
+                    <div className="h-px flex-1 bg-slate-200 ml-6" />
+                  </div>
 
-                <div className="space-y-3">
-                  {quantity.map((p, idx) => (
-                    <div key={idx} className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">
-                        {p.title} × {p.quantity}
+                  <div className="space-y-4">
+                    {quantity.map((p, idx) => (
+                      <div key={idx} className="flex justify-between items-center group/item">
+                        <span className="text-slate-500 font-bold text-sm uppercase tracking-wide group-hover/item:text-slate-900 transition-colors">
+                          {p.title} <span className="text-primary ml-1">×{p.quantity}</span>
+                        </span>
+                        <span className="text-slate-900 font-black tabular-nums">
+                          ${p.price.toFixed(2)}
+                        </span>
+                      </div>
+                    ))}
+
+                    <div className="flex justify-between items-center pt-4 border-t border-slate-100">
+                      <span className="text-slate-500 font-bold text-sm uppercase tracking-wide flex items-center gap-2">
+                        Shipping & handling
+                        <Info size={14} className="text-primary animate-pulse" />
                       </span>
-                      <span className="text-foreground font-medium">
-                        ${p.price.toFixed(2)}
+                      <span className="text-primary font-black text-sm uppercase tracking-widest bg-primary/10 px-3 py-1 rounded-full">
+                        FREE
                       </span>
                     </div>
-                  ))}
-
-                  <div className="flex justify-between text-sm pt-3 border-t border-border">
-                    <span className="text-muted-foreground flex items-center gap-1">
-                      Shipping & handling
-                      <Info size={14} className="text-muted-foreground/50" />
-                    </span>
-                    <span className="text-primary font-semibold">
-                      FREE
-                    </span>
                   </div>
-                </div>
 
-                <div className="flex justify-between pt-3 border-t border-border">
-                  <span className="text-foreground font-semibold">Subtotal</span>
-                  <span className="text-foreground text-lg font-bold">
-                    ${subTotalCost}
-                  </span>
+                  <div className="flex justify-between items-end pt-2">
+                    <div className="flex flex-col">
+                      <span className="text-slate-400 font-black text-xs uppercase tracking-[0.2em]">Estimated Total</span>
+                      <span className="text-slate-900 text-5xl font-black tracking-tighter">
+                        ${subTotalCost}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* STICKY FOOTER */}
-            <div className="absolute bottom-0 inset-x-0 bg-card border-t border-border p-5 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
-              <Link
-                href={'/checkout'}
-                onClick={() => {
-                  dispatch(initiateCheckout());
-                  setOpen();
-                }}
-                className="w-full bg-primary hover:bg-primary-hover text-primary-foreground font-semibold text-base rounded-lg h-12 flex items-center justify-center gap-2 transition-colors"
-              >
-                <Lock size={16} />
-                Proceed to Checkout
-              </Link>
-              <p className="text-[10px] text-muted-foreground text-center mt-3 leading-relaxed">
+            <div className="absolute bottom-10 inset-x-10">
+              <div className="group relative">
+                <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-3xl transition-all group-hover:bg-primary/30" />
+                <Link
+                  href={'/checkout'}
+                  onClick={() => {
+                    dispatch(initiateCheckout());
+                    dispatch(setSelectedOptionTitle('Direct to Customer'));
+                    setOpen();
+                  }}
+                  className="relative w-full bg-slate-900 text-white font-black text-xl uppercase tracking-widest rounded-3xl h-20 flex items-center justify-center gap-4 transition-all hover:bg-primary hover:-translate-y-1 shadow-2xl active:translate-y-0"
+                >
+                  <Lock size={20} />
+                  Secure Checkout
+                  <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
+                </Link>
+              </div>
+              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest text-center mt-6 leading-relaxed">
                 By placing an order, you agree to our{' '}
-                <span className="underline cursor-pointer hover:text-primary transition-colors">
-                  terms of sale
+                <span className="text-slate-900 underline cursor-pointer hover:text-primary transition-colors">
+                  Terms of Service
                 </span>
               </p>
             </div>

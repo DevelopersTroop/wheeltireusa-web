@@ -69,7 +69,7 @@ const initialState: TCheckoutState = {
   productsInfo: [],
   selectedOption: 1,
   shippingMethod: undefined,
-  selectedOptionTitle: undefined,
+  selectedOptionTitle: 'Direct to Customer',
   requestedDealer: undefined,
   selectedDealerInfo: undefined,
   cartType: '',

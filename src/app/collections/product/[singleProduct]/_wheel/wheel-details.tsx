@@ -79,11 +79,11 @@ const WheelDetails = ({ product }: { product: TWheelProduct }) => {
                 </div>
                 <p className="text-base uppercase text-gray-600">
                     Questions or Help Needed? Call our experts at{" "}
-                    <span className="text-primary"> +1 (303) 695-6305 </span>
+                    <span className="text-primary"> +1 (813) 812-5257 </span>
                 </p>
             </div>
 
-            <div className=" flex items-center gap-2">
+            {/* <div className=" flex items-center gap-2">
                 <div className={"rounded-full p-1 inline-block bg-primary"}>
                     <PiHandCoinsDuotone className={"text-white"} />
                 </div>
@@ -103,7 +103,7 @@ const WheelDetails = ({ product }: { product: TWheelProduct }) => {
                         </p>
                     </Link>
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 };
