@@ -34,7 +34,7 @@ const ImageGallery = ({ product, fallbackImage }: ImageGalleryProps) => {
       const urls = new Set<string>();
 
       // Prioritize main thumbnail and image fields
-      const mainImage = getProductThumbnail(product);
+      const mainImage = getProductThumbnail(product as any);
       if (mainImage) urls.add(mainImage);
 
       // Add gallery images if array
@@ -63,7 +63,7 @@ const ImageGallery = ({ product, fallbackImage }: ImageGalleryProps) => {
     loadImages();
     // Only rerun when these change
   }, [
-    getProductThumbnail(product),
+    getProductThumbnail(product as any),
     // product.galleryImages,
     fallbackImage,
   ]);
