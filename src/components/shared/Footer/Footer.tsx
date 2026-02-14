@@ -1,7 +1,7 @@
 "use client";
 import { openNewsletterModal } from "@/redux/features/newsletterModalSlice";
 import { Button } from "@/components/ui/button";
-import { Facebook, Instagram, MailCheck, Twitter, Youtube } from "lucide-react";
+import { Facebook, Linkedin, MailCheck } from "lucide-react";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
 
@@ -172,19 +172,17 @@ export default function Footer() {
               </h3>
               <div className="flex gap-4 mb-8">
                 <Link
-                  href="https://www.facebook.com/ktcaudiocustomwheelsandtires"
+                  href="https://www.facebook.com/profile.php?id=61584811679009"
                   target="_blank"
                 >
                   <Facebook className="w-6 h-6 text-white hover:text-primary cursor-pointer" />
                 </Link>
                 <Link
-                  href="https://www.youtube.com/@ktcaudio313"
+                  href="https://www.linkedin.com/company/wheel-tire-usa/"
                   target="_blank"
                 >
-                  <Youtube className="w-6 h-6 text-white hover:text-primary cursor-pointer" />
+                  <Linkedin className="w-6 h-6 text-white hover:text-primary cursor-pointer" />
                 </Link>
-                <Instagram className="w-6 h-6 text-white hover:text-primary cursor-pointer" />
-                <Twitter className="w-6 h-6 text-white hover:text-primary cursor-pointer" />
               </div>
               <Button
                 onClick={() => {
