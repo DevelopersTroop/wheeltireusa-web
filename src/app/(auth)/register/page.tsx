@@ -1,20 +1,25 @@
-import { metaDataHelper } from '@/utils/metadata';
-import ClientComponent from './ClientComponent';
+import { metaDataHelper } from "@/utils/metadata";
+import Page from "./client";
 
-// Metadata for the page
-export const metadata = metaDataHelper({
-  title: 'Register - Tirematic',
-  keywords: '',
-  description: '',
-  openGraph: {
-    title: '',
-    description: '',
-  },
-  alternates: {
-    canonical: 'https://tirematic.com/register',
-  },
-});
+export async function generateMetadata() {
+  try {
+    return {
+      ...metaDataHelper({
+        title: `Register - Wheel Tire USA`,
+        description: "",
+      }),
+      alternates: {
+        canonical: `https://wheeltireusa.com/register`,
+      },
+    };
+  } catch (error) {
+    // Return default metadata in case of error
+    return {
+      title: "Error",
+    };
+  }
+}
 
-export default function Page() {
-  return <ClientComponent />;
+export default function Register() {
+  return <Page />;
 }

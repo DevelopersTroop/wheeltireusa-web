@@ -13,6 +13,7 @@ import { Metadata } from 'next';
 import Script from 'next/script';
 import Newsletter from '@/components/shared/Newsletter/Newsletter';
 import ComparisonWidget from '@/components/shared/ComparisonWidget/ComparisonWidget';
+import StickyVehicleSelector from '@/components/shared/header-ymm';
 const robotoFlex = Roboto_Flex({
   variable: '--font-roboto-flex',
   subsets: ['latin'],
@@ -80,6 +81,7 @@ export default function RootLayout({
           <ReduxWrapper>
             <CheckoutProvider>
               <Header />
+              <StickyVehicleSelector />
               <DynamicAnalytics />
               <main>{children}</main>
               <Footer />

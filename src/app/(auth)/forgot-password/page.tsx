@@ -1,23 +1,25 @@
-// Import the ClientComponent, which handles the forgot password functionality
+import { metaDataHelper } from "@/utils/metadata";
+import Page from "./client";
 
-import { metaDataHelper } from '@/utils/metadata';
-import ClientComponent from './ClientComponent';
+export async function generateMetadata() {
+  try {
+    return {
+      ...metaDataHelper({
+        title: `Forgot password - Wheel Tire USA`,
+        description: "",
+      }),
+      alternates: {
+        canonical: `https://wheeltireusa.com/forgot-password`,
+      },
+    };
+  } catch (error) {
+    // Return default metadata in case of error
+    return {
+      title: "Error",
+    };
+  }
+}
 
-// Metadata for the page
-export const metadata = metaDataHelper({
-  title: 'Forgot Password - Tirematic',
-  keywords: '',
-  description: '',
-  openGraph: {
-    title: '',
-    description: '',
-  },
-  alternates: {
-    canonical: 'https://tirematic.com/forgot-password',
-  },
-});
-
-// Page Component
-export default function Page() {
-  return <ClientComponent />;
+export default function Register() {
+  return <Page />;
 }

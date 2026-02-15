@@ -168,14 +168,14 @@ const HeaderSearchButton: React.FC<HeaderSearchButtonProps> = ({
 
           {/* MOBILE SEARCH ICON */}
           <div
-            className="lg:hidden"
+            className="lg:hidden cursor-pointer"
             onClick={(e) => {
               e.preventDefault();
               setOpen(true);
             }}
             aria-label={ariaLabel || "Open mobile search"}
           >
-            <BiSearch className="w-6 h-6" />
+            <BiSearch size={32} className="text-gray-600" />
           </div>
         </form>
       </div>

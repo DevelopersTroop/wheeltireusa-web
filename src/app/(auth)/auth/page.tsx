@@ -1,8 +1,8 @@
-import { redirect } from 'next/navigation'; // Import the redirect function from Next.js for server-side navigation
+import { redirect } from 'next/navigation';
+import React from 'react';
 
-// Page Component
 const page = () => {
-  redirect('/');
+    redirect("/")
 };
 
 export default page;

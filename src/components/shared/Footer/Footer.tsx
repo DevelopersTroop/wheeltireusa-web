@@ -170,7 +170,7 @@ export default function Footer() {
               <h3 className="text-white text-2xl font-semibold mb-4">
                 Stay Connected
               </h3>
-              <div className="flex gap-4 mb-8">
+              {/* <div className="flex gap-4 mb-8">
                 <Link
                   href="https://www.facebook.com/profile.php?id=61584811679009"
                   target="_blank"
@@ -183,7 +183,7 @@ export default function Footer() {
                 >
                   <Linkedin className="w-6 h-6 text-white hover:text-primary cursor-pointer" />
                 </Link>
-              </div>
+              </div> */}
               <Button
                 onClick={() => {
                   dispatch(openNewsletterModal());

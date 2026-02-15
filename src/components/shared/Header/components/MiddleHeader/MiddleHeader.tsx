@@ -2,14 +2,13 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import useAuth from '@/hooks/useAuth';
-import { HeartIcon, Phone, ShoppingCart, User } from 'lucide-react';
-import { BiUserCircle, BiShoppingBag, BiHeart } from 'react-icons/bi'
-import Link from 'next/link';
-import { useMemo, useState } from 'react';
-import MobileNavbar from './components/MobileNavBar/MobileNavBar';
-import HeaderSearchButton from './components/HeaderSearchButton/HeaderSearchButton';
 import { useCartHook } from '@/hooks/useCartHook';
 import { useTypedSelector } from '@/redux/store';
+import Link from 'next/link';
+import { useMemo, useState } from 'react';
+import { BiShoppingBag, BiUserCircle } from 'react-icons/bi';
+import HeaderSearchButton from './components/HeaderSearchButton/HeaderSearchButton';
+import MobileNavbar from './components/MobileNavBar/MobileNavBar';
 
 export default function MiddleHeader() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -68,19 +67,13 @@ export default function MiddleHeader() {
                   isHomepage={false}
                 />
               </div>
-              <Link
-                href={'/dashboard/save-product'}
-                className="flex items-center gap-2"
-              >
-                <BiHeart className="h-6 w-6 text-gray-600" />
-              </Link>
 
               <div className="hidden items-center gap-8 md:flex">
                 <Link
                   href={user?.email ? '/dashboard' : '/login'}
                   className="flex items-center gap-2"
                 >
-                  <BiUserCircle className="h-6 w-6 text-gray-600" />
+                  <BiUserCircle size={32} className="text-gray-600" />
                   <div>
                     <p className="text-sm font-medium">MY ACCOUNT</p>
                     <p className="text-xs text-gray-500">
@@ -89,13 +82,12 @@ export default function MiddleHeader() {
                   </div>
                 </Link>
 
-                <Button
+                <div
                   className="relative flex items-center gap-2 cursor-pointer"
-                  variant={'ghost'}
                   onClick={setOpen}
                 >
                   <div className="relative">
-                    <BiShoppingBag className="h-6 w-6 text-gray-600" />
+                    <BiShoppingBag size={26} className="text-gray-600" />
                     <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-xs text-white">
                       {cartQuantity}
                     </span>
@@ -104,15 +96,15 @@ export default function MiddleHeader() {
                     <p className="text-sm font-medium">MY CART</p>
                     {/* <p className="text-xs text-gray-500">$0.00</p> */}
                   </div>
-                </Button>
+                </div>
               </div>
 
               <div className="flex items-center gap-2 md:hidden">
                 <Link href={user?.email ? '/dashboard' : '/login'}>
-                  <BiUserCircle className="h-6 w-6 text-gray-600" />
+                  <BiUserCircle size={32} className="text-gray-600" />
                 </Link>
-                <div onClick={setOpen} className="relative">
-                  <BiShoppingBag className="h-5 w-5 text-gray-600" />
+                <div onClick={setOpen} className="relative cursor-pointer">
+                  <BiShoppingBag size={32} className="text-gray-600" />
                   <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-xs text-white">
                     {cartQuantity}
                   </span>

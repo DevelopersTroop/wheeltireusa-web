@@ -22,6 +22,7 @@ import { TypedUseSelectorHook, useSelector, useDispatch } from 'react-redux';
 import { checkoutListenerMiddleware } from './middleware/checkoutMiddleware';
 import { cartListenerMiddleware } from './middleware/cartListener';
 import comparisonReducer from './features/comparisonSlice';
+import wheelReducer from './features/wheel';
 
 const rootPersistConfig = {
   key: 'tirematic-store',
@@ -46,6 +47,7 @@ const rootReducer = combineReducers({
   mainFilter: mailFilterReducer,
   yearMakeModel: yearMakeModelReducer,
   [baseApi.reducerPath]: baseApi.reducer,
+  wheel: wheelReducer,
 });
 
 const store = configureStore({

@@ -206,5 +206,5 @@ export const baseApi = createApi({
   baseQuery: baseQuery({ baseURL: process.env.NEXT_PUBLIC_API_URL }),
   endpoints: () => ({}),
   refetchOnReconnect: true,
-  tagTypes: ['Wishlist'],
+  tagTypes: ['Wishlist', 'Gallery', 'File'],
 });
