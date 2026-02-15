@@ -200,6 +200,11 @@ const mobileNavMenus: NavMenu[] = [
   },
   {
     meagMenu: false,
+    label: 'Gallery',
+    href: '/gallery',
+  },
+  {
+    meagMenu: false,
     label: 'Interior',
     href: '#',
     children: [
