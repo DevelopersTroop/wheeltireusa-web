@@ -6,8 +6,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Form } from "@/components/ui/form";
-import { TextInput } from "@/components/ui/textinput";
+import { Form, FormField } from "@/components/ui/form";
+import { Input } from "./Input";
 import { setRequestedDealer } from "@/redux/features/checkoutSlice";
 import { apiBaseUrl } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -130,31 +130,49 @@ export const DealerRequest: React.FC<{
             </DialogHeader>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(submit)} className="space-y-4">
-                <TextInput
-                  placeholder="John Doe"
+                <FormField
                   control={form.control}
                   name="name"
-                  label="Dealer's First and Last Name"
-                  required
+                  render={({ field, fieldState }: { field: any; fieldState: any }) => (
+                    <Input
+                      {...field}
+                      label="Dealer's First and Last Name"
+                      placeholder="John Doe"
+                      required
+                      error={fieldState.error?.message}
+                    />
+                  )}
                 />
-                <TextInput
+                <FormField
                   control={form.control}
                   name="website"
-                  label="Website"
-                  required
+                  render={({ field, fieldState }: { field: any; fieldState: any }) => (
+                    <Input
+                      {...field}
+                      label="Website"
+                      required
+                      error={fieldState.error?.message}
+                    />
+                  )}
                 />
-                <TextInput
-                  type="tel"
+                <FormField
                   control={form.control}
                   name="phone"
-                  label="Phone number"
-                  required
+                  render={({ field, fieldState }: { field: any; fieldState: any }) => (
+                    <Input
+                      {...field}
+                      type="tel"
+                      label="Phone number"
+                      required
+                      error={fieldState.error?.message}
+                    />
+                  )}
                 />
                 <div className="px-[5rem]">
                   <Button
                     type="submit"
                     className="h-14 w-full font-bold"
-                    // disabled={isLoading}
+                  // disabled={isLoading}
                   >
                     {false ? "Submitting..." : "Submit Request"}
                   </Button>

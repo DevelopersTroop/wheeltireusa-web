@@ -111,7 +111,7 @@ const CartSystem = () => {
             </div>
 
             {/* Header */}
-            <div className="px-10 py-8 flex justify-between items-center">
+            <div className="px-4 md:px-10 py-8 flex justify-between items-center">
               <div>
                 <h2 className="text-4xl font-black text-slate-900 tracking-tighter uppercase italic">
                   Your Cart
@@ -132,7 +132,7 @@ const CartSystem = () => {
             </div>
 
             {/* Scrollable Content */}
-            <div className="overflow-y-auto h-[calc(100vh-180px)] px-10 py-6 pb-64 space-y-10 custom-scrollbar">
+            <div className="overflow-y-auto h-[calc(100vh-180px)] px-4 md:px-10 py-6 pb-64 space-y-10 custom-scrollbar">
               {/* Products Section */}
               <div className="space-y-6">
                 {groupedProducts.map((group, id) => {
@@ -187,7 +187,7 @@ const CartSystem = () => {
             </div>
 
             {/* STICKY FOOTER */}
-            <div className="absolute bottom-10 inset-x-10">
+            <div className="absolute bottom-0 inset-x-4 md:inset-x-10">
               <div className="group relative">
                 <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-3xl transition-all group-hover:bg-primary/30" />
                 <Link
