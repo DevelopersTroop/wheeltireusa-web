@@ -38,22 +38,37 @@ function ProductItem({ product, type, isPartOfPackage, isLast }: ProductItemProp
   };
 
   return (
-    <div className={`flex gap-6 py-6 ${!isLast && isPartOfPackage ? 'border-b border-dashed border-slate-200' : ''} group/item transition-all hover:bg-slate-50/50 rounded-2xl px-4 -mx-4`}>
-      {/* Product Image */}
-      <div className="relative w-28 h-28 shrink-0">
-        <div className="absolute inset-0 bg-primary/5 blur-xl rounded-full scale-0 group-hover/item:scale-100 transition-transform duration-500" />
-        <div className="relative w-full h-full bg-white rounded-2xl flex items-center justify-center overflow-hidden border border-slate-100 shadow-sm transition-all group-hover/item:shadow-md group-hover/item:-translate-y-1">
-          <img
-            src={getProductThumbnail(product)}
-            alt={product.title ?? ''}
-            className="w-full h-full object-contain p-2"
-          />
-        </div>
-        {isPartOfPackage && (
-          <div className="absolute -bottom-2 -right-2 bg-slate-900 text-white text-[8px] font-black uppercase tracking-tighter px-2 py-1 rounded-md shadow-lg border border-white/20">
-            P-ITEM
+    <div className={`flex flex-col sm:flex-row gap-4 sm:gap-6 py-6 ${!isLast && isPartOfPackage ? 'border-b border-dashed border-slate-200' : ''} group/item transition-all hover:bg-slate-50/50 rounded-2xl px-4 -mx-4`}>
+      {/* Product Image & Pricing Mobile Header */}
+      <div className="flex sm:block gap-4 items-center">
+        {/* Product Image */}
+        <div className="relative w-24 h-24 sm:w-28 sm:h-28 shrink-0">
+          <div className="absolute inset-0 bg-primary/5 blur-xl rounded-full scale-0 group-hover/item:scale-100 transition-transform duration-500" />
+          <div className="relative w-full h-full bg-white rounded-2xl flex items-center justify-center overflow-hidden border border-slate-100 shadow-sm transition-all group-hover/item:shadow-md group-hover/item:-translate-y-1">
+            <img
+              src={getProductThumbnail(product)}
+              alt={product.title ?? ''}
+              className="w-full h-full object-contain p-2"
+            />
           </div>
-        )}
+          {isPartOfPackage && (
+            <div className="absolute -bottom-2 -right-2 bg-slate-900 text-white text-[8px] font-black uppercase tracking-tighter px-2 py-1 rounded-md shadow-lg border border-white/20">
+              P-ITEM
+            </div>
+          )}
+        </div>
+
+        {/* Pricing Mobile (Visible only on mobile) */}
+        <div className="sm:hidden flex-1 text-right">
+          {msrpPrice > totalPrice && (
+            <p className="text-[10px] text-slate-400 line-through font-bold">
+              {formatPrice(msrpPrice)}
+            </p>
+          )}
+          <p className="text-xl font-black text-slate-900 tracking-tighter tabular-nums">
+            {formatPrice(totalPrice)}
+          </p>
+        </div>
       </div>
 
       <div className="flex-1 min-w-0 py-1">
@@ -68,16 +83,16 @@ function ProductItem({ product, type, isPartOfPackage, isLast }: ProductItemProp
             </div>
 
             {/* Brand & Model */}
-            <h4 className="font-black text-xl text-slate-900 truncate leading-tight tracking-tight uppercase italic">
+            <h4 className="font-black text-lg sm:text-xl text-slate-900 leading-tight tracking-tight uppercase italic break-words">
               {product.brand || 'Brand'}
             </h4>
-            <p className="text-slate-500 text-sm truncate font-medium mt-0.5">
+            <p className="text-slate-500 text-sm font-medium mt-0.5 break-words">
               {product.model || product.title || 'Product'}
             </p>
           </div>
 
-          {/* Pricing */}
-          <div className="text-right shrink-0">
+          {/* Pricing Desktop (Hidden on mobile) */}
+          <div className="hidden sm:block text-right shrink-0">
             {msrpPrice > totalPrice && (
               <p className="text-xs text-slate-400 line-through font-bold">
                 {formatPrice(msrpPrice)}
@@ -90,7 +105,7 @@ function ProductItem({ product, type, isPartOfPackage, isLast }: ProductItemProp
         </div>
 
         {/* Actions Row */}
-        <div className="flex items-center gap-4 mt-4">
+        <div className="flex items-center justify-between sm:justify-start gap-4 mt-4">
           <button
             onClick={() => {
               setOpen(true, product)
@@ -142,23 +157,23 @@ export default function ProductCard({ packageGroup }: { packageGroup: TGroupedPr
       <div className="relative bg-white/60 backdrop-blur-xl rounded-[2rem] border border-white/50 shadow-2xl overflow-hidden transition-all duration-500 hover:-translate-y-2">
         {/* Package Header - Only show for bundles */}
         {isBundle && (
-          <div className="flex items-center justify-between px-8 py-5 bg-slate-900/5 backdrop-blur-sm border-b border-white/20">
-            <div className="flex items-center gap-3">
-              <div className="bg-slate-900 text-white p-2 rounded-xl">
-                <Package size={20} />
+          <div className="flex items-center justify-between px-4 sm:px-8 py-4 sm:py-5 bg-slate-900/5 backdrop-blur-sm border-b border-white/20">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="bg-slate-900 text-white p-1.5 sm:p-2 rounded-xl">
+                <Package size={18} className="sm:w-5 sm:h-5" />
               </div>
               <div className="flex flex-col">
-                <span className="text-xs font-black text-slate-400 uppercase tracking-widest">
+                <span className="text-[10px] sm:text-xs font-black text-slate-400 uppercase tracking-widest leading-none">
                   Premium Bundle
                 </span>
-                <span className="text-sm font-black text-slate-900 uppercase italic">
-                  {items.length} items included
+                <span className="text-xs sm:text-sm font-black text-slate-900 uppercase italic">
+                  {items.length} items
                 </span>
               </div>
             </div>
             <div className="flex flex-col items-end">
-              <span className="text-xs font-black text-slate-400 uppercase tracking-widest">Package Price</span>
-              <span className="text-xl font-black text-slate-900 tabular-nums">
+              <span className="text-[10px] sm:text-xs font-black text-slate-400 uppercase tracking-widest leading-none">Package</span>
+              <span className="text-base sm:text-xl font-black text-slate-900 tabular-nums">
                 {formatPrice(totalPackagePrice)}
               </span>
             </div>
@@ -166,7 +181,7 @@ export default function ProductCard({ packageGroup }: { packageGroup: TGroupedPr
         )}
 
         {/* Package Items */}
-        <div className="px-8 py-4">
+        <div className="px-4 sm:px-8 py-2 sm:py-4">
           {items.map(({ product, type }, index) => (
             <ProductItem
               key={product.id}

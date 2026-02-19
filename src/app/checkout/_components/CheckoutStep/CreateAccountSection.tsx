@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Input } from "./Input";
 import { Label } from "@/components/ui/label";
 import { Lock, User, Loader2 } from "lucide-react";
 import { useState } from "react";
@@ -46,19 +46,13 @@ export const CreateAccountSection: React.FC<CreateAccountSectionProps> = ({
       </div>
 
       <div className="flex justify-between items-end">
-        <div className="grid gap-y-3 error-wrapper w-full">
-          <Label className="font-medium">Create password</Label>
-          <div className="relative h-14">
-            <Input
-              onChange={(e) => onPasswordChange(e.target.value)}
-              className="rounded-[10px] h-14 bg-white"
-              type="password"
-              disabled={isLoading}
-            />
-            <div className="absolute top-1/2 -translate-y-1/2 right-3">
-              <Lock className="h-5 w-5 text-[#504949]" />
-            </div>
-          </div>
+        <div className="w-full">
+          <Input
+            label="Create password"
+            onChange={(e) => onPasswordChange(e.target.value)}
+            type="password"
+            disabled={isLoading}
+          />
         </div>
       </div>
 

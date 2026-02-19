@@ -81,7 +81,6 @@ export default function RootLayout({
           <ReduxWrapper>
             <CheckoutProvider>
               <Header />
-              <StickyVehicleSelector />
               <DynamicAnalytics />
               <main>{children}</main>
               <Footer />

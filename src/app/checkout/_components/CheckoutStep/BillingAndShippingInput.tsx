@@ -1,15 +1,12 @@
 'use client';
+import { GooglePlacesInput } from '@/components/shared-old/googlePlaceInput';
 import { Checkbox } from '@/components/ui/checkbox';
-import { FormField, FormItem } from '@/components/ui/form';
-import { Label } from '@/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { useCheckout } from '@/context/checkoutContext';
+import {
+  setBillingAddress,
+  setShippingAddress,
+} from '@/redux/features/checkoutSlice';
+import { useAppDispatch, useTypedSelector } from '@/redux/store';
 import { US_STATES } from '@/states';
 import { TBillingAddress } from '@/types/order';
 import debounce from 'lodash.debounce';
@@ -18,12 +15,7 @@ import React, { useEffect, useMemo, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { Input } from './Input';
 import { PhoneInput } from './PhoneInput';
-import { useAppDispatch, useTypedSelector } from '@/redux/store';
-import {
-  setBillingAddress,
-  setShippingAddress,
-} from '@/redux/features/checkoutSlice';
-import { GooglePlacesInput } from '@/components/shared-old/googlePlaceInput';
+import { ModernSelect } from './Select';
 
 interface ICompProps {
   setBillingSameAsShipping: React.Dispatch<React.SetStateAction<boolean>>;
@@ -306,43 +298,13 @@ export const BillingAndShippingInput: React.FC<ICompProps> = ({
                 {...shippingRegister('city', { required: 'City is required' })}
               />
 
-              <FormField
-                render={({ field, fieldState }) => {
-                  return (
-                    <FormItem>
-                      <Label className="block text-lg mb-1 font-medium leading-[24px]">
-                        State <span className="text-red-600">*</span>
-                      </Label>
-                      <Select
-                        value={field.value}
-                        onValueChange={field.onChange}
-                      >
-                        <SelectTrigger className="h-14">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {US_STATES.map((s) => {
-                            return (
-                              <SelectItem
-                                key={s.abbreviation}
-                                value={s.abbreviation}
-                              >
-                                {s.name}
-                              </SelectItem>
-                            );
-                          })}
-                        </SelectContent>
-                      </Select>
-                      {fieldState.error?.message && (
-                        <p className="text-red-600">
-                          {fieldState.error?.message}
-                        </p>
-                      )}
-                    </FormItem>
-                  );
-                }}
-                control={shippingControl}
-                name="cityState"
+              <ModernSelect
+                label="State"
+                required
+                value={shippingWatch('cityState')}
+                onValueChange={(val) => shippingSetValue('cityState', val, { shouldValidate: true })}
+                options={US_STATES}
+                error={shippingErrors.cityState?.message}
               />
 
               <PhoneInput
@@ -491,46 +453,13 @@ export const BillingAndShippingInput: React.FC<ICompProps> = ({
                 {...billingRegister('city', { required: 'City is required' })}
               />
 
-              <FormField
-                render={({ field, fieldState }) => {
-                  return (
-                    <FormItem>
-                      <Label className="block text-lg mb-1 font-medium leading-[24px]">
-                        State <span className="text-red-600">*</span>
-                      </Label>
-                      <Select
-                        value={field.value}
-                        onValueChange={field.onChange}
-                      >
-                        <SelectTrigger className="h-14">
-                          <SelectValue
-                            placeholder="Select state"
-                            className="text-[24px]"
-                          />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {US_STATES.map((s) => {
-                            return (
-                              <SelectItem
-                                key={s.abbreviation}
-                                value={s.abbreviation}
-                              >
-                                {s.name}
-                              </SelectItem>
-                            );
-                          })}
-                        </SelectContent>
-                      </Select>
-                      {fieldState.error?.message && (
-                        <p className="text-red-600">
-                          {fieldState.error?.message}
-                        </p>
-                      )}
-                    </FormItem>
-                  );
-                }}
-                control={billingControl}
-                name="cityState"
+              <ModernSelect
+                label="State"
+                required
+                value={billingWatch('cityState')}
+                onValueChange={(val) => billingSetValue('cityState', val, { shouldValidate: true })}
+                options={US_STATES}
+                error={billingErrors.cityState?.message}
               />
 
               <PhoneInput

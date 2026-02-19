@@ -44,12 +44,12 @@ export default function MiddleHeader() {
           <div className="flex items-center justify-between gap-4">
             <MobileNavbar />
 
-            <div className="flex items-center">
-              <Link href="/" className="shrink-0">
+            <div className="flex items-center overflow-hidden shrink-0">
+              <Link href="/">
                 <img
                   src="/images/logo.png"
                   alt="Custom Offsets"
-                  className="h-6 min-[390px]:h-7 md:h-12"
+                  className="h-6 min-[390px]:h-7 lg:h-8 xl:h-12"
                 />
               </Link>
             </div>
