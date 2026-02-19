@@ -73,6 +73,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'images.wheelpros.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'images.carid.com',
+      },
     ],
   },
   rewrites: async () => {

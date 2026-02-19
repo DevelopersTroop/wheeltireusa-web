@@ -10,6 +10,7 @@ import WheelsSection from './_components/WheelsSection/WheelsSection';
 import ViewGallery from './_components/ViewGallery/ViewGallery';
 import SuspensionBrands from './_components/SuspensionBrands/SuspensionBrands';
 import SuspensionSection from './_components/SuspensionSection/SuspensionSection';
+import BannerGrid from './_components/BannerGrid/BannerGrid';
 
 // Metadata for the page
 export const metadata = metaDataHelper({
@@ -33,6 +34,7 @@ export default function Homepage() {
       <WheelCategories />
       <WheelsGallery />
       <TodaysDeals/>
+      <BannerGrid />
       <HomeBlogList/>
       <BannerAndPoster/>
       <WheelsSection/>
