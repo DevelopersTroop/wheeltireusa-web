@@ -1,6 +1,4 @@
-// const username = "Tire_Wheel_Experts";
-// const securityToken = "0b035d5ccecc43f2a9adce9849c7024e";
-const apiBaseUrl = 'https://api.wheeltireusa.com/api/v1';
+import { apiBaseUrl } from '@/utils/api';
 
 /**
  * Get Regions
