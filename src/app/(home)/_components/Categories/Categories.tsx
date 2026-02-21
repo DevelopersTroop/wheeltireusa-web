@@ -27,7 +27,7 @@ export const Categories = () => {
             className="group hover:scale-110 transition-all duration-300 text-center flex flex-col items-center bg-white shadow-md py-2 px-2"
           >
             <img
-              src={`/images/categories/${index + 1}.webp`}
+              src={`/images/categories/${index + 1}.png`}
               alt={item.title}
               className="object-contain lg:w-[217px] lg:h-[145px]"
             />
