@@ -36,7 +36,7 @@ export default function Homepage() {
       <TodaysDeals/>
       <BannerGrid />
       <HomeBlogList/>
-      <BannerAndPoster/>
+      {/* <BannerAndPoster/> */}
       <WheelsSection/>
       <ViewGallery/>
       <SuspensionBrands/>
