@@ -13,7 +13,7 @@ export default function TopBar() {
   const [currency, setCurrency] = useState("USD");
   return (
     <div className="border-b bg-white text-gray-500 hidden lg:block">
-      <div className="container px-4 py-1 flex justify-between items-center">
+      <div className="container mx-auto px-4 py-1 flex justify-between items-center">
         <div className="flex items-center gap-3">
           <Link href={"/about"}>About us</Link>
           <Link href={"/track-order"}>Track order</Link>
