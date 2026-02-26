@@ -1,16 +1,17 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/zoom";
-import { Autoplay, Navigation, Zoom } from "swiper/modules"; // Correct ES modules import
-import { Swiper, SwiperSlide } from "swiper/react";
-import SkeletonCard from "./components/SkeletonCard/SkeletonCard";
-import { useFilterSync } from "@/hooks/useFilterSync";
-import { useGetProductsQuery } from "@/redux/apis/product";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { getProductThumbnail } from "@/utils/product";
+import Link from 'next/link';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/zoom';
+import { Autoplay, Navigation, Zoom } from 'swiper/modules'; // Correct ES modules import
+import { Swiper, SwiperSlide } from 'swiper/react';
+import SkeletonCard from './components/SkeletonCard/SkeletonCard';
+import { useFilterSync } from '@/hooks/useFilterSync';
+import { useGetProductsQuery } from '@/redux/apis/product';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { getProductThumbnail } from '@/utils/product';
+import React from 'react';
 
 // const galleryData = [
 //   {
@@ -25,10 +26,15 @@ import { getProductThumbnail } from "@/utils/product";
 //   },
 // ];
 
-const WheelsGallery = () => {
+const ProductGallery: React.FC<{
+  category: string;
+  title: string;
+}> = ({ category, title }) => {
   const { filters } = useFilterSync();
-  const { data, isLoading } = useGetProductsQuery({});
-  console.log("TCL: WheelsGallery -> data", data);
+  const { data, isLoading } = useGetProductsQuery({
+    category,
+  });
+  console.log('TCL: WheelsGallery -> data', data);
 
   return (
     <div>
@@ -37,9 +43,7 @@ const WheelsGallery = () => {
         {/* Section Title */}
         <div className="py-4 lg:py-8">
           <hr className="border-primary border-[1.5px] w-[100px]" />
-          <h3 className="text-3xl lg:text-5xl font-bold uppercase">
-            Popular Wheels Available & in-stock
-          </h3>
+          <h3 className="text-3xl lg:text-5xl font-bold uppercase">{title}</h3>
         </div>
 
         {/* Swiper Gallery */}
@@ -70,35 +74,37 @@ const WheelsGallery = () => {
           </button>
           {isLoading
             ? Array.from({ length: 8 }).map((_, i) => {
-              return (
-                <SwiperSlide key={i}>
-                  <SkeletonCard />
-                </SwiperSlide>
-              );
-            })
+                return (
+                  <SwiperSlide key={i}>
+                    <SkeletonCard />
+                  </SwiperSlide>
+                );
+              })
             : data?.products.slice(0, 8).map((products, index) => {
-              const product = products[0];
-              return <>
-                <SwiperSlide key={index}>
-                  <Link href={`/collections/product/${product.slug}`}>
-                    <div className="p-4">
-                      <img
-                        src={getProductThumbnail(product)}
-                        alt={product?.title || ""}
-                        className="w-full p-4 h-auto object-cover"
-                      />
+                const product = products[0];
+                return (
+                  <>
+                    <SwiperSlide key={index}>
+                      <Link href={`/collections/product/${product.slug}`}>
+                        <div className="p-4">
+                          <img
+                            src={getProductThumbnail(product)}
+                            alt={product?.title || ''}
+                            className="w-full p-4 h-auto object-cover"
+                          />
 
-                      <h4 className="text-lg font-semibold mt-2 text-center">
-                        {product?.title}
-                      </h4>
-                      <h4 className="text-lg font-semibold mt-2 text-center">
-                        {product?.partNumber}
-                      </h4>
-                    </div>
-                  </Link>
-                </SwiperSlide>
-              </>
-            })}
+                          <h4 className="text-lg font-semibold mt-2 text-center">
+                            {product?.title}
+                          </h4>
+                          <h4 className="text-lg font-semibold mt-2 text-center">
+                            {product?.partNumber}
+                          </h4>
+                        </div>
+                      </Link>
+                    </SwiperSlide>
+                  </>
+                );
+              })}
 
           <button
             className={`swiper-button-prev-123 w-fit text-black rounded-md absolute right-0 top-1/2 flex items-center cursor-pointer z-30`}
@@ -120,4 +126,4 @@ const WheelsGallery = () => {
   );
 };
 
-export default WheelsGallery;
+export default ProductGallery;
