@@ -21,7 +21,6 @@ export const BlogList = () => {
     sort: [{ whom: 'updatedAt', order: 'desc' }],
   });
 
-  console.log('blog data ================= ', data);
   if (isLoading) {
     return (
       <div className="container my-12 grid gap-12">

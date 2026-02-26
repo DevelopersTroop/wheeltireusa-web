@@ -20,8 +20,8 @@ const reviews = baseApi.injectEndpoints({
         try {
           await queryFulfilled;
           toast.success('Your review is submitted');
-        } catch {
-          console.log('Review error');
+        } catch (e) {
+          console.error('Review error', e);
         }
       },
     }),

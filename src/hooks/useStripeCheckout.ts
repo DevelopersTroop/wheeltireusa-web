@@ -42,7 +42,7 @@ export const useStripeCheckout = () => {
     stripe: Stripe | null,
     paymentElement: StripeElements | null
   ) => {
-    console.log('TCL: initiateCheckout -> paymentElement', paymentElement);
+ 
     try {
       if (!stripe || !paymentElement) return;
       const orderData = {

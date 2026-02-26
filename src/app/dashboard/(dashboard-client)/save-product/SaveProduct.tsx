@@ -14,7 +14,6 @@ const SaveProduct = () => {
 
   // Function to handle wishlist item deletion
   const [removeWishlist] = useRemoveWishlistMutation();
-  console.log('Wishlist', data);
 
   if (loading) return <LoadingSpinner />; // Show loading spinner while fetching data
 

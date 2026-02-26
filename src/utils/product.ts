@@ -26,9 +26,9 @@ export const isWishListData = (
 export const getProductThumbnail = (product: TInventoryItem) => {
   if (!product) {
     return '/images/not-available.webp';
-  } else if (product && product.category?.slug === 'tire') {
+  } else if (product && !product.itemImage && product.category?.slug === 'tire') {
     return '/tire-not-available.png';
-  } else if (product && product.category?.slug === 'wheels') {
+  } else if (product && !product.itemImage && product.category?.slug === 'wheels') {
     return '/wheel-not-available.png';
   }
   if (
@@ -150,10 +150,10 @@ export function isTireAfterMarketTireSizePossible(
 ): boolean {
   const parsedFactoryTireSpec = parseTireSpec(factoryTireSize);
   const parsedTireSpec = parseTireSpec(tireSize);
-  console.log('--------------------------------');
-  console.log('parsedFactoryTireSpec', factoryTireSize, parsedFactoryTireSpec);
-  console.log('parsedTireSpec', tireSize, parsedTireSpec);
-  console.log('--------------------------------');
+  // console.log('--------------------------------');
+  // console.log('parsedFactoryTireSpec', factoryTireSize, parsedFactoryTireSpec);
+  // console.log('parsedTireSpec', tireSize, parsedTireSpec);
+  // console.log('--------------------------------');
   return Boolean(
     parsedFactoryTireSpec.afterMarketTireDiameterRange.plusTireDiameterInch &&
     parsedFactoryTireSpec.afterMarketTireDiameterRange.minusTireDiameterInch &&

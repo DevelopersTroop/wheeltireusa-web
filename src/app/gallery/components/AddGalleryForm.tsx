@@ -187,7 +187,6 @@ export default function MultiStepBuildForm() {
     installedProducts: [],
   });
 
-  console.log("TCL: MultiStepBuildForm -> formData", formData);
   const steps = [
     { num: 1, label: "VEHICLE" },
     { num: 2, label: "SET-UP" },

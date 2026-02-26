@@ -12,7 +12,6 @@ export const getLatestOrderId = async () => {
       order: TOrder;
     };
   }>('/orders/last-order');
-  console.log('TCL: getLatestOrderId -> response', response);
 
   return response.data?.order?.orderId;
 };

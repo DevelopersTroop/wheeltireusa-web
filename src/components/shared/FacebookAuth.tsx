@@ -26,7 +26,6 @@ export default function FacebookAuth() {
     if (accessToken && refreshToken && userDetails) {
       setLoading(true);
       const parsedUser = JSON.parse(decodeURIComponent(userDetails));
-      console.log(parsedUser);
       dispatch(setAccessToken({ accessToken }));
       dispatch(setRefreshToken({ refreshToken }));
       dispatch(setUserDetails({ userDetails: parsedUser }));

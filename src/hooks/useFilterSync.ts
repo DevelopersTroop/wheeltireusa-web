@@ -11,7 +11,6 @@ export const useFilterSync = () => {
   const pathname = usePathname();
 
   const [localFilters, setLocalFilters] = useState<Filters>({});
-  console.log("TCL: useFilterSync -> localFilters", localFilters);
 
   // Use ref to track if we're syncing from URL to avoid circular updates
   const isSyncingFromURL = useRef(false);

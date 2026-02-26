@@ -29,7 +29,6 @@ export const SingleImageUploader = <T extends Record<string, any>>({
   handleUpdate,
   payload,
 }: SingleImageUploaderProps<T>) => {
-  console.log("TCL: values", values);
   const [fileUploading, setFileUploading] = useState(false);
   const [fileRemoving, setFileRemoving] = useState(false);
   const fileRef = useRef<HTMLInputElement | null>(null);
@@ -60,7 +59,6 @@ export const SingleImageUploader = <T extends Record<string, any>>({
     setFileUploading(true);
     try {
       const res = await uploadFile(formData).unwrap();
-      console.log("TCL: handleFileChange -> res", res);
       const item_image = res?.files?.[0]?.path;
 
       if (handleUpdate) {
@@ -201,7 +199,6 @@ export const MultipleImageUploader = <T extends Record<string, any>>({
     try {
       const res = await uploadFile(formData).unwrap();
       const newImages = res?.files?.map((f: any) => f.path) || [];
-      console.log("TCL: newImages", newImages);
 
       setFieldValue((prev) => {
         const currentImages = (prev[field] as string[]) || [];

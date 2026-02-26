@@ -19,7 +19,6 @@ export async function generateMetadata({
 
     const result = await response.json(); // Parse response.
 
-    console.log(result.data.product);
 
     const product = result.data?.product as TInventoryItem; // Extract product data.
 
@@ -64,7 +63,8 @@ export default async function Page({
 
   const result = await response.json();
 
-  console.log(result)
 
-  return <SingleProductClient product={result.data.product} />;
+  return   <div className="max-w-[1350px] p-4 mx-auto py-10">
+    <SingleProductClient product={result.data.product} />
+  </div> ;
 }

@@ -27,7 +27,6 @@ const WheelCategory: React.FC<{
     ...filters,
     category: 'wheels',
   });
-  console.log('TCL: data', data);
   return (
     <>
       {topDescription && (

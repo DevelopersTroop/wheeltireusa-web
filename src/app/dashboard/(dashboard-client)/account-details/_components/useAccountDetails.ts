@@ -41,7 +41,6 @@ export const useAccountDetails = () => {
 
       const data = await response.json();
 
-      console.log('set user ===========================  ', data?.data?.user);
 
       if (data.statusCode === 200) {
         dispatch(setUserDetails({ userDetails: data?.data?.user?.data }));

@@ -128,7 +128,6 @@ export const StepOne = ({ }) => {
 
   // ✅ Define handlers (stable, no re-creation)
   const onClickHandler = (data: any, actions: any) => {
-    console.log('TCL: onClickHandler -> data', data);
     // Trigger Snap app logic here (apply for credit, etc.)
   };
 
@@ -143,9 +142,9 @@ export const StepOne = ({ }) => {
     console.error('Error occurred: And I can see', error);
   };
 
-  const onInitHandler = (d: string) => {
-    console.log('Init data:', d);
-  };
+  // const onInitHandler = (d: string) => {
+  //   console.log('Init data:', d);
+  // };
 
   // ✅ Input config
   const inputCheckout: TSnapInputCheckout = {
@@ -154,7 +153,6 @@ export const StepOne = ({ }) => {
     onApproved: onApprovedHandler,
     onError: onErrorHandler,
     onInit(data, actions) {
-      console.log('TCL: onInit -> data', data);
     },
   };
 
@@ -171,7 +169,7 @@ export const StepOne = ({ }) => {
 
         // ✅ Create Snap instance
         const instance = window.snap.checkoutButton(inputCheckout);
-        console.log('TCL: initSnap -> instance', instance);
+        'TCL: initSnap -> instance', instance);
         snapInstanceRef.current = instance;
       } catch (error) {
         console.error('Snap Finance init failed:', error);
@@ -195,7 +193,7 @@ export const StepOne = ({ }) => {
         snapInstanceRef.current?._actions?.launchCheckout(transactionData);
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
   };
 
@@ -303,7 +301,6 @@ export const StepOne = ({ }) => {
         }),
       });
     } catch (error) {
-      console.log('TCL: handlePlaceOrder -> error', error);
       toast.error('Error', {
         description: 'Something went wrong. Please try again.',
       });

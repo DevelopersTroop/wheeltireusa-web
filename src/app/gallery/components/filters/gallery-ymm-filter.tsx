@@ -44,7 +44,6 @@ const GalleryYMMFilters = () => {
 
   const onMakeChange = (value: string) => {
     setLoadingModels(true);
-    console.log("onMakeChange", value);
     form.setValue("make", value);
     form.setValue("model", "");
     setTimeout(() => {
@@ -54,7 +53,6 @@ const GalleryYMMFilters = () => {
   };
 
   const onSubmit = (values: any) => {
-    console.log(values);
     setYears(values.year);
     setMakes(values.make);
     setModels(values.model);

@@ -20,7 +20,6 @@ const wishlist = baseApi.injectEndpoints({
           wishlists: TWishlistItem[];
         }>
       ): TPaginatedResponse<{ wishlists: TWishListData[] }> {
-        console.log('🚀 ~ baseQueryReturnValue:', baseQueryReturnValue);
         return {
           pages: baseQueryReturnValue.pages,
           total: baseQueryReturnValue.total,
@@ -51,7 +50,6 @@ const wishlist = baseApi.injectEndpoints({
       transformResponse(
         baseQueryReturnValue: TResponse<{ wishlist: TWishlistItem }>
       ): TResponse<{ wishlist: TWishListData }> {
-        console.log(baseQueryReturnValue);
         return {
           wishlist: {
             wishlist_id: baseQueryReturnValue.wishlist.id,
@@ -77,7 +75,6 @@ const wishlist = baseApi.injectEndpoints({
           });
         } catch (error) {
           const err = error as TBaseQueryError;
-          console.log('Error creating wishlist:', err);
           // if (err.error.status === 401) {
           //   toast("Login required",{
           //     description: "Please login first test",

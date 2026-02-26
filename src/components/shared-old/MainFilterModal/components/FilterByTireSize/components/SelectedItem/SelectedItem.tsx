@@ -44,7 +44,6 @@ const SelectedItem = ({ onFrontUpdate }: Props) => {
   const isFrontRatioSelected = Boolean(aspectRatio);
   const isRearWidthSelected = Boolean(rearWidth);
   const isRearRatioSelected = Boolean(rearAspectRatio);
-  console.log("isRearTireMode", isRearTireMode)
   return (
     <div
       ref={selectedItemRef}

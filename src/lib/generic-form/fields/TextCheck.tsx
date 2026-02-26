@@ -19,7 +19,6 @@ const TextCheckBox = <T extends FieldValues>({
   type = 'checkbox',
 }: TextProps<T>) => {
   const { control } = useGenericForm<T>();
-  console.log('type', type);
   return (
     <FormField
       control={control}

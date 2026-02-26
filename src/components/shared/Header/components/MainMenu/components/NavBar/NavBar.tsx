@@ -43,9 +43,6 @@ function NavBar() {
     setOpenMenu(menu);
   };
 
-  useEffect(() => {
-    console.log(nestedHovering, currentlyHovering);
-  }, [nestedHovering, currentlyHovering]);
 
   // Function to handle mouse leave on a menu item
   const handleMouseLeave = () => {

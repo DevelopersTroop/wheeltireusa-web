@@ -161,7 +161,6 @@ export const BillingAndShippingInput: React.FC<ICompProps> = ({
     // 🧩 Check billing form completeness and errors
     const hasBillingInvalid = requiredFields.some((field) => {
       const value = billingValues[field];
-      // console.log('TCL: value', value);
       const isEmpty = !value || value.toString().trim().length === 0;
       const hasError = !!billingErrors[field];
       return isEmpty || hasError;
@@ -172,7 +171,6 @@ export const BillingAndShippingInput: React.FC<ICompProps> = ({
     if (selectedOptionTitle === 'Direct to Customer') {
       hasShippingInvalid = requiredFields.some((field) => {
         const value = shippingValues[field];
-        console.log('TCL: value', value);
         const isEmpty = !value || value.toString().trim().length === 0;
         const hasError = !!shippingErrors[field];
         return isEmpty || hasError;
@@ -245,7 +243,6 @@ export const BillingAndShippingInput: React.FC<ICompProps> = ({
                   error={shippingErrors.address1?.message}
                   value={shippingWatch('address1')}
                   onSelect={(address) => {
-                    console.log('TCL: address', address);
                     address.addressLines.forEach((line, i) => {
                       shippingSetValue(`address${i + 1}` as any, line);
                     });

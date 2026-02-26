@@ -139,7 +139,6 @@ const mainFilterSlice = createSlice({
         }[]
       >
     ) => {
-      console.log('action.payload', action.payload);
       state.filters.byVehicle.list.bodyTypesWithSubmodels = action.payload;
     },
     resetInitialVehicleInformation: (

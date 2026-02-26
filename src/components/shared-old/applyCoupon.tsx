@@ -27,7 +27,6 @@ export const ApplyCoupon = () => {
   const { isCouponApplied, discount, couponCode } = useTypedSelector(
     (state) => state.persisted.checkout
   );
-  console.log('TCL: ApplyCoupon -> discount', discount);
   return (
     <div className="px-2 sm:px-6 w-full pb-4">
       <Accordion type="single" collapsible>

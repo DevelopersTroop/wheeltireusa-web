@@ -34,7 +34,6 @@ const ProductGallery: React.FC<{
   const { data, isLoading } = useGetProductsQuery({
     category,
   });
-  console.log('TCL: WheelsGallery -> data', data);
 
   return (
     <div>
@@ -82,6 +81,7 @@ const ProductGallery: React.FC<{
               })
             : data?.products.slice(0, 8).map((products, index) => {
                 const product = products[0];
+                console.log("getProductThumbnail(product)", getProductThumbnail(product), product)
                 return (
                   <>
                     <SwiperSlide key={index}>

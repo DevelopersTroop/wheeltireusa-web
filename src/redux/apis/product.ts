@@ -48,7 +48,6 @@ const products = baseApi.injectEndpoints({
         }
 
         Object.entries(shallowParams).forEach(([key, value]) => {
-          console.log(value, typeof value === 'string' && value?.split(','));
           if (shouldArray.includes(key) && typeof value === 'string') {
             shallowParams[key] = value.split(',');
           } else if (key === 'sale') {

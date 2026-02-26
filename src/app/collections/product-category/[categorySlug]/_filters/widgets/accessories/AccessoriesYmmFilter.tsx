@@ -50,7 +50,6 @@ const AccessoriesYMMFilters = () => {
 
   const onMakeChange = (value: string) => {
     setLoadingModels(true);
-    console.log("onMakeChange", value);
     form.setValue("make", value);
     form.setValue("model", "");
     setTimeout(() => {
@@ -61,7 +60,6 @@ const AccessoriesYMMFilters = () => {
 
   const onModelChange = (value: string) => {
     setLoadingTrims(true);
-    console.log("onModelChange", value);
     form.setValue("model", value);
     form.setValue("trim", "");
     setTimeout(() => {
@@ -71,7 +69,6 @@ const AccessoriesYMMFilters = () => {
   };
 
   const onTrimChange = (value: string) => {
-    console.log("onTrimChange", value);
     form.setValue("trim", value);
     form.setValue("drive", "");
     setLoadingDrives(true);
@@ -82,7 +79,6 @@ const AccessoriesYMMFilters = () => {
   };
 
   const onSubmit = (values: any) => {
-    console.log(values);
     setYears(values.year);
     setMakes(values.make);
     setModels(values.model);

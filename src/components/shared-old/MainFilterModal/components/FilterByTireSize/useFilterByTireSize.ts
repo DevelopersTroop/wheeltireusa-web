@@ -108,8 +108,6 @@ const useFilterByTireSize = () => {
   const hasRearSelections =
     selectedRearWidth || selectedRearAspectRatio || selectedRearDiameter;
 
-  console.log('hasRearSelections', hasRearSelections);
-  console.log('isRearTireMode', isRearTireMode);
 
 
   const shouldShowRearSelections = isRearTireMode || hasRearSelections;
@@ -153,9 +151,7 @@ const useFilterByTireSize = () => {
     router.push(url);
     dispatch(closeMainFilterModal());
   };
-  useEffect(() => {
-    console.log("setIsRearTireMode", setIsRearTireMode)
-  }, [setIsRearTireMode]);
+
 
   const handleRearTireSizeLinkClick = () => {
     setIsRearTireMode(true);

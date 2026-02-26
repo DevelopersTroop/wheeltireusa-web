@@ -20,7 +20,7 @@ interface ContainerProps {
 const Container = ({ children, className = '' }: ContainerProps) => {
   return (
     <div
-      className={`container px-4 sm:px-6 lg:px-8 xl:px-16 py-2 ${className}`.trim()}
+      className={`max-w-[1350px] p-4 mx-auto py-10 ${className}`.trim()}
     >
       {children}
     </div>

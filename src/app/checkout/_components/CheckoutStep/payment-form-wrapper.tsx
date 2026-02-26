@@ -38,7 +38,6 @@ export function PaymentFormWrapper({
   return (
     <PaymentElement
       onFocus={(event) => {
-        console.log('TCL: event', event.elementType);
         setActiveAccordion('');
       }}
       onBlur={() => {

@@ -4,6 +4,7 @@ const Loading = () => {
 
     return (
         <Container>
+            
             <div className='w-full flex gap-4 mt-12'>
                 <div className='w-1/2 flex flex-col gap-16'>
                     {/* Thumbnail Skeleton */}

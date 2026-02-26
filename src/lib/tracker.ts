@@ -53,7 +53,6 @@ const initDB = async (): Promise<IDBPDatabase> => {
  * Persists email for guest tracking
  */
 export const setTrackingEmail = async (email: string) => {
-  console.log("TCL: setTrackingEmail -> email", email);
   const db = await initDB();
   await db.put(IDENTITY_STORE, email, "guest_email");
 };
@@ -109,10 +108,10 @@ export const trackEvent = async (
  * Sync queued events when back online
  */
 export const syncOfflineEvents = async () => {
-  console.log(
-    "TCL: syncOfflineEvents -> syncOfflineEvents",
-    "Sending Offline activity"
-  );
+  // console.log(
+  //   "TCL: syncOfflineEvents -> syncOfflineEvents",
+  //   "Sending Offline activity"
+  // );
   const db = await initDB();
   const tx = db.transaction(QUEUE_STORE, "readwrite");
   const store = tx.objectStore(QUEUE_STORE);

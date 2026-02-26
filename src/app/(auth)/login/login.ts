@@ -39,7 +39,6 @@ export const userLogin = async ({
   // Check if the status code is 200 (OK)
   if (statusCode === 200) {
     const accessToken = data.token.accessToken;
-    console.log(accessToken);
 
     // Return the data if login is successful
     return data;

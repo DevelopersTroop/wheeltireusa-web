@@ -24,9 +24,9 @@ const defaultValues: TFieldValues = {
 };
 
 const ExampleForm2 = () => {
-  const onSubmit = (data: TFieldValues) => {
-    console.log(data);
-  };
+  // const onSubmit = (data: TFieldValues) => {
+  //   console.log(data);
+  // };
 
   return (
     <div className="w-96 mx-auto mt-20">

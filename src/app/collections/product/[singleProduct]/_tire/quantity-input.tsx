@@ -15,9 +15,6 @@ const QuantityInput = ({ name, inventoryAvailable, id, className = "", ...props 
     const quantityStep = 1;
     const maxQuantity = Math.floor(inventoryAvailable / quantityStep) * quantityStep;
     const {quantity, setQuantity} = useContext(TireContext);
-    // console.log("input quantity====  ", quantity);
-    // console.log("maxQuantity====  ", maxQuantity);
-    // console.log("inventoryAvailable ==== ", inventoryAvailable);
 
     const updateInputQuantityByBtn = (action: "increase" | "decrease") => {
         if (action === 'increase') {

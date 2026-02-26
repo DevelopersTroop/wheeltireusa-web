@@ -42,7 +42,6 @@ cartListenerMiddleware.startListening({
     }
 
     const products = Object.values(state.persisted.cart.products);
-    console.log('TCL: products', products);
 
     dispatch(updateProductFromCart(products));
   },

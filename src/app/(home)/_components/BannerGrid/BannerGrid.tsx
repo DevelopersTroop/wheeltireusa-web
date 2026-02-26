@@ -58,30 +58,32 @@ export default function BannerGrid() {
   const get = (span: PromoBanner["span"]) => banners.find((b) => b.span === span)!;
 
   return (
-    <section className="w-full">
-      <ul className="custom-promo-wrap">
-        <li className="banner -top-center">
-          <BannerItem banner={get("top-center")} />
-        </li>
-        <li className="banner -top-left">
-          <BannerItem banner={get("top-left")} />
-        </li>
-        <li className="banner -bottom-left">
-          <BannerItem banner={get("bottom-left")} />
-        </li>
-        <li className="banner -bottom-center-left">
-          <BannerItem banner={get("bottom-center-left")} />
-        </li>
-        <li className="banner -bottom-center-right">
-          <BannerItem banner={get("bottom-center-right")} />
-        </li>
-        <li className="banner -top-right">
-          <BannerItem banner={get("top-right")} />
-        </li>
-        <li className="banner -bottom-right">
-          <BannerItem banner={get("bottom-right")} />
-        </li>
-      </ul>
-    </section>
+    <div className="max-w-[1350px] p-4 mx-auto py-10">
+      <section className="w-full">
+        <ul className="custom-promo-wrap">
+          <li className="banner -top-center">
+            <BannerItem banner={get("top-center")} />
+          </li>
+          <li className="banner -top-left">
+            <BannerItem banner={get("top-left")} />
+          </li>
+          <li className="banner -bottom-left">
+            <BannerItem banner={get("bottom-left")} />
+          </li>
+          <li className="banner -bottom-center-left">
+            <BannerItem banner={get("bottom-center-left")} />
+          </li>
+          <li className="banner -bottom-center-right">
+            <BannerItem banner={get("bottom-center-right")} />
+          </li>
+          <li className="banner -top-right">
+            <BannerItem banner={get("top-right")} />
+          </li>
+          <li className="banner -bottom-right">
+            <BannerItem banner={get("bottom-right")} />
+          </li>
+        </ul>
+      </section>
+    </div>
   );
 }

@@ -31,7 +31,6 @@ const cartSlice = createSlice({
       const productsToAdd = Array.isArray(action.payload)
         ? action.payload
         : [action.payload];
-      console.log(productsToAdd);
 
       for (const newProduct of productsToAdd) {
         const existingProduct = state.products.find(

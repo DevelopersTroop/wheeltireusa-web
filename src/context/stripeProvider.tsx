@@ -41,10 +41,8 @@ const stripePromise = loadStripe(
 // --------------------
 export default function StripeProvider({ children }: React.PropsWithChildren) {
   const { totalCost, step } = useCheckout();
-	console.log("TCL: StripeProvider -> totalCost", totalCost)
   const { billingAddress, shippingAddress, paymentIntentId, productsInfo } =
     useTypedSelector((state) => state.persisted.checkout);
-  console.log('TCL: StripeProvider -> shippingAddress', shippingAddress);
 
   const stripe = use(stripePromise);
   const [loading, setLoading] = useState(false);
@@ -125,7 +123,6 @@ export default function StripeProvider({ children }: React.PropsWithChildren) {
         products: productsInfo,
       })
       .then((res) => {
-        console.log('StripeProvider -> PaymentIntent created:', res.data);
         setClientSecret(res.data.data.secret);
         dispatch(setPaymentIntentId(res.data.data.id));
         dispatch(

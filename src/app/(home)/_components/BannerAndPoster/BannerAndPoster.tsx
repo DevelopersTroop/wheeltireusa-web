@@ -3,6 +3,7 @@ import Link from "next/link";
 
 const BannerAndPoster = () => {
     return (
+        
         <section className="bg-[#fde0d6]">
             <div className="max-w-[1350px] mx-auto p-4 py-10 space-y-12">
                 <div className="grid lg:grid-cols-2 gap-8 items-center">

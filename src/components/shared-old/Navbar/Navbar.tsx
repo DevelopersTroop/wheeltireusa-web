@@ -25,7 +25,6 @@ export default function Navbar() {
 
   // Function to handle clicks on specific href values that should open the modal
   const handleModalOpen = (tab: 'Vehicle' | 'TireSize' | 'TireBrand') => {
-    console.log('handleModalOpen called with tab:', tab);
     dispatch(openMainFilterModal({ tab }));
   };
 
@@ -42,7 +41,6 @@ export default function Navbar() {
   const getModalTabFromHref = (
     href: string
   ): 'Vehicle' | 'TireSize' | 'TireBrand' | null => {
-    console.log('getModalTabFromHref called with href:', href);
     switch (href) {
       case '#tiresByVehicle':
         return 'Vehicle';

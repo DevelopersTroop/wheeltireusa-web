@@ -125,7 +125,6 @@ export const FinalStep: React.FC = () => {
         }
 
         const result = response.data as { order: TOrder; payment: any };
-        console.log('TCL: verifyPayment -> result', result);
 
         if (result?.order) {
           setProgress(80);

@@ -4,7 +4,6 @@ import { cookies } from 'next/headers';
 export async function generateMetadata() {
   const cookieStore = await cookies();
   const path = cookieStore.get('__path')?.value || 'unknown';
-  console.log('Path from cookies:', path);
 
   let customTitle = 'Orders';
 

@@ -60,7 +60,6 @@ apiInstance.interceptors.response.use(
         return new Promise(function (resolve, reject) {
           failedQueue.push({
             resolve: (token: string) => {
-              console.log('🚀 ~ token:', token);
               originalRequest.headers.Authorization = 'Bearer ' + token;
               resolve(apiInstance(originalRequest));
             },
