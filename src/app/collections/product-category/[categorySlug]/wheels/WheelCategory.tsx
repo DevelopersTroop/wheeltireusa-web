@@ -15,6 +15,12 @@ import Item from '@/components/ui/breadcrumb/item';
 import Breadcrumb from '@/components/ui/breadcrumb/breadcrumb';
 import { Paginate } from '@/components/shared/Paginate/Paginate';
 import ProductCategoryLoading from '../../_components/_loading';
+import WheelCardList from './WheelCardList';
+import ViewToggle from '@/components/shared/ViewToggle/ViewToggle';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
+import Container from '@/components/ui/container/container';
+import { cn } from '@/lib/utils';
 
 const WheelCategory: React.FC<{
   page: number;
@@ -27,6 +33,7 @@ const WheelCategory: React.FC<{
     ...filters,
     category: 'wheels',
   });
+  const viewType = useSelector((state: RootState) => state.persisted.layout.viewType);
   return (
     <>
       {topDescription && (
@@ -35,7 +42,12 @@ const WheelCategory: React.FC<{
           dangerouslySetInnerHTML={{ __html: topDescription }}
         />
       )}
-      <div className="mx-auto flex w-full max-w-[1450px] flex-col gap-6 md:px-4 pb-6 pt-2 md:flex-row">
+      <Container className={
+        cn(
+          "flex w-full flex-col gap-6 md:px-4 pb-6 pt-2 md:flex-row",
+          viewType === "grid" ? "" : "max-w-[1450px]"
+        )
+      }>
         <div className="w-full flex flex-row gap-2 justify-between  md:hidden">
           <SidebarFilters>
             <TireFilters />
@@ -60,7 +72,7 @@ const WheelCategory: React.FC<{
         ) : (
           <>
             <div className="flex w-full flex-col">
-              <div className="flex w-full flex-row justify-between">
+              <div className="flex w-full flex-row justify-between items-center mb-4">
                 <div className="p-2">
                   <Breadcrumb>
                     <Item href={'/'}>Home</Item>
@@ -70,23 +82,34 @@ const WheelCategory: React.FC<{
                     </Item>
                   </Breadcrumb>
                 </div>
-                <div className="hidden md:block w-full max-w-[180px]">
-                  <SortByFilter />
+                {/* Mobile View Toggle */}
+                <div className="md:hidden pr-2">
+                  <ViewToggle />
+                </div>
+                {/* Desktop View Toggle & Sort */}
+                <div className="hidden md:flex w-full max-w-[240px] gap-2 items-center justify-end">
+                  <ViewToggle />
+                  <div className="w-[180px]">
+                    <SortByFilter />
+                  </div>
                 </div>
               </div>
               <div
                 className={
-                  'flex w-full flex-row flex-wrap justify-center gap-4'
+                  viewType === 'grid'
+                    ? 'grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'
+                    : 'flex w-full flex-col gap-4'
                 }
               >
                 {data?.products?.map((products) => {
                   const product = products[0];
                   return (
-                    <div
-                      key={product.id}
-                      className="max-md:border max-md:border-b max-md:first:border-t max-md:border-t-0 max-md:border-l-0 max-md:border-r-0 max-md:px-2"
-                    >
-                      <TireCard product={product} key={product.id} />
+                    <div key={product.id}>
+                      {viewType === 'grid' ? (
+                        <TireCard product={product} key={`grid-${product.id}`} />
+                      ) : (
+                        <WheelCardList product={product} key={`list-${product.id}`} />
+                      )}
                     </div>
                   );
                 })}
@@ -103,7 +126,7 @@ const WheelCategory: React.FC<{
             </div>
           </>
         )}
-      </div>
+      </Container>
       {bottomDescription && (
         <div
           className="container mx-auto px-4 my-6 text-center max-w-4xl text-gray-700 leading-relaxed text-sm md:text-base [&>p]:mb-4"

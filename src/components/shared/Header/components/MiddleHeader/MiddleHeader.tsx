@@ -23,7 +23,7 @@ export default function MiddleHeader() {
   }, [products]);
 
   return (
-    <div className="container">
+    <div className="container mx-auto">
       <div className="border-b bg-white">
         {isSearchOpen && (
           <div className="fixed inset-0 z-50 bg-white lg:hidden">

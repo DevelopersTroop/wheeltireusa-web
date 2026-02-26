@@ -23,6 +23,7 @@ import { checkoutListenerMiddleware } from './middleware/checkoutMiddleware';
 import { cartListenerMiddleware } from './middleware/cartListener';
 import comparisonReducer from './features/comparisonSlice';
 import wheelReducer from './features/wheel';
+import layoutReducer from './features/layoutSlice';
 
 const rootPersistConfig = {
   key: 'tirematic-store',
@@ -37,6 +38,7 @@ const persistingReducer = combineReducers({
   package: packageReducer,
   newsletterModal: newsletterModalReducer,
   comparison: comparisonReducer,
+  layout: layoutReducer,
 });
 
 const persistedReducer = persistReducer(rootPersistConfig, persistingReducer);
