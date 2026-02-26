@@ -407,16 +407,111 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
             </div>
           </TabsContent>
 
-          {/* Placeholders for inactive tabs */}
+          {/* BY WHEEL Tab */}
           <TabsContent value="wheel" className="m-0 mt-0">
-            <div className="py-8 text-center text-gray-500 font-medium">
-              Search by Wheel functionality coming soon.
+            <div className="flex flex-col lg:flex-row gap-3">
+              <div className="flex-1 flex flex-col sm:flex-row gap-3">
+                <div className="flex-1">
+                  <Select>
+                    <SelectTrigger className="w-full bg-white border-gray-200 text-gray-700 h-12 text-base">
+                      <SelectValue placeholder="Diameter" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {["14", "15", "16", "17", "18", "19", "20", "22", "24", "26", "28", "30"].map((d) => (
+                        <SelectItem key={`dia-${d}`} value={d}>{d}&quot;</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="flex-1">
+                  <Select>
+                    <SelectTrigger className="w-full bg-white border-gray-200 text-gray-700 h-12 text-base">
+                      <SelectValue placeholder="Width" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {["5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9", "9.5", "10", "10.5", "11", "12", "14"].map((w) => (
+                        <SelectItem key={`width-${w}`} value={w}>{w}&quot;</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="flex-1">
+                  <Select>
+                    <SelectTrigger className="w-full bg-white border-gray-200 text-gray-700 h-12 text-base">
+                      <SelectValue placeholder="Bolt Pattern" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {["4x100", "4x114.3", "5x100", "5x108", "5x110", "5x112", "5x114.3", "5x115", "5x120", "5x127", "5x130", "5x139.7", "5x150", "6x114.3", "6x120", "6x127", "6x135", "6x139.7", "8x165.1", "8x170", "8x180"].map((bp) => (
+                        <SelectItem key={`bp-${bp}`} value={bp}>{bp}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="lg:w-32 shrink-0">
+                <button
+                  className={cn(
+                    "w-full h-12 text-white font-bold text-lg uppercase rounded shadow flex items-center justify-center transition-opacity bg-[#dca4a4] cursor-not-allowed opacity-80"
+                  )}
+                  disabled
+                >
+                  GO
+                </button>
+              </div>
             </div>
           </TabsContent>
 
+          {/* BY TIRE Tab */}
           <TabsContent value="tire" className="m-0 mt-0">
-            <div className="py-8 text-center text-gray-500 font-medium">
-              Search by Tire functionality coming soon.
+            <div className="flex flex-col lg:flex-row gap-3">
+              <div className="flex-1 flex flex-col sm:flex-row gap-3">
+                <div className="flex-1">
+                  <Select>
+                    <SelectTrigger className="w-full bg-white border-gray-200 text-gray-700 h-12 text-base">
+                      <SelectValue placeholder="Width / Height" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {["145", "155", "165", "175", "185", "195", "205", "215", "225", "235", "245", "255", "265", "275", "285", "295", "305", "315", "325", "335", "345", "355"].map((w) => (
+                        <SelectItem key={`tw-${w}`} value={w}>{w}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="flex-1">
+                  <Select>
+                    <SelectTrigger className="w-full bg-white border-gray-200 text-gray-700 h-12 text-base">
+                      <SelectValue placeholder="Aspect / Width" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {["25", "30", "35", "40", "45", "50", "55", "60", "65", "70", "75", "80", "85"].map((a) => (
+                        <SelectItem key={`ta-${a}`} value={a}>{a}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="flex-1">
+                  <Select>
+                    <SelectTrigger className="w-full bg-white border-gray-200 text-gray-700 h-12 text-base">
+                      <SelectValue placeholder="Diameter" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {["13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "24", "26", "28", "30"].map((d) => (
+                        <SelectItem key={`td-${d}`} value={d}>{d}&quot;</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="lg:w-32 shrink-0">
+                <button
+                  className={cn(
+                    "w-full h-12 text-white font-bold text-lg uppercase rounded shadow flex items-center justify-center transition-opacity bg-[#dca4a4] cursor-not-allowed opacity-80"
+                  )}
+                  disabled
+                >
+                  GO
+                </button>
+              </div>
             </div>
           </TabsContent>
         </div>

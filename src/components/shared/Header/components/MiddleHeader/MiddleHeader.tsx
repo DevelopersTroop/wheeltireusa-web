@@ -10,6 +10,7 @@ import { useMemo, useState } from 'react';
 import { BiShoppingBag, BiUserCircle } from 'react-icons/bi';
 import HeaderSearchButton from './components/HeaderSearchButton/HeaderSearchButton';
 import MobileNavbar from './components/MobileNavBar/MobileNavBar';
+import Container from '@/components/ui/container/container';
 
 export default function MiddleHeader() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -24,7 +25,7 @@ export default function MiddleHeader() {
   }, [products]);
 
   return (
-    <div className="container mx-auto">
+    <Container>
       <div className="border-b bg-white">
         {isSearchOpen && (
           <div className="fixed inset-0 z-50 bg-white lg:hidden">
@@ -61,7 +62,9 @@ export default function MiddleHeader() {
                 isHomepage={false}
               />
             </div>
-            <VehicleSelectorButton />
+            <div className="hidden lg:block">
+              <VehicleSelectorButton />
+            </div>
             <div className="flex items-center justify-end gap-2">
               <div className="lg:hidden">
                 <HeaderSearchButton
@@ -116,6 +119,6 @@ export default function MiddleHeader() {
           </div>
         </div>
       </div>
-    </div>
+    </Container>
   );
 }

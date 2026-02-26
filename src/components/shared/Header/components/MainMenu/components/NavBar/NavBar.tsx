@@ -1,11 +1,12 @@
 "use client"
 import { cn } from "@/lib/utils";
-import { ArrowRight, ChevronDown, ChevronRight, ChevronUp } from "lucide-react";
+import { ArrowRight, ChevronDown, ChevronRight, ChevronUp, PhoneCall } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import navMenus from "./config";
+import Container from "@/components/ui/container/container";
 
 // Navbar Component
 // This component renders the main navigation bar with support for mega menus and dropdowns
@@ -52,201 +53,132 @@ function NavBar() {
     setSubmenuTimeout(setTimeout(() => setOpenMenu(null), 400)); // Slight delay before disappearing
   };
   return (
-    <nav
-      className={cn(
-        "bg-transparent w-full text-white ml-4 flex items-center justify-between"
-      )}
-    >
-      {/* Navigation menu list */}
-      <ul className="flex space-x-6 py-4 items-center relative uppercase">
-        {navMenus.map((menu) => (
-          <li
-            key={menu.label}
-            onMouseEnter={() => handleMouseEnter(menu.label || "")}
-            onMouseLeave={handleMouseLeave}
-            className={cn(menu.meagMenu ? "" : "relative")}
-          >
-            {/* Menu link */}
-            <Link
-              // onClick={handleProductFilter}
-              target={menu.target}
-              href={menu.href || "#"}
-              className={cn(
-                "text-white p-2 flex items-center transition-all duration-300 relative after:absolute after:left-0 after:bottom-0 after:w-full after:h-[2px] after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300",
-                isHomePage && "hover:text-white "
-                //after:bg-transparent hover:underline
-              )}
+    <Container>
+      <nav
+        className={cn(
+          "w-full text-white flex items-center justify-between relative"
+        )}
+      >
+        {/* Navigation menu list */}
+        <ul className="flex space-x-6 py-4 items-center uppercase z-50">
+          {navMenus.map((menu) => (
+            <li
+              key={menu.label}
+              onMouseEnter={() => handleMouseEnter(menu.label || "")}
+              onMouseLeave={handleMouseLeave}
+              className="static"
             >
-              {menu.label} {/* Menu label */}
-              {menu.children &&
-                (openMenu === menu.label ? (
-                  <ChevronUp className="ml-2 w-4 h-4" />
-                ) : (
-                  <ChevronDown className="ml-2 w-4 h-4" />
-                ))}
-            </Link>
-
-            {/* Mega Menu */}
-            {menu.meagMenu && (
-              <div
+              {/* Menu link */}
+              <Link
+                // onClick={handleProductFilter}
+                target={menu.target}
+                href={menu.href || "#"}
                 className={cn(
-                  "absolute left-0 top-[75%] w-full text-black bg-white px-16 py-10 grid grid-cols-12  gap-16 shadow-lg transition-all duration-300 transform rounded-b-[20px]",
-                  openMenu === menu.label
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 pointer-events-none -translate-y-20"
+                  "text-black p-2 flex items-center transition-all duration-300 relative after:absolute after:left-0 after:bottom-0 after:w-full after:h-[2px] after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 text-sm",
+                  isHomePage && "hover:text-gray-600 "
+                  //after:bg-transparent hover:underline
                 )}
               >
-                {menu.children?.map((submenu, index) => (
-                  <div
-                    key={index}
-                    className={cn(
-                      "col-span-6",
-                      (index === 3 || index === 2) &&
-                        " border-black border-t-2 mt-2 "
-                    )}
-                  >
-                    <Link
-                      // onClick={handleProductFilter}
-                      className="font-bold text-xl"
-                      href={submenu.href ?? "#"}
-                    >
-                      {submenu.label}
-                    </Link>
-                    {submenu.children && (
-                      <div className="w-full bg-white transition-opacity duration-300">
-                        {submenu.children.map((subsub, i) => (
-                          <div
-                            key={subsub.label}
-                            className="relative"
-                            onMouseOver={() => {
-                              setCurrentlyHovering(i);
-                              setNestedHovering((prev) => ({
-                                ...prev,
-                                [subsub?.label ?? ""]: i,
-                              }));
-                            }}
-                          >
-                            <div className="w-full flex items-center justify-between">
-                              <Link
-                                // onClick={handleProductFilter}
-                                key={subsub.label}
-                                href={subsub.href || ""}
-                                className={cn(
-                                  `text-base flex w-fit items-center py-2 transition-all duration-300 hover:text-primary relative 
-                                  after:absolute after:left-0 after:bottom-0 after:w-full after:h-[2px] after:bg-primary 
-                                  after:scale-x-0 hover:after:scale-x-100 
-                                  after:origin-left after:transition-transform after:duration-300`
-                                )}
-                              >
-                                {subsub.label}
-                                {subsub.children && (
-                                  <ChevronDown className="ml-2 w-4 h-4" />
-                                )}
-                              </Link>
-                              {/* {index === 1 && <ArrowRight />} */}
-                            </div>
-                            {/* {subsub.children && (
-                                <ul
-                                  className={cn(
-                                    "pl-4 overflow-hidden transition-all duration-300 transform",
-                                    nestedHovering &&
-                                      currentlyHovering &&
-                                      currentlyHovering >=
-                                        nestedHovering[subsub?.label ?? ""]
-                                      ? "max-h-96 opacity-100 translate-y-0"
-                                      : "max-h-0 opacity-0 -translate-y-2"
-                                  )}
-                                >
-                                  {subsub.children?.map((nestedSubMenu) => (
-                                    <li
-                                      key={nestedSubMenu.label}
-                                      className="mb-3"
-                                    >
+                {menu.label} {/* Menu label */}
+                {menu.children &&
+                  (openMenu === menu.label ? (
+                    <ChevronUp className="ml-2 w-4 h-4" />
+                  ) : (
+                    <ChevronDown className="ml-2 w-4 h-4" />
+                  ))}
+              </Link>
+
+              {/* Dropdown — full-width dark panel (Element Wheels style) */}
+              {menu.children && (
+                <div
+                  className={cn(
+                    "fixed left-0 top-auto w-screen text-white bg-[#1a1a1a] shadow-2xl transition-all duration-300 transform z-50 border-t border-gray-700",
+                    openMenu === menu.label
+                      ? "opacity-100 translate-y-0 visible"
+                      : "opacity-0 pointer-events-none -translate-y-2 invisible"
+                  )}
+                >
+                  <div className="max-w-7xl mx-auto px-8 md:px-12 py-10">
+                    {/* Check if children have sub-children (multi-column) */}
+                    {menu.children.some((c) => c.children && c.children.length > 0) ? (
+                      <div className="flex gap-12">
+                        {/* Columns */}
+                        <div className="flex-1 flex gap-10">
+                          {menu.children.map((submenu, index) => (
+                            <div key={index} className="flex-1 min-w-0">
+                              <h4 className="font-bold text-[13px] uppercase tracking-wider text-white mb-5">
+                                {submenu.label}
+                              </h4>
+                              {submenu.children && (
+                                <ul className="flex flex-col gap-[10px]">
+                                  {submenu.children.map((subsub) => (
+                                    <li key={subsub.label}>
                                       <Link
-                                        href={nestedSubMenu.href || "#"}
-                                        className="block py-1 transition-all duration-300 hover:text-primary"
+                                        href={subsub.href || "#"}
+                                        className="text-[13px] text-gray-400 hover:text-white transition-colors duration-200"
                                       >
-                                        {nestedSubMenu.label}
+                                        {subsub.label}
                                       </Link>
                                     </li>
                                   ))}
                                 </ul>
-                              )} */}
-                          </div>
-                        ))}
+                              )}
+                              {submenu.href && (
+                                <Link
+                                  href={submenu.href}
+                                  className="inline-block mt-5 text-[12px] font-bold uppercase tracking-wider text-red-500 hover:text-red-400 transition-colors"
+                                >
+                                  View All {submenu.label}
+                                </Link>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                      /* Flat children — single column list */
+                      <div className="flex gap-12">
+                        <div className="min-w-[200px]">
+                          <h4 className="font-bold text-[13px] uppercase tracking-wider text-white mb-5">
+                            {menu.label}
+                          </h4>
+                          <ul className="flex flex-col gap-[10px]">
+                            {menu.children.map((submenu) => (
+                              <li key={submenu.label}>
+                                <Link
+                                  href={submenu.href || "#"}
+                                  className="text-[13px] text-gray-400 hover:text-white transition-colors duration-200"
+                                >
+                                  {submenu.label}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                          {menu.href && (
+                            <Link
+                              href={menu.href}
+                              className="inline-block mt-5 text-[12px] font-bold uppercase tracking-wider text-red-500 hover:text-red-400 transition-colors"
+                            >
+                              View All
+                            </Link>
+                          )}
+                        </div>
                       </div>
                     )}
                   </div>
-                ))}
-              </div>
-            )}
+                </div>
+              )}
+            </li>
+          ))}
+        </ul>
 
-            {/* Normal Dropdown */}
-            {!menu.meagMenu && menu.children && (
-              <div
-                className={cn(
-                  "absolute top-full left-0 text-black bg-white w-56 py-4 shadow-2xl transition-all duration-300 transform rounded-b-[12px]",
-                  openMenu === menu.label
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 -translate-y-20 pointer-events-none"
-                )}
-              >
-                {menu.children.map((submenu) => (
-                  <div
-                    key={submenu.label}
-                    className="relative"
-                    onMouseEnter={() => setHovering(submenu?.label || "")}
-                    onMouseLeave={() => setHovering(null)}
-                  >
-                    {/* Submenu link */}
-                    <Link
-                      // onClick={handleProductFilter}
-                      href={submenu?.href || "#"}
-                      className="flex items-center py-2 mx-4 transition-all duration-300 hover:text-primary relative 
-after:absolute after:left-0 after:bottom-0 after:w-full after:h-[2px] after:bg-primary 
-after:scale-x-0 hover:after:scale-x-100 after:origin-left 
-after:transition-transform after:duration-300"
-                    >
-                      {submenu.label}
-                      {submenu.children && (
-                        <ChevronRight className="ml-2 w-4 h-4" />
-                      )}
-                    </Link>
-                    {/* Third-Level Submenu */}
-                    {submenu.children && (
-                      <div
-                        className={cn(
-                          "absolute left-full top-0 w-56 bg-white p-4 shadow-md transition-opacity duration-300 transform",
-                          hovering === submenu.label
-                            ? "opacity-100"
-                            : "opacity-0 pointer-events-none"
-                        )}
-                      >
-                        {submenu.children.map((subsub) => (
-                          <Link
-                            // onClick={handleProductFilter}
-                            key={subsub.label}
-                            href={subsub?.href || "#"}
-                            className="block py-2 transition-all duration-300 hover:text-primary relative after:absolute after:left-0 after:bottom-0 after:w-full after:h-[2px] after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300"
-                          >
-                            {subsub.label}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-          </li>
-        ))}
-      </ul>
-
-      <a href="tel:+1 (813) 812-5257" className="flex gap-2">
-        <span className="text-gray-300">Call us:</span>
-        +1 (813) 812-5257
-      </a>
-    </nav>
+        <a href="tel:+1 (813) 812-5257" className="flex gap-2 text-black justify-end">
+          <PhoneCall size={20} />
+          <span className="">Call us:</span>
+          +1 (813) 812-5257
+        </a>
+      </nav>
+    </Container>
   );
 }
 

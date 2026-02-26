@@ -42,6 +42,9 @@ const TireCategory: React.FC<{
           dangerouslySetInnerHTML={{ __html: topDescription }}
         />
       )}
+      <div className='max-w-7xl mx-auto mb-10'>
+        <HomeYmm variant="product" />
+      </div>
       <Container className={
         cn(
           "flex w-full flex-col gap-6 md:px-4 pb-6 pt-2 md:flex-row",
@@ -67,7 +70,6 @@ const TireCategory: React.FC<{
         ) : (
           <>
             <div className="flex w-full flex-col gap-4">
-              <HomeYmm variant="product" />
               <div className="flex w-full flex-row justify-between items-center mb-4">
                 <div className="p-2">
                   <Breadcrumb>
@@ -93,7 +95,7 @@ const TireCategory: React.FC<{
               <div
                 className={
                   viewType === "grid"
-                    ? "grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
+                    ? "grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"
                     : "flex w-full flex-col gap-4"
                 }
               >

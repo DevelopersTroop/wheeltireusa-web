@@ -31,6 +31,7 @@ export default function Homepage() {
     <div>
       <HeroSection />
       <Categories />
+      <BannerGrid />
       <WheelCategories />
       <ProductGallery
         category="tire"
@@ -43,13 +44,12 @@ export default function Homepage() {
             Popular Wheels Available & in-stock"
       />
       <TodaysDeals />
-      <BannerGrid />
       <HomeBlogList />
       <BannerAndPoster />
       <WheelsSection />
       <ViewGallery />
       <SuspensionBrands />
-      <SuspensionSection />
+      {/* <SuspensionSection /> */}
     </div>
   );
 }

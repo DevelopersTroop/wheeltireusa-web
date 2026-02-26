@@ -1,15 +1,13 @@
 "use client";
 
-import { useFetchFilters } from "@/hooks/useFetchFilters";
-import TireModel from "./widgets/tire/TireModel";
-import TireWheelDiameter from "./widgets/tire/TireWheelDiameter";
-import TireWidth from "./widgets/tire/TireWidth";
-import TireType from "./widgets/tire/TireType";
 import { ActionFilter } from "@/components/shared/ActionFilter/ActionFilter";
-import TireImage from "./widgets/tire/TireImage";
+import { useFetchFilters } from "@/hooks/useFetchFilters";
 import PriceRange from "./widgets/components/PriceRange";
-import TireLoadIndex from "./widgets/tire/TireLoadIndex";
 import TireBrand from "./widgets/tire/TireBrand";
+import TireLoadIndex from "./widgets/tire/TireLoadIndex";
+import TireModel from "./widgets/tire/TireModel";
+import TireType from "./widgets/tire/TireType";
+import TireWheelDiameter from "./widgets/tire/TireWheelDiameter";
 
 const TireFilters = () => {
   const { filters } = useFetchFilters("tires");
@@ -17,9 +15,9 @@ const TireFilters = () => {
 
   return (
     <div className={"filter-shadow bg-gray-200"}>
-      <div className="border-b border-gray-300">
+      {/* <div className="border-b border-gray-300">
         <TireImage />
-      </div>
+      </div> */}
       {/* <div className="border-b border-gray-300 px-3 pb-3 pt-10">
         <div className="relative p-1 outline outline-1">
           <h2 className="pt-3 text-base font-semibold uppercase">

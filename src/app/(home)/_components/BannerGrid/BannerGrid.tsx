@@ -1,6 +1,7 @@
 import BannerItem from "./components/BannerItem/BannerItem";
 import { PromoBanner } from "./types/BannerGrid";
 import "./BannerGrid.css";
+import Container from "@/components/ui/container/container";
 
 const banners: PromoBanner[] = [
   {
@@ -58,7 +59,7 @@ export default function BannerGrid() {
   const get = (span: PromoBanner["span"]) => banners.find((b) => b.span === span)!;
 
   return (
-    <section className="w-full">
+    <Container className="w-full">
       <ul className="custom-promo-wrap">
         <li className="banner -top-center">
           <BannerItem banner={get("top-center")} />
@@ -82,6 +83,6 @@ export default function BannerGrid() {
           <BannerItem banner={get("bottom-right")} />
         </li>
       </ul>
-    </section>
+    </Container>
   );
 }

@@ -2,16 +2,26 @@
 import useYmm from "@/hooks/useYmm";
 import { ChevronDown, RotateCcw, Search } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-
-// Mock hook - replace with your actual useYmm hook
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
   const {
     isYearLoading,
     isMakeLoading,
     isModelLoading,
+    isBodyTypeLoading,
+    isSubmodelLoading,
+    isYearDisabled,
     isMakeDisabled,
     isModelDisabled,
+    isBodyTypeDisabled,
+    isSubmodelDisabled,
     shouldShowSubmit,
     list: { years, makes, models, subModels, bodyTypes },
     onYearChange,
@@ -21,8 +31,6 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
     onSubModelChange,
     onSubmit,
     isDisabledSubmit,
-    isBodyTypeDisabled,
-    isSubmodelDisabled,
     year,
     make,
     model,
@@ -35,21 +43,65 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
   const selectorRef = useRef<HTMLDivElement>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const isFirstRender = useRef(true);
+  const hasUserInteracted = useRef(false);
+
+  useEffect(() => {
+    isFirstRender.current = false;
+  }, []);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Show when sentinel is not visible (scrolled past)
         setIsVisible(!entry.isIntersecting);
       },
       { threshold: 0, rootMargin: "-1px 0px 0px 0px" }
     );
 
-    if (sentinelRef.current) {
-      observer.observe(sentinelRef.current);
-    }
-
+    if (sentinelRef.current) observer.observe(sentinelRef.current);
     return () => observer.disconnect();
   }, []);
+
+  const handleInteraction = <T extends (...args: any[]) => void>(fn: T) => {
+    return (...args: Parameters<T>) => {
+      hasUserInteracted.current = true;
+      fn(...args);
+    };
+  };
+
+  const handleYearChange = handleInteraction(onYearChange);
+  const handleMakeChange = handleInteraction(onMakeChange);
+  const handleModelChange = handleInteraction(onModelChange);
+  const handleBodyTypeChange = handleInteraction(onBodyTypeChange);
+  const handleSubModelChange = handleInteraction(onSubModelChange);
+
+  const handleOpenChange = (key: string) => (open: boolean) => {
+    if (open) setActiveDropdown(key);
+    else setActiveDropdown((prev) => (prev === key ? null : prev));
+  };
+
+  useEffect(() => {
+    if (isFirstRender.current) return;
+    let timeoutId: NodeJS.Timeout;
+    if (year && !isMakeLoading && !isMakeDisabled && (makes?.length ?? 0) > 0 && (!make || make === "__DEFAULT_MAKE__")) {
+      timeoutId = setTimeout(() => {
+        setActiveDropdown("make");
+      }, 200);
+    }
+    return () => clearTimeout(timeoutId);
+  }, [year, isMakeLoading, isMakeDisabled, makes?.length, make]);
+
+  useEffect(() => {
+    if (isFirstRender.current) return;
+    let timeoutId: NodeJS.Timeout;
+    if (make && !isModelLoading && !isModelDisabled && (models?.length ?? 0) > 0 && (!model || model === "__DEFAULT_MODEL__")) {
+      timeoutId = setTimeout(() => {
+        setActiveDropdown("model");
+      }, 200);
+    }
+    return () => clearTimeout(timeoutId);
+  }, [make, isModelLoading, isModelDisabled, models?.length, model]);
 
   const handleReset = () => {
     onYearChange("");
@@ -57,9 +109,11 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
     onModelChange("");
   };
 
+  const showBodyType = false;
+  const showSubmodel = false;
+
   return (
     <>
-      {/* Sentinel element to detect when selector should become sticky */}
       <div ref={sentinelRef} className="h-px" />
 
       {/* Desktop View */}
@@ -67,111 +121,99 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
         ref={selectorRef}
         className={`hidden md:block bg-[#E8EDF2] border-b border-gray-200 transition-all duration-300 z-20 fixed top-0 left-0 right-0 shadow-md ${isVisible
           ? "opacity-100"
-          : "-translate-y-full opacity-0 pointer-events-none"
+          : "-translate-y-full opacity-0 pointer-events-none hidden"
           }`}
       >
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center gap-2">
-            {/* Year Dropdown */}
             <div className="flex-1 relative flex items-center bg-white border border-gray-300 rounded-sm">
               <div className="pl-3 pr-3 text-gray-900 font-bold text-sm">1</div>
               <div className="w-px h-5 bg-gray-300"></div>
-              <select
-                value={year || ""}
-                onChange={(e) => onYearChange(e.target.value)}
-                className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 appearance-none cursor-pointer focus:outline-none"
-              >
-                <option value="">YEAR</option>
-                {years?.map((y) => (
-                  <option key={y} value={y}>
-                    {y}
-                  </option>
-                ))}
-              </select>
+              <Select onValueChange={handleYearChange} value={year || undefined} disabled={isYearDisabled}>
+                <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden">
+                  <SelectValue placeholder={isYearLoading ? "LOADING..." : "YEAR"} />
+                </SelectTrigger>
+                <SelectContent>
+                  {years?.map((y) => (
+                    <SelectItem key={`year-${y}`} value={y}>{y}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <ChevronDown className="absolute right-3 w-4 h-4 text-gray-500 pointer-events-none" />
             </div>
 
-            {/* Make Dropdown */}
             <div className="flex-1 relative flex items-center bg-white border border-gray-300 rounded-sm">
               <div className="pl-3 pr-3 text-gray-900 font-bold text-sm">2</div>
               <div className="w-px h-5 bg-gray-300"></div>
-              <select
-                value={make || ""}
-                onChange={(e) => onMakeChange(e.target.value)}
-                disabled={isMakeDisabled}
-                className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 appearance-none cursor-pointer focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <option value="">MAKE</option>
-                {makes?.map((m) => (
-                  <option key={m} value={m}>
-                    {m}
-                  </option>
-                ))}
-              </select>
+              <Select open={activeDropdown === "make"} onOpenChange={handleOpenChange("make")} onValueChange={handleMakeChange} value={make || "__DEFAULT_MAKE__"} disabled={isMakeDisabled}>
+                <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden">
+                  <SelectValue placeholder={isMakeLoading ? "LOADING..." : "MAKE"} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__DEFAULT_MAKE__" className="hidden" disabled>MAKE</SelectItem>
+                  {makes?.map((m) => (
+                    <SelectItem key={`make-${m}`} value={m}>{m}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <ChevronDown className="absolute right-3 w-4 h-4 text-gray-500 pointer-events-none" />
             </div>
 
-            {/* Model Dropdown */}
             <div className="flex-1 relative flex items-center bg-white border border-gray-300 rounded-sm">
               <div className="pl-3 pr-3 text-gray-900 font-bold text-sm">3</div>
               <div className="w-px h-5 bg-gray-300"></div>
-              <select
-                value={model || ""}
-                onChange={(e) => onModelChange(e.target.value)}
-                disabled={isModelDisabled}
-                className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 appearance-none cursor-pointer focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <option value="">MODEL</option>
-                {models?.map((mdl) => (
-                  <option key={mdl} value={mdl}>
-                    {mdl}
-                  </option>
-                ))}
-              </select>
+              <Select open={activeDropdown === "model"} onOpenChange={handleOpenChange("model")} onValueChange={handleModelChange} value={model || "__DEFAULT_MODEL__"} disabled={isModelDisabled}>
+                <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden">
+                  <SelectValue placeholder={isModelLoading ? "LOADING..." : "MODEL"} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__DEFAULT_MODEL__" className="hidden" disabled>MODEL</SelectItem>
+                  {models?.map((mdl) => (
+                    <SelectItem key={`model-${mdl}`} value={mdl}>{mdl}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <ChevronDown className="absolute right-3 w-4 h-4 text-gray-500 pointer-events-none" />
             </div>
 
-            {/* Body Type Dropdown */}
-            <div className="flex-1 relative flex items-center bg-white border border-gray-300 rounded-sm">
-              <div className="pl-3 pr-3 text-gray-900 font-bold text-sm">4</div>
-              <div className="w-px h-5 bg-gray-300"></div>
-              <select
-                value={bodyType || ""}
-                onChange={(e) => onBodyTypeChange(e.target.value)}
-                disabled={isBodyTypeDisabled}
-                className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 appearance-none cursor-pointer focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <option value="">BODY TYPE</option>
-                {bodyTypes?.map((mdl) => (
-                  <option key={mdl} value={mdl}>
-                    {mdl}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown className="absolute right-3 w-4 h-4 text-gray-500 pointer-events-none" />
-            </div>
+            {showBodyType && (
+              <div className="flex-1 relative flex items-center bg-white border border-gray-300 rounded-sm">
+                <div className="pl-3 pr-3 text-gray-900 font-bold text-sm">4</div>
+                <div className="w-px h-5 bg-gray-300"></div>
+                <Select open={activeDropdown === "bodyType"} onOpenChange={handleOpenChange("bodyType")} onValueChange={handleBodyTypeChange} value={bodyType || "__DEFAULT_BODYTYPE__"} disabled={isBodyTypeDisabled}>
+                  <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden">
+                    <SelectValue placeholder={isBodyTypeLoading ? "LOADING..." : "BODY TYPE"} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="__DEFAULT_BODYTYPE__" className="hidden" disabled>BODY TYPE</SelectItem>
+                    {bodyTypes?.map((bt) => (
+                      <SelectItem key={`bodyType-${bt}`} value={bt}>{bt}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <ChevronDown className="absolute right-3 w-4 h-4 text-gray-500 pointer-events-none" />
+              </div>
+            )}
 
-            {/* Submodel Dropdown */}
-            <div className="flex-1 relative flex items-center bg-white border border-gray-300 rounded-sm">
-              <div className="pl-3 pr-3 text-gray-900 font-bold text-sm">5</div>
-              <div className="w-px h-5 bg-gray-300"></div>
-              <select
-                value={subModel.SubModel || ""}
-                onChange={(e) => onSubModelChange(e.target.value)}
-                disabled={isSubmodelDisabled}
-                className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 appearance-none cursor-pointer focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <option value="">SUBMODEL</option>
-                {subModels?.map((mdl) => (
-                  <option key={mdl.SubModel} value={mdl.SubModel}>
-                    {mdl.SubModel}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown className="absolute right-3 w-4 h-4 text-gray-500 pointer-events-none" />
-            </div>
+            {showSubmodel && (
+              <div className="flex-1 relative flex items-center bg-white border border-gray-300 rounded-sm">
+                <div className="pl-3 pr-3 text-gray-900 font-bold text-sm">{showBodyType ? "5" : "4"}</div>
+                <div className="w-px h-5 bg-gray-300"></div>
+                <Select open={activeDropdown === "subModel"} onOpenChange={handleOpenChange("subModel")} onValueChange={handleSubModelChange} value={subModel?.SubModel || "__DEFAULT_SUBMODEL__"} disabled={isSubmodelDisabled}>
+                  <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden">
+                    <SelectValue placeholder={isSubmodelLoading ? "LOADING..." : "SUBMODEL"} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="__DEFAULT_SUBMODEL__" className="hidden" disabled>SUBMODEL</SelectItem>
+                    {subModels?.map((sm) => (
+                      <SelectItem key={`subModel-${sm.SubModel}`} value={sm.SubModel}>{sm.SubModel}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <ChevronDown className="absolute right-3 w-4 h-4 text-gray-500 pointer-events-none" />
+              </div>
+            )}
 
-            {/* Reset Button (Icon only to save space) */}
             <button
               onClick={handleReset}
               title="Reset"
@@ -180,9 +222,8 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
               <RotateCcw className="w-4 h-4" />
             </button>
 
-            {/* Go Button */}
             <button
-              onClick={onSubmit}
+              onClick={() => onSubmit(undefined)}
               disabled={isDisabledSubmit}
               className="px-8 py-2.5 bg-[#3b5998] hover:bg-[#2d4373] text-white font-bold text-sm rounded-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
@@ -194,30 +235,24 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
 
       {/* Mobile View */}
       <div
-        className={`md:hidden  bg-gray-800 transition-all duration-300 z-50 fixed top-0 left-0 right-0 shadow-lg ${isVisible
+        className={`md:hidden bg-gray-800 transition-all duration-300 z-50 fixed top-0 left-0 right-0 shadow-lg ${isVisible
           ? "opacity-100"
-          : "-translate-y-full opacity-0 pointer-events-none"
+          : "-translate-y-full opacity-0 pointer-events-none hidden"
           }`}
         style={isVisible ? { transform: `translateY(${offset}px)` } : {}}
       >
-        <div className="flex " >
-          {/* Toggle Button */}
+        <div className="flex">
           <button
             onClick={() => setIsMobileOpen(!isMobileOpen)}
             className="flex-1 bg-gray-700 text-white px-4 py-4 flex items-center cursor-pointer justify-between text-sm font-medium"
           >
             <div className="flex items-center gap-2">
-              <ChevronDown
-                className={`w-5 h-5 transition-transform ${isMobileOpen ? "rotate-180" : ""
-                  }`}
-              />
+              <ChevronDown className={`w-5 h-5 transition-transform ${isMobileOpen ? "rotate-180" : ""}`} />
               SELECT YOUR VEHICLE
             </div>
           </button>
-
-          {/* Find Button */}
           <button
-            onClick={onSubmit}
+            onClick={() => onSubmit(undefined)}
             hidden={isMobileOpen}
             disabled={isDisabledSubmit}
             className="bg-red-600 hover:bg-red-700 text-white px-6 py-4 font-bold uppercase text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -226,135 +261,111 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
           </button>
         </div>
 
-        {/* Expandable Content */}
-        <div
-          className={`overflow-hidden transition-all duration-300 h-full ${isMobileOpen ? "max-h-full" : "max-h-0"
-            }`}
-        >
+        <div className={`overflow-hidden transition-all duration-300 h-full ${isMobileOpen ? "max-h-full" : "max-h-0 hidden"}`}>
           <div className="bg-gray-700 p-4 space-y-3">
-            {/* Year */}
             <div>
-              <label className="text-white text-xs font-bold mb-1 block uppercase">
-                Year
-              </label>
+              <label className="text-white text-xs font-bold mb-1 block uppercase">Year</label>
               <div className="relative">
-                <select
-                  value={year || ""}
-                  onChange={(e) => onYearChange(e.target.value)}
-                  className="w-full bg-white text-gray-800 px-4 py-2 pr-10 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-red-500"
-                >
-                  <option value="">Please Select ...</option>
-                  {years?.map((y) => (
-                    <option key={y} value={y}>
-                      {y}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 pointer-events-none" />
-              </div>
-            </div>
-
-            {/* Make */}
-            <div>
-              <label className="text-white text-xs font-bold mb-1 block uppercase">
-                Make
-              </label>
-              <div className="relative">
-                <select
-                  value={make || ""}
-                  onChange={(e) => onMakeChange(e.target.value)}
-                  disabled={isMakeDisabled}
-                  className="w-full bg-white text-gray-800 px-4 py-2 pr-10 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <option value="">Please Select ...</option>
-                  {makes?.map((m) => (
-                    <option key={m} value={m}>
-                      {m}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 pointer-events-none" />
-              </div>
-            </div>
-
-            {/* Model */}
-            <div>
-              <label className="text-white text-xs font-bold mb-1 block uppercase">
-                Model
-              </label>
-              <div className="relative">
-                <select
-                  value={model || ""}
-                  onChange={(e) => onModelChange(e.target.value)}
-                  disabled={isModelDisabled}
-                  className="w-full bg-white text-gray-800 px-4 py-2 pr-10 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <option value="">Please Select ...</option>
-                  {models?.map((mdl) => (
-                    <option key={mdl} value={mdl}>
-                      {mdl}
-                    </option>
-                  ))}
-                </select>
+                <Select onValueChange={handleYearChange} value={year || undefined} disabled={isYearDisabled}>
+                  <SelectTrigger className="w-full bg-white text-gray-800 px-4 py-2 border-none shadow-none ring-0 focus:ring-2 focus:ring-red-500 appearance-none h-auto [&>svg]:hidden text-left font-normal">
+                    <SelectValue placeholder={isYearLoading ? "Loading..." : "Please Select ..."} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {years?.map((y) => (
+                      <SelectItem key={`year-${y}`} value={y}>{y}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 pointer-events-none" />
               </div>
             </div>
 
             <div>
-              <label className="text-white text-xs font-bold mb-1 block uppercase">
-                Body Type
-              </label>
+              <label className="text-white text-xs font-bold mb-1 block uppercase">Make</label>
               <div className="relative">
-                <select
-                  value={bodyType || ""}
-                  onChange={(e) => onBodyTypeChange(e.target.value)}
-                  disabled={isBodyTypeDisabled}
-                  className="w-full bg-white text-gray-800 px-4 py-2 pr-10 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <option value="">Please Select ...</option>
-                  {bodyTypes?.map((mdl) => (
-                    <option key={mdl} value={mdl}>
-                      {mdl}
-                    </option>
-                  ))}
-                </select>
+                <Select open={activeDropdown === "make"} onOpenChange={handleOpenChange("make")} onValueChange={handleMakeChange} value={make || "__DEFAULT_MAKE__"} disabled={isMakeDisabled}>
+                  <SelectTrigger className="w-full bg-white text-gray-800 px-4 py-2 border-none shadow-none ring-0 focus:ring-2 focus:ring-red-500 appearance-none h-auto [&>svg]:hidden text-left font-normal">
+                    <SelectValue placeholder={isMakeLoading ? "Loading..." : "Please Select ..."} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="__DEFAULT_MAKE__" className="hidden" disabled>Please Select ...</SelectItem>
+                    {makes?.map((m) => (
+                      <SelectItem key={`make-${m}`} value={m}>{m}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 pointer-events-none" />
               </div>
             </div>
 
             <div>
-              <label className="text-white text-xs font-bold mb-1 block uppercase">
-                Submodel
-              </label>
+              <label className="text-white text-xs font-bold mb-1 block uppercase">Model</label>
               <div className="relative">
-                <select
-                  value={subModel.SubModel || ""}
-                  onChange={(e) => onSubModelChange(e.target.value)}
-                  disabled={isModelDisabled}
-                  className="w-full bg-white text-gray-800 px-4 py-2 pr-10 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <option value="">Please Select ...</option>
-                  {subModels?.map((mdl) => (
-                    <option key={mdl.SubModel} value={mdl.SubModel}>
-                      {mdl.SubModel}
-                    </option>
-                  ))}
-                </select>
+                <Select open={activeDropdown === "model"} onOpenChange={handleOpenChange("model")} onValueChange={handleModelChange} value={model || "__DEFAULT_MODEL__"} disabled={isModelDisabled}>
+                  <SelectTrigger className="w-full bg-white text-gray-800 px-4 py-2 border-none shadow-none ring-0 focus:ring-2 focus:ring-red-500 appearance-none h-auto [&>svg]:hidden text-left font-normal">
+                    <SelectValue placeholder={isModelLoading ? "Loading..." : "Please Select ..."} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="__DEFAULT_MODEL__" className="hidden" disabled>Please Select ...</SelectItem>
+                    {models?.map((mdl) => (
+                      <SelectItem key={`model-${mdl}`} value={mdl}>{mdl}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 pointer-events-none" />
               </div>
             </div>
 
-            {/* Reset Button */}
+            {showBodyType && (
+              <div>
+                <label className="text-white text-xs font-bold mb-1 block uppercase">Body Type</label>
+                <div className="relative">
+                  <Select open={activeDropdown === "bodyType"} onOpenChange={handleOpenChange("bodyType")} onValueChange={handleBodyTypeChange} value={bodyType || "__DEFAULT_BODYTYPE__"} disabled={isBodyTypeDisabled}>
+                    <SelectTrigger className="w-full bg-white text-gray-800 px-4 py-2 border-none shadow-none ring-0 focus:ring-2 focus:ring-red-500 appearance-none h-auto [&>svg]:hidden text-left font-normal">
+                      <SelectValue placeholder={isBodyTypeLoading ? "Loading..." : "Please Select ..."} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="__DEFAULT_BODYTYPE__" className="hidden" disabled>Please Select ...</SelectItem>
+                      {bodyTypes?.map((bt) => (
+                        <SelectItem key={`bodyType-${bt}`} value={bt}>{bt}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 pointer-events-none" />
+                </div>
+              </div>
+            )}
+
+            {showSubmodel && (
+              <div>
+                <label className="text-white text-xs font-bold mb-1 block uppercase">Submodel</label>
+                <div className="relative">
+                  <Select open={activeDropdown === "subModel"} onOpenChange={handleOpenChange("subModel")} onValueChange={handleSubModelChange} value={subModel?.SubModel || "__DEFAULT_SUBMODEL__"} disabled={isSubmodelDisabled}>
+                    <SelectTrigger className="w-full bg-white text-gray-800 px-4 py-2 border-none shadow-none ring-0 focus:ring-2 focus:ring-red-500 appearance-none h-auto [&>svg]:hidden text-left font-normal">
+                      <SelectValue placeholder={isSubmodelLoading ? "Loading..." : "Please Select ..."} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="__DEFAULT_SUBMODEL__" className="hidden" disabled>Please Select ...</SelectItem>
+                      {subModels?.map((sm) => (
+                        <SelectItem key={`subModel-${sm.SubModel}`} value={sm.SubModel}>{sm.SubModel}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 pointer-events-none" />
+                </div>
+              </div>
+            )}
+
             <div className="w-full flex items-center">
               <button
                 onClick={handleReset}
-                className=" bg-white w-full hover:bg-gray-100 text-red-600 px-4 py-4 flex items-center justify-center gap-2 font-bold uppercase text-sm transition-colors"
+                className="bg-white w-full hover:bg-gray-100 text-red-600 px-4 py-4 flex items-center justify-center gap-2 font-bold uppercase text-sm transition-colors"
               >
                 <RotateCcw className="w-4 h-4" />
                 Reset
               </button>
               <button
-                onClick={onSubmit}
+                onClick={() => onSubmit(undefined)}
                 disabled={isDisabledSubmit}
                 className="bg-red-600 hover:bg-red-700 text-white px-6 py-4 font-bold uppercase text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed w-full"
               >
