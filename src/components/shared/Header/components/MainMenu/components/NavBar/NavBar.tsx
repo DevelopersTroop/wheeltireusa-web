@@ -53,7 +53,7 @@ function NavBar() {
     <Container>
       <nav
         className={cn(
-          "w-full text-white flex items-center justify-between relative"
+          "w-full text-white lg:flex items-center justify-between relative hidden"
         )}
       >
         {/* Navigation menu list */}
