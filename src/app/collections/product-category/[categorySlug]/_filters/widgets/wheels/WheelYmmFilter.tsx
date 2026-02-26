@@ -40,10 +40,36 @@ const WheelYMMFilters = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const isFirstRender = useRef(true);
+  const hasUserInteracted = useRef(false);
 
   useEffect(() => {
     isFirstRender.current = false;
   }, []);
+
+  const handleInteraction = <T extends (...args: any[]) => void>(fn: T) => {
+    return (...args: Parameters<T>) => {
+      hasUserInteracted.current = true;
+      fn(...args);
+    };
+  };
+
+  const handleYearChange = handleInteraction(onYearChange);
+  const handleMakeChange = handleInteraction(onMakeChange);
+  const handleModelChange = handleInteraction(onModelChange);
+  const handleBodyTypeChange = handleInteraction(onBodyTypeChange);
+  const handleSubModelChange = handleInteraction(onSubModelChange);
+
+  // Auto-submit when fully populated
+  useEffect(() => {
+    const isReady = !isDisabledSubmit && shouldShowSubmit;
+    if (isReady && hasUserInteracted.current) {
+      onSubmit(undefined);
+      hasUserInteracted.current = false; // Reset
+    }
+  }, [isDisabledSubmit, shouldShowSubmit, onSubmit]);
+
+  const showBodyType = (bodyTypes?.length ?? 0) > 0;
+  const showSubmodel = (subModels?.length ?? 0) > 0;
 
   const handleOpenChange = (key: string) => (open: boolean) => {
     if (open) {
@@ -148,7 +174,7 @@ const WheelYMMFilters = () => {
       <div className="px-10 pb-10 pt-5 md:pt-2 border-y">
         <div className="w-full flex flex-col gap-1 mt-4">
           <div className="w-full">
-            <Select onValueChange={onYearChange} value={year || undefined} disabled={isYearDisabled} >
+            <Select onValueChange={handleYearChange} value={year || undefined} disabled={isYearDisabled} >
               <SelectTrigger className="w-full p-2 rounded bg-white text-base text-black disabled:opacity-50">
                 <SelectValue placeholder={isYearLoading ? "Loading..." : "Year"} />
               </SelectTrigger>
@@ -162,7 +188,7 @@ const WheelYMMFilters = () => {
             </Select>
           </div>
           <div className="w-full">
-            <Select open={activeDropdown === "make"} onOpenChange={handleOpenChange("make")} onValueChange={onMakeChange} value={make || "__DEFAULT_MAKE__"} disabled={isMakeDisabled} >
+            <Select open={activeDropdown === "make"} onOpenChange={handleOpenChange("make")} onValueChange={handleMakeChange} value={make || "__DEFAULT_MAKE__"} disabled={isMakeDisabled} >
               <SelectTrigger className="w-full p-2 rounded bg-white text-base text-black disabled:opacity-50">
                 <SelectValue placeholder={isMakeLoading ? "Loading..." : "Make"} />
               </SelectTrigger>
@@ -179,7 +205,7 @@ const WheelYMMFilters = () => {
             </Select>
           </div>
           <div className="w-full">
-            <Select open={activeDropdown === "model"} onOpenChange={handleOpenChange("model")} onValueChange={onModelChange} value={model || "__DEFAULT_MODEL__"} disabled={isModelDisabled} >
+            <Select open={activeDropdown === "model"} onOpenChange={handleOpenChange("model")} onValueChange={handleModelChange} value={model || "__DEFAULT_MODEL__"} disabled={isModelDisabled} >
               <SelectTrigger className="w-full p-2 rounded bg-white text-base text-black disabled:opacity-50">
                 <SelectValue placeholder={isModelLoading ? "Loading..." : "Model"} />
               </SelectTrigger>
@@ -195,44 +221,48 @@ const WheelYMMFilters = () => {
               </SelectContent>
             </Select>
           </div>
-          <div className="w-full">
-            <Select open={activeDropdown === "bodyType"} onOpenChange={handleOpenChange("bodyType")} onValueChange={onBodyTypeChange} value={bodyType || "__DEFAULT_BODYTYPE__"} disabled={isBodyTypeDisabled} >
-              <SelectTrigger className="w-full p-2 rounded bg-white text-base text-black disabled:opacity-50">
-                <SelectValue placeholder={isBodyTypeLoading ? "Loading..." : "Body Type"} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="__DEFAULT_BODYTYPE__" className="hidden" disabled>
-                  {isBodyTypeLoading ? "Loading..." : "Body Type"}
-                </SelectItem>
-                {bodyTypes?.map((bt) => (
-                  <SelectItem key={`bodyType-${bt}`} value={bt}>
-                    {bt}
+          {showBodyType && (
+            <div className="w-full">
+              <Select open={activeDropdown === "bodyType"} onOpenChange={handleOpenChange("bodyType")} onValueChange={handleBodyTypeChange} value={bodyType || "__DEFAULT_BODYTYPE__"} disabled={isBodyTypeDisabled} >
+                <SelectTrigger className="w-full p-2 rounded bg-white text-base text-black disabled:opacity-50">
+                  <SelectValue placeholder={isBodyTypeLoading ? "Loading..." : "Body Type"} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__DEFAULT_BODYTYPE__" className="hidden" disabled>
+                    {isBodyTypeLoading ? "Loading..." : "Body Type"}
                   </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="w-full">
-            <Select open={activeDropdown === "subModel"} onOpenChange={handleOpenChange("subModel")} onValueChange={onSubModelChange} value={subModel?.SubModel || "__DEFAULT_SUBMODEL__"} disabled={isSubmodelDisabled} >
-              <SelectTrigger className="w-full p-2 rounded bg-white text-base text-black disabled:opacity-50">
-                <SelectValue placeholder={isSubmodelLoading ? "Loading..." : "Submodel"} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="__DEFAULT_SUBMODEL__" className="hidden" disabled>
-                  {isSubmodelLoading ? "Loading..." : "Submodel"}
-                </SelectItem>
-                {subModels?.map((sm) => (
-                  <SelectItem key={`subModel-${sm.SubModel}`} value={sm.SubModel}>
-                    {sm.SubModel}
+                  {bodyTypes?.map((bt) => (
+                    <SelectItem key={`bodyType-${bt}`} value={bt}>
+                      {bt}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+          {showSubmodel && (
+            <div className="w-full">
+              <Select open={activeDropdown === "subModel"} onOpenChange={handleOpenChange("subModel")} onValueChange={handleSubModelChange} value={subModel?.SubModel || "__DEFAULT_SUBMODEL__"} disabled={isSubmodelDisabled} >
+                <SelectTrigger className="w-full p-2 rounded bg-white text-base text-black disabled:opacity-50">
+                  <SelectValue placeholder={isSubmodelLoading ? "Loading..." : "Submodel"} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__DEFAULT_SUBMODEL__" className="hidden" disabled>
+                    {isSubmodelLoading ? "Loading..." : "Submodel"}
                   </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+                  {subModels?.map((sm) => (
+                    <SelectItem key={`subModel-${sm.SubModel}`} value={sm.SubModel}>
+                      {sm.SubModel}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
         </div>
         <div className="w-full p-4">
           <button
-            onClick={onSubmit}
+            onClick={() => onSubmit(undefined)}
             disabled={isDisabledSubmit && !shouldShowSubmit}
             className={cn(
               "w-full bg-primary hover:bg-primary-hover  text-white py-1 text-base uppercase cursor-pointer",

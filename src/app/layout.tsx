@@ -1,19 +1,16 @@
 import { DynamicAnalytics } from '@/components/dynamic-analytics';
-import Footer from '@/components/shared/Footer/Footer';
 import { GoogleMapScriptLoader } from '@/components/shared-old/googleMapScriptLoader';
+import Footer from '@/components/shared/Footer/Footer';
 import Header from '@/components/shared/Header/Header';
+import Newsletter from '@/components/shared/Newsletter/Newsletter';
 import { CheckoutProvider } from '@/context/checkoutContext';
 import ReduxWrapper from '@/redux/ReduxWrapper';
 import '@/styles/globals.css';
-import { metaDataHelper } from '@/utils/metadata';
-import { DM_Sans, Geist, Geist_Mono, Roboto_Flex } from 'next/font/google';
+import { Metadata } from 'next';
+import { Roboto_Flex } from 'next/font/google';
+import Script from 'next/script';
 import { Toaster } from 'sonner';
 import CartSystem from './cart/v2/page';
-import { Metadata } from 'next';
-import Script from 'next/script';
-import Newsletter from '@/components/shared/Newsletter/Newsletter';
-import ComparisonWidget from '@/components/shared/ComparisonWidget/ComparisonWidget';
-import StickyVehicleSelector from '@/components/shared/header-ymm';
 const robotoFlex = Roboto_Flex({
   variable: '--font-roboto-flex',
   subsets: ['latin'],

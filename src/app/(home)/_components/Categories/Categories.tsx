@@ -1,3 +1,4 @@
+import Container from "@/components/ui/container/container";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -18,7 +19,7 @@ const items = [
 
 export const Categories = () => {
   return (
-       <div className="max-w-[1350px] p-4 mx-auto py-10">
+    <Container className="py-20">
       <div className="grid grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 lg:gap-8 justify-items-center">
         {items.map((item, index) => (
           <Link
@@ -37,6 +38,6 @@ export const Categories = () => {
           </Link>
         ))}
       </div>
-    </div>
+    </Container>
   );
 };

@@ -8,6 +8,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
+import Container from "@/components/ui/container/container";
 
 const HomeBlogList = () => {
     const posts = [
@@ -46,7 +47,7 @@ const HomeBlogList = () => {
     ];
 
     return (
-        <div className="max-w-[1350px] my-12 p-4 mx-auto py-10">
+        <Container className="my-12 py-10">
             <div className="py-4 lg:py-8">
                 <hr className="border-primary border-[1.5px] w-[100px]" />
                 <h3 className="text-3xl lg:text-5xl font-bold uppercase">Latest News</h3>
@@ -104,7 +105,7 @@ const HomeBlogList = () => {
                     <ChevronRight size={38} />
                 </button>
             </div>
-        </div>
+        </Container>
     );
 };
 
