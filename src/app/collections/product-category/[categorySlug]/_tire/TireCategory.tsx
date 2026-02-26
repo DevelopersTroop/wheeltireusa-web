@@ -20,6 +20,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import Container from "@/components/ui/container/container";
 import { cn } from "@/lib/utils";
+import HomeYmm from "@/app/(home)/_components/HeroSection/components/HomeYmm/HomeYmm";
 
 const TireCategory: React.FC<{
   page: number;
@@ -52,16 +53,11 @@ const TireCategory: React.FC<{
             <TireFilters />
           </SidebarFilters>
 
-          <MobileYmmFilter>
-            <TireYMMFilters />
-          </MobileYmmFilter>
-
           <div className="w-full">
             <SortByFilter />
           </div>
         </div>
         <div className="hidden h-full flex-col gap-3 md:flex md:w-[400px]">
-          <TireYMMFilters />
           <TireFilters />
         </div>
         {loading ? <ProductCategoryLoading /> : data?.products?.length === 0 ? (
@@ -70,7 +66,8 @@ const TireCategory: React.FC<{
           </>
         ) : (
           <>
-            <div className="flex w-full flex-col">
+            <div className="flex w-full flex-col gap-4">
+              <HomeYmm variant="product" />
               <div className="flex w-full flex-row justify-between items-center mb-4">
                 <div className="p-2">
                   <Breadcrumb>

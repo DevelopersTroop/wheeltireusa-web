@@ -1,4 +1,5 @@
 'use client';
+import { VehicleSelectorButton } from '@/components/shared/VehicleSelectorModal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import useAuth from '@/hooks/useAuth';
@@ -60,6 +61,7 @@ export default function MiddleHeader() {
                 isHomepage={false}
               />
             </div>
+            <VehicleSelectorButton />
             <div className="flex items-center justify-end gap-2">
               <div className="lg:hidden">
                 <HeaderSearchButton

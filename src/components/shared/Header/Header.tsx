@@ -34,10 +34,10 @@ const Header = () => {
         <>
             <TopBar />
             <MiddleHeader />
-            <div ref={menuRef} className="sticky top-0 z-50">
+            <div ref={menuRef} >
                 <MainMenu />
             </div>
-            <StickyVehicleSelector offset={headerHeight} />
+            <StickyVehicleSelector />
         </>
     );
 };

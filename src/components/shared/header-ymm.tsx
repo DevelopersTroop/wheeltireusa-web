@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 
 // Mock hook - replace with your actual useYmm hook
 
-const StickyVehicleSelector = ({ offset = 64 }: { offset?: number }) => {
+const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
   const {
     isYearLoading,
     isMakeLoading,
@@ -65,133 +65,128 @@ const StickyVehicleSelector = ({ offset = 64 }: { offset?: number }) => {
       {/* Desktop View */}
       <div
         ref={selectorRef}
-        className={`hidden md:block bg-gray-800 transition-all duration-300 z-20 fixed top-0 left-0 right-0 shadow-lg ${isVisible
+        className={`hidden md:block bg-[#E8EDF2] border-b border-gray-200 transition-all duration-300 z-20 fixed top-0 left-0 right-0 shadow-md ${isVisible
           ? "opacity-100"
           : "-translate-y-full opacity-0 pointer-events-none"
           }`}
-        style={isVisible ? { transform: `translateY(${offset}px)` } : {}}
       >
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center">
-            {/* Label Section */}
-            <div className="bg-gray-700 text-white px-6 py-4 text-sm font-medium whitespace-nowrap">
-              Select Your Vehicle
-            </div>
-
+        <div className="max-w-7xl mx-auto px-4 py-3">
+          <div className="flex items-center gap-2">
             {/* Year Dropdown */}
-            <div className="flex-1 bg-red-600 px-4 py-3 flex items-center gap-2">
-              <div className="relative flex-1">
-                <select
-                  value={year || ""}
-                  onChange={(e) => onYearChange(e.target.value)}
-                  className="w-full bg-white text-gray-800 px-4 py-2 pr-10 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-red-500"
-                >
-                  <option value="">Year</option>
-                  {years?.map((y) => (
-                    <option key={y} value={y}>
-                      {y}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 pointer-events-none" />
-              </div>
+            <div className="flex-1 relative flex items-center bg-white border border-gray-300 rounded-sm">
+              <div className="pl-3 pr-3 text-gray-900 font-bold text-sm">1</div>
+              <div className="w-px h-5 bg-gray-300"></div>
+              <select
+                value={year || ""}
+                onChange={(e) => onYearChange(e.target.value)}
+                className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 appearance-none cursor-pointer focus:outline-none"
+              >
+                <option value="">YEAR</option>
+                {years?.map((y) => (
+                  <option key={y} value={y}>
+                    {y}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="absolute right-3 w-4 h-4 text-gray-500 pointer-events-none" />
             </div>
 
             {/* Make Dropdown */}
-            <div className="flex-1 bg-red-700 px-4 py-3 flex items-center gap-2">
-              <div className="relative flex-1">
-                <select
-                  value={make || ""}
-                  onChange={(e) => onMakeChange(e.target.value)}
-                  disabled={isMakeDisabled}
-                  className="w-full bg-white text-gray-800 px-4 py-2 pr-10 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <option value="">Make</option>
-                  {makes?.map((m) => (
-                    <option key={m} value={m}>
-                      {m}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 pointer-events-none" />
-              </div>
+            <div className="flex-1 relative flex items-center bg-white border border-gray-300 rounded-sm">
+              <div className="pl-3 pr-3 text-gray-900 font-bold text-sm">2</div>
+              <div className="w-px h-5 bg-gray-300"></div>
+              <select
+                value={make || ""}
+                onChange={(e) => onMakeChange(e.target.value)}
+                disabled={isMakeDisabled}
+                className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 appearance-none cursor-pointer focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <option value="">MAKE</option>
+                {makes?.map((m) => (
+                  <option key={m} value={m}>
+                    {m}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="absolute right-3 w-4 h-4 text-gray-500 pointer-events-none" />
             </div>
 
             {/* Model Dropdown */}
-            <div className="flex-1 bg-red-800 px-4 py-3 flex items-center gap-2">
-              <div className="relative flex-1">
-                <select
-                  value={model || ""}
-                  onChange={(e) => onModelChange(e.target.value)}
-                  disabled={isModelDisabled}
-                  className="w-full bg-white text-gray-800 px-4 py-2 pr-10 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <option value="">Model</option>
-                  {models?.map((mdl) => (
-                    <option key={mdl} value={mdl}>
-                      {mdl}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 pointer-events-none" />
-              </div>
+            <div className="flex-1 relative flex items-center bg-white border border-gray-300 rounded-sm">
+              <div className="pl-3 pr-3 text-gray-900 font-bold text-sm">3</div>
+              <div className="w-px h-5 bg-gray-300"></div>
+              <select
+                value={model || ""}
+                onChange={(e) => onModelChange(e.target.value)}
+                disabled={isModelDisabled}
+                className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 appearance-none cursor-pointer focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <option value="">MODEL</option>
+                {models?.map((mdl) => (
+                  <option key={mdl} value={mdl}>
+                    {mdl}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="absolute right-3 w-4 h-4 text-gray-500 pointer-events-none" />
             </div>
 
-            <div className="flex-1 bg-red-800 px-4 py-3 flex items-center gap-2">
-              <div className="relative flex-1">
-                <select
-                  value={bodyType || ""}
-                  onChange={(e) => onBodyTypeChange(e.target.value)}
-                  disabled={isBodyTypeDisabled}
-                  className="w-full bg-white text-gray-800 px-4 py-2 pr-10 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <option value="">Body Type</option>
-                  {bodyTypes?.map((mdl) => (
-                    <option key={mdl} value={mdl}>
-                      {mdl}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 pointer-events-none" />
-              </div>
+            {/* Body Type Dropdown */}
+            <div className="flex-1 relative flex items-center bg-white border border-gray-300 rounded-sm">
+              <div className="pl-3 pr-3 text-gray-900 font-bold text-sm">4</div>
+              <div className="w-px h-5 bg-gray-300"></div>
+              <select
+                value={bodyType || ""}
+                onChange={(e) => onBodyTypeChange(e.target.value)}
+                disabled={isBodyTypeDisabled}
+                className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 appearance-none cursor-pointer focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <option value="">BODY TYPE</option>
+                {bodyTypes?.map((mdl) => (
+                  <option key={mdl} value={mdl}>
+                    {mdl}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="absolute right-3 w-4 h-4 text-gray-500 pointer-events-none" />
             </div>
 
-            <div className="flex-1 bg-red-800 px-4 py-3 flex items-center gap-2">
-              <div className="relative flex-1">
-                <select
-                  value={subModel.SubModel || ""}
-                  onChange={(e) => onModelChange(e.target.value)}
-                  disabled={isSubmodelDisabled}
-                  className="w-full bg-white text-gray-800 px-4 py-2 pr-10 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <option value="">Submodel</option>
-                  {subModels?.map((mdl) => (
-                    <option key={mdl.SubModel} value={mdl.SubModel}>
-                      {mdl.SubModel}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 pointer-events-none" />
-              </div>
+            {/* Submodel Dropdown */}
+            <div className="flex-1 relative flex items-center bg-white border border-gray-300 rounded-sm">
+              <div className="pl-3 pr-3 text-gray-900 font-bold text-sm">5</div>
+              <div className="w-px h-5 bg-gray-300"></div>
+              <select
+                value={subModel.SubModel || ""}
+                onChange={(e) => onSubModelChange(e.target.value)}
+                disabled={isSubmodelDisabled}
+                className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 appearance-none cursor-pointer focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <option value="">SUBMODEL</option>
+                {subModels?.map((mdl) => (
+                  <option key={mdl.SubModel} value={mdl.SubModel}>
+                    {mdl.SubModel}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="absolute right-3 w-4 h-4 text-gray-500 pointer-events-none" />
             </div>
 
-            {/* Reset Button */}
+            {/* Reset Button (Icon only to save space) */}
             <button
               onClick={handleReset}
-              className="bg-white hover:bg-gray-100 text-red-600 px-6 py-4 flex items-center gap-2 font-bold uppercase text-sm transition-colors"
+              title="Reset"
+              className="p-2.5 text-gray-500 hover:text-red-600 bg-white border border-gray-300 rounded-sm hover:bg-red-50 transition-colors"
             >
               <RotateCcw className="w-4 h-4" />
-              Reset
             </button>
 
-            {/* Find Button */}
+            {/* Go Button */}
             <button
               onClick={onSubmit}
               disabled={isDisabledSubmit}
-              className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 flex items-center gap-2 font-bold uppercase text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-8 py-2.5 bg-[#3b5998] hover:bg-[#2d4373] text-white font-bold text-sm rounded-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <Search className="w-4 h-4" />
-              Find
+              GO
             </button>
           </div>
         </div>
