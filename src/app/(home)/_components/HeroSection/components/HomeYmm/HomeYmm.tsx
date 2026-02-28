@@ -136,7 +136,7 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
           </div>
           <div className="flex items-center gap-6">
             <Link
-              href={`/collections/product-category/wheels?vehicle=${year}-${make}-${model}`}
+              href={`/collections/product-category/wheels?q=${year}-${make}-${model}`}
               className="text-xs font-bold text-[#111827] border-b-2 border-[#111827] uppercase hover:text-gray-600 hover:border-gray-600 transition-colors pb-0.5 tracking-wide"
             >
               VIEW ALL PRODUCTS FOR MY VEHICLE
