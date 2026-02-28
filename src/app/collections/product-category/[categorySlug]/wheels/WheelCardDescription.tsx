@@ -1,17 +1,62 @@
-"use client";
-import { ProductCardRating } from "@/components/shared/Reviews/components/ProductCardRating/ProductCardRating";
-import { TInventoryItem } from "@/types/product";
-import { FaStar } from "react-icons/fa6";
-import { MdOutlineShoppingCart } from "react-icons/md";
-import { PiTireBold } from "react-icons/pi";
+'use client';
+import { ProductCardRating } from '@/components/shared/Reviews/components/ProductCardRating/ProductCardRating';
+import { addPackage } from '@/redux/features/packageSlice';
+import { useAppDispatch } from '@/redux/store';
+import { TInventoryItem, TWheelProduct } from '@/types/product';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { FaStar } from 'react-icons/fa6';
+import { MdOutlineShoppingCart } from 'react-icons/md';
+import { PiTireBold } from 'react-icons/pi';
+import { v4 as uuidv4 } from 'uuid';
 // import { PiTireBold } from "react-icons/pi";
 
-const WheelCardDescription = ({ product }: { product: TInventoryItem }) => {
+const WheelCardDescription = ({ product }: { product: TWheelProduct }) => {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const searchParams = useSearchParams();
+  const cartPackage = searchParams.get('cartPackage');
+  const addTires = () => {
+    new Promise<{ cartPackage: string }>((res) => {
+      const cartPackage = uuidv4();
+      dispatch(
+        addPackage({
+          packageId: cartPackage,
+          wheel: {
+            ...product,
+            cartPackage,
+          } as any,
+        })
+      );
+      res({ cartPackage });
+    }).then((res) => {
+      router.push(
+        `/collections/product-category/tires?wheelDiameter=${product.wheelDiameter}&cartPackage=${res.cartPackage}`
+      );
+    });
+  };
+
+  const addWheelsToPackage = () => {
+    if (!cartPackage) return;
+    new Promise<{ cartPackage: string }>((res) => {
+      dispatch(
+        addPackage({
+          packageId: cartPackage,
+          wheel: {
+            ...product,
+            cartPackage,
+          },
+        })
+      );
+      res({ cartPackage });
+    }).then((res) => {
+      router.push(`/wheel-and-tire-package?cartPackage=${res.cartPackage}`);
+    });
+  };
   return (
     <div>
       {/* product title */}
       <div>
-        <h3 className="text-xs font-semibold uppercase text-black">
+        <h3 className="text-xl font-semibold uppercase text-black h-14 line-clamp-2">
           {product.title}
         </h3>
       </div>
@@ -23,17 +68,17 @@ const WheelCardDescription = ({ product }: { product: TInventoryItem }) => {
       <div className="hidden flex-col gap-3 min-[600px]:flex">
         <div className="flex items-start gap-1">
           $
-          <span className="text-3xl font-semibold">
-            {(product.sellingPrice)?.toFixed(2) ?? "N/A"}
-          </span>{" "}
+          <span className="text-xl font-semibold">
+            {product.sellingPrice?.toFixed(2) ?? 'N/A'}
+          </span>{' '}
           <span className="my-auto text-xs font-medium uppercase text-primary">
             \ea
           </span>
         </div>
         <div>
           <p className="text-xs">
-            Starting at <span className="font-bold">$82</span>/MO{" "}
-            <span className="font-bold">Affirm</span>{" "}
+            Starting at <span className="font-bold">$82</span>/MO{' '}
+            <span className="font-bold">Affirm</span>{' '}
           </p>
         </div>
       </div>
@@ -60,44 +105,49 @@ const WheelCardDescription = ({ product }: { product: TInventoryItem }) => {
           </div>
         </div> */}
         <div className="flex items-center gap-2">
-          <div className={"inline-block rounded-full bg-primary p-1"}>
-            <MdOutlineShoppingCart className={"text-white"} />
+          <div className={'inline-block rounded-full bg-primary p-1'}>
+            <MdOutlineShoppingCart className={'text-white'} />
           </div>
           <div className="text-xs uppercase">
             <p className="text-gray-800">In Stock & Free Quick Delivery </p>
             <p className="">
-              {" "}
-              As Fast As: <span className="font-semibold">  {(() => {
-                                      const today = new Date();
-                                      const start = new Date(today);
-                                      start.setDate(today.getDate() + 3);
-                                      const end = new Date(today);
-                                      end.setDate(today.getDate() + 7);
+              {' '}
+              As Fast As:{' '}
+              <span className="font-semibold">
+                {' '}
+                {(() => {
+                  const today = new Date();
+                  const start = new Date(today);
+                  start.setDate(today.getDate() + 3);
+                  const end = new Date(today);
+                  end.setDate(today.getDate() + 7);
 
-                                      const format = (date: Date) =>
-                                        date.toLocaleString("en-US", {
-                                          month: "short",
-                                          day: "2-digit",
-                                        });
+                  const format = (date: Date) =>
+                    date.toLocaleString('en-US', {
+                      month: 'short',
+                      day: '2-digit',
+                    });
 
-                                      return `${format(start)} - ${format(end)}`;
-                                    })()} </span> to the lower 48{" "}
+                  return `${format(start)} - ${format(end)}`;
+                })()}{' '}
+              </span>{' '}
+              to the lower 48{' '}
             </p>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <div className={"inline-block rounded-full bg-primary p-1"}>
-            <PiTireBold className={"text-white"} />
+          <div className={'inline-block rounded-full bg-primary p-1'}>
+            <PiTireBold className={'text-white'} />
           </div>
-          <p className="text-xs uppercase text-gray-800">
-            {"Performance"}
-          </p>
+          <p className="text-xs uppercase text-gray-800">{'Performance'}</p>
         </div>
         <div className="flex items-center gap-2">
-          <div className={"inline-block rounded-full bg-primary p-1"}>
-            <FaStar className={"text-white"} />
+          <div className={'inline-block rounded-full bg-primary p-1'}>
+            <FaStar className={'text-white'} />
           </div>
-          <p className="text-xs uppercase text-gray-800">{"Manufacturer Mileage Warranty"}</p>
+          <p className="text-xs uppercase text-gray-800">
+            {'Manufacturer Mileage Warranty'}
+          </p>
         </div>
       </div>
 
@@ -106,19 +156,30 @@ const WheelCardDescription = ({ product }: { product: TInventoryItem }) => {
         <div className="flex items-start gap-1">
           $
           <span className="text-2xl font-semibold">
-            {((product.sellingPrice ?? 0) * 4)?.toFixed(2) || "N/A"}
-          </span>{" "}
-          <span className="my-auto text-xs font-medium text-primary">
-            \ea
-          </span>
+            {((product.sellingPrice ?? 0) * 4)?.toFixed(2) || 'N/A'}
+          </span>{' '}
+          <span className="my-auto text-xs font-medium text-primary">\ea</span>
         </div>
         <div>
           <p className="text-xs">
-            Starting at <span className="font-bold">$82</span>/MO{" "}
-            <span className="font-bold">Affirm</span>{" "}
+            Starting at <span className="font-bold">$82</span>/MO{' '}
+            <span className="font-bold">Affirm</span>{' '}
           </p>
         </div>
       </div>
+
+      <button
+        className="mt-4 font-semibold bg-primary w-full inline-block text-center text-white rounded-xl py-2 cursor-pointer"
+        onClick={() => {
+          if (cartPackage) {
+            addWheelsToPackage();
+          } else {
+            addTires();
+          }
+        }}
+      >
+        Purchase with Tires
+      </button>
     </div>
   );
 };

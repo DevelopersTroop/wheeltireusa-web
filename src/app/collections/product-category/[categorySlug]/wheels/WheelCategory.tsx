@@ -1,27 +1,24 @@
 'use client';
+import HomeYmm from '@/app/(home)/_components/HeroSection/components/HomeYmm/HomeYmm';
+import { Paginate } from '@/components/shared/Paginate/Paginate';
+import ViewToggle from '@/components/shared/ViewToggle/ViewToggle';
+import Breadcrumb from '@/components/ui/breadcrumb/breadcrumb';
+import Item from '@/components/ui/breadcrumb/item';
+import Container from '@/components/ui/container/container';
+import { useFilterSync } from '@/hooks/useFilterSync';
+import { cn } from '@/lib/utils';
+import { useGetProductsQuery } from '@/redux/apis/product';
+import { RootState } from '@/redux/store';
 import { useSearchParams } from 'next/navigation';
 import React from 'react';
-import TireCard from './WheelCard';
-import { useGetProductsQuery } from '@/redux/apis/product';
-import { useFilterSync } from '@/hooks/useFilterSync';
-import SidebarFilters from '../_filters/mobile-filters/SidebarFilter';
-import TireFilters from '../_filters/TireFilters';
-import MobileYmmFilter from '../_filters/mobile-ymm/MobileYmmFilter';
-import TireYMMFilters from '../_filters/widgets/tire/TireYmmFilter';
-import SortByFilter from '../_filters/SortByFilter';
-import ProductCardSkeleton from '../_loading/ProductCardSkeleton';
-import NoProductsFound from '../NoProductsFound';
-import Item from '@/components/ui/breadcrumb/item';
-import Breadcrumb from '@/components/ui/breadcrumb/breadcrumb';
-import { Paginate } from '@/components/shared/Paginate/Paginate';
-import ProductCategoryLoading from '../../_components/_loading';
-import WheelCardList from './WheelCardList';
-import ViewToggle from '@/components/shared/ViewToggle/ViewToggle';
 import { useSelector } from 'react-redux';
-import { RootState } from '@/redux/store';
-import Container from '@/components/ui/container/container';
-import { cn } from '@/lib/utils';
-import HomeYmm from '@/app/(home)/_components/HeroSection/components/HomeYmm/HomeYmm';
+import ProductCategoryLoading from '../../_components/_loading';
+import SidebarFilters from '../_filters/mobile-filters/SidebarFilter';
+import SortByFilter from '../_filters/SortByFilter';
+import TireFilters from '../_filters/TireFilters';
+import NoProductsFound from '../NoProductsFound';
+import WheelCard from './WheelCard';
+import WheelCardList from './WheelCardList';
 
 const WheelCategory: React.FC<{
   page: number;
@@ -96,7 +93,7 @@ const WheelCategory: React.FC<{
               <div
                 className={
                   viewType === 'grid'
-                    ? 'grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'
+                    ? 'grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4'
                     : 'flex w-full flex-col gap-4'
                 }
               >
@@ -105,7 +102,7 @@ const WheelCategory: React.FC<{
                   return (
                     <div key={product.id}>
                       {viewType === 'grid' ? (
-                        <TireCard product={product} key={`grid-${product.id}`} />
+                        <WheelCard product={product} key={`grid-${product.id}`} />
                       ) : (
                         <WheelCardList product={product} key={`list-${product.id}`} />
                       )}
