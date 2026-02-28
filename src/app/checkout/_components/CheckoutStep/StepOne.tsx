@@ -142,9 +142,9 @@ export const StepOne = ({ }) => {
     console.error('Error occurred: And I can see', error);
   };
 
-  // const onInitHandler = (d: string) => {
-  //   console.log('Init data:', d);
-  // };
+  const onInitHandler = (d: string) => {
+    // console.log('Init data:', d);
+  };
 
   // ✅ Input config
   const inputCheckout: TSnapInputCheckout = {
@@ -169,7 +169,6 @@ export const StepOne = ({ }) => {
 
         // ✅ Create Snap instance
         const instance = window.snap.checkoutButton(inputCheckout);
-        'TCL: initSnap -> instance', instance);
         snapInstanceRef.current = instance;
       } catch (error) {
         console.error('Snap Finance init failed:', error);

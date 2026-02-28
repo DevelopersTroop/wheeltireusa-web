@@ -1,12 +1,12 @@
 "use client";
-import { TInventoryBase } from "@/types/product";
+import { TInventoryItem } from "@/types/product";
 import { getProductThumbnail } from "@/utils/product";
 import { useEffect, useState } from "react";
 import Gallery from "react-image-gallery";
 import "react-image-gallery/styles/image-gallery.css";
 
 interface ImageGalleryProps {
-  product: TInventoryBase;
+  product: TInventoryItem;
   fallbackImage: string;
 }
 

@@ -39,7 +39,7 @@ const ImageGallery = ({ product }: { product: TInventoryItem | IGallery }) => {
     // 2. Handle Gallery / Additional Images
     let additional: string[] = [];
     if (isInventoryItem(product)) {
-      additional = product.galleryImages || [];
+      additional = product.images || [];
     } else {
       // Use images array or additionalImages array from IGallery
       additional = product.additionalImages || [];

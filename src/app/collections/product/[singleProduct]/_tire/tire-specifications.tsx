@@ -4,7 +4,7 @@ import { TTireProduct } from "@/types/product";
 const tire_specs_key: (keyof TTireProduct)[] = [
   "tireSize",
   "tireWidth",
-  "tireAspectRatio",
+  "tireRatio",
   "tireDiameter",
   "speedRating",
   "loadIndex",
@@ -12,21 +12,14 @@ const tire_specs_key: (keyof TTireProduct)[] = [
   "ply",
   "tireClass",
   "tireType",
-  "tireStyle",
-  "terrain",
   "runFlat",
-  "mS",
-  "treadDepth",
+  "MSRating",
   "treadDepthIn",
   "treadDepthMm",
   "maxAirPressurePsi",
   "utqg",
-  "mileageWarranty",
-  "tireWeight",
   "sidewall",
   "revsPerMile",
-  "tireMaxLoadLbs",
-  "tireMaxLoadKg",
 ];
 
 const TireSpecifications = ({ product }: { product: TTireProduct }) => {

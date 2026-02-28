@@ -8,7 +8,7 @@ const WheelTitle = ({ product }: { product: TWheelProduct }) => {
                 <p className="text-2xl font-semibold text-gray-800">
                     {product.title} {product.brand} <br />
                     <span className="text-lg">
-                        {product.wheelSize || `${product.diameter}" x ${product.width}"`}
+                        {product.wheelSize || `${product.wheelDiameter}" x ${product.wheelWidth}"`}
                     </span>
                 </p>
             </div>

@@ -1,10 +1,9 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { getProductImage } from "@/lib/utils";
 import { addToCart } from "@/redux/features/cartSlice";
 import { useTypedSelector } from "@/redux/store";
 import { getPrice } from "@/utils/price";
-import { productsByCategory } from "@/utils/product";
+import { getProductThumbnail, productsByCategory } from "@/utils/product";
 import { useSearchParams } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
@@ -84,7 +83,7 @@ function ProductCard({
       {/* Image */}
       <div className="relative bg-gradient-to-b from-secondary/30 to-secondary/10 p-6 pt-12 flex items-center justify-center overflow-hidden">
         <img
-          src={getProductImage(false, product)}
+          src={getProductThumbnail( product)}
           alt={`${product.brand} ${product.model}`}
           className="w-full max-w-[320px] h-[280px] object-contain transition-transform duration-500 group-hover:scale-105"
         />
@@ -100,11 +99,11 @@ function ProductCard({
           <h3 className="text-xl font-bold text-foreground mt-0.5 leading-tight">
             {product.model}
           </h3>
-          {isWheel && wheelProduct?.finish && (
+          {/* {isWheel && wheelProduct?.finish && (
             <p className="text-sm text-muted-foreground mt-1">
               {wheelProduct.finish}
             </p>
-          )}
+          )} */}
           {!isWheel && tireProduct?.tireSize && (
             <p className="text-sm text-muted-foreground mt-1">
               Size: {tireProduct.tireSize}
@@ -127,21 +126,21 @@ function ProductCard({
               <SpecBadge
                 label="Diameter"
                 value={
-                  wheelProduct.wheelDiameter || wheelProduct.diameter
+                  wheelProduct.wheelDiameter
                 }
               />
               <SpecBadge
                 label="Width"
-                value={wheelProduct.wheelWidth || wheelProduct.width}
+                value={wheelProduct.wheelWidth}
               />
               <SpecBadge label="Offset" value={wheelProduct.offset} />
               <SpecBadge
                 label="Bolt"
-                value={wheelProduct.boltPattern1}
+                value={wheelProduct?.boltPatterns?.join(", ") || ""}
               />
               <SpecBadge
                 label="Centerbore"
-                value={wheelProduct.centerbore}
+                value={wheelProduct.centerBore}
               />
             </>
           )}
@@ -150,7 +149,7 @@ function ProductCard({
               <SpecBadge label="Width" value={tireProduct.tireWidth} />
               <SpecBadge
                 label="Aspect"
-                value={tireProduct.tireAspectRatio}
+                value={tireProduct.tireRatio}
               />
               <SpecBadge
                 label="Speed"
@@ -189,13 +188,13 @@ function ProductCard({
         )}
 
         {/* Description */}
-        {product.description && (
+        {product.shortDescription && (
           <div className="border-t border-border/50 pt-4">
             <h4 className="text-sm font-semibold text-foreground mb-2">
               About {product.brand} {product.model}
             </h4>
             <p className="text-sm text-muted-foreground leading-relaxed line-clamp-4">
-              {product.description}
+              {product.shortDescription}
             </p>
           </div>
         )}
@@ -226,24 +225,23 @@ function WheelSpecTable({ product }: { product: TWheelProduct }) {
     <div className="space-y-0.5">
       <SpecRow label="Brand" value={product.brand} />
       <SpecRow label="Model" value={product.model} />
-      <SpecRow label="Diameter" value={product.wheelDiameter || product.diameter} />
-      <SpecRow label="Width" value={product.wheelWidth || product.width} />
+      <SpecRow label="Diameter" value={product.wheelDiameter} />
+      <SpecRow label="Width" value={product.wheelWidth} />
       <SpecRow label="Wheel Size" value={product.wheelSize} />
-      <SpecRow label="Bolt Pattern" value={product.boltPattern1} />
-      <SpecRow label="Bolt Pattern 2" value={product.boltPattern2} />
+      <SpecRow label="Bolt Pattern" value={product.boltPatterns?.join(", ") || ""} />
       <SpecRow label="Offset" value={product.offset} />
       <SpecRow label="Backspacing" value={product.backspacing} />
-      <SpecRow label="Centerbore" value={product.centerbore} />
-      <SpecRow label="Finish" value={product.finish} />
+      <SpecRow label="Centerbore" value={product.centerBore} />
+      {/* <SpecRow label="Finish" value={product.finish} />
       <SpecRow label="Finish Type" value={product.finishType} />
       <SpecRow label="Style" value={product.style} />
       <SpecRow label="Design Type" value={product.designType} />
-      <SpecRow label="Load Rating" value={product.loadRating} />
+      <SpecRow label="Load Rating" value={product.loadRating} /> */}
       <SpecRow label="Max Load (lbs)" value={product.maxLoadLbs} />
       <SpecRow label="Max Load (kg)" value={product.maxLoadKg} />
-      <SpecRow label="Lip Size" value={product.lipSize} />
-      <SpecRow label="Forging Style" value={product.forgingStyle} />
-      <SpecRow label="Dually" value={product.dually} />
+      {/* <SpecRow label="Lip Size" value={product.lipSize} /> */}
+      {/* <SpecRow label="Forging Style" value={product.forgingStyle} /> */}
+      {/* <SpecRow label="Dually" value={product.dually} /> */}
     </div>
   );
 }
@@ -255,22 +253,21 @@ function TireSpecTable({ product }: { product: TTireProduct }) {
       <SpecRow label="Model" value={product.model} />
       <SpecRow label="Tire Size" value={product.tireSize} />
       <SpecRow label="Width" value={product.tireWidth} />
-      <SpecRow label="Aspect Ratio" value={product.tireAspectRatio} />
+      <SpecRow label="Aspect Ratio" value={product.tireRatio} />
       <SpecRow label="Diameter" value={product.tireDiameter} />
       <SpecRow label="Speed Rating" value={product.speedRating} />
       <SpecRow label="Load Index" value={product.loadIndex} />
       <SpecRow label="Load Range" value={product.loadRange} />
-      <SpecRow label="Max Load (lbs)" value={product.tireMaxLoadLbs} />
+      <SpecRow label="Max Load (lbs)" value={product.maxLoadLbs} />
       <SpecRow label="Ply" value={product.ply} />
       <SpecRow label="Tire Class" value={product.tireClass} />
       <SpecRow label="Tire Type" value={product.tireType} />
-      <SpecRow label="Tire Style" value={product.tireStyle} />
-      <SpecRow label="Terrain" value={product.terrain} />
+      {/* <SpecRow label="Terrain" value={product.terrain} /> */}
       <SpecRow label="Run Flat" value={product.runFlat} />
-      <SpecRow label="Tread Depth" value={product.treadDepth} />
+      <SpecRow label="Tread Depth" value={product.treadDepthIn} />
       <SpecRow label="UTQG" value={product.utqg} />
-      <SpecRow label="Mileage Warranty" value={product.mileageWarranty} />
-      <SpecRow label="M+S" value={product.mS} />
+      {/* <SpecRow label="Mileage Warranty" value={product.mileageWarranty} /> */}
+      <SpecRow label="M+S" value={product.MSRating} />
       <SpecRow label="Max Inflation (PSI)" value={product.maxAirPressurePsi} />
       <SpecRow label="Sidewall" value={product.sidewall} />
       <SpecRow label="Revs Per Mile" value={product.revsPerMile} />

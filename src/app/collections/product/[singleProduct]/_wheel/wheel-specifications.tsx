@@ -2,26 +2,13 @@ import { camelCaseToWords } from "@/utils/string";
 import { TWheelProduct } from "@/types/product";
 
 const wheel_specs_keys: (keyof TWheelProduct)[] = [
-    "diameter",
-    "width",
-    "boltPattern1",
-    "boltPattern2",
     "offset",
     "backspacing",
-    "centerbore",
-    "finish",
-    "finishType",
-    "loadRating",
     "maxLoadLbs",
     "maxLoadKg",
     "wheelDiameter",
     "wheelWidth",
     "wheelSize",
-    "lipSize",
-    "style",
-    "designType",
-    "forgingStyle",
-    "dually",
 ];
 
 const WheelSpecifications = ({ product }: { product: TWheelProduct }) => {

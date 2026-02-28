@@ -31,7 +31,7 @@ export function isSale(
 }
 
 export function getPrice(
-  product: TInventoryItem | TProductInfo | TCartProduct
+  product: TInventoryItem | TProductInfo | TCartProduct | {sellingPrice: number | null}
 ): number {
   return product?.sellingPrice ?? 0;
 }

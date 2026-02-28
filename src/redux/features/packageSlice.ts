@@ -1,20 +1,21 @@
-import { TInventoryItem } from "@/types/product";
+import { TInventoryItem, TTireProduct, TWheelProduct } from "@/types/product";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // Each package is keyed by its ID
 type IState = {
   [packageId: string]: {
-    wheel?: TInventoryItem;
-    tire?: TInventoryItem;
+    wheel?: TWheelPackageItem;
+    tire?: TTirePackageItem;
   };
 };
 
-type TPackageItem = TInventoryItem & { cartPackage: string };
+type TWheelPackageItem = TWheelProduct & { cartPackage: string };
+type TTirePackageItem = TTireProduct & { cartPackage: string };
 
 type PackagePayload = {
   packageId: string;
-  wheel?: TPackageItem;
-  tire?: TPackageItem;
+  wheel?: TWheelPackageItem;
+  tire?: TTirePackageItem;
 };
 
 const initialState: IState = {};

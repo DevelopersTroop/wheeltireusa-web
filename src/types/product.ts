@@ -107,8 +107,11 @@ export type TWheelProduct = {
   maxLoadLbs: string | null;
   maxLoadKg: string | null;
   raw_size: string | null;
-   
+  sellingPrice: number | null;
+  availableStock: number | null;
+  shortDescription: string | null;
+
 }
-export type TInventoryItem = TTireProduct & TWheelProduct & {
+export type TInventoryItem = TTireProduct | TWheelProduct & {
 
 };
