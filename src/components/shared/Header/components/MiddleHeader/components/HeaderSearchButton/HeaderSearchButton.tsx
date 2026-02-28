@@ -7,6 +7,7 @@ import { X } from "lucide-react";
 import { BiSearch } from "react-icons/bi";
 import { Controller, useForm } from "react-hook-form";
 import { trackEvent } from "@/lib/tracker";
+import SearchSuggestion from "./components/SearchSuggestion/SearchSuggestion";
 
 interface HeaderSearchButtonProps {
   isHomepage: boolean;
@@ -122,7 +123,7 @@ const HeaderSearchButton: React.FC<HeaderSearchButtonProps> = ({
             </form>
 
             {/* Suggestions */}
-            {/* <SearchSuggestion setOpen={setOpen} searchInput={searchInput} /> */}
+            <SearchSuggestion setOpen={setOpen} searchInput={searchInput} />
           </div>
         </div>
       )}

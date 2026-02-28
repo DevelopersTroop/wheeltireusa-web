@@ -69,19 +69,4 @@ export function normalizeImageUrl(
     return `${s3BucketUrl}/${url}`;
   }
 }
-export function getProductImage(imageErr: boolean, product:TInventoryItem) {
-  const notAvailableImage =
-    product.category?.slug === "wheels"
-      ? "/not-available.webp"
-      : product.category?.slug === "tires"
-      ? "/accessory-not-available.webp"
-      : "";
-  if (imageErr) {
-    return normalizeImageUrl("", notAvailableImage);
-  }
 
-  return normalizeImageUrl(
-    product.itemImage,
-    notAvailableImage
-  );
-}
