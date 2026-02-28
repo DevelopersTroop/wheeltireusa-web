@@ -20,6 +20,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import Container from "@/components/ui/container/container";
 import { cn } from "@/lib/utils";
+import HomeYmm from "@/app/(home)/_components/HeroSection/components/HomeYmm/HomeYmm";
 
 const TireCategory: React.FC<{
   page: number;
@@ -41,6 +42,9 @@ const TireCategory: React.FC<{
           dangerouslySetInnerHTML={{ __html: topDescription }}
         />
       )}
+      <div className='max-w-7xl mx-auto mb-10'>
+        <HomeYmm variant="product" />
+      </div>
       <Container className={
         cn(
           "flex w-full flex-col gap-6 md:px-4 pb-6 pt-2 md:flex-row",
@@ -52,16 +56,11 @@ const TireCategory: React.FC<{
             <TireFilters />
           </SidebarFilters>
 
-          <MobileYmmFilter>
-            <TireYMMFilters />
-          </MobileYmmFilter>
-
           <div className="w-full">
             <SortByFilter />
           </div>
         </div>
         <div className="hidden h-full flex-col gap-3 md:flex md:w-[400px]">
-          <TireYMMFilters />
           <TireFilters />
         </div>
         {loading ? <ProductCategoryLoading /> : data?.products?.length === 0 ? (
@@ -70,7 +69,7 @@ const TireCategory: React.FC<{
           </>
         ) : (
           <>
-            <div className="flex w-full flex-col">
+            <div className="flex w-full flex-col gap-4">
               <div className="flex w-full flex-row justify-between items-center mb-4">
                 <div className="p-2">
                   <Breadcrumb>
@@ -96,7 +95,7 @@ const TireCategory: React.FC<{
               <div
                 className={
                   viewType === "grid"
-                    ? "grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
+                    ? "grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"
                     : "flex w-full flex-col gap-4"
                 }
               >

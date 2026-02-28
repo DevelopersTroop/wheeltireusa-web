@@ -25,24 +25,7 @@ export default function HeroSection() {
             </h1>
           </div>
 
-          <div className="w-full flex flex-col items-center bg-gray-900/80  pb-8 rounded-lg text-white">
-            <div className="w-full flex flex-row">
-              <div
-                className={`w-full p-4 cursor-pointer ${activeTab === 'vehicle' ? 'bg-primary hover:bg-primary-hover' : 'bg-black'}`}
-                onClick={() => setActiveTab('vehicle')}
-              >
-                <h2 className="uppercase text-base sm:text-xl">SEARCH VEHICLE</h2>
-              </div>
-              <div
-                className={`w-full p-4 cursor-pointer ${activeTab === 'wheels' ? 'bg-primary hover:bg-primary-hover' : 'bg-black'}`}
-                onClick={() => setActiveTab('wheels')}
-              >
-                <h2 className="uppercase text-base sm:text-xl">WHEELS BY SIZE & BRAND</h2>
-              </div>
-            </div>
-
-            {activeTab === 'vehicle' ? <HomeYmm /> : <WheelsBySizeAndBrand />}
-          </div>
+          <HomeYmm />
         </div>
       </div>
     </div>

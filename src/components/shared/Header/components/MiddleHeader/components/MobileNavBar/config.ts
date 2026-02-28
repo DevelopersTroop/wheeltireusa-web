@@ -200,11 +200,6 @@ const mobileNavMenus: NavMenu[] = [
   },
   {
     meagMenu: false,
-    label: 'Gallery',
-    href: '/gallery',
-  },
-  {
-    meagMenu: false,
     label: 'Interior',
     href: '#',
     children: [
@@ -220,6 +215,11 @@ const mobileNavMenus: NavMenu[] = [
       { label: 'Interior Safety', href: '/collection/product-category/wheels' },
       { label: 'Seats', href: '/collection/product-category/wheels' },
     ],
+  },
+  {
+    meagMenu: false,
+    label: 'Gallery',
+    href: '/gallery',
   },
   // {
   //   meagMenu: false,

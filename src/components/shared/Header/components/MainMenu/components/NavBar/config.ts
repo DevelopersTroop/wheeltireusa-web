@@ -187,11 +187,6 @@ const navMenus: NavMenu[] = [
 
   {
     meagMenu: false,
-    label: 'Gallery',
-    href: '/gallery',
-  },
-  {
-    meagMenu: false,
     label: 'Accessories',
     href: '/collections/product-category/accessories',
     children: [
@@ -343,11 +338,11 @@ const navMenus: NavMenu[] = [
     ],
   },
 
-  {
-    label: 'Financing',
-    href: '/financing',
-    meagMenu: false,
-  },
+  // {
+  //   label: 'Financing',
+  //   href: '/financing',
+  //   meagMenu: false,
+  // },
   {
     meagMenu: false,
     label: 'Resource',
@@ -356,6 +351,11 @@ const navMenus: NavMenu[] = [
       {
         label: 'Affiliate Program',
         href: '/affiliates',
+      },
+      {
+        meagMenu: false,
+        label: 'Gallery',
+        href: '/gallery',
       },
     ],
   },

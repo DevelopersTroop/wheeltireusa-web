@@ -108,11 +108,11 @@ const navMenus: NavMenu[] = [
     label: 'Deals',
     href: '/deals-and-rebates',
   },
-  {
-    megaMenu: false,
-    label: 'Financing',
-    href: '/financing',
-  },
+  // {
+  //   megaMenu: false,
+  //   label: 'Financing',
+  //   href: '/financing',
+  // },
   {
     megaMenu: false,
     label: 'Support',

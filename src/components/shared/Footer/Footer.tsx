@@ -4,12 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Facebook, Linkedin, MailCheck } from "lucide-react";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
+import Container from "@/components/ui/container/container";
 
 export default function Footer() {
   const dispatch = useDispatch();
   return (
     <>
-      <div className="text-center container mx-auto px-4 text-gray-500">
+      <Container className="text-center container mx-auto px-4 text-gray-500">
         <p>
           {
             `
@@ -17,10 +18,10 @@ export default function Footer() {
             `
           }
         </p>
-      </div>
+      </Container>
       {/* <FAQs /> */}
       <footer className="bg-black pt-12 pb-6">
-        <div className="container mx-auto px-4">
+        <Container>
           <div className="w-full mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <h3 className="text-white text-2xl font-semibold mb-4">
@@ -243,7 +244,7 @@ export default function Footer() {
               <span>© 2025 Wheel Tire USA</span>
             </div>
           </div>
-        </div>
+        </Container>
       </footer>
     </>
   );
