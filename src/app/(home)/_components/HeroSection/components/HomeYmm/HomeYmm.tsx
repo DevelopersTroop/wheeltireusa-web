@@ -264,14 +264,14 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
         <div className="flex items-center gap-3 lg:gap-4 w-full md:w-auto">
           <button
             onClick={handleClear}
-            className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 lg:px-6 py-3 border border-gray-300 bg-white rounded-sm text-sm font-bold text-[#4B5563] hover:bg-gray-50 uppercase shadow-sm whitespace-nowrap transition-colors"
+            className="flex-1 md:flex-none min-[375px]:px-2 flex items-center justify-center gap-2 px-4 lg:px-6 py-3 border border-gray-300 bg-white rounded-sm text-sm font-bold text-[#4B5563] hover:bg-gray-50 uppercase shadow-sm whitespace-nowrap transition-colors"
           >
             <ArrowLeftRight className="w-4 h-4" />
             CHANGE VEHICLE
           </button>
           <button
             onClick={() => onSubmit()}
-            className="flex-1 md:flex-none px-6 lg:px-8 py-3 bg-[#dc5454] hover:bg-red-600 rounded-sm text-sm font-bold text-white uppercase shadow-sm whitespace-nowrap transition-colors"
+            className="flex-1 md:flex-none min-[375px]:px-4 px-6 lg:px-8 py-3 bg-[#dc5454] hover:bg-red-600 rounded-sm text-sm font-bold text-white uppercase shadow-sm whitespace-nowrap transition-colors"
           >
             SHOP NOW
           </button>

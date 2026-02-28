@@ -42,7 +42,7 @@ export default function MiddleHeader() {
           </div>
         )}
 
-        <div className="px-4 py-3">
+        <div className="py-3">
           <div className="flex items-center justify-between gap-4">
             <MobileNavbar />
 
@@ -51,7 +51,7 @@ export default function MiddleHeader() {
                 <img
                   src="/images/logo.png"
                   alt="Custom Offsets"
-                  className="h-6 min-[390px]:h-7 lg:h-8 xl:h-12"
+                  className="h-6 min-[475px]:h-7 lg:h-8 xl:h-12"
                 />
               </Link>
             </div>
@@ -106,16 +106,19 @@ export default function MiddleHeader() {
 
               <div className="flex items-center gap-2 md:hidden">
                 <Link href={user?.email ? '/dashboard' : '/login'}>
-                  <BiUserCircle size={32} className="text-gray-600" />
+                  <BiUserCircle size={26} className="text-gray-600" />
                 </Link>
                 <div onClick={setOpen} className="relative cursor-pointer">
-                  <BiShoppingBag size={32} className="text-gray-600" />
+                  <BiShoppingBag size={26} className="text-gray-600" />
                   <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-xs text-white">
                     {cartQuantity}
                   </span>
                 </div>
               </div>
             </div>
+          </div>
+          <div className='lg:hidden flex justify-center py-2'>
+            <VehicleSelectorButton />
           </div>
         </div>
       </div>

@@ -68,6 +68,14 @@ const useYmm = (isWheel: boolean = true) => {
   const [isDisabledSubmit, setIsDisabledSubmit] = useState(true);
   const ymm = useTypedSelector((state) => state.yearMakeModel);
 
+  // Reset local state when Redux state is cleared (e.g., clearYearMakeModel)
+  useEffect(() => {
+    if (!ymm.year && !ymm.make && !ymm.model && !ymm.bodyType) {
+      setSelectedVehicle(null);
+      setIsDisabledSubmit(true);
+    }
+  }, [ymm.year, ymm.make, ymm.model, ymm.bodyType]);
+
   // fetch year
   useEffect(() => {
     if (!ymm.list?.years || ymm.list.years.length === 0) {
@@ -80,7 +88,7 @@ const useYmm = (isWheel: boolean = true) => {
           setIsLoading((prev) => ({ ...prev, year: false }));
         });
     }
-  }, []);
+  }, [ymm.list?.years?.length]);
 
   // fetch makes (only when makes list is empty and year is selected)
   useEffect(() => {

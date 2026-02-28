@@ -176,7 +176,7 @@ const HeaderSearchButton: React.FC<HeaderSearchButtonProps> = ({
             }}
             aria-label={ariaLabel || "Open mobile search"}
           >
-            <BiSearch size={32} className="text-gray-600" />
+            <BiSearch size={26} className="text-gray-600" />
           </div>
         </form>
       </div>
