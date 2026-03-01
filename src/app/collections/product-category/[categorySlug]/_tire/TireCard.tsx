@@ -1,7 +1,7 @@
 'use client';
 import { TInventoryItem, TTireProduct } from '@/types/product';
 import { getProductThumbnail } from '@/utils/product';
-import Image from 'next/image';
+import ProductImage from '@/components/shared/ProductImage/ProductImage';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
@@ -29,14 +29,14 @@ const TireCard = ({ product }: { product: TInventoryItem }) => {
 
       <div className="flex w-full items-center justify-center pt-5">
         <Link href={productLink}>
-          <Image
+          <ProductImage
             className={'d-block mx-auto w-full rounded-xl object-cover'}
             height={238}
             width={238}
             alt="product image"
             src={getProductThumbnail(product)}
             onError={() => setImageErr(true)}
-          ></Image>
+          />
         </Link>
       </div>
       <Link href={productLink} className="py-6">
