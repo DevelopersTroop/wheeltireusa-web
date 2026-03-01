@@ -4,14 +4,38 @@ import { baseApi } from './base';
 import { TFilters } from '@/types/filter';
 
 const shouldArray = [
+  // Wheel filters
+  'wheelDiameter',
+  'wheelWidth',
+  'color',
+  'brand',
   'model',
-  'tireSize',
-  'diameter',
+  'boltPatterns',
+  'offset',
+  'backspacing',
+  'loadRating',
+  'centerBore',
+  'wheelMaterial',
+  'wheelStructure',
+  // Tire filters
+  'tireDiameter',
+  'tireWidth',
+  'tireAspectRatio',
   'tireType',
+  'tireSize',
+  'loadIndex',
+  'speedRating',
+  'loadRange',
+  'mileageWarranty',
+  'terrain',
+  'sidewall',
+  'ply',
+  // Accessories filters
+  // 'category',
+  // Legacy keys (kept for backward compatibility)
+  'diameter',
   'customerRating',
   'speedIndex',
-  'loadIndex',
-  'mileageWarranty',
 ];
 
 const products = baseApi.injectEndpoints({

@@ -7,27 +7,15 @@ export type TSingleFilter = {
   count: number;
 };
 
+/**
+ * Dynamic filter type: the API returns a flat object where
+ * - `price` is always a { min, max } range
+ * - every other key is an array of { value, count } items
+ *
+ * Using a loose index signature so we never need to hardcode keys again.
+ */
 export type TFilters = {
   price: TPriceFilter;
-  model: TSingleFilter[];
-  tire_size: TSingleFilter[];
-  tire_type: TSingleFilter[];
-  diameter: TSingleFilter[];
-  brand: TSingleFilter[];
-  tire_height: TSingleFilter[];
-  load_range: TSingleFilter[];
-  load_index: TSingleFilter[];
-  speed_index: TSingleFilter[];
-  category: TSingleFilter[];
-  customer_rating: TSingleFilter[];
-  mileage_warranty: TSingleFilter[];
-  special_offers: TSingleFilter[];
-  // Wheel-specific filters
-  width: TSingleFilter[];
-  offset: TSingleFilter[];
-  brand_desc: TSingleFilter[];
-  display_model_no: TSingleFilter[];
-  fancy_finish_desc: TSingleFilter[];
-  bolt_pattern_metric: TSingleFilter[];
-  material: TSingleFilter[];
+} & {
+  [key: string]: TSingleFilter[] | TPriceFilter;
 };

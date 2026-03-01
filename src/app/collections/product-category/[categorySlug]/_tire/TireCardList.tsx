@@ -1,5 +1,5 @@
 "use client";
-import { TInventoryItem } from "@/types/product";
+import { TInventoryItem, TTireProduct } from "@/types/product";
 import { getProductThumbnail } from "@/utils/product";
 import Image from "next/image";
 import Link from "next/link";
@@ -38,7 +38,7 @@ const TireCardList = ({ product }: { product: TInventoryItem }) => {
             </div>
             <div className="grow flex flex-col justify-center py-2 h-full">
                 <Link href={productLink} className="h-full block">
-                    <TireCardDescription product={product} />
+                    <TireCardDescription product={product as TTireProduct} />
                 </Link>
             </div>
         </div>

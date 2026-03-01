@@ -40,6 +40,7 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
 
   const [isVisible, setIsVisible] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const selectorRef = useRef<HTMLDivElement>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
@@ -49,6 +50,18 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
 
   useEffect(() => {
     isFirstRender.current = false;
+  }, []);
+
+  // Track screen size to conditionally render desktop vs mobile
+  useEffect(() => {
+    const mql = window.matchMedia("(max-width: 767px)");
+    setIsMobile(mql.matches);
+    const handler = (e: MediaQueryListEvent) => {
+      setIsMobile(e.matches);
+      setActiveDropdown(null); // close any open dropdown on resize
+    };
+    mql.addEventListener("change", handler);
+    return () => mql.removeEventListener("change", handler);
   }, []);
 
   useEffect(() => {
@@ -84,24 +97,48 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
   useEffect(() => {
     if (isFirstRender.current) return;
     let timeoutId: NodeJS.Timeout;
-    if (year && !isMakeLoading && !isMakeDisabled && (makes?.length ?? 0) > 0 && (!make || make === "__DEFAULT_MAKE__")) {
+    if (isVisible && year && !isMakeLoading && !isMakeDisabled && (makes?.length ?? 0) > 0 && (!make || make === "__DEFAULT_MAKE__")) {
       timeoutId = setTimeout(() => {
         setActiveDropdown("make");
       }, 200);
     }
     return () => clearTimeout(timeoutId);
-  }, [year, isMakeLoading, isMakeDisabled, makes?.length, make]);
+  }, [year, isMakeLoading, isMakeDisabled, makes?.length, make, isVisible]);
 
   useEffect(() => {
     if (isFirstRender.current) return;
     let timeoutId: NodeJS.Timeout;
-    if (make && !isModelLoading && !isModelDisabled && (models?.length ?? 0) > 0 && (!model || model === "__DEFAULT_MODEL__")) {
+    if (isVisible && make && !isModelLoading && !isModelDisabled && (models?.length ?? 0) > 0 && (!model || model === "__DEFAULT_MODEL__")) {
       timeoutId = setTimeout(() => {
         setActiveDropdown("model");
       }, 200);
     }
     return () => clearTimeout(timeoutId);
-  }, [make, isModelLoading, isModelDisabled, models?.length, model]);
+  }, [make, isModelLoading, isModelDisabled, models?.length, model, isVisible]);
+
+  // Auto-advance: open Body Type after Model is selected
+  useEffect(() => {
+    if (isFirstRender.current) return;
+    let timeoutId: NodeJS.Timeout;
+    if (isVisible && model && model !== "__DEFAULT_MODEL__" && !isBodyTypeLoading && !isBodyTypeDisabled && (bodyTypes?.length ?? 0) > 0 && (!bodyType || bodyType === "__DEFAULT_BODYTYPE__")) {
+      timeoutId = setTimeout(() => {
+        setActiveDropdown("bodyType");
+      }, 200);
+    }
+    return () => clearTimeout(timeoutId);
+  }, [model, isBodyTypeLoading, isBodyTypeDisabled, bodyTypes?.length, bodyType, isVisible]);
+
+  // Auto-advance: open SubModel after Body Type is selected
+  useEffect(() => {
+    if (isFirstRender.current) return;
+    let timeoutId: NodeJS.Timeout;
+    if (isVisible && bodyType && bodyType !== "__DEFAULT_BODYTYPE__" && !isSubmodelLoading && !isSubmodelDisabled && (subModels?.length ?? 0) > 0 && (!subModel || subModel?.SubModel === "__DEFAULT_SUBMODEL__")) {
+      timeoutId = setTimeout(() => {
+        setActiveDropdown("subModel");
+      }, 200);
+    }
+    return () => clearTimeout(timeoutId);
+  }, [bodyType, isSubmodelLoading, isSubmodelDisabled, subModels?.length, subModel, isVisible]);
 
   const handleReset = () => {
     onYearChange("");
@@ -109,19 +146,19 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
     onModelChange("");
   };
 
-  const showBodyType = false;
-  const showSubmodel = false;
+  const showBodyType = (bodyTypes?.length ?? 0) > 0;
+  const showSubmodel = (subModels?.length ?? 0) > 0;
 
   return (
     <>
       <div ref={sentinelRef} className="h-px" />
 
       {/* Desktop View */}
-      <div
+      {!isMobile && <div
         ref={selectorRef}
-        className={`hidden md:block bg-[#E8EDF2] border-b border-gray-200 transition-all duration-300 z-20 fixed top-0 left-0 right-0 shadow-md ${isVisible
+        className={`bg-[#E8EDF2] border-b border-gray-200 transition-all duration-300 z-20 fixed top-0 left-0 right-0 shadow-md ${isVisible
           ? "opacity-100"
-          : "-translate-y-full opacity-0 pointer-events-none hidden"
+          : "-translate-y-full opacity-0 pointer-events-none"
           }`}
       >
         <div className="max-w-7xl mx-auto px-4 py-3">
@@ -231,13 +268,13 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
             </button>
           </div>
         </div>
-      </div>
+      </div>}
 
       {/* Mobile View */}
-      <div
-        className={`md:hidden bg-gray-800 transition-all duration-300 z-50 fixed top-0 left-0 right-0 shadow-lg ${isVisible
+      {isMobile && <div
+        className={`bg-gray-800 transition-all duration-300 z-50 fixed top-0 left-0 right-0 shadow-lg ${isVisible
           ? "opacity-100"
-          : "-translate-y-full opacity-0 pointer-events-none hidden"
+          : "-translate-y-full opacity-0 pointer-events-none"
           }`}
         style={isVisible ? { transform: `translateY(${offset}px)` } : {}}
       >
@@ -266,7 +303,7 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
             <div>
               <label className="text-white text-xs font-bold mb-1 block uppercase">Year</label>
               <div className="relative">
-                <Select onValueChange={handleYearChange} value={year || undefined} disabled={isYearDisabled}>
+                <Select open={activeDropdown === "year"} onOpenChange={handleOpenChange("year")} onValueChange={handleYearChange} value={year || undefined} disabled={isYearDisabled}>
                   <SelectTrigger className="w-full bg-white text-gray-800 px-4 py-2 border-none shadow-none ring-0 focus:ring-2 focus:ring-red-500 appearance-none h-auto [&>svg]:hidden text-left font-normal">
                     <SelectValue placeholder={isYearLoading ? "Loading..." : "Please Select ..."} />
                   </SelectTrigger>
@@ -365,7 +402,10 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
                 Reset
               </button>
               <button
-                onClick={() => onSubmit(undefined)}
+                onClick={() => {
+                  onSubmit(undefined)
+                  setIsMobileOpen(false)
+                }}
                 disabled={isDisabledSubmit}
                 className="bg-red-600 hover:bg-red-700 text-white px-6 py-4 font-bold uppercase text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed w-full"
               >
@@ -374,7 +414,7 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
             </div>
           </div>
         </div>
-      </div>
+      </div>}
     </>
   );
 };

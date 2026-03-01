@@ -1,7 +1,6 @@
 'use client';
 import { useState } from "react";
 import HomeYmm from "./components/HomeYmm/HomeYmm";
-import WheelsBySizeAndBrand from "./components/WheelsBySizeAndBrand/WheelsBySizeAndBrand";
 
 export default function HeroSection() {
 

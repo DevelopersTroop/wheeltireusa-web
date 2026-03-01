@@ -1,31 +1,30 @@
-import { customFetch } from "@/lib/commonFetch";
-import { TFilters } from "@/types/filter";
-import { IApiRes } from "@/types/reduxHelper";
-import { useEffect, useState } from "react";
+import { customFetch } from '@/lib/commonFetch';
+import { TFilters } from '@/types/filter';
+import { IApiRes } from '@/types/reduxHelper';
+import { useEffect, useState } from 'react';
 
-export const useFetchFilters = (category:"wheels"|"tires"|"accessories") => {
+export const useFetchFilters = (
+  category: 'wheels' | 'tire' | 'accessories'
+) => {
   const [filters, setFilters] = useState<TFilters | null>(null);
   const [loading, setLoading] = useState(false);
-
-
-
 
   useEffect(() => {
     const fetchData = async function () {
       setLoading(true);
       try {
         const { data } = await customFetch<IApiRes<{ filters: TFilters }>>(
-          "products/filter-list",
-          "POST",
+          'products/filter-list',
+          'GET',
           {
-            body: {
+            queryParams: {
               category,
             },
-          },
+          }
         );
         setFilters(data.filters);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error('Error fetching data:', error);
       } finally {
         setLoading(false);
       }
@@ -35,6 +34,6 @@ export const useFetchFilters = (category:"wheels"|"tires"|"accessories") => {
 
   return {
     filters,
-    loading
-  }
-}
+    loading,
+  };
+};

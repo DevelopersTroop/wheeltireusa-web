@@ -15,7 +15,7 @@ const Header = () => {
             <div ref={menuRef} >
                 <MainMenu />
             </div>
-            {/* <StickyVehicleSelector /> */}
+            <StickyVehicleSelector />
         </>
     );
 };

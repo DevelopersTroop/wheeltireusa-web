@@ -11,7 +11,7 @@ export const WheelContext = React.createContext({} as TWheelContext);
 const WheelProvider = ({ children }: {
     children: React.ReactNode
 }) => {
-    const [quantity, setQuantity] = React.useState(1);
+    const [quantity, setQuantity] = React.useState(4);
     const value: TWheelContext = { quantity, setQuantity }
 
     return (

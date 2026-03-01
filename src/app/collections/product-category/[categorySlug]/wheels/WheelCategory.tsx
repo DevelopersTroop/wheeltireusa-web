@@ -19,6 +19,7 @@ import TireFilters from '../_filters/TireFilters';
 import NoProductsFound from '../NoProductsFound';
 import WheelCard from './WheelCard';
 import WheelCardList from './WheelCardList';
+import WheelFilters from '../_filters/WheelFilters';
 
 const WheelCategory: React.FC<{
   page: number;
@@ -27,7 +28,7 @@ const WheelCategory: React.FC<{
 }> = ({ page = 1, topDescription, bottomDescription }) => {
   const searchParams = useSearchParams();
   const { filters } = useFilterSync();
-  const { data, isLoading: loading } = useGetProductsQuery({
+  const { data, isLoading: loading, isFetching } = useGetProductsQuery({
     ...filters,
     category: 'wheels',
   });
@@ -52,16 +53,16 @@ const WheelCategory: React.FC<{
       }>
         <div className="w-full flex flex-row gap-2 justify-between  md:hidden">
           <SidebarFilters>
-            <TireFilters />
+            <WheelFilters />
           </SidebarFilters>
           <div className="w-full">
             <SortByFilter />
           </div>
         </div>
         <div className="hidden h-full flex-col gap-3 md:flex md:w-[400px]">
-          <TireFilters />
+          <WheelFilters />
         </div>
-        {loading ? <ProductCategoryLoading /> : data?.products?.length === 0 ? (
+        {loading || isFetching ? <ProductCategoryLoading /> : data?.products?.length === 0 ? (
           <>
             <NoProductsFound />
           </>
@@ -73,8 +74,8 @@ const WheelCategory: React.FC<{
                   <Breadcrumb>
                     <Item href={'/'}>Home</Item>
                     <Item href={'/'}>Collections</Item>
-                    <Item href={'/collections/product-category/tires'}>
-                      Tires
+                    <Item href={'/collections/product-category/wheels'}>
+                      Wheels
                     </Item>
                   </Breadcrumb>
                 </div>

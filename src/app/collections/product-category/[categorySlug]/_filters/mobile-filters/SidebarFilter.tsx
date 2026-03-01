@@ -45,7 +45,7 @@ const SidebarFilters = ({ children }: SidebarProps) => {
         <div className="border-b-2 border-gray-400 text-2xl text-gray-700 font-semibold my-auto fixed bg-gray-100 w-[300px] py-2 px-4 -mt-5 mb-2 z-50">
           Filter
         </div>
-        <div className="text-black pt-7 w[80%]">{children}</div>
+        <div className="text-black pt-7 w[80%] bg-white">{children}</div>
       </Menu>
     </div>
   );

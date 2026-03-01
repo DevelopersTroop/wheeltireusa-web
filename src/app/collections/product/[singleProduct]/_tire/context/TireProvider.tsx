@@ -11,7 +11,7 @@ export const TireContext = React.createContext({} as TTireContext);
 const TireProvider = ({ children }: {
     children: React.ReactNode
 }) => {
-    const [quantity, setQuantity] = React.useState(1);
+    const [quantity, setQuantity] = React.useState(4);
     const value: TTireContext = { quantity, setQuantity }
 
     return (

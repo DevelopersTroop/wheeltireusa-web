@@ -3,34 +3,31 @@
 import { ActionFilter } from "@/components/shared/ActionFilter/ActionFilter";
 import { useFetchFilters } from "@/hooks/useFetchFilters";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
-import AccessoriesBrand from "./widgets/accessories/AccessoriesBrand";
+import React, { useState } from "react";
 import AccessoriesSearchByKey from "./widgets/accessories/AccessoriesSearchByKey";
-import AccessoriesSubCategory from "./widgets/accessories/AccessoriesSubcategory";
 import { useSearchFilter } from "@/hooks/useSearchFilter";
-const AccessoriesFilters = () => {
+import DynamicFilters from "./DynamicFilters";
+
+const AccessoriesFilters = React.memo(() => {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
   const [searchKey, setSearchKey] = useState(query);
-  const { filters } = useFetchFilters("accessories");
-  // Rerender every time if the search key changes
+  const { filters, loading } = useFetchFilters("accessories");
   useSearchFilter(searchKey, setSearchKey, query);
 
   return (
-    <div className={"filter-shadow bg-gray-200"}>
+    <div className="filter-shadow ">
       <ActionFilter />
-
-      {/* <div className={"border-y border-gray-300 px-5 py-3"}>
-        <AccessoriesSubCategory
-          filterKey={"product_sub_type"}
-          subCategory={filters?. || []}
-        />
-      </div> */}
-      <div className={"border-b border-gray-300 px-5 py-3"}>
-        <AccessoriesBrand filterKey={"brand_desc"} brand={filters?.brand || []} />
-      </div>
-
-      <div className={"border-b border-gray-300 px-5 py-3"}>
+      <DynamicFilters
+        filters={filters}
+        loading={loading}
+        include={[
+          { key: "price" },
+          { key: "brand", title: "Brand", defaultOpen: true },
+          { key: "category", title: "Category" },
+        ]}
+      />
+      <div className="border-b border-gray-300 px-5 py-3">
         <AccessoriesSearchByKey
           setSearchKey={setSearchKey}
           searchKey={searchKey}
@@ -38,6 +35,7 @@ const AccessoriesFilters = () => {
       </div>
     </div>
   );
-};
+});
 
+AccessoriesFilters.displayName = "AccessoriesFilters";
 export default AccessoriesFilters;
