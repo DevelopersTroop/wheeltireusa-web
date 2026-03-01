@@ -8,9 +8,9 @@ const ProductCategoryLoading = () => {
   return (
     <Container>
       <div className="flex w-full gap-6 pt-12">
-        <div className={"hidden lg:block lg:w-1/4 mt-2"}>
+        {/* <div className={"hidden lg:block lg:w-1/4 mt-2"}>
           <FilterLoadingSkeleton />
-        </div>
+        </div> */}
         <div
           className={
             "w-full lg:w-3/4 grid gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 auto-rows-min"
