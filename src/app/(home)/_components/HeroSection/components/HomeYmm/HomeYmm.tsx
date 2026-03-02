@@ -11,8 +11,8 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import useYmm from "@/hooks/useYmm";
 import { CarFront, Circle, Disc, CheckCircle2, ArrowLeftRight, ShipWheelIcon, TimerOffIcon } from "lucide-react";
-import { useAppDispatch } from "@/redux/store";
-import { clearYearMakeModel } from "@/redux/features/yearMakeModelSlice";
+import { useAppDispatch, useTypedSelector } from "@/redux/store";
+import { clearYearMakeModel, setHomeYmmInView } from "@/redux/features/yearMakeModelSlice";
 import Link from "next/link";
 import { PiTireThin } from 'react-icons/pi'
 import { GiCarWheel } from 'react-icons/gi'
@@ -57,6 +57,11 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
   const hasUserInteracted = useRef(false);
   const [isInView, setIsInView] = useState(false);
 
+  // Read garage state from Redux
+  const garage = useTypedSelector((state) => state.persisted.yearMakeModel.garage);
+  const activeGarageId = useTypedSelector((state) => state.persisted.yearMakeModel.activeGarageId);
+  const activeGarageItem = garage?.find((item) => item.id === activeGarageId);
+
   useEffect(() => {
     isFirstRender.current = false;
   }, []);
@@ -66,12 +71,18 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
     const el = containerRef.current;
     if (!el) return;
     const observer = new IntersectionObserver(
-      ([entry]) => setIsInView(entry.isIntersecting),
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+        dispatch(setHomeYmmInView(entry.isIntersecting));
+      },
       { threshold: 0.1 }
     );
     observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+    return () => {
+      observer.disconnect();
+      dispatch(setHomeYmmInView(false));
+    };
+  }, [dispatch]);
 
   // Auto-submit when fully populated
   useEffect(() => {
@@ -154,7 +165,7 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
     return () => clearTimeout(timeoutId);
   }, [bodyType, isSubmodelLoading, isSubmodelDisabled, subModels?.length, subModel, isInView]);
 
-  const hasVehicleSelected = Boolean(year && make && model && model !== "__DEFAULT_MODEL__" && subModel && subModel.SubModel !== "__DEFAULT_SUBMODEL__" && bodyType && bodyType !== "__DEFAULT_BODY_TYPE__");
+  const hasVehicleSelected = Boolean(activeGarageItem) || Boolean(year && make && model && model !== "__DEFAULT_MODEL__" && subModel && subModel.SubModel !== "__DEFAULT_SUBMODEL__" && bodyType && bodyType !== "__DEFAULT_BODY_TYPE__");
 
   // Optional rendering of sub-dropdowns based on whether they have items.
   // The mockups only show 3 inputs for the initial state, but we should let users select subModels if needed
@@ -170,7 +181,9 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
           <div className="flex items-center gap-3">
             <CheckCircle2 className="w-6 h-6 shrink-0 fill-[#3D8B3D] text-white" />
             <span className="font-extrabold text-gray-900 uppercase text-[15px] tracking-tight">
-              {year} {make} {model} {subModel?.SubModel && subModel.SubModel !== "__DEFAULT_SUBMODEL__" ? subModel.SubModel : ""}
+              {activeGarageItem
+                ? `${activeGarageItem.year} ${activeGarageItem.make} ${activeGarageItem.model || ''} ${activeGarageItem.subModel?.SubModel && activeGarageItem.subModel.SubModel !== '__DEFAULT_SUBMODEL__' ? activeGarageItem.subModel.SubModel : ''}`.trim()
+                : `${year} ${make} ${model} ${subModel?.SubModel && subModel.SubModel !== "__DEFAULT_SUBMODEL__" ? subModel.SubModel : ""}`}
             </span>
           </div>
           <div className="flex items-center gap-6">

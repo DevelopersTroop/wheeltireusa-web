@@ -64,7 +64,7 @@ export default async function Page({
   const result = await response.json();
 
 
-  return   <div className="max-w-[1350px] p-4 mx-auto py-10">
+  return <div className="max-w-[1350px] p-4 mx-auto ">
     <SingleProductClient product={result.data.product} />
-  </div> ;
+  </div>;
 }

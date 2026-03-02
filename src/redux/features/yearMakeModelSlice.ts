@@ -32,6 +32,7 @@ const initialState: TYmm = {
   submitYmm: {},
   garage: [],
   activeGarageId: null,
+  isHomeYmmInView: false,
 };
 const yearMakeModelSlice = createSlice({
   name: 'yearMakeModel',
@@ -87,6 +88,9 @@ const yearMakeModelSlice = createSlice({
       state.garage = [];
       state.activeGarageId = null;
     },
+    setHomeYmmInView: (state, action: { payload: boolean }) => {
+      state.isHomeYmmInView = action.payload;
+    },
   },
 });
 
@@ -99,4 +103,5 @@ export const {
   removeFromGarage,
   clearGarage,
   setActiveGarage,
+  setHomeYmmInView,
 } = yearMakeModelSlice.actions;

@@ -17,7 +17,7 @@ const Gallery: React.FC = () => {
   const searchParams = useSearchParams();
   const page = searchParams.get("page");
   const { filters } = useFilterSync();
-  const ymm = useTypedSelector((state) => state.yearMakeModel);
+  const ymm = useTypedSelector((state) => state.persisted.yearMakeModel);
   const { category, ...parsedFilter } = wrapWheelFilters(
     filters,
     1,

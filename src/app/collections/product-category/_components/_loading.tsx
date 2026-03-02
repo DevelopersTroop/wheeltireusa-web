@@ -2,7 +2,6 @@
 // Import necessary components for the page layout and skeleton loading
 import Container from '@/components/ui/container/container';
 import ProductCardSkeleton from '../[categorySlug]/_loading/ProductCardSkeleton';
-import FilterLoadingSkeleton from '../[categorySlug]/_loading/FilterLoadingSkeleton';
 
 const ProductCategoryLoading = () => {
   return (
