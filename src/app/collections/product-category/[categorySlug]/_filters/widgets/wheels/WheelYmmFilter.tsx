@@ -35,7 +35,7 @@ const WheelYMMFilters = () => {
     onSubmit,
     isDisabledSubmit,
     year, make, model, bodyType, subModel
-  } = useYmm();
+  } = useYmm("wheel_ymm_filter");
 
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);

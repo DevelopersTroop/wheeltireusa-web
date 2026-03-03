@@ -166,7 +166,7 @@ const AddVehicleView = ({ onClose }: { onClose: () => void }) => {
     subModel,
     bodyType,
     shouldShowSubmit,
-  } = useYmm();
+  } = useYmm("vehicle_selector_modal");
 
   const dispatch = useAppDispatch();
   const hasUserInteracted = useRef(false);

@@ -45,7 +45,8 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
     model,
     bodyType,
     subModel,
-  } = useYmm();
+    isActive,
+  } = useYmm("home_hero_ymm");
 
   const dispatch = useAppDispatch();
   const [activeTab, setActiveTab] = useState<"vehicle" | "wheel" | "tire">("vehicle");
@@ -94,7 +95,7 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
 
   // Auto-advance dropdowns
   useEffect(() => {
-    if (isFirstRender.current) return;
+    if (isFirstRender.current || !isActive) return;
     let timeoutId: NodeJS.Timeout;
     if (year && !isMakeLoading && !isMakeDisabled && (makes?.length ?? 0) > 0 && (!make || make === "__DEFAULT_MAKE__")) {
       timeoutId = setTimeout(() => {
@@ -102,10 +103,10 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
       }, 200);
     }
     return () => clearTimeout(timeoutId);
-  }, [year, isMakeLoading, isMakeDisabled, makes?.length, make]);
+  }, [year, isMakeLoading, isMakeDisabled, makes?.length, make, isActive]);
 
   useEffect(() => {
-    if (isFirstRender.current) return;
+    if (isFirstRender.current || !isActive) return;
     let timeoutId: NodeJS.Timeout;
     if (make && !isModelLoading && !isModelDisabled && (models?.length ?? 0) > 0 && (!model || model === "__DEFAULT_MODEL__")) {
       timeoutId = setTimeout(() => {
@@ -113,7 +114,7 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
       }, 200);
     }
     return () => clearTimeout(timeoutId);
-  }, [make, isModelLoading, isModelDisabled, models?.length, model]);
+  }, [make, isModelLoading, isModelDisabled, models?.length, model, isActive]);
 
   const hasVehicleSelected = Boolean(year && make && model && model !== "__DEFAULT_MODEL__" && subModel && subModel.SubModel !== "__DEFAULT_SUBMODEL__" && bodyType && bodyType !== "__DEFAULT_BODY_TYPE__");
 

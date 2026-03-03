@@ -1,11 +1,4 @@
 import {
-  addToGarage,
-  setYmm,
-  submitYmm,
-} from '@/redux/features/yearMakeModelSlice';
-import { TYmmGarageItem } from '@/types/ymm';
-import { useTypedSelector } from '@/redux/store';
-import {
   getBodyTypes,
   getMakes,
   getModels,
@@ -13,11 +6,15 @@ import {
   getVehicleData,
   getYears,
 } from '@/lib/driver-right-api';
+import {
+  setYmm
+} from '@/redux/features/yearMakeModelSlice';
+import { useTypedSelector } from '@/redux/store';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-const useYmm = (isWheel: boolean = true) => {
+const useYmm = (ymmId?: string) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -263,7 +260,10 @@ const useYmm = (isWheel: boolean = true) => {
     }
   }, [JSON.stringify(ymm.list?.subModels)]);
 
+  const [activeYmmId, setActiveYmmId] = useState<string | null>(null);
+
   const onYearChange = (data: ChangeEvent<HTMLSelectElement> | string) => {
+    if (ymmId) setActiveYmmId(ymmId);
     const newYear = typeof data === 'string' ? data : data.target.value;
     setSelectedVehicle((prev) => ({
       ...prev,
@@ -308,6 +308,7 @@ const useYmm = (isWheel: boolean = true) => {
     setIsDisabledSubmit(true);
   };
   const onMakeChange = (data: ChangeEvent<HTMLSelectElement> | string) => {
+    if (ymmId) setActiveYmmId(ymmId);
     const newMake = typeof data === 'string' ? data : data.target.value;
     setSelectedVehicle((prev) => ({
       ...prev,
@@ -349,6 +350,7 @@ const useYmm = (isWheel: boolean = true) => {
     setIsDisabledSubmit(true);
   };
   const onModelChange = (data: ChangeEvent<HTMLSelectElement> | string) => {
+    if (ymmId) setActiveYmmId(ymmId);
     const newModel = typeof data === 'string' ? data : data.target.value;
     setSelectedVehicle((prev) => ({
       ...prev,
@@ -387,6 +389,7 @@ const useYmm = (isWheel: boolean = true) => {
     setIsDisabledSubmit(true);
   };
   const onBodyTypeChange = (data: ChangeEvent<HTMLSelectElement> | string) => {
+    if (ymmId) setActiveYmmId(ymmId);
     const newBodyType = typeof data === 'string' ? data : data.target.value;
     setSelectedVehicle((prev) => ({
       ...prev,
@@ -421,6 +424,7 @@ const useYmm = (isWheel: boolean = true) => {
     setIsDisabledSubmit(true);
   };
   const onSubModelChange = (data: ChangeEvent<HTMLSelectElement> | string) => {
+    if (ymmId) setActiveYmmId(ymmId);
     const value = typeof data === 'string' ? data : data.target.value;
     if (ymm.list?.subModels) {
       setSelectedVehicle((prev) => ({
@@ -434,61 +438,18 @@ const useYmm = (isWheel: boolean = true) => {
 
   const onSubmit = (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     if (e) e.preventDefault();
-    if (!isWheel && selectedVehicle?.vehicleInformation) {
-      selectedVehicle.vehicleInformation.tireSizesList = Array.from(
-        new Set(
-          Object.values(
-            selectedVehicle?.vehicleInformation?.tireSizes ?? {}
-          ).flatMap((sizes: Record<'front' | 'rear', string>) => [
-            sizes.front.replace(/(\/\d+)[A-Z]+(\d+)/, '$1-$2'),
-            sizes.rear.replace(/(\/\d+)[A-Z]+(\d+)/, '$1-$2'),
-          ])
-        )
-      );
-    }
-    const vehicleInformation = isWheel
-      ? { ...(selectedVehicle?.vehicleInformation ?? {}), tireSizes: [] }
-      : { ...(selectedVehicle?.vehicleInformation ?? {}), supportedWheels: [] };
-    const finalYear = selectedVehicle?.year ?? ymm.year;
-    const finalMake = selectedVehicle?.make ?? ymm.make;
-    const finalModel = selectedVehicle?.model ?? ymm.model;
-    const finalBodyType = selectedVehicle?.bodyType ?? ymm.bodyType;
-    const finalSubModel = selectedVehicle?.subModel ?? ymm.subModel;
-
-    dispatch(
-      setYmm({
-        year: finalYear,
-        make: finalMake,
-        model: finalModel,
-        bodyType: finalBodyType,
-        subModel: finalSubModel,
-        vehicleInformation,
-      })
-    );
-    if (selectedVehicle?.subModel?.DRChassisID && !isLoading.vehicleData) {
-      const newItem: TYmmGarageItem = {
-        id: `${finalYear}-${finalMake}-${finalModel}-${finalBodyType}-${finalSubModel.SubModel}`,
-        year: finalYear,
-        make: finalMake,
-        model: finalModel,
-        bodyType: finalBodyType,
-        subModel: finalSubModel,
-      };
-
-      dispatch(addToGarage(newItem));
-      dispatch(submitYmm(newItem));
-
-      if (isWheel) {
-        router.push(
-          '/collections/product-category/wheels?vehicle=selectedVehicleInformation'
-        );
-      } else {
-        router.push(
-          '/collections/product-category/tires?tire_size=' +
-            selectedVehicle?.vehicleInformation?.tireSizesList?.join(',')
-        );
-      }
-    }
+    
+    // dispatch(
+    //   setYmm({
+    //     year: undefined,
+    //     make: undefined,
+    //     model: undefined,
+    //     bodyType: undefined,
+    //     subModel: undefined,
+    //     vehicleInformation: undefined,
+    //   })
+    // );
+    
   };
 
   return {
@@ -524,6 +485,7 @@ const useYmm = (isWheel: boolean = true) => {
     onSubModelChange,
     onSubmit,
     isDisabledSubmit,
+    isActive: activeYmmId === ymmId,
     ...ymm,
     ...selectedVehicle,
   };

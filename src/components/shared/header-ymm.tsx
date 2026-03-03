@@ -36,7 +36,8 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
     model,
     subModel,
     bodyType,
-  } = useYmm();
+    isActive,
+  } = useYmm("header_ymm");
 
   const [isVisible, setIsVisible] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -82,26 +83,26 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
   };
 
   useEffect(() => {
-    if (isFirstRender.current) return;
+    if (isFirstRender.current || !isActive) return;
     let timeoutId: NodeJS.Timeout;
     if (year && !isMakeLoading && !isMakeDisabled && (makes?.length ?? 0) > 0 && (!make || make === "__DEFAULT_MAKE__")) {
       timeoutId = setTimeout(() => {
-        setActiveDropdown("make");
+        if (selectorRef.current?.offsetParent) setActiveDropdown("make");
       }, 200);
     }
     return () => clearTimeout(timeoutId);
-  }, [year, isMakeLoading, isMakeDisabled, makes?.length, make]);
+  }, [year, isMakeLoading, isMakeDisabled, makes?.length, make, isActive]);
 
   useEffect(() => {
-    if (isFirstRender.current) return;
+    if (isFirstRender.current || !isActive) return;
     let timeoutId: NodeJS.Timeout;
     if (make && !isModelLoading && !isModelDisabled && (models?.length ?? 0) > 0 && (!model || model === "__DEFAULT_MODEL__")) {
       timeoutId = setTimeout(() => {
-        setActiveDropdown("model");
+        if (selectorRef.current?.offsetParent) setActiveDropdown("model");
       }, 200);
     }
     return () => clearTimeout(timeoutId);
-  }, [make, isModelLoading, isModelDisabled, models?.length, model]);
+  }, [make, isModelLoading, isModelDisabled, models?.length, model, isActive]);
 
   const handleReset = () => {
     onYearChange("");
