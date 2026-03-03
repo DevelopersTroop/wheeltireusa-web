@@ -115,6 +115,12 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
     }
   };
 
+  useEffect(() => {
+    if (!hasUserInteracted.current && !year) {
+      setActiveDropdown("year");
+    }
+  }, []);
+
   const handleClear = () => {
     dispatch(clearYearMakeModel());
   };
@@ -205,100 +211,101 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
       );
     }
 
-    return (
-      <div className="w-full bg-white border-b-4 border-[#dc5454] px-4 lg:px-6 py-4 shadow-md rounded-t-sm flex flex-col lg:flex-row items-center gap-4 lg:gap-8">
-        <div className="flex items-center gap-2 font-black text-gray-900 whitespace-nowrap lg:w-48 uppercase tracking-tight text-[15px]">
-          <CarFront className="text-[#dc5454] w-5 h-5 shrink-0" />
-          SHOP BY VEHICLE
-        </div>
+    return null
+    // return (
+    //   <div className="w-full bg-white border-b-4 border-[#dc5454] px-4 lg:px-6 py-4 shadow-md rounded-t-sm flex flex-col lg:flex-row items-center gap-4 lg:gap-8">
+    //     <div className="flex items-center gap-2 font-black text-gray-900 whitespace-nowrap lg:w-48 uppercase tracking-tight text-[15px]">
+    //       <CarFront className="text-[#dc5454] w-5 h-5 shrink-0" />
+    //       SHOP BY VEHICLE
+    //     </div>
 
-        <div className="flex-1 flex flex-col sm:flex-row gap-2 w-full" ref={containerRef}>
-          <div className="flex-1 min-w-[120px]">
-            <Select onValueChange={handleYearChange} value={year || undefined} disabled={isYearDisabled}>
-              <SelectTrigger className="w-full bg-white border border-gray-200 text-[#6B7280] h-10 shadow-none rounded-[2px] ring-0! ring-offset-0! text-sm">
-                <SelectValue placeholder={isYearLoading ? "Loading..." : "Year"} />
-              </SelectTrigger>
-              <SelectContent>
-                {years?.map((y) => (
-                  <SelectItem key={`year-${y}`} value={y}>{y}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+    //     <div className="flex-1 flex flex-col sm:flex-row gap-2 w-full" ref={containerRef}>
+    //       <div className="flex-1 min-w-[120px]">
+    //         <Select onValueChange={handleYearChange} value={year || undefined} disabled={isYearDisabled}>
+    //           <SelectTrigger className="w-full bg-white border border-gray-200 text-[#6B7280] h-10 shadow-none rounded-[2px] ring-0! ring-offset-0! text-sm">
+    //             <SelectValue placeholder={isYearLoading ? "Loading..." : "Year"} />
+    //           </SelectTrigger>
+    //           <SelectContent>
+    //             {years?.map((y) => (
+    //               <SelectItem key={`year-${y}`} value={y}>{y}</SelectItem>
+    //             ))}
+    //           </SelectContent>
+    //         </Select>
+    //       </div>
 
-          <div className="flex-1 min-w-[120px]">
-            <Select open={activeDropdown === "make"} onOpenChange={handleOpenChange("make")} onValueChange={handleMakeChange} value={make || "__DEFAULT_MAKE__"} disabled={isMakeDisabled}>
-              <SelectTrigger className="w-full bg-white border border-gray-200 text-[#6B7280] h-10 shadow-none rounded-[2px] ring-0! ring-offset-0! text-sm">
-                <SelectValue placeholder={isMakeLoading ? "Loading..." : "Make"} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="__DEFAULT_MAKE__" className="hidden" disabled>Make</SelectItem>
-                {makes?.map((m) => (
-                  <SelectItem key={`make-${m}`} value={m}>{m}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+    //       <div className="flex-1 min-w-[120px]">
+    //         <Select open={activeDropdown === "make"} onOpenChange={handleOpenChange("make")} onValueChange={handleMakeChange} value={make || "__DEFAULT_MAKE__"} disabled={isMakeDisabled}>
+    //           <SelectTrigger className="w-full bg-white border border-gray-200 text-[#6B7280] h-10 shadow-none rounded-[2px] ring-0! ring-offset-0! text-sm">
+    //             <SelectValue placeholder={isMakeLoading ? "Loading..." : "Make"} />
+    //           </SelectTrigger>
+    //           <SelectContent>
+    //             <SelectItem value="__DEFAULT_MAKE__" className="hidden" disabled>Make</SelectItem>
+    //             {makes?.map((m) => (
+    //               <SelectItem key={`make-${m}`} value={m}>{m}</SelectItem>
+    //             ))}
+    //           </SelectContent>
+    //         </Select>
+    //       </div>
 
-          <div className="flex-1 min-w-[120px]">
-            <Select open={activeDropdown === "model"} onOpenChange={handleOpenChange("model")} onValueChange={handleModelChange} value={model || "__DEFAULT_MODEL__"} disabled={isModelDisabled}>
-              <SelectTrigger className="w-full bg-white border border-gray-200 text-[#6B7280] h-10 shadow-none rounded-[2px] ring-0! ring-offset-0! text-sm">
-                <SelectValue placeholder={isModelLoading ? "Loading..." : "Model"} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="__DEFAULT_MODEL__" className="hidden" disabled>Model</SelectItem>
-                {models?.map((mdl) => (
-                  <SelectItem key={`model-${mdl}`} value={mdl}>{mdl}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+    //       <div className="flex-1 min-w-[120px]">
+    //         <Select open={activeDropdown === "model"} onOpenChange={handleOpenChange("model")} onValueChange={handleModelChange} value={model || "__DEFAULT_MODEL__"} disabled={isModelDisabled}>
+    //           <SelectTrigger className="w-full bg-white border border-gray-200 text-[#6B7280] h-10 shadow-none rounded-[2px] ring-0! ring-offset-0! text-sm">
+    //             <SelectValue placeholder={isModelLoading ? "Loading..." : "Model"} />
+    //           </SelectTrigger>
+    //           <SelectContent>
+    //             <SelectItem value="__DEFAULT_MODEL__" className="hidden" disabled>Model</SelectItem>
+    //             {models?.map((mdl) => (
+    //               <SelectItem key={`model-${mdl}`} value={mdl}>{mdl}</SelectItem>
+    //             ))}
+    //           </SelectContent>
+    //         </Select>
+    //       </div>
 
-          {showBodyType && (
-            <div className="flex-1 min-w-[120px]">
-              <Select open={activeDropdown === "bodyType"} onOpenChange={handleOpenChange("bodyType")} onValueChange={handleBodyTypeChange} value={bodyType || "__DEFAULT_BODYTYPE__"} disabled={isBodyTypeDisabled}>
-                <SelectTrigger className="w-full bg-white border border-gray-200 text-[#6B7280] h-10 shadow-none rounded-[2px] ring-0! ring-offset-0! text-sm">
-                  <SelectValue placeholder={isBodyTypeLoading ? "Loading..." : "Body Type"} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="__DEFAULT_BODYTYPE__" className="hidden" disabled>Body Type</SelectItem>
-                  {bodyTypes?.map((bt) => (
-                    <SelectItem key={`bodyType-${bt}`} value={bt}>{bt}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
+    //       {showBodyType && (
+    //         <div className="flex-1 min-w-[120px]">
+    //           <Select open={activeDropdown === "bodyType"} onOpenChange={handleOpenChange("bodyType")} onValueChange={handleBodyTypeChange} value={bodyType || "__DEFAULT_BODYTYPE__"} disabled={isBodyTypeDisabled}>
+    //             <SelectTrigger className="w-full bg-white border border-gray-200 text-[#6B7280] h-10 shadow-none rounded-[2px] ring-0! ring-offset-0! text-sm">
+    //               <SelectValue placeholder={isBodyTypeLoading ? "Loading..." : "Body Type"} />
+    //             </SelectTrigger>
+    //             <SelectContent>
+    //               <SelectItem value="__DEFAULT_BODYTYPE__" className="hidden" disabled>Body Type</SelectItem>
+    //               {bodyTypes?.map((bt) => (
+    //                 <SelectItem key={`bodyType-${bt}`} value={bt}>{bt}</SelectItem>
+    //               ))}
+    //             </SelectContent>
+    //           </Select>
+    //         </div>
+    //       )}
 
-          {showSubmodel && (
-            <div className="flex-1 min-w-[120px]">
-              <Select open={activeDropdown === "subModel"} onOpenChange={handleOpenChange("subModel")} onValueChange={handleSubModelChange} value={subModel?.SubModel || "__DEFAULT_SUBMODEL__"} disabled={isSubmodelDisabled}>
-                <SelectTrigger className="w-full bg-white border border-gray-200 text-[#6B7280] h-10 shadow-none rounded-[2px] ring-0! ring-offset-0! text-sm">
-                  <SelectValue placeholder={isSubmodelLoading ? "Loading..." : "Submodel"} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="__DEFAULT_SUBMODEL__" className="hidden" disabled>Submodel</SelectItem>
-                  {subModels?.map((sm) => (
-                    <SelectItem key={`subModel-${sm.SubModel}`} value={sm.SubModel}>{sm.SubModel}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
-        </div>
+    //       {showSubmodel && (
+    //         <div className="flex-1 min-w-[120px]">
+    //           <Select open={activeDropdown === "subModel"} onOpenChange={handleOpenChange("subModel")} onValueChange={handleSubModelChange} value={subModel?.SubModel || "__DEFAULT_SUBMODEL__"} disabled={isSubmodelDisabled}>
+    //             <SelectTrigger className="w-full bg-white border border-gray-200 text-[#6B7280] h-10 shadow-none rounded-[2px] ring-0! ring-offset-0! text-sm">
+    //               <SelectValue placeholder={isSubmodelLoading ? "Loading..." : "Submodel"} />
+    //             </SelectTrigger>
+    //             <SelectContent>
+    //               <SelectItem value="__DEFAULT_SUBMODEL__" className="hidden" disabled>Submodel</SelectItem>
+    //               {subModels?.map((sm) => (
+    //                 <SelectItem key={`subModel-${sm.SubModel}`} value={sm.SubModel}>{sm.SubModel}</SelectItem>
+    //               ))}
+    //             </SelectContent>
+    //           </Select>
+    //         </div>
+    //       )}
+    //     </div>
 
-        <button
-          onClick={() => onSubmit()}
-          disabled={isDisabledSubmit || !shouldShowSubmit}
-          className={cn(
-            "h-10 px-8 text-white font-bold text-sm uppercase rounded-[2px] transition-colors w-full lg:w-auto mt-3 lg:mt-0 shadow-sm shrink-0 tracking-wide",
-            isDisabledSubmit || !shouldShowSubmit ? "bg-[#8B8B8B] cursor-not-allowed" : "bg-[#dc5454] hover:bg-red-600"
-          )}
-        >
-          GO
-        </button>
-      </div>
-    );
+    //     <button
+    //       onClick={(e) => onSubmit(e, { targetPath: variant === 'product' && location.pathname.includes('/tire') ? '/collections/product-category/tire' : undefined })}
+    //       disabled={isDisabledSubmit || !shouldShowSubmit}
+    //       className={cn(
+    //         "h-10 px-8 text-white font-bold text-sm uppercase rounded-[2px] transition-colors w-full lg:w-auto mt-3 lg:mt-0 shadow-sm shrink-0 tracking-wide",
+    //         isDisabledSubmit || !shouldShowSubmit ? "bg-[#8B8B8B] cursor-not-allowed" : "bg-[#dc5454] hover:bg-red-600"
+    //       )}
+    //     >
+    //       GO
+    //     </button>
+    //   </div>
+    // );
   }
 
   // Render Hero Variant
@@ -323,7 +330,7 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
             CHANGE VEHICLE
           </button>
           <button
-            onClick={() => onSubmit()}
+            onClick={(e) => onSubmit(e, { targetPath: activeTab === 'tire' ? '/collections/product-category/tire' : '/collections/product-category/wheels' })}
             className="flex-1 md:flex-none min-[375px]:px-4 px-6 lg:px-8 py-3 bg-[#dc5454] hover:bg-red-600 rounded-sm text-sm font-bold text-white uppercase shadow-sm whitespace-nowrap transition-colors"
           >
             SHOP NOW
@@ -367,7 +374,7 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
             <div className="flex flex-col lg:flex-row gap-3">
               <div className="flex-1 flex flex-col sm:flex-row gap-3">
                 <div className="flex-1">
-                  <Select onValueChange={handleYearChange} value={year || undefined} disabled={isYearDisabled}>
+                  <Select open={activeDropdown === "year"} onOpenChange={handleOpenChange("year")} onValueChange={handleYearChange} value={year || undefined} disabled={isYearDisabled}>
                     <SelectTrigger className="w-full bg-white border-gray-200 text-gray-700 h-12 text-base">
                       <SelectValue placeholder={isYearLoading ? "Loading..." : "Year"} />
                     </SelectTrigger>

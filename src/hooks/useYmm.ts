@@ -22,12 +22,13 @@ import {
 } from '@/redux/apis/ymmApi';
 
 import { TYmmGarageItem } from '@/types/ymm';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 const useYmm = (ymmId?: string) => {
   const router = useRouter();
+  const pathname = usePathname();
   const dispatch = useDispatch();
 
   const defaultMakeValue = '__DEFAULT_MAKE__';
@@ -81,57 +82,47 @@ const useYmm = (ymmId?: string) => {
 
   // ─── RTK Query hooks (auto-cached, no refetch if params unchanged) ───
 
-  const {
-    data: years,
-    isLoading: isYearLoading,
-  } = useGetYearsQuery();
+  const { data: years, isLoading: isYearLoading } = useGetYearsQuery();
 
-  const {
-    data: makes,
-    isLoading: isMakeLoading,
-  } = useGetMakesQuery(
+  const { data: makes, isLoading: isMakeLoading } = useGetMakesQuery(
     { year: effectiveYear },
     { skip: !effectiveYear }
   );
 
-  const {
-    data: models,
-    isLoading: isModelLoading,
-  } = useGetModelsQuery(
+  const { data: models, isLoading: isModelLoading } = useGetModelsQuery(
     { year: effectiveYear, make: effectiveMake },
     { skip: !effectiveYear || !isValidMake }
   );
 
-  const {
-    data: bodyTypes,
-    isLoading: isBodyTypeLoading,
-  } = useGetBodyTypesQuery(
-    { year: effectiveYear, make: effectiveMake, model: effectiveModel },
-    { skip: !effectiveYear || !effectiveMake || !isValidModel }
-  );
+  const { data: bodyTypes, isLoading: isBodyTypeLoading } =
+    useGetBodyTypesQuery(
+      { year: effectiveYear, make: effectiveMake, model: effectiveModel },
+      { skip: !effectiveYear || !effectiveMake || !isValidModel }
+    );
 
-  const {
-    data: subModels,
-    isLoading: isSubmodelLoading,
-  } = useGetSubModelsQuery(
-    {
-      year: effectiveYear,
-      make: effectiveMake,
-      model: effectiveModel,
-      bodyType: effectiveBodyType,
-    },
-    {
-      skip:
-        !effectiveYear ||
-        !effectiveMake ||
-        !effectiveModel ||
-        !isValidBodyType,
-    }
-  );
+  const { data: subModels, isLoading: isSubmodelLoading } =
+    useGetSubModelsQuery(
+      {
+        year: effectiveYear,
+        make: effectiveMake,
+        model: effectiveModel,
+        bodyType: effectiveBodyType,
+      },
+      {
+        skip:
+          !effectiveYear ||
+          !effectiveMake ||
+          !effectiveModel ||
+          !isValidBodyType,
+      }
+    );
 
   // Vehicle data query (only when we have chassis/model IDs)
-  const chassisId = selectedVehicle?.subModel?.DRChassisID ?? '';
-  const modelId = selectedVehicle?.subModel?.DRModelID ?? '';
+  // Fall back to Redux subModel so garage selection also triggers this query
+  const chassisId =
+    selectedVehicle?.subModel?.DRChassisID ?? ymm.subModel?.DRChassisID ?? '';
+  const modelId =
+    selectedVehicle?.subModel?.DRModelID ?? ymm.subModel?.DRModelID ?? '';
 
   const {
     data: vehicleData,
@@ -183,6 +174,13 @@ const useYmm = (ymmId?: string) => {
       }));
     }
   }, [vehicleData]);
+
+  // Sync vehicle data to Redux so product pages can read it
+  useEffect(() => {
+    if (vehicleData) {
+      dispatch(setYmm({ vehicleInformation: vehicleData }));
+    }
+  }, [vehicleData, dispatch]);
 
   // ─── Reset & validation logic ───
 
@@ -420,20 +418,17 @@ const useYmm = (ymmId?: string) => {
 
   // ─── Submit ───
 
-  const onSubmit = (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const onSubmit = (
+    e?: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    options?: { targetPath?: string }
+  ) => {
     if (e) e.preventDefault();
-    
-    // dispatch(
-    //   setYmm({
-    //     year: undefined,
-    //     make: undefined,
-    //     model: undefined,
-    //     bodyType: undefined,
-    //     subModel: undefined,
-    //     vehicleInformation: undefined,
-    //   })
-    // );
-    
+
+    if (pathname && !pathname.includes('/collections')) {
+      const path =
+        options?.targetPath || '/collections/product-category/wheels';
+      router.push(path);
+    }
   };
 
   // ─── Return values (same API surface as before) ───
