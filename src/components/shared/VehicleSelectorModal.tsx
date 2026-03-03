@@ -396,7 +396,7 @@ export const VehicleSelectorButton = () => {
   const activeItem = garage?.find((item) => item.id === activeGarageId);
   const activeLabel = activeItem
     ? `${activeItem.year} ${activeItem.make} ${activeItem.model && activeItem.model !== '__DEFAULT_MODEL__' ? activeItem.model : ''}`
-    : "SELECT YOUR VEHICLE";
+    : "SHOP BY VEHICLE";
 
   return (
     <>
