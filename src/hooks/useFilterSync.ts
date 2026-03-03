@@ -1,7 +1,14 @@
-"use client";
-import debounce from "lodash/debounce";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+'use client';
+import debounce from 'lodash/debounce';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useTransition,
+} from 'react';
 
 type Filters = Record<string, string>;
 
@@ -9,6 +16,7 @@ export const useFilterSync = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
+  const [isPending, startTransition] = useTransition();
 
   const [localFilters, setLocalFilters] = useState<Filters>({});
 
@@ -23,7 +31,7 @@ export const useFilterSync = () => {
     const params: Filters = {};
     searchParams.forEach((value, key) => {
       // only include keys you want to treat as filters
-      if (["cartPackage", "cartSerial"].includes(key)) return;
+      if (['cartPackage', 'cartSerial'].includes(key)) return;
       params[key] = value;
     });
     return params;
@@ -41,6 +49,7 @@ export const useFilterSync = () => {
 
   /**
    * ✅ Debounced query updater - using useRef to maintain stable reference
+   * Increased debounce from 150ms → 400ms to batch rapid clicks and reduce re-renders
    */
   const updateQueryParamsRef = useRef(
     debounce(
@@ -48,7 +57,8 @@ export const useFilterSync = () => {
         filters: Filters,
         currentSearchParams: URLSearchParams,
         currentPathname: string,
-        currentParsedFilters: Filters
+        currentParsedFilters: Filters,
+        transition: typeof startTransition
       ) => {
         // 1️⃣ start with full query (so we keep cartPackage, cartSerial, etc.)
         const params = new URLSearchParams(currentSearchParams.toString());
@@ -67,9 +77,13 @@ export const useFilterSync = () => {
           ? `${currentPathname}?${queryString}`
           : currentPathname;
 
-        router.replace(url, { scroll: false });
+        // ✅ Use startTransition to mark the navigation as non-urgent
+        // This keeps the checkbox UI responsive while the URL + product fetch happens in the background
+        transition(() => {
+          router.replace(url, { scroll: false });
+        });
       },
-      150
+      400
     )
   );
 
@@ -85,16 +99,17 @@ export const useFilterSync = () => {
         localFilters,
         searchParams,
         pathname,
-        parsedFilters
+        parsedFilters,
+        startTransition
       );
     }
-  }, [localFilters, searchParams, pathname, parsedFilters]);
+  }, [localFilters, searchParams, pathname, parsedFilters, startTransition]);
 
   // ✅ Toggle logic
   const toggleFilterValue = useCallback(
     (key: string, value: string, acceptMultiple = true) => {
       setLocalFilters((prev) => {
-        const prevValues = prev[key]?.split(",").filter(Boolean) || [];
+        const prevValues = prev[key]?.split(',').filter(Boolean) || [];
         let newValues: string[];
 
         if (acceptMultiple) {
@@ -109,7 +124,7 @@ export const useFilterSync = () => {
         if (newValues.length === 0) {
           delete updated[key];
         } else {
-          updated[key] = newValues.join(",");
+          updated[key] = newValues.join(',');
         }
 
         return updated;
@@ -137,7 +152,7 @@ export const useFilterSync = () => {
     });
   }, []);
 
-  const removeSorting = useCallback(() => removeKey("sort"), [removeKey]);
+  const removeSorting = useCallback(() => removeKey('sort'), [removeKey]);
 
   const clearFilters = useCallback(() => {
     setLocalFilters({});
@@ -150,5 +165,6 @@ export const useFilterSync = () => {
     removeKey,
     removeSorting,
     clearFilters,
+    isPending,
   };
 };

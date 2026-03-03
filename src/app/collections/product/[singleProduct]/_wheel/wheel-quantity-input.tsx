@@ -12,7 +12,7 @@ type QuantityInputProps = {
 }
 
 const WheelQuantityInput = ({ name, inventoryAvailable, id, className = "", ...props }: QuantityInputProps) => {
-    const quantityStep = 1;
+    const quantityStep = 4;
     const maxQuantity = Math.floor(inventoryAvailable / quantityStep) * quantityStep;
     const { quantity, setQuantity } = useContext(WheelContext);
 

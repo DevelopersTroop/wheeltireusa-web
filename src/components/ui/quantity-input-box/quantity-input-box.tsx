@@ -17,7 +17,7 @@ type QuantityInputBoxProps = {
   minInputValue?: number;
 };
 const QuantityInputBox = ({
-  minInputValue = 1,
+  minInputValue = 4,
   onIncrease,
   onDecrease,
   inputName,
@@ -33,7 +33,7 @@ const QuantityInputBox = ({
         <button
           onClick={onIncrease}
           className={cn(
-            'rounded-tl-xl rounded-bl-xl border border-[#cfcfcf] p-3 flex gap-2 justify-center items-center relative w-10 h-10 bg-white disabled:cursor-not-allowed disabled:text-gray-500'
+            'rounded-tl-xl cursor-pointer rounded-bl-xl border border-[#cfcfcf] p-3 flex gap-2 justify-center items-center relative w-10 h-10 bg-white disabled:cursor-not-allowed disabled:text-gray-500'
           )}
           disabled={Number(inputValue) <= Number(minInputValue)}
         >
@@ -56,7 +56,7 @@ const QuantityInputBox = ({
         <button
           onClick={onDecrease}
           className={cn(
-            'rounded-tr-xl rounded-br-xl border border-[#cfcfcf] p-3 flex gap-2 justify-center items-center relative w-10 h-10 bg-white disabled:cursor-not-allowed disabled:text-gray-500'
+            'rounded-tr-xl cursor-pointer rounded-br-xl border border-[#cfcfcf] p-3 flex gap-2 justify-center items-center relative w-10 h-10 bg-white disabled:cursor-not-allowed disabled:text-gray-500'
           )}
           disabled={Number(inputValue) >= Number(maxInputValue)}
         >

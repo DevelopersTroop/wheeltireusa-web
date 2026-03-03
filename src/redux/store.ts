@@ -30,6 +30,13 @@ const rootPersistConfig = {
   storage,
 };
 
+// Persist only garage-related fields from yearMakeModel
+const ymmPersistConfig = {
+  key: 'yearMakeModel',
+  storage,
+  whitelist: ['garage', 'activeGarageId'],
+};
+
 // Register reducers that's need to be persisted
 const persistingReducer = combineReducers({
   user: userReducer,
@@ -39,6 +46,7 @@ const persistingReducer = combineReducers({
   newsletterModal: newsletterModalReducer,
   comparison: comparisonReducer,
   layout: layoutReducer,
+  yearMakeModel: persistReducer(ymmPersistConfig, yearMakeModelReducer),
 });
 
 const persistedReducer = persistReducer(rootPersistConfig, persistingReducer);
@@ -47,7 +55,6 @@ const persistedReducer = persistReducer(rootPersistConfig, persistingReducer);
 const rootReducer = combineReducers({
   persisted: persistedReducer,
   mainFilter: mailFilterReducer,
-  yearMakeModel: yearMakeModelReducer,
   [baseApi.reducerPath]: baseApi.reducer,
   wheel: wheelReducer,
 });

@@ -10,10 +10,12 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import useYmm from "@/hooks/useYmm";
-import { CarFront, Circle, Disc, CheckCircle2, ArrowLeftRight } from "lucide-react";
-import { useAppDispatch } from "@/redux/store";
-import { clearYearMakeModel } from "@/redux/features/yearMakeModelSlice";
+import { CarFront, Circle, Disc, CheckCircle2, ArrowLeftRight, ShipWheelIcon, TimerOffIcon } from "lucide-react";
+import { useAppDispatch, useTypedSelector } from "@/redux/store";
+import { clearYearMakeModel, setHomeYmmInView } from "@/redux/features/yearMakeModelSlice";
 import Link from "next/link";
+import { PiTireThin } from 'react-icons/pi'
+import { GiCarWheel } from 'react-icons/gi'
 
 interface HomeYmmProps {
   variant?: "hero" | "product";
@@ -54,10 +56,34 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const isFirstRender = useRef(true);
   const hasUserInteracted = useRef(false);
+  const [isInView, setIsInView] = useState(false);
+
+  // Read garage state from Redux
+  const garage = useTypedSelector((state) => state.persisted.yearMakeModel.garage);
+  const activeGarageId = useTypedSelector((state) => state.persisted.yearMakeModel.activeGarageId);
+  const activeGarageItem = garage?.find((item) => item.id === activeGarageId);
 
   useEffect(() => {
     isFirstRender.current = false;
   }, []);
+
+  // Track whether the hero YMM is actually visible in the viewport
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+        dispatch(setHomeYmmInView(entry.isIntersecting));
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(el);
+    return () => {
+      observer.disconnect();
+      dispatch(setHomeYmmInView(false));
+    };
+  }, [dispatch]);
 
   // Auto-submit when fully populated
   useEffect(() => {
@@ -97,26 +123,50 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
   useEffect(() => {
     if (isFirstRender.current || !isActive) return;
     let timeoutId: NodeJS.Timeout;
-    if (year && !isMakeLoading && !isMakeDisabled && (makes?.length ?? 0) > 0 && (!make || make === "__DEFAULT_MAKE__")) {
+    if (isInView && year && !isMakeLoading && !isMakeDisabled && (makes?.length ?? 0) > 0 && (!make || make === "__DEFAULT_MAKE__")) {
       timeoutId = setTimeout(() => {
-        if (containerRef.current?.offsetParent) setActiveDropdown("make");
+        setActiveDropdown("make");
       }, 200);
     }
     return () => clearTimeout(timeoutId);
-  }, [year, isMakeLoading, isMakeDisabled, makes?.length, make, isActive]);
+  }, [year, isMakeLoading, isMakeDisabled, makes?.length, make, isActive, isInView]);
 
   useEffect(() => {
     if (isFirstRender.current || !isActive) return;
     let timeoutId: NodeJS.Timeout;
-    if (make && !isModelLoading && !isModelDisabled && (models?.length ?? 0) > 0 && (!model || model === "__DEFAULT_MODEL__")) {
+    if (isInView && make && !isModelLoading && !isModelDisabled && (models?.length ?? 0) > 0 && (!model || model === "__DEFAULT_MODEL__")) {
       timeoutId = setTimeout(() => {
-        if (containerRef.current?.offsetParent) setActiveDropdown("model");
+        setActiveDropdown("model");
       }, 200);
     }
     return () => clearTimeout(timeoutId);
-  }, [make, isModelLoading, isModelDisabled, models?.length, model, isActive]);
+  }, [make, isModelLoading, isModelDisabled, models?.length, model, isActive, isInView]);
 
-  const hasVehicleSelected = Boolean(year && make && model && model !== "__DEFAULT_MODEL__" && subModel && subModel.SubModel !== "__DEFAULT_SUBMODEL__" && bodyType && bodyType !== "__DEFAULT_BODY_TYPE__");
+  // Auto-advance: open Body Type after Model is selected
+  useEffect(() => {
+    if (isFirstRender.current) return;
+    let timeoutId: NodeJS.Timeout;
+    if (isInView && model && model !== "__DEFAULT_MODEL__" && !isBodyTypeLoading && !isBodyTypeDisabled && (bodyTypes?.length ?? 0) > 0 && (!bodyType || bodyType === "__DEFAULT_BODYTYPE__")) {
+      timeoutId = setTimeout(() => {
+        setActiveDropdown("bodyType");
+      }, 200);
+    }
+    return () => clearTimeout(timeoutId);
+  }, [model, isBodyTypeLoading, isBodyTypeDisabled, bodyTypes?.length, bodyType, isInView]);
+
+  // Auto-advance: open SubModel after Body Type is selected
+  useEffect(() => {
+    if (isFirstRender.current) return;
+    let timeoutId: NodeJS.Timeout;
+    if (isInView && bodyType && bodyType !== "__DEFAULT_BODYTYPE__" && !isSubmodelLoading && !isSubmodelDisabled && (subModels?.length ?? 0) > 0 && (!subModel || subModel?.SubModel === "__DEFAULT_SUBMODEL__")) {
+      timeoutId = setTimeout(() => {
+        setActiveDropdown("subModel");
+      }, 200);
+    }
+    return () => clearTimeout(timeoutId);
+  }, [bodyType, isSubmodelLoading, isSubmodelDisabled, subModels?.length, subModel, isInView]);
+
+  const hasVehicleSelected = Boolean(activeGarageItem) || Boolean(year && make && model && model !== "__DEFAULT_MODEL__" && subModel && subModel.SubModel !== "__DEFAULT_SUBMODEL__" && bodyType && bodyType !== "__DEFAULT_BODY_TYPE__");
 
   // Optional rendering of sub-dropdowns based on whether they have items.
   // The mockups only show 3 inputs for the initial state, but we should let users select subModels if needed
@@ -132,12 +182,14 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
           <div className="flex items-center gap-3">
             <CheckCircle2 className="w-6 h-6 shrink-0 fill-[#3D8B3D] text-white" />
             <span className="font-extrabold text-gray-900 uppercase text-[15px] tracking-tight">
-              {year} {make} {model} {subModel?.SubModel && subModel.SubModel !== "__DEFAULT_SUBMODEL__" ? subModel.SubModel : ""}
+              {activeGarageItem
+                ? `${activeGarageItem.year} ${activeGarageItem.make} ${activeGarageItem.model || ''} ${activeGarageItem.subModel?.SubModel && activeGarageItem.subModel.SubModel !== '__DEFAULT_SUBMODEL__' ? activeGarageItem.subModel.SubModel : ''}`.trim()
+                : `${year} ${make} ${model} ${subModel?.SubModel && subModel.SubModel !== "__DEFAULT_SUBMODEL__" ? subModel.SubModel : ""}`}
             </span>
           </div>
           <div className="flex items-center gap-6">
             <Link
-              href={`/collections/product-category/wheels?vehicle=${year}-${make}-${model}`}
+              href={`/collections/product-category/wheels?q=${year}-${make}-${model}`}
               className="text-xs font-bold text-[#111827] border-b-2 border-[#111827] uppercase hover:text-gray-600 hover:border-gray-600 transition-colors pb-0.5 tracking-wide"
             >
               VIEW ALL PRODUCTS FOR MY VEHICLE
@@ -265,14 +317,14 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
         <div className="flex items-center gap-3 lg:gap-4 w-full md:w-auto">
           <button
             onClick={handleClear}
-            className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 lg:px-6 py-3 border border-gray-300 bg-white rounded-sm text-sm font-bold text-[#4B5563] hover:bg-gray-50 uppercase shadow-sm whitespace-nowrap transition-colors"
+            className="flex-1 md:flex-none min-[375px]:px-2 flex items-center justify-center gap-2 px-4 lg:px-6 py-3 border border-gray-300 bg-white rounded-sm text-sm font-bold text-[#4B5563] hover:bg-gray-50 uppercase shadow-sm whitespace-nowrap transition-colors"
           >
             <ArrowLeftRight className="w-4 h-4" />
             CHANGE VEHICLE
           </button>
           <button
             onClick={() => onSubmit()}
-            className="flex-1 md:flex-none px-6 lg:px-8 py-3 bg-[#dc5454] hover:bg-red-600 rounded-sm text-sm font-bold text-white uppercase shadow-sm whitespace-nowrap transition-colors"
+            className="flex-1 md:flex-none min-[375px]:px-4 px-6 lg:px-8 py-3 bg-[#dc5454] hover:bg-red-600 rounded-sm text-sm font-bold text-white uppercase shadow-sm whitespace-nowrap transition-colors"
           >
             SHOP NOW
           </button>
@@ -288,23 +340,23 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
         <TabsList className="w-full flex bg-[#F0F2F5] border-b border-gray-200 h-auto p-0 rounded-none justify-start">
           <TabsTrigger
             value="vehicle"
-            className="flex-1 py-4 flex justify-center items-center gap-2 font-bold text-xs sm:text-sm uppercase transition-colors relative rounded-none data-[state=active]:bg-white data-[state=active]:text-gray-900 border-b-2 border-transparent data-[state=active]:border-red-600 data-[state=active]:shadow-none text-gray-500 hover:bg-gray-50 bg-transparent"
+            className=" cursor-pointer flex-1 py-4 flex justify-center items-center gap-2 font-bold text-xs sm:text-sm uppercase transition-colors relative rounded-none data-[state=active]:bg-white data-[state=active]:text-gray-900 border-b-2 border-transparent data-[state=active]:border-red-600 data-[state=active]:shadow-none text-gray-500 hover:bg-gray-50 bg-transparent"
           >
             <CarFront className={cn("w-4 h-4", activeTab === "vehicle" ? "text-red-600" : "text-gray-400")} />
             BY VEHICLE
           </TabsTrigger>
           <TabsTrigger
             value="wheel"
-            className="flex-1 py-4 flex justify-center items-center gap-2 font-bold text-xs sm:text-sm uppercase transition-colors relative rounded-none data-[state=active]:bg-white data-[state=active]:text-gray-900 border-b-2 border-transparent data-[state=active]:border-red-600 data-[state=active]:shadow-none text-gray-500 hover:bg-gray-50 bg-transparent"
+            className=" cursor-pointer flex-1 py-4 flex justify-center items-center gap-2 font-bold text-xs sm:text-sm uppercase transition-colors relative rounded-none data-[state=active]:bg-white data-[state=active]:text-gray-900 border-b-2 border-transparent data-[state=active]:border-red-600 data-[state=active]:shadow-none text-gray-500 hover:bg-gray-50 bg-transparent"
           >
-            <Circle className={cn("w-4 h-4", activeTab === "wheel" ? "text-red-600" : "text-gray-400")} />
+            <GiCarWheel className={cn("w-4 h-4", activeTab === "wheel" ? "text-red-600" : "text-gray-400")} />
             BY WHEEL
           </TabsTrigger>
           <TabsTrigger
             value="tire"
-            className="flex-1 py-4 flex justify-center items-center gap-2 font-bold text-xs sm:text-sm uppercase transition-colors relative rounded-none data-[state=active]:bg-white data-[state=active]:text-gray-900 border-b-2 border-transparent data-[state=active]:border-red-600 data-[state=active]:shadow-none text-gray-500 hover:bg-gray-50 bg-transparent"
+            className=" cursor-pointer flex-1 py-4 flex justify-center items-center gap-2 font-bold text-xs sm:text-sm uppercase transition-colors relative rounded-none data-[state=active]:bg-white data-[state=active]:text-gray-900 border-b-2 border-transparent data-[state=active]:border-red-600 data-[state=active]:shadow-none text-gray-500 hover:bg-gray-50 bg-transparent"
           >
-            <Disc className={cn("w-4 h-4", activeTab === "tire" ? "text-red-600" : "text-gray-400")} />
+            <PiTireThin className={cn("w-4 h-4", activeTab === "tire" ? "text-red-600" : "text-gray-400")} />
             BY TIRE
           </TabsTrigger>
         </TabsList>

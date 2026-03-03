@@ -1,30 +1,24 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import { addToCart } from "@/redux/features/cartSlice";
-import { useTypedSelector } from "@/redux/store";
-import { getPrice } from "@/utils/price";
-import { getProductThumbnail, productsByCategory } from "@/utils/product";
-import { useSearchParams } from "next/navigation";
-import { useDispatch } from "react-redux";
-import { v4 as uuidv4 } from "uuid";
-import PackageDetails from "./package-details";
-import { Ymm } from "./ymm";
-import { useCartHook } from "@/hooks/useCartHook";
-import { TWheelProduct, TTireProduct } from "@/types/product";
-import { useState } from "react";
-import {
-  Package,
-  Shield,
-  Star,
-  ChevronDown,
-  ChevronUp,
-} from "lucide-react";
+'use client';
+import { Button } from '@/components/ui/button';
+import { addToCart } from '@/redux/features/cartSlice';
+import { useTypedSelector } from '@/redux/store';
+import { getPrice } from '@/utils/price';
+import { getProductThumbnail, productsByCategory } from '@/utils/product';
+import { useSearchParams } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
+import PackageDetails from './package-details';
+import { Ymm } from './ymm';
+import { useCartHook } from '@/hooks/useCartHook';
+import { TWheelProduct, TTireProduct } from '@/types/product';
+import { useState } from 'react';
+import { Package, Shield, Star, ChevronDown, ChevronUp } from 'lucide-react';
 
 // Format currency
 const formatPrice = (price: number) =>
-  new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
+  new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
   }).format(price);
 
 // Spec badge component
@@ -41,9 +35,7 @@ function SpecBadge({
       <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">
         {label}
       </span>
-      <span className="text-sm font-bold text-foreground mt-0.5">
-        {value}
-      </span>
+      <span className="text-sm font-bold text-foreground mt-0.5">{value}</span>
     </div>
   );
 }
@@ -55,11 +47,11 @@ function ProductCard({
   price,
 }: {
   product: TWheelProduct | TTireProduct;
-  type: "wheel" | "tire";
+  type: 'wheel' | 'tire';
   price: number;
 }) {
   const [showSpecs, setShowSpecs] = useState(false);
-  const isWheel = type === "wheel";
+  const isWheel = type === 'wheel';
   const wheelProduct = isWheel ? (product as TWheelProduct) : null;
   const tireProduct = !isWheel ? (product as TTireProduct) : null;
 
@@ -83,7 +75,7 @@ function ProductCard({
       {/* Image */}
       <div className="relative bg-gradient-to-b from-secondary/30 to-secondary/10 p-6 pt-12 flex items-center justify-center overflow-hidden">
         <img
-          src={getProductThumbnail( product)}
+          src={getProductThumbnail(product)}
           alt={`${product.brand} ${product.model}`}
           className="w-full max-w-[320px] h-[280px] object-contain transition-transform duration-500 group-hover:scale-105"
         />
@@ -123,46 +115,29 @@ function ProductCard({
         <div className="flex flex-wrap gap-2">
           {isWheel && wheelProduct && (
             <>
-              <SpecBadge
-                label="Diameter"
-                value={
-                  wheelProduct.wheelDiameter
-                }
-              />
-              <SpecBadge
-                label="Width"
-                value={wheelProduct.wheelWidth}
-              />
+              <SpecBadge label="Diameter" value={wheelProduct.wheelDiameter} />
+              <SpecBadge label="Width" value={wheelProduct.wheelWidth} />
               <SpecBadge label="Offset" value={wheelProduct.offset} />
               <SpecBadge
                 label="Bolt"
-                value={wheelProduct?.boltPatterns?.join(", ") || ""}
+                value={
+                  Array.isArray(wheelProduct?.boltPatterns)
+                    ? wheelProduct?.boltPatterns?.join(', ')
+                    : typeof wheelProduct.boltPatterns === 'string'
+                      ? wheelProduct.boltPatterns
+                      : ''
+                }
               />
-              <SpecBadge
-                label="Centerbore"
-                value={wheelProduct.centerBore}
-              />
+              <SpecBadge label="Centerbore" value={wheelProduct.centerBore} />
             </>
           )}
           {!isWheel && tireProduct && (
             <>
               <SpecBadge label="Width" value={tireProduct.tireWidth} />
-              <SpecBadge
-                label="Aspect"
-                value={tireProduct.tireRatio}
-              />
-              <SpecBadge
-                label="Speed"
-                value={tireProduct.speedRating}
-              />
-              <SpecBadge
-                label="Load"
-                value={tireProduct.loadIndex}
-              />
-              <SpecBadge
-                label="Ply"
-                value={tireProduct.ply}
-              />
+              <SpecBadge label="Aspect" value={tireProduct.tireRatio} />
+              <SpecBadge label="Speed" value={tireProduct.speedRating} />
+              <SpecBadge label="Load" value={tireProduct.loadIndex} />
+              <SpecBadge label="Ply" value={tireProduct.ply} />
             </>
           )}
         </div>
@@ -172,7 +147,7 @@ function ProductCard({
           onClick={() => setShowSpecs(!showSpecs)}
           className="flex items-center gap-1 text-sm font-medium text-primary hover:text-primary-hover transition-colors w-full justify-center py-2 rounded-lg hover:bg-primary/5"
         >
-          {showSpecs ? "Hide" : "View"} Full Specifications
+          {showSpecs ? 'Hide' : 'View'} Full Specifications
           {showSpecs ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </button>
 
@@ -181,9 +156,7 @@ function ProductCard({
             {isWheel && wheelProduct && (
               <WheelSpecTable product={wheelProduct} />
             )}
-            {!isWheel && tireProduct && (
-              <TireSpecTable product={tireProduct} />
-            )}
+            {!isWheel && tireProduct && <TireSpecTable product={tireProduct} />}
           </div>
         )}
 
@@ -215,7 +188,9 @@ function SpecRow({
   return (
     <div className="flex justify-between items-center py-2 px-3 even:bg-secondary/30 rounded-md">
       <span className="text-xs text-muted-foreground font-medium">{label}</span>
-      <span className="text-xs font-semibold text-foreground">{String(value)}</span>
+      <span className="text-xs font-semibold text-foreground">
+        {String(value)}
+      </span>
     </div>
   );
 }
@@ -228,7 +203,14 @@ function WheelSpecTable({ product }: { product: TWheelProduct }) {
       <SpecRow label="Diameter" value={product.wheelDiameter} />
       <SpecRow label="Width" value={product.wheelWidth} />
       <SpecRow label="Wheel Size" value={product.wheelSize} />
-      <SpecRow label="Bolt Pattern" value={product.boltPatterns?.join(", ") || ""} />
+      <SpecRow
+        label="Bolt Pattern"
+        value={Array.isArray(product?.boltPatterns)
+                    ? product?.boltPatterns?.join(', ')
+                    : typeof product.boltPatterns === 'string'
+                      ? product.boltPatterns
+                      : ''}
+      />
       <SpecRow label="Offset" value={product.offset} />
       <SpecRow label="Backspacing" value={product.backspacing} />
       <SpecRow label="Centerbore" value={product.centerBore} />
@@ -281,13 +263,13 @@ export default function WheelTirePackage() {
   const searchParams = useSearchParams();
   const packages = useTypedSelector((state) => state.persisted.package);
 
-  const cartPackage = searchParams.get("cartPackage") as string;
+  const cartPackage = searchParams.get('cartPackage') as string;
 
   const packageData = packages[cartPackage];
   if (!packageData?.wheel || !packageData?.tire) return null;
 
-  const wheel = productsByCategory("wheels", packageData.wheel);
-  const tire = productsByCategory("tire", packageData.tire);
+  const wheel = productsByCategory('wheels', packageData.wheel);
+  const tire = productsByCategory('tire', packageData.tire);
 
   const wheelPrice = getPrice(wheel);
   const tirePrice = getPrice(tire);
@@ -341,7 +323,9 @@ export default function WheelTirePackage() {
             <span>/</span>
             <span>Packages</span>
             <span>/</span>
-            <span className="text-primary">{wheel.brand} + {tire.brand}</span>
+            <span className="text-primary">
+              {wheel.brand} + {tire.brand}
+            </span>
           </div>
           <div className="flex items-center gap-3">
             <div className="p-2.5 bg-primary/15 rounded-xl backdrop-blur-sm border border-primary/20">
@@ -404,7 +388,10 @@ export default function WheelTirePackage() {
           {/* Sticky Sidebar */}
           <div className="lg:col-span-4">
             <div className="lg:sticky lg:top-4 space-y-4">
-              <PackageDetails wheel={packageData.wheel} tire={packageData.tire} />
+              <PackageDetails
+                wheel={packageData.wheel}
+                tire={packageData.tire}
+              />
               <div>
                 <Ymm wheel={packageData.wheel} tire={packageData.tire} />
               </div>

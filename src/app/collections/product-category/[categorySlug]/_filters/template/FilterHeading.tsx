@@ -1,4 +1,3 @@
-import { BiSolidDownArrow, BiSolidUpArrow } from "react-icons/bi";
 const FilterHeading = ({
   showFilter,
   toggleFilter,
@@ -11,18 +10,14 @@ const FilterHeading = ({
   return (
     <button
       onClick={toggleFilter}
-      className="w-full flex items-center justify-between py-2 text-lg font-medium text-gray-800"
+      className="w-full flex items-center justify-between py-2 group cursor-pointer"
     >
-      <span>{title}</span>
-      {showFilter ? (
-        <div className=" text-gray-600">
-          <BiSolidUpArrow className="text-xl" />
-        </div>
-      ) : (
-        <div className=" text-gray-600">
-          <BiSolidDownArrow className="text-xl" />
-        </div>
-      )}
+      <span className="text-[13px] font-extrabold uppercase tracking-wide text-[#1a1a2e]">
+        {title}
+      </span>
+      <span className="text-[#1a1a2e] text-xl leading-none font-light select-none transition-transform">
+        {showFilter ? "−" : "+"}
+      </span>
     </button>
   );
 };

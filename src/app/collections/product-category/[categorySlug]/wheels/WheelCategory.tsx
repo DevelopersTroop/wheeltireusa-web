@@ -1,27 +1,25 @@
 'use client';
+import HomeYmm from '@/app/(home)/_components/HeroSection/components/HomeYmm/HomeYmm';
+import { Paginate } from '@/components/shared/Paginate/Paginate';
+import ViewToggle from '@/components/shared/ViewToggle/ViewToggle';
+import Breadcrumb from '@/components/ui/breadcrumb/breadcrumb';
+import Item from '@/components/ui/breadcrumb/item';
+import Container from '@/components/ui/container/container';
+import { useFilterSync } from '@/hooks/useFilterSync';
+import { cn } from '@/lib/utils';
+import { useGetProductsQuery } from '@/redux/apis/product';
+import { RootState } from '@/redux/store';
 import { useSearchParams } from 'next/navigation';
 import React from 'react';
-import TireCard from './WheelCard';
-import { useGetProductsQuery } from '@/redux/apis/product';
-import { useFilterSync } from '@/hooks/useFilterSync';
-import SidebarFilters from '../_filters/mobile-filters/SidebarFilter';
-import TireFilters from '../_filters/TireFilters';
-import MobileYmmFilter from '../_filters/mobile-ymm/MobileYmmFilter';
-import TireYMMFilters from '../_filters/widgets/tire/TireYmmFilter';
-import SortByFilter from '../_filters/SortByFilter';
-import ProductCardSkeleton from '../_loading/ProductCardSkeleton';
-import NoProductsFound from '../NoProductsFound';
-import Item from '@/components/ui/breadcrumb/item';
-import Breadcrumb from '@/components/ui/breadcrumb/breadcrumb';
-import { Paginate } from '@/components/shared/Paginate/Paginate';
-import ProductCategoryLoading from '../../_components/_loading';
-import WheelCardList from './WheelCardList';
-import ViewToggle from '@/components/shared/ViewToggle/ViewToggle';
 import { useSelector } from 'react-redux';
-import { RootState } from '@/redux/store';
-import Container from '@/components/ui/container/container';
-import { cn } from '@/lib/utils';
-import HomeYmm from '@/app/(home)/_components/HeroSection/components/HomeYmm/HomeYmm';
+import ProductCategoryLoading from '../../_components/_loading';
+import SidebarFilters from '../_filters/mobile-filters/SidebarFilter';
+import SortByFilter from '../_filters/SortByFilter';
+import TireFilters from '../_filters/TireFilters';
+import NoProductsFound from '../NoProductsFound';
+import WheelCard from './WheelCard';
+import WheelCardList from './WheelCardList';
+import WheelFilters from '../_filters/WheelFilters';
 
 const WheelCategory: React.FC<{
   page: number;
@@ -30,7 +28,7 @@ const WheelCategory: React.FC<{
 }> = ({ page = 1, topDescription, bottomDescription }) => {
   const searchParams = useSearchParams();
   const { filters } = useFilterSync();
-  const { data, isLoading: loading } = useGetProductsQuery({
+  const { data, isLoading: loading, isFetching } = useGetProductsQuery({
     ...filters,
     category: 'wheels',
   });
@@ -55,16 +53,16 @@ const WheelCategory: React.FC<{
       }>
         <div className="w-full flex flex-row gap-2 justify-between  md:hidden">
           <SidebarFilters>
-            <TireFilters />
+            <WheelFilters />
           </SidebarFilters>
           <div className="w-full">
             <SortByFilter />
           </div>
         </div>
         <div className="hidden h-full flex-col gap-3 md:flex md:w-[400px]">
-          <TireFilters />
+          <WheelFilters />
         </div>
-        {loading ? <ProductCategoryLoading /> : data?.products?.length === 0 ? (
+        {loading || isFetching ? <ProductCategoryLoading /> : data?.products?.length === 0 ? (
           <>
             <NoProductsFound />
           </>
@@ -76,8 +74,8 @@ const WheelCategory: React.FC<{
                   <Breadcrumb>
                     <Item href={'/'}>Home</Item>
                     <Item href={'/'}>Collections</Item>
-                    <Item href={'/collections/product-category/tires'}>
-                      Tires
+                    <Item href={'/collections/product-category/wheels'}>
+                      Wheels
                     </Item>
                   </Breadcrumb>
                 </div>
@@ -96,7 +94,7 @@ const WheelCategory: React.FC<{
               <div
                 className={
                   viewType === 'grid'
-                    ? 'grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'
+                    ? 'grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4'
                     : 'flex w-full flex-col gap-4'
                 }
               >
@@ -105,7 +103,7 @@ const WheelCategory: React.FC<{
                   return (
                     <div key={product.id}>
                       {viewType === 'grid' ? (
-                        <TireCard product={product} key={`grid-${product.id}`} />
+                        <WheelCard product={product} key={`grid-${product.id}`} />
                       ) : (
                         <WheelCardList product={product} key={`list-${product.id}`} />
                       )}

@@ -11,7 +11,7 @@ import { addToGarage, removeFromGarage, clearGarage, setYmm, submitYmm, setActiv
 import { TYmmGarageItem } from "@/types/ymm";
 
 export const VehicleSelectorModal = ({ isOpen, onOpenChange, skipToGarage }: { isOpen: boolean, onOpenChange: (open: boolean) => void, skipToGarage?: boolean }) => {
-  const { garage, activeGarageId } = useTypedSelector((state) => state.yearMakeModel);
+  const { garage, activeGarageId } = useTypedSelector((state) => state.persisted.yearMakeModel);
   const [view, setView] = useState<'garage' | 'add'>(skipToGarage && garage?.length > 0 ? 'garage' : 'add');
   const dispatch = useAppDispatch();
 
@@ -114,7 +114,7 @@ const GarageView = ({ garage, activeGarageId, onAddVehicle, onClearAll, onRemove
                 </div>
                 <div>
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="font-bold text-gray-900">{item.year} {item.make} {item.model} {item.subModel?.SubModel || item.bodyType}</span>
+                    <span className="font-bold text-gray-900">{item.year} {item.make} {item.model && item.model !== '__DEFAULT_MODEL__' ? item.model : ''} {item.subModel?.SubModel && item.subModel.SubModel !== '__DEFAULT_SUBMODEL__' ? item.subModel.SubModel : (item.bodyType && item.bodyType !== '__DEFAULT_BODYTYPE__' ? item.bodyType : '')}</span>
                     {item.id === activeGarageId && (
                       <span className="bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded font-bold uppercase">Main</span>
                     )}
@@ -188,13 +188,16 @@ const AddVehicleView = ({ onClose }: { onClose: () => void }) => {
   const showSubmodel = (subModels?.length ?? 0) > 0;
 
   const handleSubmit = () => {
+    const cleanModel = model && model !== '__DEFAULT_MODEL__' ? model : '';
+    const cleanBodyType = bodyType && bodyType !== '__DEFAULT_BODYTYPE__' ? bodyType : '';
+    const cleanSubModel = subModel?.SubModel && subModel.SubModel !== '__DEFAULT_SUBMODEL__' ? subModel : { SubModel: '', DRChassisID: '', DRModelID: '' };
     const newItem: TYmmGarageItem = {
-      id: `${year}-${make}-${model}-${bodyType}-${subModel.SubModel}`,
+      id: `${year}-${make}-${cleanModel}-${cleanBodyType}-${cleanSubModel.SubModel}`,
       year,
       make,
-      model,
-      bodyType,
-      subModel
+      model: cleanModel,
+      bodyType: cleanBodyType,
+      subModel: cleanSubModel
     };
     dispatch(addToGarage(newItem));
     dispatch(submitYmm(newItem));
@@ -326,12 +329,12 @@ const AddVehicleView = ({ onClose }: { onClose: () => void }) => {
 export const VehicleSelectorButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { garage, activeGarageId } = useTypedSelector(
-    (state) => state.yearMakeModel
+    (state) => state.persisted.yearMakeModel
   );
 
   const activeItem = garage?.find((item) => item.id === activeGarageId);
   const activeLabel = activeItem
-    ? `${activeItem.year} ${activeItem.make} ${activeItem.model}`
+    ? `${activeItem.year} ${activeItem.make} ${activeItem.model && activeItem.model !== '__DEFAULT_MODEL__' ? activeItem.model : ''}`
     : "SELECT YOUR VEHICLE";
 
   return (

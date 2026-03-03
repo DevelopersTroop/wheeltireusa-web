@@ -109,7 +109,7 @@ const Textarea = ({ className = "", ...props }: TextareaProps) => (
 export default function MultiStepBuildForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const { filters: tireFilters } = useFetchFilters("tires");
+  const { filters: tireFilters } = useFetchFilters("tire");
   const { filters: wheelFilters } = useFetchFilters("wheels");
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearch] = useDebounce(searchTerm);

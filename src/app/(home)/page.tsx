@@ -31,7 +31,7 @@ export default function Homepage() {
     <div>
       <HeroSection />
       <Categories />
-      <BannerGrid />
+      {/* <BannerGrid /> */}
       <WheelCategories />
       <ProductGallery
         category="tire"

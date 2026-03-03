@@ -96,7 +96,7 @@ export default function MobileNavbar() {
       <button
         onClick={() => setIsOpen(true)}
         aria-label="Open menu"
-        className="p-2 text-black block custom-lg:hidden"
+        className="text-black block custom-lg:hidden"
       >
         <BiMenu className="w-7 h-7" />
       </button>

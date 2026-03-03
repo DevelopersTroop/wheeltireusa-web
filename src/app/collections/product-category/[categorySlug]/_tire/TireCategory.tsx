@@ -95,7 +95,7 @@ const TireCategory: React.FC<{
               <div
                 className={
                   viewType === "grid"
-                    ? "grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"
+                    ? "grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4"
                     : "flex w-full flex-col gap-4"
                 }
               >
