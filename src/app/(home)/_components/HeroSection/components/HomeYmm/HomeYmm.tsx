@@ -1,6 +1,4 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
 import {
   Select,
   SelectContent,
@@ -10,12 +8,14 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import useYmm from "@/hooks/useYmm";
-import { CarFront, Circle, Disc, CheckCircle2, ArrowLeftRight, ShipWheelIcon, TimerOffIcon } from "lucide-react";
-import { useAppDispatch, useTypedSelector } from "@/redux/store";
+import { cn } from "@/lib/utils";
 import { clearYearMakeModel, setHomeYmmInView } from "@/redux/features/yearMakeModelSlice";
+import { useAppDispatch, useTypedSelector } from "@/redux/store";
+import { ArrowLeftRight, CarFront, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
-import { PiTireThin } from 'react-icons/pi'
-import { GiCarWheel } from 'react-icons/gi'
+import { useEffect, useRef, useState } from "react";
+import { GiCarWheel } from 'react-icons/gi';
+import { PiTireThin } from 'react-icons/pi';
 
 interface HomeYmmProps {
   variant?: "hero" | "product";
