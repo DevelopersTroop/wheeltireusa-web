@@ -123,7 +123,7 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
   useEffect(() => {
     if (isFirstRender.current || !isActive) return;
     let timeoutId: NodeJS.Timeout;
-    if (isInView && year && !isMakeLoading && !isMakeDisabled && (makes?.length ?? 0) > 0 && (!make || make === "__DEFAULT_MAKE__")) {
+    if (isInView && hasUserInteracted.current && year && !isMakeLoading && !isMakeDisabled && (makes?.length ?? 0) > 0 && (!make || make === "__DEFAULT_MAKE__")) {
       timeoutId = setTimeout(() => {
         setActiveDropdown("make");
       }, 200);
@@ -134,7 +134,7 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
   useEffect(() => {
     if (isFirstRender.current || !isActive) return;
     let timeoutId: NodeJS.Timeout;
-    if (isInView && make && !isModelLoading && !isModelDisabled && (models?.length ?? 0) > 0 && (!model || model === "__DEFAULT_MODEL__")) {
+    if (isInView && hasUserInteracted.current && make && !isModelLoading && !isModelDisabled && (models?.length ?? 0) > 0 && (!model || model === "__DEFAULT_MODEL__")) {
       timeoutId = setTimeout(() => {
         setActiveDropdown("model");
       }, 200);
@@ -144,27 +144,27 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
 
   // Auto-advance: open Body Type after Model is selected
   useEffect(() => {
-    if (isFirstRender.current) return;
+    if (isFirstRender.current || !isActive) return;
     let timeoutId: NodeJS.Timeout;
-    if (isInView && model && model !== "__DEFAULT_MODEL__" && !isBodyTypeLoading && !isBodyTypeDisabled && (bodyTypes?.length ?? 0) > 0 && (!bodyType || bodyType === "__DEFAULT_BODYTYPE__")) {
+    if (isInView && hasUserInteracted.current && model && model !== "__DEFAULT_MODEL__" && !isBodyTypeLoading && !isBodyTypeDisabled && (bodyTypes?.length ?? 0) > 0 && (!bodyType || bodyType === "__DEFAULT_BODYTYPE__")) {
       timeoutId = setTimeout(() => {
         setActiveDropdown("bodyType");
       }, 200);
     }
     return () => clearTimeout(timeoutId);
-  }, [model, isBodyTypeLoading, isBodyTypeDisabled, bodyTypes?.length, bodyType, isInView]);
+  }, [model, isBodyTypeLoading, isBodyTypeDisabled, bodyTypes?.length, bodyType, isInView, isActive]);
 
   // Auto-advance: open SubModel after Body Type is selected
   useEffect(() => {
-    if (isFirstRender.current) return;
+    if (isFirstRender.current || !isActive) return;
     let timeoutId: NodeJS.Timeout;
-    if (isInView && bodyType && bodyType !== "__DEFAULT_BODYTYPE__" && !isSubmodelLoading && !isSubmodelDisabled && (subModels?.length ?? 0) > 0 && (!subModel || subModel?.SubModel === "__DEFAULT_SUBMODEL__")) {
+    if (isInView && hasUserInteracted.current && bodyType && bodyType !== "__DEFAULT_BODYTYPE__" && !isSubmodelLoading && !isSubmodelDisabled && (subModels?.length ?? 0) > 0 && (!subModel || subModel?.SubModel === "__DEFAULT_SUBMODEL__")) {
       timeoutId = setTimeout(() => {
         setActiveDropdown("subModel");
       }, 200);
     }
     return () => clearTimeout(timeoutId);
-  }, [bodyType, isSubmodelLoading, isSubmodelDisabled, subModels?.length, subModel, isInView]);
+  }, [bodyType, isSubmodelLoading, isSubmodelDisabled, subModels?.length, subModel, isInView, isActive]);
 
   const hasVehicleSelected = Boolean(activeGarageItem) || Boolean(year && make && model && model !== "__DEFAULT_MODEL__" && subModel && subModel.SubModel !== "__DEFAULT_SUBMODEL__" && bodyType && bodyType !== "__DEFAULT_BODY_TYPE__");
 

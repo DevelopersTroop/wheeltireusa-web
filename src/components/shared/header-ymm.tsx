@@ -159,27 +159,27 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
 
   // Auto-advance: open Body Type after Model is selected
   useEffect(() => {
-    if (isFirstRender.current) return;
+    if (isFirstRender.current || !isActive) return;
     let timeoutId: NodeJS.Timeout;
     if (shouldShow && hasUserInteracted.current && model && model !== "__DEFAULT_MODEL__" && !isBodyTypeLoading && !isBodyTypeDisabled && (bodyTypes?.length ?? 0) > 0 && (!bodyType || bodyType === "__DEFAULT_BODYTYPE__")) {
       timeoutId = setTimeout(() => {
-        setActiveDropdown("bodyType");
+        if (selectorRef.current?.offsetParent) setActiveDropdown("bodyType");
       }, 200);
     }
     return () => clearTimeout(timeoutId);
-  }, [model, isBodyTypeLoading, isBodyTypeDisabled, bodyTypes?.length, bodyType, shouldShow]);
+  }, [model, isBodyTypeLoading, isBodyTypeDisabled, bodyTypes?.length, bodyType, shouldShow, isActive]);
 
   // Auto-advance: open SubModel after Body Type is selected
   useEffect(() => {
-    if (isFirstRender.current) return;
+    if (isFirstRender.current || !isActive) return;
     let timeoutId: NodeJS.Timeout;
     if (shouldShow && hasUserInteracted.current && bodyType && bodyType !== "__DEFAULT_BODYTYPE__" && !isSubmodelLoading && !isSubmodelDisabled && (subModels?.length ?? 0) > 0 && (!subModel || subModel?.SubModel === "__DEFAULT_SUBMODEL__")) {
       timeoutId = setTimeout(() => {
-        setActiveDropdown("subModel");
+        if (selectorRef.current?.offsetParent) setActiveDropdown("subModel");
       }, 200);
     }
     return () => clearTimeout(timeoutId);
-  }, [bodyType, isSubmodelLoading, isSubmodelDisabled, subModels?.length, subModel, shouldShow]);
+  }, [bodyType, isSubmodelLoading, isSubmodelDisabled, subModels?.length, subModel, shouldShow, isActive]);
 
   const handleReset = () => {
     onYearChange("");

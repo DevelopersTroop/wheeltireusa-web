@@ -259,10 +259,14 @@ const useYmm = (ymmId?: string) => {
 
   // ─── Change handlers ───
 
-  const [activeYmmId, setActiveYmmId] = useState<string | null>(null);
+  const markActiveYmmInstance = () => {
+    if (ymmId && ymm.activeYmmInstanceId !== ymmId) {
+      dispatch(setYmm({ activeYmmInstanceId: ymmId }));
+    }
+  };
 
   const onYearChange = (data: ChangeEvent<HTMLSelectElement> | string) => {
-    if (ymmId) setActiveYmmId(ymmId);
+    markActiveYmmInstance();
     const newYear = typeof data === 'string' ? data : data.target.value;
     setSelectedVehicle((prev) => ({
       ...prev,
@@ -300,7 +304,7 @@ const useYmm = (ymmId?: string) => {
   };
 
   const onMakeChange = (data: ChangeEvent<HTMLSelectElement> | string) => {
-    if (ymmId) setActiveYmmId(ymmId);
+    markActiveYmmInstance();
     const newMake = typeof data === 'string' ? data : data.target.value;
     setSelectedVehicle((prev) => ({
       ...prev,
@@ -336,7 +340,7 @@ const useYmm = (ymmId?: string) => {
   };
 
   const onModelChange = (data: ChangeEvent<HTMLSelectElement> | string) => {
-    if (ymmId) setActiveYmmId(ymmId);
+    markActiveYmmInstance();
     const newModel = typeof data === 'string' ? data : data.target.value;
     setSelectedVehicle((prev) => ({
       ...prev,
@@ -370,7 +374,7 @@ const useYmm = (ymmId?: string) => {
   };
 
   const onBodyTypeChange = (data: ChangeEvent<HTMLSelectElement> | string) => {
-    if (ymmId) setActiveYmmId(ymmId);
+    markActiveYmmInstance();
     const newBodyType = typeof data === 'string' ? data : data.target.value;
     setSelectedVehicle((prev) => ({
       ...prev,
@@ -402,7 +406,7 @@ const useYmm = (ymmId?: string) => {
   };
 
   const onSubModelChange = (data: ChangeEvent<HTMLSelectElement> | string) => {
-    if (ymmId) setActiveYmmId(ymmId);
+    markActiveYmmInstance();
     const value = typeof data === 'string' ? data : data.target.value;
     if (subModels) {
       setSelectedVehicle((prev) => ({
@@ -474,7 +478,7 @@ const useYmm = (ymmId?: string) => {
     onSubModelChange,
     onSubmit,
     isDisabledSubmit,
-    isActive: activeYmmId === ymmId,
+    isActive: !ymmId || ymm.activeYmmInstanceId === ymmId,
     ...ymm,
     ...selectedVehicle,
     list: listData,

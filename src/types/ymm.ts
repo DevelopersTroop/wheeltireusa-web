@@ -55,5 +55,6 @@ export type TYmm = {
   submitYmm: object;
   garage: TYmmGarageItem[];
   activeGarageId: string | null;
+  activeYmmInstanceId: string;
   isHomeYmmInView: boolean;
 };

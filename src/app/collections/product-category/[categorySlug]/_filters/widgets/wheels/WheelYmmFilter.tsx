@@ -34,7 +34,7 @@ const WheelYMMFilters = () => {
     onSubModelChange,
     onSubmit,
     isDisabledSubmit,
-    year, make, model, bodyType, subModel
+    year, make, model, bodyType, subModel, isActive
   } = useYmm("wheel_ymm_filter");
 
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
@@ -80,9 +80,10 @@ const WheelYMMFilters = () => {
   };
 
   useEffect(() => {
-    if (isFirstRender.current) return;
+    if (isFirstRender.current || !isActive) return;
     let timeoutId: NodeJS.Timeout;
     if (
+      hasUserInteracted.current &&
       year &&
       !isMakeLoading &&
       !isMakeDisabled &&
@@ -96,12 +97,13 @@ const WheelYMMFilters = () => {
       }, 200);
     }
     return () => clearTimeout(timeoutId);
-  }, [year, isMakeLoading, isMakeDisabled, makes?.length, make]);
+  }, [year, isMakeLoading, isMakeDisabled, makes?.length, make, isActive]);
 
   useEffect(() => {
-    if (isFirstRender.current) return;
+    if (isFirstRender.current || !isActive) return;
     let timeoutId: NodeJS.Timeout;
     if (
+      hasUserInteracted.current &&
       make &&
       !isModelLoading &&
       !isModelDisabled &&
@@ -115,12 +117,13 @@ const WheelYMMFilters = () => {
       }, 200);
     }
     return () => clearTimeout(timeoutId);
-  }, [make, isModelLoading, isModelDisabled, models?.length, model]);
+  }, [make, isModelLoading, isModelDisabled, models?.length, model, isActive]);
 
   useEffect(() => {
-    if (isFirstRender.current) return;
+    if (isFirstRender.current || !isActive) return;
     let timeoutId: NodeJS.Timeout;
     if (
+      hasUserInteracted.current &&
       model &&
       !isBodyTypeLoading &&
       !isBodyTypeDisabled &&
@@ -134,12 +137,13 @@ const WheelYMMFilters = () => {
       }, 200);
     }
     return () => clearTimeout(timeoutId);
-  }, [model, isBodyTypeLoading, isBodyTypeDisabled, bodyTypes?.length, bodyType]);
+  }, [model, isBodyTypeLoading, isBodyTypeDisabled, bodyTypes?.length, bodyType, isActive]);
 
   useEffect(() => {
-    if (isFirstRender.current) return;
+    if (isFirstRender.current || !isActive) return;
     let timeoutId: NodeJS.Timeout;
     if (
+      hasUserInteracted.current &&
       bodyType &&
       !isSubmodelLoading &&
       !isSubmodelDisabled &&
@@ -153,7 +157,7 @@ const WheelYMMFilters = () => {
       }, 200);
     }
     return () => clearTimeout(timeoutId);
-  }, [bodyType, isSubmodelLoading, isSubmodelDisabled, subModels?.length, subModel?.SubModel]);
+  }, [bodyType, isSubmodelLoading, isSubmodelDisabled, subModels?.length, subModel?.SubModel, isActive]);
 
   return (
     <div ref={containerRef} className={"filter-shadow bg-gray-200"}>

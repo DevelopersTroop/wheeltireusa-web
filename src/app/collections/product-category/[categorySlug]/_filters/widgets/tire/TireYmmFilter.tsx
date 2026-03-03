@@ -35,7 +35,8 @@ const TireYMMFilters = () => {
     model,
     bodyType,
     subModel,
-  } = useYmm(false);
+    isActive,
+  } = useYmm("tire_ymm_filter");
 
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -80,9 +81,10 @@ const TireYMMFilters = () => {
   };
 
   useEffect(() => {
-    if (isFirstRender.current) return;
+    if (isFirstRender.current || !isActive) return;
     let timeoutId: NodeJS.Timeout;
     if (
+      hasUserInteracted.current &&
       year &&
       !isMakeLoading &&
       (makes?.length ?? 0) > 0 &&
@@ -95,12 +97,13 @@ const TireYMMFilters = () => {
       }, 200);
     }
     return () => clearTimeout(timeoutId);
-  }, [year, isMakeLoading, makes?.length, make]);
+  }, [year, isMakeLoading, makes?.length, make, isActive]);
 
   useEffect(() => {
-    if (isFirstRender.current) return;
+    if (isFirstRender.current || !isActive) return;
     let timeoutId: NodeJS.Timeout;
     if (
+      hasUserInteracted.current &&
       make &&
       !isModelLoading &&
       (models?.length ?? 0) > 0 &&
@@ -113,12 +116,13 @@ const TireYMMFilters = () => {
       }, 200);
     }
     return () => clearTimeout(timeoutId);
-  }, [make, isModelLoading, models?.length, model]);
+  }, [make, isModelLoading, models?.length, model, isActive]);
 
   useEffect(() => {
-    if (isFirstRender.current) return;
+    if (isFirstRender.current || !isActive) return;
     let timeoutId: NodeJS.Timeout;
     if (
+      hasUserInteracted.current &&
       model &&
       !isBodyTypeLoading &&
       (bodyTypes?.length ?? 0) > 0 &&
@@ -131,12 +135,13 @@ const TireYMMFilters = () => {
       }, 200);
     }
     return () => clearTimeout(timeoutId);
-  }, [model, isBodyTypeLoading, bodyTypes?.length, bodyType]);
+  }, [model, isBodyTypeLoading, bodyTypes?.length, bodyType, isActive]);
 
   useEffect(() => {
-    if (isFirstRender.current) return;
+    if (isFirstRender.current || !isActive) return;
     let timeoutId: NodeJS.Timeout;
     if (
+      hasUserInteracted.current &&
       bodyType &&
       !isSubmodelLoading &&
       (subModels?.length ?? 0) > 0 &&
@@ -149,7 +154,7 @@ const TireYMMFilters = () => {
       }, 200);
     }
     return () => clearTimeout(timeoutId);
-  }, [bodyType, isSubmodelLoading, subModels?.length, subModel?.SubModel]);
+  }, [bodyType, isSubmodelLoading, subModels?.length, subModel?.SubModel, isActive]);
 
   return (
     <div ref={containerRef} className={"filter-shadow bg-gray-200"}>

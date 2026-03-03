@@ -32,6 +32,7 @@ const initialState: TYmm = {
   submitYmm: {},
   garage: [],
   activeGarageId: null,
+  activeYmmInstanceId: '',
   isHomeYmmInView: false,
 };
 const yearMakeModelSlice = createSlice({
