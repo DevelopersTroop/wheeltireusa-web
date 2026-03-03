@@ -4,11 +4,20 @@ import {
   Dialog,
   DialogContent,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 import { ChevronDown, Trash2 } from "lucide-react";
 import useYmm from "@/hooks/useYmm";
 import { useAppDispatch, useTypedSelector } from "@/redux/store";
 import { addToGarage, removeFromGarage, clearGarage, setYmm, submitYmm, setActiveGarage } from "@/redux/features/yearMakeModelSlice";
 import { TYmmGarageItem } from "@/types/ymm";
+import { useRouter, usePathname } from 'next/navigation';
 
 export const VehicleSelectorModal = ({ isOpen, onOpenChange, skipToGarage }: { isOpen: boolean, onOpenChange: (open: boolean) => void, skipToGarage?: boolean }) => {
   const { garage, activeGarageId } = useTypedSelector((state) => state.persisted.yearMakeModel);
@@ -59,6 +68,8 @@ export const VehicleSelectorModal = ({ isOpen, onOpenChange, skipToGarage }: { i
 
 const GarageView = ({ garage, activeGarageId, onAddVehicle, onClearAll, onRemove, onClose }: any) => {
   const dispatch = useAppDispatch();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const handleSelectVehicle = (item: TYmmGarageItem) => {
     dispatch(setActiveGarage(item.id));
@@ -87,6 +98,12 @@ const GarageView = ({ garage, activeGarageId, onAddVehicle, onClearAll, onRemove
     }));
     dispatch(submitYmm({ ...item }));
     onClose();
+    if (pathname && !pathname.includes('/collections')) {
+      const targetPath = pathname.includes('/tire')
+        ? '/collections/product-category/tire'
+        : '/collections/product-category/wheels';
+      router.push(targetPath);
+    }
   };
 
   return (
@@ -149,6 +166,12 @@ const GarageView = ({ garage, activeGarageId, onAddVehicle, onClearAll, onRemove
 
 const AddVehicleView = ({ onClose }: { onClose: () => void }) => {
   const {
+    isYearLoading,
+    isMakeLoading,
+    isModelLoading,
+    isBodyTypeLoading,
+    isSubmodelLoading,
+    isYearDisabled,
     isMakeDisabled,
     isModelDisabled,
     list: { years, makes, models, subModels, bodyTypes },
@@ -169,7 +192,14 @@ const AddVehicleView = ({ onClose }: { onClose: () => void }) => {
   } = useYmm("vehicle_selector_modal");
 
   const dispatch = useAppDispatch();
+  const router = useRouter();
+  const pathname = usePathname();
   const hasUserInteracted = useRef(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>("year");
+
+  const handleOpenChange = (key: string) => (open: boolean) => {
+    setActiveDropdown(open ? key : null);
+  };
 
   const handleInteraction = <T extends (...args: any[]) => void>(fn: T) => {
     return (...args: Parameters<T>) => {
@@ -184,8 +214,33 @@ const AddVehicleView = ({ onClose }: { onClose: () => void }) => {
   const handleBodyTypeChange = handleInteraction(onBodyTypeChange);
   const handleSubModelChange = handleInteraction(onSubModelChange);
 
+  // Auto-advance dropdowns 
+  useEffect(() => {
+    if (year && !isMakeLoading && !isMakeDisabled && (makes?.length ?? 0) > 0 && (!make || make === "__DEFAULT_MAKE__")) {
+      setTimeout(() => setActiveDropdown("make"), 200);
+    }
+  }, [year, isMakeLoading, isMakeDisabled, makes?.length, make]);
+
+  useEffect(() => {
+    if (make && !isModelLoading && !isModelDisabled && (models?.length ?? 0) > 0 && (!model || model === "__DEFAULT_MODEL__")) {
+      setTimeout(() => setActiveDropdown("model"), 200);
+    }
+  }, [make, isModelLoading, isModelDisabled, models?.length, model]);
+
   const showBodyType = (bodyTypes?.length ?? 0) > 0;
   const showSubmodel = (subModels?.length ?? 0) > 0;
+
+  useEffect(() => {
+    if (showBodyType && model && model !== "__DEFAULT_MODEL__" && !isBodyTypeLoading && !isBodyTypeDisabled && (!bodyType || bodyType === "__DEFAULT_BODYTYPE__")) {
+      setTimeout(() => setActiveDropdown("bodyType"), 200);
+    }
+  }, [showBodyType, model, isBodyTypeLoading, isBodyTypeDisabled, bodyType]);
+
+  useEffect(() => {
+    if (showSubmodel && bodyType && bodyType !== "__DEFAULT_BODYTYPE__" && !isSubmodelLoading && !isSubmodelDisabled && (!subModel || subModel?.SubModel === "__DEFAULT_SUBMODEL__")) {
+      setTimeout(() => setActiveDropdown("subModel"), 200);
+    }
+  }, [showSubmodel, bodyType, isSubmodelLoading, isSubmodelDisabled, subModel]);
 
   const handleSubmit = () => {
     const cleanModel = model && model !== '__DEFAULT_MODEL__' ? model : '';
@@ -202,6 +257,12 @@ const AddVehicleView = ({ onClose }: { onClose: () => void }) => {
     dispatch(addToGarage(newItem));
     dispatch(submitYmm(newItem));
     onClose();
+    if (pathname && !pathname.includes('/collections')) {
+      const targetPath = pathname.includes('/tire')
+        ? '/collections/product-category/tire'
+        : '/collections/product-category/wheels';
+      router.push(targetPath);
+    }
   };
 
   // Auto-submit when fully populated
@@ -225,16 +286,16 @@ const AddVehicleView = ({ onClose }: { onClose: () => void }) => {
         <div className="flex-1 w-full sm:w-auto min-w-[120px] relative flex items-center bg-white border border-gray-300 rounded-sm">
           <div className="pl-3 pr-2 text-gray-900 font-bold text-sm">1</div>
           <div className="w-px h-5 bg-gray-300"></div>
-          <select
-            value={year || ""}
-            onChange={(e) => handleYearChange(e.target.value)}
-            className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-2 py-3 appearance-none cursor-pointer focus:outline-none"
-          >
-            <option value="">YEAR</option>
-            {years?.map((y) => (
-              <option key={y} value={y}>{y}</option>
-            ))}
-          </select>
+          <Select open={activeDropdown === "year"} onOpenChange={handleOpenChange("year")} onValueChange={handleYearChange} value={year || undefined} disabled={isYearDisabled}>
+            <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-2 py-3 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden shrink-0 whitespace-nowrap">
+              <SelectValue placeholder={isYearLoading ? "LOADING..." : "YEAR"} />
+            </SelectTrigger>
+            <SelectContent>
+              {years?.map((y) => (
+                <SelectItem key={y} value={y}>{y}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <ChevronDown className="absolute right-2 w-4 h-4 text-gray-500 pointer-events-none" />
         </div>
 
@@ -242,17 +303,17 @@ const AddVehicleView = ({ onClose }: { onClose: () => void }) => {
         <div className="flex-1 w-full sm:w-auto min-w-[120px] relative flex items-center bg-white border border-gray-300 rounded-sm">
           <div className="pl-3 pr-2 text-gray-900 font-bold text-sm">2</div>
           <div className="w-px h-5 bg-gray-300"></div>
-          <select
-            value={make || ""}
-            onChange={(e) => handleMakeChange(e.target.value)}
-            disabled={isMakeDisabled}
-            className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-2 py-3 appearance-none cursor-pointer focus:outline-none disabled:opacity-50"
-          >
-            <option value="">MAKE</option>
-            {makes?.map((m) => (
-              <option key={m} value={m}>{m}</option>
-            ))}
-          </select>
+          <Select open={activeDropdown === "make"} onOpenChange={handleOpenChange("make")} onValueChange={handleMakeChange} value={make || "__DEFAULT_MAKE__"} disabled={isMakeDisabled}>
+            <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-2 py-3 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden shrink-0 whitespace-nowrap">
+              <SelectValue placeholder={isMakeLoading ? "LOADING..." : "MAKE"} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="__DEFAULT_MAKE__" className="hidden" disabled>MAKE</SelectItem>
+              {makes?.map((m) => (
+                <SelectItem key={m} value={m}>{m}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <ChevronDown className="absolute right-2 w-4 h-4 text-gray-500 pointer-events-none" />
         </div>
 
@@ -260,17 +321,17 @@ const AddVehicleView = ({ onClose }: { onClose: () => void }) => {
         <div className="flex-1 w-full sm:w-auto min-w-[120px] relative flex items-center bg-white border border-gray-300 rounded-sm">
           <div className="pl-3 pr-2 text-gray-900 font-bold text-sm">3</div>
           <div className="w-px h-5 bg-gray-300"></div>
-          <select
-            value={model || ""}
-            onChange={(e) => handleModelChange(e.target.value)}
-            disabled={isModelDisabled}
-            className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-2 py-3 appearance-none cursor-pointer focus:outline-none disabled:opacity-50"
-          >
-            <option value="">MODEL</option>
-            {models?.map((mdl) => (
-              <option key={mdl} value={mdl}>{mdl}</option>
-            ))}
-          </select>
+          <Select open={activeDropdown === "model"} onOpenChange={handleOpenChange("model")} onValueChange={handleModelChange} value={model || "__DEFAULT_MODEL__"} disabled={isModelDisabled}>
+            <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-2 py-3 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden shrink-0 whitespace-nowrap">
+              <SelectValue placeholder={isModelLoading ? "LOADING..." : "MODEL"} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="__DEFAULT_MODEL__" className="hidden" disabled>MODEL</SelectItem>
+              {models?.map((mdl) => (
+                <SelectItem key={mdl} value={mdl}>{mdl}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <ChevronDown className="absolute right-2 w-4 h-4 text-gray-500 pointer-events-none" />
         </div>
 
@@ -278,17 +339,17 @@ const AddVehicleView = ({ onClose }: { onClose: () => void }) => {
           <div className="flex-1 w-full sm:w-auto min-w-[120px] relative flex items-center bg-white border border-gray-300 rounded-sm">
             <div className="pl-3 pr-2 text-gray-900 font-bold text-sm">4</div>
             <div className="w-px h-5 bg-gray-300"></div>
-            <select
-              value={bodyType || ""}
-              onChange={(e) => handleBodyTypeChange(e.target.value)}
-              disabled={isBodyTypeDisabled}
-              className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-2 py-3 appearance-none cursor-pointer focus:outline-none disabled:opacity-50"
-            >
-              <option value="">BODY TYPE</option>
-              {bodyTypes?.map((mdl) => (
-                <option key={mdl} value={mdl}>{mdl}</option>
-              ))}
-            </select>
+            <Select open={activeDropdown === "bodyType"} onOpenChange={handleOpenChange("bodyType")} onValueChange={handleBodyTypeChange} value={bodyType || "__DEFAULT_BODYTYPE__"} disabled={isBodyTypeDisabled}>
+              <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-2 py-3 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden shrink-0 whitespace-nowrap">
+                <SelectValue placeholder={isBodyTypeLoading ? "LOADING..." : "BODY TYPE"} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__DEFAULT_BODYTYPE__" className="hidden" disabled>BODY TYPE</SelectItem>
+                {bodyTypes?.map((bt) => (
+                  <SelectItem key={bt} value={bt}>{bt}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             <ChevronDown className="absolute right-2 w-4 h-4 text-gray-500 pointer-events-none" />
           </div>
         )}
@@ -297,17 +358,17 @@ const AddVehicleView = ({ onClose }: { onClose: () => void }) => {
           <div className="flex-1 w-full sm:w-auto min-w-[120px] relative flex items-center bg-white border border-gray-300 rounded-sm">
             <div className="pl-3 pr-2 text-gray-900 font-bold text-sm">5</div>
             <div className="w-px h-5 bg-gray-300"></div>
-            <select
-              value={subModel.SubModel || ""}
-              onChange={(e) => handleSubModelChange(e.target.value)}
-              disabled={isSubmodelDisabled}
-              className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-2 py-3 appearance-none cursor-pointer focus:outline-none disabled:opacity-50"
-            >
-              <option value="">SUBMODEL</option>
-              {subModels?.map((mdl) => (
-                <option key={mdl.SubModel} value={mdl.SubModel}>{mdl.SubModel}</option>
-              ))}
-            </select>
+            <Select open={activeDropdown === "subModel"} onOpenChange={handleOpenChange("subModel")} onValueChange={handleSubModelChange} value={subModel?.SubModel || "__DEFAULT_SUBMODEL__"} disabled={isSubmodelDisabled}>
+              <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-2 py-3 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden shrink-0 whitespace-nowrap">
+                <SelectValue placeholder={isSubmodelLoading ? "LOADING..." : "SUBMODEL"} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__DEFAULT_SUBMODEL__" className="hidden" disabled>SUBMODEL</SelectItem>
+                {subModels?.map((sm) => (
+                  <SelectItem key={sm.SubModel} value={sm.SubModel}>{sm.SubModel}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             <ChevronDown className="absolute right-2 w-4 h-4 text-gray-500 pointer-events-none" />
           </div>
         )}

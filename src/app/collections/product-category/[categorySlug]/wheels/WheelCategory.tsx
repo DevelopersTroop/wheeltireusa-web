@@ -12,6 +12,7 @@ import { RootState } from '@/redux/store';
 import { useSearchParams } from 'next/navigation';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { useTypedSelector } from '@/redux/store';
 import ProductCategoryLoading from '../../_components/_loading';
 import SidebarFilters from '../_filters/mobile-filters/SidebarFilter';
 import SortByFilter from '../_filters/SortByFilter';
@@ -28,9 +29,17 @@ const WheelCategory: React.FC<{
 }> = ({ page = 1, topDescription, bottomDescription }) => {
   const searchParams = useSearchParams();
   const { filters } = useFilterSync();
+  const vehicleInformation = useTypedSelector((state) => state.persisted.yearMakeModel.vehicleInformation);
+  const activeGarageId = useTypedSelector((state) => state.persisted.yearMakeModel.activeGarageId);
   const { data, isLoading: loading, isFetching } = useGetProductsQuery({
     ...filters,
     category: 'wheels',
+    ...(activeGarageId && vehicleInformation?.boltPattern ? {
+      vehicleInformation: {
+        ...vehicleInformation,
+        boltPattern: vehicleInformation.boltPattern.toUpperCase(),
+      }
+    } : {}),
   });
   const viewType = useSelector((state: RootState) => state.persisted.layout.viewType);
   return (

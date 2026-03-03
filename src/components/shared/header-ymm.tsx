@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select";
 import { useTypedSelector, useAppDispatch } from "@/redux/store";
 import { clearYearMakeModel } from "@/redux/features/yearMakeModelSlice";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
   const {
@@ -62,6 +62,11 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
 
   useEffect(() => {
     isFirstRender.current = false;
+
+    // Auto popup 'Year' Select when initialized and completely empty
+    if (!hasUserInteracted.current && !year) {
+      setActiveDropdown("year");
+    }
   }, []);
 
   // Determine if a vehicle is fully selected - prefer garage item, fallback to hook state
@@ -127,11 +132,16 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
   };
 
   const router = useRouter();
+  const pathname = usePathname();
   const handleShopNow = () => {
+    const targetPath = pathname?.includes('/tire')
+      ? '/collections/product-category/tire'
+      : '/collections/product-category/wheels';
+
     if (activeGarageItem) {
-      router.push('/collections/product-category/wheels?vehicle=selectedVehicleInformation');
+      router.push(`${targetPath}?vehicle=selectedVehicleInformation`);
     } else {
-      onSubmit(undefined);
+      onSubmit(undefined, { targetPath });
     }
   };
 
@@ -239,7 +249,7 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
               <div className="flex-1 relative flex items-center bg-white border border-gray-300 rounded-sm">
                 <div className="pl-3 pr-3 text-gray-900 font-bold text-sm">1</div>
                 <div className="w-px h-5 bg-gray-300"></div>
-                <Select onValueChange={handleYearChange} value={year || undefined} disabled={isYearDisabled}>
+                <Select open={activeDropdown === "year"} onOpenChange={handleOpenChange("year")} onValueChange={handleYearChange} value={year || undefined} disabled={isYearDisabled}>
                   <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden">
                     <SelectValue placeholder={isYearLoading ? "LOADING..." : "YEAR"} />
                   </SelectTrigger>

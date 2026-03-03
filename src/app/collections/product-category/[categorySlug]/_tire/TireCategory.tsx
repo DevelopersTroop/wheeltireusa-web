@@ -17,7 +17,7 @@ import TireCard from "./TireCard";
 import TireCardList from "./TireCardList";
 import ViewToggle from "@/components/shared/ViewToggle/ViewToggle";
 import { useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
+import { RootState, useTypedSelector } from "@/redux/store";
 import Container from "@/components/ui/container/container";
 import { cn } from "@/lib/utils";
 import HomeYmm from "@/app/(home)/_components/HeroSection/components/HomeYmm/HomeYmm";
@@ -29,7 +29,18 @@ const TireCategory: React.FC<{
 }> = ({ page = 1, topDescription, bottomDescription }) => {
   const searchParams = useSearchParams();
   const { filters } = useFilterSync();
-  const { data, isLoading: loading } = useGetProductsQuery({ ...filters, category: 'tire' });
+  const vehicleInformation = useTypedSelector((state) => state.persisted.yearMakeModel.vehicleInformation);
+  const activeGarageId = useTypedSelector((state) => state.persisted.yearMakeModel.activeGarageId);
+  const { data, isLoading: loading } = useGetProductsQuery({
+    ...filters,
+    category: 'tire',
+    ...(activeGarageId && vehicleInformation?.boltPattern ? {
+      vehicleInformation: {
+        ...vehicleInformation,
+        boltPattern: vehicleInformation.boltPattern.toUpperCase(),
+      }
+    } : {}),
+  });
   const viewType = useSelector((state: RootState) => state.persisted.layout.viewType);
   return (
     <>

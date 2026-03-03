@@ -115,6 +115,12 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
     }
   };
 
+  useEffect(() => {
+    if (!hasUserInteracted.current && !year) {
+      setActiveDropdown("year");
+    }
+  }, []);
+
   const handleClear = () => {
     dispatch(clearYearMakeModel());
   };
@@ -288,7 +294,7 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
         </div>
 
         <button
-          onClick={() => onSubmit()}
+          onClick={(e) => onSubmit(e, { targetPath: variant === 'product' && location.pathname.includes('/tire') ? '/collections/product-category/tire' : undefined })}
           disabled={isDisabledSubmit || !shouldShowSubmit}
           className={cn(
             "h-10 px-8 text-white font-bold text-sm uppercase rounded-[2px] transition-colors w-full lg:w-auto mt-3 lg:mt-0 shadow-sm shrink-0 tracking-wide",
@@ -323,7 +329,7 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
             CHANGE VEHICLE
           </button>
           <button
-            onClick={() => onSubmit()}
+            onClick={(e) => onSubmit(e, { targetPath: activeTab === 'tire' ? '/collections/product-category/tire' : '/collections/product-category/wheels' })}
             className="flex-1 md:flex-none min-[375px]:px-4 px-6 lg:px-8 py-3 bg-[#dc5454] hover:bg-red-600 rounded-sm text-sm font-bold text-white uppercase shadow-sm whitespace-nowrap transition-colors"
           >
             SHOP NOW
@@ -367,7 +373,7 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
             <div className="flex flex-col lg:flex-row gap-3">
               <div className="flex-1 flex flex-col sm:flex-row gap-3">
                 <div className="flex-1">
-                  <Select onValueChange={handleYearChange} value={year || undefined} disabled={isYearDisabled}>
+                  <Select open={activeDropdown === "year"} onOpenChange={handleOpenChange("year")} onValueChange={handleYearChange} value={year || undefined} disabled={isYearDisabled}>
                     <SelectTrigger className="w-full bg-white border-gray-200 text-gray-700 h-12 text-base">
                       <SelectValue placeholder={isYearLoading ? "Loading..." : "Year"} />
                     </SelectTrigger>
