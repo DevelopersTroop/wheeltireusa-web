@@ -11,6 +11,7 @@ import { BiShoppingBag, BiUserCircle } from 'react-icons/bi';
 import HeaderSearchButton from './components/HeaderSearchButton/HeaderSearchButton';
 import MobileNavbar from './components/MobileNavBar/MobileNavBar';
 import Container from '@/components/ui/container/container';
+import { PhoneCall } from 'lucide-react';
 
 export default function MiddleHeader() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -105,9 +106,9 @@ export default function MiddleHeader() {
               </div>
 
               <div className="flex items-center gap-2 md:hidden">
-                <Link href={user?.email ? '/dashboard' : '/login'}>
-                  <BiUserCircle size={26} className="text-gray-600" />
-                </Link>
+                <a href="tel:+1 (813) 812-5257" className="flex gap-2 text-gray-600 justify-end">
+                  <PhoneCall size={22} />
+                </a>
                 <div onClick={setOpen} className="relative cursor-pointer">
                   <BiShoppingBag size={26} className="text-gray-600" />
                   <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-xs text-white">
