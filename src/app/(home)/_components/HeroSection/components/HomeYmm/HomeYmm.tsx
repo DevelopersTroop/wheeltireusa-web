@@ -184,7 +184,7 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
   if (variant === "product") {
     if (hasVehicleSelected) {
       return (
-        <div className="w-full bg-white border-b-4 border-[#3D8B3D] px-4 md:px-6 py-4 shadow-md rounded-t-sm flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="w-full max-w-7xl mx-auto mb-10 bg-white border-b-4 border-[#3D8B3D] px-4 md:px-6 py-4 shadow-md rounded-t-sm flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <CheckCircle2 className="w-6 h-6 shrink-0 fill-[#3D8B3D] text-white" />
             <span className="font-extrabold text-gray-900 uppercase text-[15px] tracking-tight">

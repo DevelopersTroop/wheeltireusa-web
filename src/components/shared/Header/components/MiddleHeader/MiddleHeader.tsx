@@ -52,7 +52,7 @@ export default function MiddleHeader() {
                 <img
                   src="/images/logo.png"
                   alt="Custom Offsets"
-                  className="h-6 min-[475px]:h-7 lg:h-8 xl:h-12"
+                  className="h-6 max-[400px]:h-7 min-[401px]:h-8 lg:h-8 xl:h-12"
                 />
               </Link>
             </div>
@@ -118,7 +118,7 @@ export default function MiddleHeader() {
               </div>
             </div>
           </div>
-          <div className='lg:hidden flex justify-center py-2'>
+          <div className='lg:hidden flex justify-center pt-3'>
             <VehicleSelectorButton />
           </div>
         </div>
