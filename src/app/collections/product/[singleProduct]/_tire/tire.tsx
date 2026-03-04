@@ -14,6 +14,7 @@ export const step = 4;
 export const duallyStep = 6;
 
 const Tire = ({ product }: { product: TTireProduct }) => {
+  console.log("product", product)
   return (
     <TireProvider>
       <Breadcrumb>

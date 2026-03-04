@@ -78,7 +78,7 @@ const TireCategory: React.FC<{
     ...filters,
     category: 'tire',
     ...(ymmFilters.length > 0 ? {ymmFilter: ymmFilters} : {}),
-  });
+  }, { refetchOnMountOrArgChange: true });
   const viewType = useSelector((state: RootState) => state.persisted.layout.viewType);
   return (
     <>
