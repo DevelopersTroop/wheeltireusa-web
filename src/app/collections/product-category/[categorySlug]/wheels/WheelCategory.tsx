@@ -51,9 +51,7 @@ const WheelCategory: React.FC<{
         />
       )}
 
-      <div className='max-w-7xl mx-auto mb-10'>
-        <HomeYmm variant="product" />
-      </div>
+      <HomeYmm variant="product" />
       <Container className={
         cn(
           "flex w-full flex-col gap-6 md:px-4 pb-6 pt-2 md:flex-row",
