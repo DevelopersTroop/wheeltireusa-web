@@ -114,11 +114,10 @@ export default function MultiStepBuildForm() {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearch] = useDebounce(searchTerm);
   const {
-    list: { years, makes, models, bodyTypes },
+    list: { years, makes, models },
     onYearChange,
     onMakeChange,
     onModelChange,
-    isBodyTypeDisabled,
     isModelDisabled,
     isMakeDisabled,
   } = useYmm();

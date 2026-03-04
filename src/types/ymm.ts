@@ -1,28 +1,24 @@
+import {
+  FitmentRecommendationItem,
+  FitmentRecommendations,
+  FitmentVehicleDetails,
+} from '@/lib/fitment-api';
+
 export type TYmmGarageItem = {
-  id: string;
+  id?: string;
   year: string;
   make: string;
   model: string;
-  bodyType?: string;
-  subModel?: Partial<TYmmSubModel>;
+  trim?: string;
+  drive?: string;
 };
 
 export type TYmmList = {
   years: string[];
   makes: string[];
   models: string[];
-  bodyTypes: string[];
-  subModels: {
-    SubModel: string;
-    DRChassisID: string;
-    DRModelID: string;
-  }[];
-};
-
-export type TYmmSubModel = {
-  SubModel: string;
-  DRChassisID: string;
-  DRModelID: string;
+  trims: string[];
+  drives: string[];
 };
 
 export type TYmmSuportedWheel = {
@@ -42,6 +38,11 @@ export type TYmmVehicleInformation = {
   rearCenterBore: string;
   maxWheelLoad: string;
   tireSizes: Record<'front' | 'rear', string>[];
+  vehicle_details_2: FitmentVehicleDetails | null;
+  tire_fitment: {
+    recommendations: FitmentRecommendations;
+    factorySizes: FitmentRecommendationItem[];
+  } | null;
 };
 
 export type TYmm = {
@@ -49,11 +50,11 @@ export type TYmm = {
   year: string;
   make: string;
   model: string;
-  bodyType: string;
-  subModel: Partial<TYmmSubModel>;
+  trim: string;
+  drive: string;
   vehicleInformation: Partial<TYmmVehicleInformation>;
   submitYmm: object;
-  garage: TYmmGarageItem[];
+  garage: Record<string, TYmmGarageItem>;
   activeGarageId: string | null;
   activeYmmInstanceId: string;
   isHomeYmmInView: boolean;

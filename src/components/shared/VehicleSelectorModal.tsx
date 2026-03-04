@@ -11,28 +11,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
 import { ChevronDown, Trash2 } from "lucide-react";
 import useYmm from "@/hooks/useYmm";
 import { useAppDispatch, useTypedSelector } from "@/redux/store";
-import { addToGarage, removeFromGarage, clearGarage, setYmm, submitYmm, setActiveGarage } from "@/redux/features/yearMakeModelSlice";
+import { addToGarage, removeFromGarage, clearGarage, submitYmm, setActiveGarage } from "@/redux/features/yearMakeModelSlice";
 import { TYmmGarageItem } from "@/types/ymm";
 import { useRouter, usePathname } from 'next/navigation';
 
 export const VehicleSelectorModal = ({ isOpen, onOpenChange, skipToGarage }: { isOpen: boolean, onOpenChange: (open: boolean) => void, skipToGarage?: boolean }) => {
   const { garage, activeGarageId } = useTypedSelector((state) => state.persisted.yearMakeModel);
-  const [view, setView] = useState<'garage' | 'add'>(skipToGarage && garage?.length > 0 ? 'garage' : 'add');
+  const garageCount = Object.keys(garage || {}).length;
+  const [view, setView] = useState<'garage' | 'add'>(skipToGarage && garageCount > 0 ? 'garage' : 'add');
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (isOpen) {
-      if (garage?.length > 0 && skipToGarage) {
+      if (garageCount > 0 && skipToGarage) {
         setView('garage');
       } else {
         setView('add');
       }
     }
-  }, [isOpen, garage?.length, skipToGarage]);
+  }, [isOpen, garageCount, skipToGarage]);
 
   const handleClearAll = () => {
     dispatch(clearGarage());
@@ -41,7 +41,7 @@ export const VehicleSelectorModal = ({ isOpen, onOpenChange, skipToGarage }: { i
 
   const handleRemove = (id: string) => {
     dispatch(removeFromGarage(id));
-    if (garage?.length <= 1) {
+    if (garageCount <= 1) {
       setView('add');
     }
   };
@@ -49,7 +49,7 @@ export const VehicleSelectorModal = ({ isOpen, onOpenChange, skipToGarage }: { i
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-7xl p-0 border-none rounded-md overflow-hidden bg-white">
-        {view === 'garage' && garage?.length > 0 ? (
+        {view === 'garage' && garageCount > 0 ? (
           <GarageView
             garage={garage}
             activeGarageId={activeGarageId}
@@ -71,31 +71,8 @@ const GarageView = ({ garage, activeGarageId, onAddVehicle, onClearAll, onRemove
   const router = useRouter();
   const pathname = usePathname();
 
-  const handleSelectVehicle = (item: TYmmGarageItem) => {
-    dispatch(setActiveGarage(item.id));
-    dispatch(setYmm({
-      year: item.year,
-      make: item.make,
-      model: item.model,
-      bodyType: item.bodyType || "",
-      subModel: item.subModel || { SubModel: "", DRChassisID: "", DRModelID: "" },
-      list: {
-        makes: [],
-        models: [],
-        bodyTypes: [],
-        subModels: []
-      },
-      vehicleInformation: {
-        boltPattern: "",
-        frontRimSize: "",
-        rearRimSize: "",
-        frontCenterBore: "",
-        rearCenterBore: "",
-        maxWheelLoad: "",
-        tireSizes: [],
-        supportedWheels: []
-      }
-    }));
+  const handleSelectVehicle = (id: string, item: TYmmGarageItem) => {
+    dispatch(setActiveGarage(id));
     dispatch(submitYmm({ ...item }));
     onClose();
     if (pathname && !pathname.includes('/collections')) {
@@ -116,35 +93,35 @@ const GarageView = ({ garage, activeGarageId, onAddVehicle, onClearAll, onRemove
       </div>
 
       <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2">
-        {garage.map((item: TYmmGarageItem) => (
+        {Object.entries((garage as Record<string, TYmmGarageItem>) || {}).map(([id, item]) => (
           <div
-            key={item.id}
-            onClick={() => handleSelectVehicle(item)}
-            className={`p-4 rounded-md border-l-4 cursor-pointer transition-colors ${item.id === activeGarageId ? 'bg-blue-50/50 border-[#3b5998]' : 'bg-gray-50 border-gray-200 hover:bg-gray-100'}`}
+            key={id}
+            onClick={() => handleSelectVehicle(id, item)}
+            className={`p-4 rounded-md border-l-4 cursor-pointer transition-colors ${id === activeGarageId ? 'bg-blue-50/50 border-[#3b5998]' : 'bg-gray-50 border-gray-200 hover:bg-gray-100'}`}
           >
             <div className="flex justify-between items-start">
               <div className="flex gap-3">
                 <div className="mt-1">
-                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${item.id === activeGarageId ? 'border-yellow-400' : 'border-gray-300'}`}>
-                    {item.id === activeGarageId && <div className="w-2.5 h-2.5 rounded-full bg-yellow-400" />}
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${id === activeGarageId ? 'border-yellow-400' : 'border-gray-300'}`}>
+                    {id === activeGarageId && <div className="w-2.5 h-2.5 rounded-full bg-yellow-400" />}
                   </div>
                 </div>
                 <div>
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="font-bold text-gray-900">{item.year} {item.make} {item.model && item.model !== '__DEFAULT_MODEL__' ? item.model : ''} {item.subModel?.SubModel && item.subModel.SubModel !== '__DEFAULT_SUBMODEL__' ? item.subModel.SubModel : (item.bodyType && item.bodyType !== '__DEFAULT_BODYTYPE__' ? item.bodyType : '')}</span>
-                    {item.id === activeGarageId && (
+                    <span className="font-bold text-gray-900">{item.year} {item.make} {item.model && item.model !== '__DEFAULT_MODEL__' ? item.model : ''} {item.trim && item.trim !== '__DEFAULT_TRIM__' ? item.trim : ''} {item.drive && item.drive !== '__DEFAULT_DRIVE__' ? item.drive : ''}</span>
+                    {id === activeGarageId && (
                       <span className="bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded font-bold uppercase">Main</span>
                     )}
                   </div>
                   <button
-                    onClick={(e) => { e.stopPropagation(); handleSelectVehicle(item); }}
+                    onClick={(e) => { e.stopPropagation(); handleSelectVehicle(id, item); }}
                     className="text-[#3b5998] border border-[#3b5998] px-3 py-1.5 text-xs font-bold rounded-sm hover:bg-blue-50"
                   >
                     BROWSE CATALOG
                   </button>
                 </div>
               </div>
-              <button onClick={(e) => { e.stopPropagation(); onRemove(item.id); }} className="text-gray-400 hover:text-red-500">
+              <button onClick={(e) => { e.stopPropagation(); onRemove(id); }} className="text-gray-400 hover:text-red-500">
                 <Trash2 className="w-5 h-5" />
               </button>
             </div>
@@ -169,25 +146,25 @@ const AddVehicleView = ({ onClose }: { onClose: () => void }) => {
     isYearLoading,
     isMakeLoading,
     isModelLoading,
-    isBodyTypeLoading,
-    isSubmodelLoading,
+    isTrimLoading,
+    isDriveLoading,
     isYearDisabled,
     isMakeDisabled,
     isModelDisabled,
-    list: { years, makes, models, subModels, bodyTypes },
+    list: { years, makes, models, trims, drives },
     onYearChange,
     onMakeChange,
     onModelChange,
-    onBodyTypeChange,
-    onSubModelChange,
+    onTrimChange,
+    onDriveChange,
     isDisabledSubmit,
-    isBodyTypeDisabled,
-    isSubmodelDisabled,
+    isTrimDisabled,
+    isDriveDisabled,
     year,
     make,
     model,
-    subModel,
-    bodyType,
+    trim,
+    drive,
     shouldShowSubmit,
   } = useYmm("vehicle_selector_modal");
 
@@ -211,48 +188,55 @@ const AddVehicleView = ({ onClose }: { onClose: () => void }) => {
   const handleYearChange = handleInteraction(onYearChange);
   const handleMakeChange = handleInteraction(onMakeChange);
   const handleModelChange = handleInteraction(onModelChange);
-  const handleBodyTypeChange = handleInteraction(onBodyTypeChange);
-  const handleSubModelChange = handleInteraction(onSubModelChange);
+  const handleTrimChange = handleInteraction(onTrimChange);
+  const handleDriveChange = handleInteraction(onDriveChange);
 
   // Auto-advance dropdowns 
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
     if (year && !isMakeLoading && !isMakeDisabled && (makes?.length ?? 0) > 0 && (!make || make === "__DEFAULT_MAKE__")) {
-      setTimeout(() => setActiveDropdown("make"), 200);
+      timeoutId = setTimeout(() => setActiveDropdown("make"), 300);
     }
+    return () => clearTimeout(timeoutId);
   }, [year, isMakeLoading, isMakeDisabled, makes?.length, make]);
 
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
     if (make && !isModelLoading && !isModelDisabled && (models?.length ?? 0) > 0 && (!model || model === "__DEFAULT_MODEL__")) {
-      setTimeout(() => setActiveDropdown("model"), 200);
+      timeoutId = setTimeout(() => setActiveDropdown("model"), 300);
     }
+    return () => clearTimeout(timeoutId);
   }, [make, isModelLoading, isModelDisabled, models?.length, model]);
 
-  const showBodyType = (bodyTypes?.length ?? 0) > 0;
-  const showSubmodel = (subModels?.length ?? 0) > 0;
+  const showTrim = (trims?.length ?? 0) > 0;
+  const showDrive = (drives?.length ?? 0) > 0;
 
   useEffect(() => {
-    if (showBodyType && model && model !== "__DEFAULT_MODEL__" && !isBodyTypeLoading && !isBodyTypeDisabled && (!bodyType || bodyType === "__DEFAULT_BODYTYPE__")) {
-      setTimeout(() => setActiveDropdown("bodyType"), 200);
+    let timeoutId: NodeJS.Timeout;
+    if (showTrim && model && model !== "__DEFAULT_MODEL__" && !isTrimLoading && !isTrimDisabled && (!trim || trim === "__DEFAULT_TRIM__")) {
+      timeoutId = setTimeout(() => setActiveDropdown("trim"), 300);
     }
-  }, [showBodyType, model, isBodyTypeLoading, isBodyTypeDisabled, bodyType]);
+    return () => clearTimeout(timeoutId);
+  }, [showTrim, model, isTrimLoading, isTrimDisabled, trim]);
 
   useEffect(() => {
-    if (showSubmodel && bodyType && bodyType !== "__DEFAULT_BODYTYPE__" && !isSubmodelLoading && !isSubmodelDisabled && (!subModel || subModel?.SubModel === "__DEFAULT_SUBMODEL__")) {
-      setTimeout(() => setActiveDropdown("subModel"), 200);
+    let timeoutId: NodeJS.Timeout;
+    if (showDrive && trim && trim !== "__DEFAULT_TRIM__" && !isDriveLoading && !isDriveDisabled && (!drive || drive === "__DEFAULT_DRIVE__")) {
+      timeoutId = setTimeout(() => setActiveDropdown("drive"), 300);
     }
-  }, [showSubmodel, bodyType, isSubmodelLoading, isSubmodelDisabled, subModel]);
+    return () => clearTimeout(timeoutId);
+  }, [showDrive, trim, isDriveLoading, isDriveDisabled, drive]);
 
   const handleSubmit = () => {
     const cleanModel = model && model !== '__DEFAULT_MODEL__' ? model : '';
-    const cleanBodyType = bodyType && bodyType !== '__DEFAULT_BODYTYPE__' ? bodyType : '';
-    const cleanSubModel = subModel?.SubModel && subModel.SubModel !== '__DEFAULT_SUBMODEL__' ? subModel : { SubModel: '', DRChassisID: '', DRModelID: '' };
+    const cleanTrim = trim && trim !== '__DEFAULT_TRIM__' ? trim : '';
+    const cleanDrive = drive && drive !== '__DEFAULT_DRIVE__' ? drive : '';
     const newItem: TYmmGarageItem = {
-      id: `${year}-${make}-${cleanModel}-${cleanBodyType}-${cleanSubModel.SubModel}`,
       year,
       make,
       model: cleanModel,
-      bodyType: cleanBodyType,
-      subModel: cleanSubModel
+      trim: cleanTrim,
+      drive: cleanDrive,
     };
     dispatch(addToGarage(newItem));
     dispatch(submitYmm(newItem));
@@ -335,18 +319,18 @@ const AddVehicleView = ({ onClose }: { onClose: () => void }) => {
           <ChevronDown className="absolute right-2 w-4 h-4 text-gray-500 pointer-events-none" />
         </div>
 
-        {showBodyType && (
+        {showTrim && (
           <div className="flex-1 w-full sm:w-auto min-w-[120px] relative flex items-center bg-white border border-gray-300 rounded-sm">
             <div className="pl-3 pr-2 text-gray-900 font-bold text-sm">4</div>
             <div className="w-px h-5 bg-gray-300"></div>
-            <Select open={activeDropdown === "bodyType"} onOpenChange={handleOpenChange("bodyType")} onValueChange={handleBodyTypeChange} value={bodyType || "__DEFAULT_BODYTYPE__"} disabled={isBodyTypeDisabled}>
+            <Select open={activeDropdown === "trim"} onOpenChange={handleOpenChange("trim")} onValueChange={handleTrimChange} value={trim || "__DEFAULT_TRIM__"} disabled={isTrimDisabled}>
               <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-2 py-3 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden shrink-0 whitespace-nowrap">
-                <SelectValue placeholder={isBodyTypeLoading ? "LOADING..." : "BODY TYPE"} />
+                <SelectValue placeholder={isTrimLoading ? "LOADING..." : "TRIM"} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="__DEFAULT_BODYTYPE__" className="hidden" disabled>BODY TYPE</SelectItem>
-                {bodyTypes?.map((bt) => (
-                  <SelectItem key={bt} value={bt}>{bt}</SelectItem>
+                <SelectItem value="__DEFAULT_TRIM__" className="hidden" disabled>TRIM</SelectItem>
+                {trims?.map((item) => (
+                  <SelectItem key={item} value={item}>{item}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -354,18 +338,18 @@ const AddVehicleView = ({ onClose }: { onClose: () => void }) => {
           </div>
         )}
 
-        {showSubmodel && (
+        {showDrive && (
           <div className="flex-1 w-full sm:w-auto min-w-[120px] relative flex items-center bg-white border border-gray-300 rounded-sm">
             <div className="pl-3 pr-2 text-gray-900 font-bold text-sm">5</div>
             <div className="w-px h-5 bg-gray-300"></div>
-            <Select open={activeDropdown === "subModel"} onOpenChange={handleOpenChange("subModel")} onValueChange={handleSubModelChange} value={subModel?.SubModel || "__DEFAULT_SUBMODEL__"} disabled={isSubmodelDisabled}>
+            <Select open={activeDropdown === "drive"} onOpenChange={handleOpenChange("drive")} onValueChange={handleDriveChange} value={drive || "__DEFAULT_DRIVE__"} disabled={isDriveDisabled}>
               <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-2 py-3 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden shrink-0 whitespace-nowrap">
-                <SelectValue placeholder={isSubmodelLoading ? "LOADING..." : "SUBMODEL"} />
+                <SelectValue placeholder={isDriveLoading ? "LOADING..." : "DRIVE"} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="__DEFAULT_SUBMODEL__" className="hidden" disabled>SUBMODEL</SelectItem>
-                {subModels?.map((sm) => (
-                  <SelectItem key={sm.SubModel} value={sm.SubModel}>{sm.SubModel}</SelectItem>
+                <SelectItem value="__DEFAULT_DRIVE__" className="hidden" disabled>DRIVE</SelectItem>
+                {drives?.map((item) => (
+                  <SelectItem key={item} value={item}>{item}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -393,9 +377,10 @@ export const VehicleSelectorButton = () => {
     (state) => state.persisted.yearMakeModel
   );
 
-  const activeItem = garage?.find((item) => item.id === activeGarageId);
+  const activeItem = activeGarageId ? garage?.[activeGarageId] : undefined;
+  const count = Object.keys(garage || {}).length;
   const activeLabel = activeItem
-    ? `${activeItem.year} ${activeItem.make} ${activeItem.model && activeItem.model !== '__DEFAULT_MODEL__' ? activeItem.model : ''}`
+    ? `${activeItem.year} ${activeItem.make} ${activeItem.model && activeItem.model !== '__DEFAULT_MODEL__' ? activeItem.model : ''} ${activeItem.trim && activeItem.trim !== '__DEFAULT_TRIM__' ? activeItem.trim : ''} ${activeItem.drive && activeItem.drive !== '__DEFAULT_DRIVE__' ? activeItem.drive : ''}`.trim()
     : "SHOP BY VEHICLE";
 
   return (
@@ -422,7 +407,7 @@ export const VehicleSelectorButton = () => {
             <circle cx="17" cy="17" r="2" />
           </svg>
           <div className="absolute -top-2 -right-2.5 bg-green-600 text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold border border-white">
-            {garage?.length || 0}
+            {count || 0}
           </div>
         </div>
 
@@ -434,7 +419,7 @@ export const VehicleSelectorButton = () => {
       <VehicleSelectorModal
         isOpen={isModalOpen}
         onOpenChange={setIsModalOpen}
-        skipToGarage={garage?.length > 0}
+        skipToGarage={count > 0}
       />
     </>
   );

@@ -18,27 +18,27 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
     isYearLoading,
     isMakeLoading,
     isModelLoading,
-    isBodyTypeLoading,
-    isSubmodelLoading,
+    isTrimLoading,
+    isDriveLoading,
     isYearDisabled,
     isMakeDisabled,
     isModelDisabled,
-    isBodyTypeDisabled,
-    isSubmodelDisabled,
+    isTrimDisabled,
+    isDriveDisabled,
     shouldShowSubmit,
-    list: { years, makes, models, subModels, bodyTypes },
+    list: { years, makes, models, trims, drives },
     onYearChange,
     onMakeChange,
     onModelChange,
-    onBodyTypeChange,
-    onSubModelChange,
+    onTrimChange,
+    onDriveChange,
     onSubmit,
     isDisabledSubmit,
     year,
     make,
     model,
-    subModel,
-    bodyType,
+    trim,
+    drive,
     isActive,
   } = useYmm("header_ymm");
 
@@ -48,7 +48,7 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
   const activeGarageId = useTypedSelector((state) => state.persisted.yearMakeModel.activeGarageId);
 
   // Use the active garage item as the primary source of truth for selected vehicle
-  const activeGarageItem = garage?.find((item) => item.id === activeGarageId);
+  const activeGarageItem = activeGarageId ? garage?.[activeGarageId] : undefined;
 
   const [isVisible, setIsVisible] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -65,7 +65,7 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
 
     // Auto popup 'Year' Select when initialized and completely empty
     if (!hasUserInteracted.current && !year) {
-      setActiveDropdown("year");
+      // setActiveDropdown("year"); // Disabled year auto-expand
     }
   }, []);
 
@@ -75,11 +75,10 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
     make &&
     model &&
     model !== "__DEFAULT_MODEL__" &&
-    subModel &&
-    subModel.SubModel &&
-    subModel.SubModel !== "__DEFAULT_SUBMODEL__" &&
-    bodyType &&
-    bodyType !== "__DEFAULT_BODYTYPE__"
+    trim &&
+    trim !== "__DEFAULT_TRIM__" &&
+    drive &&
+    drive !== "__DEFAULT_DRIVE__"
   );
 
   // Track screen size to conditionally render desktop vs mobile
@@ -119,8 +118,8 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
   const handleYearChange = handleInteraction(onYearChange);
   const handleMakeChange = handleInteraction(onMakeChange);
   const handleModelChange = handleInteraction(onModelChange);
-  const handleBodyTypeChange = handleInteraction(onBodyTypeChange);
-  const handleSubModelChange = handleInteraction(onSubModelChange);
+  const handleTrimChange = handleInteraction(onTrimChange);
+  const handleDriveChange = handleInteraction(onDriveChange);
 
   const handleOpenChange = (key: string) => (open: boolean) => {
     if (open) setActiveDropdown(key);
@@ -151,7 +150,7 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
     if (shouldShow && hasUserInteracted.current && year && !isMakeLoading && !isMakeDisabled && (makes?.length ?? 0) > 0 && (!make || make === "__DEFAULT_MAKE__")) {
       timeoutId = setTimeout(() => {
         if (selectorRef.current?.offsetParent) setActiveDropdown("make");
-      }, 200);
+      }, 300);
     }
     return () => clearTimeout(timeoutId);
   }, [year, isMakeLoading, isMakeDisabled, makes?.length, make, isActive, shouldShow]);
@@ -162,34 +161,34 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
     if (shouldShow && hasUserInteracted.current && make && !isModelLoading && !isModelDisabled && (models?.length ?? 0) > 0 && (!model || model === "__DEFAULT_MODEL__")) {
       timeoutId = setTimeout(() => {
         if (selectorRef.current?.offsetParent) setActiveDropdown("model");
-      }, 200);
+      }, 300);
     }
     return () => clearTimeout(timeoutId);
   }, [make, isModelLoading, isModelDisabled, models?.length, model, isActive, shouldShow]);
 
-  // Auto-advance: open Body Type after Model is selected
+  // Auto-advance: open Trim after Model is selected
   useEffect(() => {
     if (isFirstRender.current || !isActive) return;
     let timeoutId: NodeJS.Timeout;
-    if (shouldShow && hasUserInteracted.current && model && model !== "__DEFAULT_MODEL__" && !isBodyTypeLoading && !isBodyTypeDisabled && (bodyTypes?.length ?? 0) > 0 && (!bodyType || bodyType === "__DEFAULT_BODYTYPE__")) {
+    if (shouldShow && hasUserInteracted.current && model && model !== "__DEFAULT_MODEL__" && !isTrimLoading && !isTrimDisabled && (trims?.length ?? 0) > 0 && (!trim || trim === "__DEFAULT_TRIM__")) {
       timeoutId = setTimeout(() => {
-        if (selectorRef.current?.offsetParent) setActiveDropdown("bodyType");
-      }, 200);
+        if (selectorRef.current?.offsetParent) setActiveDropdown("trim");
+      }, 300);
     }
     return () => clearTimeout(timeoutId);
-  }, [model, isBodyTypeLoading, isBodyTypeDisabled, bodyTypes?.length, bodyType, shouldShow, isActive]);
+  }, [model, isTrimLoading, isTrimDisabled, trims?.length, trim, shouldShow, isActive]);
 
-  // Auto-advance: open SubModel after Body Type is selected
+  // Auto-advance: open Drive after Trim is selected
   useEffect(() => {
     if (isFirstRender.current || !isActive) return;
     let timeoutId: NodeJS.Timeout;
-    if (shouldShow && hasUserInteracted.current && bodyType && bodyType !== "__DEFAULT_BODYTYPE__" && !isSubmodelLoading && !isSubmodelDisabled && (subModels?.length ?? 0) > 0 && (!subModel || subModel?.SubModel === "__DEFAULT_SUBMODEL__")) {
+    if (shouldShow && hasUserInteracted.current && trim && trim !== "__DEFAULT_TRIM__" && !isDriveLoading && !isDriveDisabled && (drives?.length ?? 0) > 0 && (!drive || drive === "__DEFAULT_DRIVE__")) {
       timeoutId = setTimeout(() => {
-        if (selectorRef.current?.offsetParent) setActiveDropdown("subModel");
-      }, 200);
+        if (selectorRef.current?.offsetParent) setActiveDropdown("drive");
+      }, 300);
     }
     return () => clearTimeout(timeoutId);
-  }, [bodyType, isSubmodelLoading, isSubmodelDisabled, subModels?.length, subModel, shouldShow, isActive]);
+  }, [trim, isDriveLoading, isDriveDisabled, drives?.length, drive, shouldShow, isActive]);
 
   const handleReset = () => {
     onYearChange("");
@@ -197,13 +196,13 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
     onModelChange("");
   };
 
-  const showBodyType = (bodyTypes?.length ?? 0) > 0 && model && model !== "__DEFAULT_MODEL__";
-  const showSubmodel = (subModels?.length ?? 0) > 0 && bodyType && bodyType !== "__DEFAULT_BODYTYPE__";
+  const showTrim = (trims?.length ?? 0) > 0 && model && model !== "__DEFAULT_MODEL__";
+  const showDrive = (drives?.length ?? 0) > 0 && trim && trim !== "__DEFAULT_TRIM__";
 
   // Build vehicle display string — prefer garage item data, fallback to hook state
   const vehicleLabel = activeGarageItem
-    ? `${activeGarageItem.year} ${activeGarageItem.make} ${activeGarageItem.model || ''} ${activeGarageItem.subModel?.SubModel && activeGarageItem.subModel.SubModel !== '__DEFAULT_SUBMODEL__' ? activeGarageItem.subModel.SubModel : ''}`.trim()
-    : `${year} ${make} ${model}${subModel?.SubModel && subModel.SubModel !== "__DEFAULT_SUBMODEL__" ? ` ${subModel.SubModel}` : ""}`;
+    ? `${activeGarageItem.year} ${activeGarageItem.make} ${activeGarageItem.model || ''} ${activeGarageItem.trim && activeGarageItem.trim !== '__DEFAULT_TRIM__' ? activeGarageItem.trim : ''} ${activeGarageItem.drive && activeGarageItem.drive !== '__DEFAULT_DRIVE__' ? activeGarageItem.drive : ''}`.trim()
+    : `${year} ${make} ${model}${trim && trim !== "__DEFAULT_TRIM__" ? ` ${trim}` : ""}${drive && drive !== "__DEFAULT_DRIVE__" ? ` ${drive}` : ""}`;
 
   return (
     <>
@@ -296,18 +295,18 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
                 <ChevronDown className="absolute right-3 w-4 h-4 text-gray-500 pointer-events-none" />
               </div>
 
-              {showBodyType && (
+              {showTrim && (
                 <div className="flex-1 relative flex items-center bg-white border border-gray-300 rounded-sm">
                   <div className="pl-3 pr-3 text-gray-900 font-bold text-sm">4</div>
                   <div className="w-px h-5 bg-gray-300"></div>
-                  <Select open={activeDropdown === "bodyType"} onOpenChange={handleOpenChange("bodyType")} onValueChange={handleBodyTypeChange} value={bodyType || "__DEFAULT_BODYTYPE__"} disabled={isBodyTypeDisabled}>
+                  <Select open={activeDropdown === "trim"} onOpenChange={handleOpenChange("trim")} onValueChange={handleTrimChange} value={trim || "__DEFAULT_TRIM__"} disabled={isTrimDisabled}>
                     <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden">
-                      <SelectValue placeholder={isBodyTypeLoading ? "LOADING..." : "BODY TYPE"} />
+                      <SelectValue placeholder={isTrimLoading ? "LOADING..." : "TRIM"} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="__DEFAULT_BODYTYPE__" className="hidden" disabled>BODY TYPE</SelectItem>
-                      {bodyTypes?.map((bt) => (
-                        <SelectItem key={`bodyType-${bt}`} value={bt}>{bt}</SelectItem>
+                      <SelectItem value="__DEFAULT_TRIM__" className="hidden" disabled>TRIM</SelectItem>
+                      {trims?.map((item) => (
+                        <SelectItem key={`trim-${item}`} value={item}>{item}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -315,18 +314,18 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
                 </div>
               )}
 
-              {showSubmodel && (
+              {showDrive && (
                 <div className="flex-1 relative flex items-center bg-white border border-gray-300 rounded-sm">
-                  <div className="pl-3 pr-3 text-gray-900 font-bold text-sm">{showBodyType ? "5" : "4"}</div>
+                  <div className="pl-3 pr-3 text-gray-900 font-bold text-sm">{showTrim ? "5" : "4"}</div>
                   <div className="w-px h-5 bg-gray-300"></div>
-                  <Select open={activeDropdown === "subModel"} onOpenChange={handleOpenChange("subModel")} onValueChange={handleSubModelChange} value={subModel?.SubModel || "__DEFAULT_SUBMODEL__"} disabled={isSubmodelDisabled}>
+                  <Select open={activeDropdown === "drive"} onOpenChange={handleOpenChange("drive")} onValueChange={handleDriveChange} value={drive || "__DEFAULT_DRIVE__"} disabled={isDriveDisabled}>
                     <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden">
-                      <SelectValue placeholder={isSubmodelLoading ? "LOADING..." : "SUBMODEL"} />
+                      <SelectValue placeholder={isDriveLoading ? "LOADING..." : "DRIVE"} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="__DEFAULT_SUBMODEL__" className="hidden" disabled>SUBMODEL</SelectItem>
-                      {subModels?.map((sm) => (
-                        <SelectItem key={`subModel-${sm.SubModel}`} value={sm.SubModel}>{sm.SubModel}</SelectItem>
+                      <SelectItem value="__DEFAULT_DRIVE__" className="hidden" disabled>DRIVE</SelectItem>
+                      {drives?.map((item) => (
+                        <SelectItem key={`drive-${item}`} value={item}>{item}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -464,18 +463,18 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
               </div>
 
               {/* Body Type */}
-              {showBodyType && (
+              {showTrim && (
                 <div className="relative flex items-center bg-white border border-gray-300 rounded-sm">
                   <div className="pl-3 pr-2 text-gray-900 font-bold text-xs">4</div>
                   <div className="w-px h-4 bg-gray-300"></div>
-                  <Select open={activeDropdown === "bodyType"} onOpenChange={handleOpenChange("bodyType")} onValueChange={handleBodyTypeChange} value={bodyType || "__DEFAULT_BODYTYPE__"} disabled={isBodyTypeDisabled}>
+                  <Select open={activeDropdown === "trim"} onOpenChange={handleOpenChange("trim")} onValueChange={handleTrimChange} value={trim || "__DEFAULT_TRIM__"} disabled={isTrimDisabled}>
                     <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden">
-                      <SelectValue placeholder={isBodyTypeLoading ? "LOADING..." : "BODY TYPE"} />
+                      <SelectValue placeholder={isTrimLoading ? "LOADING..." : "TRIM"} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="__DEFAULT_BODYTYPE__" className="hidden" disabled>BODY TYPE</SelectItem>
-                      {bodyTypes?.map((bt) => (
-                        <SelectItem key={`bodyType-${bt}`} value={bt}>{bt}</SelectItem>
+                      <SelectItem value="__DEFAULT_TRIM__" className="hidden" disabled>TRIM</SelectItem>
+                      {trims?.map((item) => (
+                        <SelectItem key={`trim-${item}`} value={item}>{item}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -483,19 +482,18 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
                 </div>
               )}
 
-              {/* Submodel */}
-              {showSubmodel && (
+              {showDrive && (
                 <div className="relative flex items-center bg-white border border-gray-300 rounded-sm">
-                  <div className="pl-3 pr-2 text-gray-900 font-bold text-xs">{showBodyType ? "5" : "4"}</div>
+                  <div className="pl-3 pr-2 text-gray-900 font-bold text-xs">{showTrim ? "5" : "4"}</div>
                   <div className="w-px h-4 bg-gray-300"></div>
-                  <Select open={activeDropdown === "subModel"} onOpenChange={handleOpenChange("subModel")} onValueChange={handleSubModelChange} value={subModel?.SubModel || "__DEFAULT_SUBMODEL__"} disabled={isSubmodelDisabled}>
+                  <Select open={activeDropdown === "drive"} onOpenChange={handleOpenChange("drive")} onValueChange={handleDriveChange} value={drive || "__DEFAULT_DRIVE__"} disabled={isDriveDisabled}>
                     <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden">
-                      <SelectValue placeholder={isSubmodelLoading ? "LOADING..." : "SUBMODEL"} />
+                      <SelectValue placeholder={isDriveLoading ? "LOADING..." : "DRIVE"} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="__DEFAULT_SUBMODEL__" className="hidden" disabled>SUBMODEL</SelectItem>
-                      {subModels?.map((sm) => (
-                        <SelectItem key={`subModel-${sm.SubModel}`} value={sm.SubModel}>{sm.SubModel}</SelectItem>
+                      <SelectItem value="__DEFAULT_DRIVE__" className="hidden" disabled>DRIVE</SelectItem>
+                      {drives?.map((item) => (
+                        <SelectItem key={`drive-${item}`} value={item}>{item}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>

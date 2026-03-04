@@ -9,8 +9,9 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import useYmm from "@/hooks/useYmm";
 import { cn } from "@/lib/utils";
-import { clearYearMakeModel, setHomeYmmInView } from "@/redux/features/yearMakeModelSlice";
+import { addToGarage, clearYearMakeModel, setHomeYmmInView, submitYmm } from "@/redux/features/yearMakeModelSlice";
 import { useAppDispatch, useTypedSelector } from "@/redux/store";
+import { TYmmGarageItem } from "@/types/ymm";
 import { ArrowLeftRight, CarFront, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -26,27 +27,27 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
     isYearLoading,
     isMakeLoading,
     isModelLoading,
-    isBodyTypeLoading,
-    isSubmodelLoading,
+    isTrimLoading,
+    isDriveLoading,
     isYearDisabled,
     isMakeDisabled,
     isModelDisabled,
-    isBodyTypeDisabled,
-    isSubmodelDisabled,
+    isTrimDisabled,
+    isDriveDisabled,
     shouldShowSubmit,
-    list: { years, makes, models, bodyTypes, subModels },
+    list: { years, makes, models, trims, drives },
     onYearChange,
     onMakeChange,
     onModelChange,
-    onBodyTypeChange,
-    onSubModelChange,
+    onTrimChange,
+    onDriveChange,
     onSubmit,
     isDisabledSubmit,
     year,
     make,
     model,
-    bodyType,
-    subModel,
+    trim,
+    drive,
     isActive,
   } = useYmm("home_hero_ymm");
 
@@ -61,7 +62,7 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
   // Read garage state from Redux
   const garage = useTypedSelector((state) => state.persisted.yearMakeModel.garage);
   const activeGarageId = useTypedSelector((state) => state.persisted.yearMakeModel.activeGarageId);
-  const activeGarageItem = garage?.find((item) => item.id === activeGarageId);
+  const activeGarageItem = activeGarageId ? garage?.[activeGarageId] : undefined;
 
   useEffect(() => {
     isFirstRender.current = false;
@@ -89,10 +90,33 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
   useEffect(() => {
     const isReady = !isDisabledSubmit && shouldShowSubmit;
     if (isReady && hasUserInteracted.current) {
-      onSubmit(undefined);
+      handleSubmit(undefined);
       hasUserInteracted.current = false; // Reset to prevent multiple submissions
     }
   }, [isDisabledSubmit, shouldShowSubmit, onSubmit]);
+
+  const handleSubmit = (
+    e?: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    options?: { targetPath?: string }
+  ) => {
+    const cleanModel = model && model !== '__DEFAULT_MODEL__' ? model : '';
+    const cleanTrim = trim && trim !== '__DEFAULT_TRIM__' ? trim : '';
+    const cleanDrive = drive && drive !== '__DEFAULT_DRIVE__' ? drive : '';
+    
+    if (year && make && cleanModel && cleanTrim && cleanDrive) {
+      const newItem: TYmmGarageItem = {
+        year,
+        make,
+        model: cleanModel,
+        trim: cleanTrim,
+        drive: cleanDrive,
+      };
+      dispatch(addToGarage(newItem));
+      dispatch(submitYmm(newItem));
+    }
+    
+    onSubmit(e, options);
+  };
 
   const handleInteraction = <T extends (...args: any[]) => void>(fn: T) => {
     return (...args: Parameters<T>) => {
@@ -104,8 +128,8 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
   const handleYearChange = handleInteraction(onYearChange);
   const handleMakeChange = handleInteraction(onMakeChange);
   const handleModelChange = handleInteraction(onModelChange);
-  const handleBodyTypeChange = handleInteraction(onBodyTypeChange);
-  const handleSubModelChange = handleInteraction(onSubModelChange);
+  const handleTrimChange = handleInteraction(onTrimChange);
+  const handleDriveChange = handleInteraction(onDriveChange);
 
   const handleOpenChange = (key: string) => (open: boolean) => {
     if (open) {
@@ -117,7 +141,7 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
 
   useEffect(() => {
     if (!hasUserInteracted.current && !year) {
-      setActiveDropdown("year");
+      // setActiveDropdown("year"); // Disabled year auto-expand
     }
   }, []);
 
@@ -132,7 +156,7 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
     if (isInView && hasUserInteracted.current && year && !isMakeLoading && !isMakeDisabled && (makes?.length ?? 0) > 0 && (!make || make === "__DEFAULT_MAKE__")) {
       timeoutId = setTimeout(() => {
         setActiveDropdown("make");
-      }, 200);
+      }, 300);
     }
     return () => clearTimeout(timeoutId);
   }, [year, isMakeLoading, isMakeDisabled, makes?.length, make, isActive, isInView]);
@@ -143,42 +167,42 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
     if (isInView && hasUserInteracted.current && make && !isModelLoading && !isModelDisabled && (models?.length ?? 0) > 0 && (!model || model === "__DEFAULT_MODEL__")) {
       timeoutId = setTimeout(() => {
         setActiveDropdown("model");
-      }, 200);
+      }, 300);
     }
     return () => clearTimeout(timeoutId);
   }, [make, isModelLoading, isModelDisabled, models?.length, model, isActive, isInView]);
 
-  // Auto-advance: open Body Type after Model is selected
+  // Auto-advance: open Trim after Model is selected
   useEffect(() => {
     if (isFirstRender.current || !isActive) return;
     let timeoutId: NodeJS.Timeout;
-    if (isInView && hasUserInteracted.current && model && model !== "__DEFAULT_MODEL__" && !isBodyTypeLoading && !isBodyTypeDisabled && (bodyTypes?.length ?? 0) > 0 && (!bodyType || bodyType === "__DEFAULT_BODYTYPE__")) {
+    if (isInView && hasUserInteracted.current && model && model !== "__DEFAULT_MODEL__" && !isTrimLoading && !isTrimDisabled && (trims?.length ?? 0) > 0 && (!trim || trim === "__DEFAULT_TRIM__")) {
       timeoutId = setTimeout(() => {
-        setActiveDropdown("bodyType");
-      }, 200);
+        setActiveDropdown("trim");
+      }, 300);
     }
     return () => clearTimeout(timeoutId);
-  }, [model, isBodyTypeLoading, isBodyTypeDisabled, bodyTypes?.length, bodyType, isInView, isActive]);
+  }, [model, isTrimLoading, isTrimDisabled, trims?.length, trim, isInView, isActive]);
 
-  // Auto-advance: open SubModel after Body Type is selected
+  // Auto-advance: open Drive after Trim is selected
   useEffect(() => {
     if (isFirstRender.current || !isActive) return;
     let timeoutId: NodeJS.Timeout;
-    if (isInView && hasUserInteracted.current && bodyType && bodyType !== "__DEFAULT_BODYTYPE__" && !isSubmodelLoading && !isSubmodelDisabled && (subModels?.length ?? 0) > 0 && (!subModel || subModel?.SubModel === "__DEFAULT_SUBMODEL__")) {
+    if (isInView && hasUserInteracted.current && trim && trim !== "__DEFAULT_TRIM__" && !isDriveLoading && !isDriveDisabled && (drives?.length ?? 0) > 0 && (!drive || drive === "__DEFAULT_DRIVE__")) {
       timeoutId = setTimeout(() => {
-        setActiveDropdown("subModel");
-      }, 200);
+        setActiveDropdown("drive");
+      }, 300);
     }
     return () => clearTimeout(timeoutId);
-  }, [bodyType, isSubmodelLoading, isSubmodelDisabled, subModels?.length, subModel, isInView, isActive]);
+  }, [trim, isDriveLoading, isDriveDisabled, drives?.length, drive, isInView, isActive]);
 
-  const hasVehicleSelected = Boolean(activeGarageItem) || Boolean(year && make && model && model !== "__DEFAULT_MODEL__" && subModel && subModel.SubModel !== "__DEFAULT_SUBMODEL__" && bodyType && bodyType !== "__DEFAULT_BODY_TYPE__");
+  const hasVehicleSelected = Boolean(activeGarageItem) || Boolean(year && make && model && model !== "__DEFAULT_MODEL__" && trim && trim !== "__DEFAULT_TRIM__" && drive && drive !== "__DEFAULT_DRIVE__");
 
   // Optional rendering of sub-dropdowns based on whether they have items.
   // The mockups only show 3 inputs for the initial state, but we should let users select subModels if needed
   // so we dynamically render them if `bodyTypes` or `subModels` exist
-  const showBodyType = (bodyTypes?.length ?? 0) > 0;
-  const showSubmodel = (subModels?.length ?? 0) > 0;
+  const showTrim = (trims?.length ?? 0) > 0;
+  const showDrive = (drives?.length ?? 0) > 0;
 
   // Render Product Page Variant
   if (variant === "product") {
@@ -189,8 +213,8 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
             <CheckCircle2 className="w-6 h-6 shrink-0 fill-[#3D8B3D] text-white" />
             <span className="font-extrabold text-gray-900 uppercase text-[15px] tracking-tight">
               {activeGarageItem
-                ? `${activeGarageItem.year} ${activeGarageItem.make} ${activeGarageItem.model || ''} ${activeGarageItem.subModel?.SubModel && activeGarageItem.subModel.SubModel !== '__DEFAULT_SUBMODEL__' ? activeGarageItem.subModel.SubModel : ''}`.trim()
-                : `${year} ${make} ${model} ${subModel?.SubModel && subModel.SubModel !== "__DEFAULT_SUBMODEL__" ? subModel.SubModel : ""}`}
+                ? `${activeGarageItem.year} ${activeGarageItem.make} ${activeGarageItem.model || ''} ${activeGarageItem.trim && activeGarageItem.trim !== '__DEFAULT_TRIM__' ? activeGarageItem.trim : ''} ${activeGarageItem.drive && activeGarageItem.drive !== '__DEFAULT_DRIVE__' ? activeGarageItem.drive : ''}`.trim()
+                : `${year} ${make} ${model} ${trim && trim !== "__DEFAULT_TRIM__" ? trim : ""} ${drive && drive !== "__DEFAULT_DRIVE__" ? drive : ""}`.trim()}
             </span>
           </div>
           <div className="flex items-center gap-6">
@@ -317,7 +341,7 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
           <div className="flex flex-col">
             <span className="text-xs text-[#6B7280] font-bold uppercase tracking-wide mb-1">Shopping For</span>
             <span className="text-2xl lg:text-3xl font-black text-[#111827] uppercase leading-none">
-              {year} {make} {model} {subModel?.SubModel && subModel.SubModel !== "__DEFAULT_SUBMODEL__" ? subModel.SubModel : ""}
+              {year} {make} {model} {trim && trim !== "__DEFAULT_TRIM__" ? trim : ""} {drive && drive !== "__DEFAULT_DRIVE__" ? drive : ""}
             </span>
           </div>
         </div>
@@ -416,34 +440,34 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
               </div>
 
               {/* Dynamically push body/sub to next line visually on smaller screens, or keep in same row if large enough */}
-              {(showBodyType || showSubmodel) && (
+              {(showTrim || showDrive) && (
                 <div className="flex-1 flex flex-col sm:flex-row gap-3">
-                  {showBodyType && (
+                  {showTrim && (
                     <div className="flex-1">
-                      <Select open={activeDropdown === "bodyType"} onOpenChange={handleOpenChange("bodyType")} onValueChange={handleBodyTypeChange} value={bodyType || "__DEFAULT_BODYTYPE__"} disabled={isBodyTypeDisabled}>
+                      <Select open={activeDropdown === "trim"} onOpenChange={handleOpenChange("trim")} onValueChange={handleTrimChange} value={trim || "__DEFAULT_TRIM__"} disabled={isTrimDisabled}>
                         <SelectTrigger className="w-full bg-white border-gray-200 text-gray-700 h-12 text-base">
-                          <SelectValue placeholder={isBodyTypeLoading ? "Loading..." : "Body Type"} />
+                          <SelectValue placeholder={isTrimLoading ? "Loading..." : "Trim"} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="__DEFAULT_BODYTYPE__" className="hidden" disabled>Body Type</SelectItem>
-                          {bodyTypes?.map((bt) => (
-                            <SelectItem key={`bodyType-${bt}`} value={bt}>{bt}</SelectItem>
+                          <SelectItem value="__DEFAULT_TRIM__" className="hidden" disabled>Trim</SelectItem>
+                          {trims?.map((item) => (
+                            <SelectItem key={`trim-${item}`} value={item}>{item}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
                     </div>
                   )}
 
-                  {showSubmodel && (
+                  {showDrive && (
                     <div className="flex-1">
-                      <Select open={activeDropdown === "subModel"} onOpenChange={handleOpenChange("subModel")} onValueChange={handleSubModelChange} value={subModel?.SubModel || "__DEFAULT_SUBMODEL__"} disabled={isSubmodelDisabled}>
+                      <Select open={activeDropdown === "drive"} onOpenChange={handleOpenChange("drive")} onValueChange={handleDriveChange} value={drive || "__DEFAULT_DRIVE__"} disabled={isDriveDisabled}>
                         <SelectTrigger className="w-full bg-white border-gray-200 text-gray-700 h-12 text-base">
-                          <SelectValue placeholder={isSubmodelLoading ? "Loading..." : "Submodel"} />
+                          <SelectValue placeholder={isDriveLoading ? "Loading..." : "Drive"} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="__DEFAULT_SUBMODEL__" className="hidden" disabled>Submodel</SelectItem>
-                          {subModels?.map((sm) => (
-                            <SelectItem key={`subModel-${sm.SubModel}`} value={sm.SubModel}>{sm.SubModel}</SelectItem>
+                          <SelectItem value="__DEFAULT_DRIVE__" className="hidden" disabled>Drive</SelectItem>
+                          {drives?.map((item) => (
+                            <SelectItem key={`drive-${item}`} value={item}>{item}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>

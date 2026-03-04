@@ -5,13 +5,11 @@ import Item from "@/components/ui/breadcrumb/item";
 import { useFilterSync } from "@/hooks/useFilterSync";
 import { useGetProductsQuery } from "@/redux/apis/product";
 import { useSearchParams } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ProductCategoryLoading from "../../_components/_loading";
 import SidebarFilters from "../_filters/mobile-filters/SidebarFilter";
-import MobileYmmFilter from "../_filters/mobile-ymm/MobileYmmFilter";
 import SortByFilter from "../_filters/SortByFilter";
 import TireFilters from "../_filters/TireFilters";
-import TireYMMFilters from "../_filters/widgets/tire/TireYmmFilter";
 import NoProductsFound from "../NoProductsFound";
 import TireCard from "./TireCard";
 import TireCardList from "./TireCardList";
@@ -31,15 +29,55 @@ const TireCategory: React.FC<{
   const { filters } = useFilterSync();
   const vehicleInformation = useTypedSelector((state) => state.persisted.yearMakeModel.vehicleInformation);
   const activeGarageId = useTypedSelector((state) => state.persisted.yearMakeModel.activeGarageId);
+  const [ymmFilters, setYmmFilters] = useState<
+    { tireSize: string; loadIndex: string; maxSpeedMPH: string }[]
+  >([]);
+  useEffect(() => {
+    if(vehicleInformation?.boltPattern && activeGarageId) {
+      const recommendations = vehicleInformation.tire_fitment?.recommendations ?? {};
+      const ymmFilterData: { tireSize: string; loadIndex: string; maxSpeedMPH: string }[] = [];
+      const seen = new Set<string>();
+
+      const addItems = (node: unknown) => {
+        if (!Array.isArray(node)) return;
+        for (const item of node) {
+          if (!item || typeof item !== 'object') continue;
+          const record = item as Record<string, unknown>;
+          const tireSize = String(record.tireSize ?? '').trim();
+          const loadIndex = String(record.tireMaxLoadRating ?? '').trim();
+          const maxSpeedMPH = String(record.maxTireSpeedMPH ?? '').trim();
+          if (!tireSize || !loadIndex || !maxSpeedMPH) continue;
+          const key = `${tireSize}|${loadIndex}|${maxSpeedMPH}`;
+          if (seen.has(key)) continue;
+          seen.add(key);
+          ymmFilterData.push({ tireSize, loadIndex, maxSpeedMPH });
+        }
+      };
+
+      const visitGuaranteed = (node: unknown) => {
+        if (!node || typeof node !== 'object') return;
+        const record = node as Record<string, unknown>;
+        for (const [key, value] of Object.entries(record)) {
+          if (key === 'Guaranteed') {
+            addItems(value);
+          } else if (value && typeof value === 'object') {
+            visitGuaranteed(value);
+          }
+        }
+      };
+
+      visitGuaranteed(recommendations);
+      setYmmFilters(ymmFilterData);
+    } else {
+      setYmmFilters([]);
+    }
+  }, [vehicleInformation])
+
+  
   const { data, isLoading: loading } = useGetProductsQuery({
     ...filters,
     category: 'tire',
-    ...(activeGarageId && vehicleInformation?.boltPattern ? {
-      vehicleInformation: {
-        ...vehicleInformation,
-        boltPattern: vehicleInformation.boltPattern.toUpperCase(),
-      }
-    } : {}),
+    ...(ymmFilters.length > 0 ? {ymmFilter: ymmFilters} : {}),
   });
   const viewType = useSelector((state: RootState) => state.persisted.layout.viewType);
   return (

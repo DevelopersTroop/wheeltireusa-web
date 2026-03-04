@@ -1,24 +1,21 @@
 'use client';
 import { TYmm, TYmmGarageItem } from '@/types/ymm';
 import { createSlice } from '@reduxjs/toolkit';
+import { v4 as uuidv4 } from 'uuid';
 
 const initialState: TYmm = {
   list: {
     years: [],
     makes: [],
     models: [],
-    bodyTypes: [],
-    subModels: [],
+    trims: [],
+    drives: [],
   },
   year: '',
   make: '',
   model: '',
-  bodyType: '',
-  subModel: {
-    SubModel: '',
-    DRChassisID: '',
-    DRModelID: '',
-  },
+  trim: '',
+  drive: '',
   vehicleInformation: {
     boltPattern: '',
     frontRimSize: '',
@@ -28,9 +25,11 @@ const initialState: TYmm = {
     maxWheelLoad: '',
     tireSizes: [],
     supportedWheels: [],
+    vehicle_details_2: null,
+    tire_fitment: null,
   },
   submitYmm: {},
-  garage: [],
+  garage: {},
   activeGarageId: null,
   activeYmmInstanceId: '',
   isHomeYmmInView: false,
@@ -51,10 +50,6 @@ const yearMakeModelSlice = createSlice({
           ...state.list,
           ...(action.payload?.list ?? {}),
         },
-        subModel: {
-          ...state.subModel,
-          ...(action.payload?.subModel ?? {}),
-        },
       };
     },
     clearYearMakeModel: (state) => {
@@ -68,25 +63,56 @@ const yearMakeModelSlice = createSlice({
       state.submitYmm = action.payload;
     },
     addToGarage: (state, action: { payload: TYmmGarageItem }) => {
-      if (!state.garage) state.garage = [];
-      const exists = state.garage.some((item) => item.id === action.payload.id);
-      if (!exists) {
-        state.garage.push(action.payload);
+      if (!state.garage) state.garage = {};
+      const { year, make, model, trim = '', drive = '' } = action.payload;
+      // Find duplicate by value equality
+      const existingEntry = Object.entries(state.garage).find(
+        ([, item]) =>
+          item.year === year &&
+          item.make === make &&
+          item.model === model &&
+          (item.trim ?? '') === trim &&
+          (item.drive ?? '') === drive
+      );
+      if (existingEntry) {
+        const [existingId] = existingEntry;
+        state.activeGarageId = existingId;
+        return;
       }
-      state.activeGarageId = action.payload.id;
+      const key = uuidv4();
+      state.garage[key] = { ...action.payload, id: key };
+      state.activeGarageId = key;
     },
-    setActiveGarage: (state, action: { payload: string }) => {
+    setActiveGarage: (state, action: { payload: string | null }) => {
       state.activeGarageId = action.payload;
+      if (action.payload && state.garage[action.payload]) {
+        const item = state.garage[action.payload];
+        state.year = item.year;
+        state.make = item.make;
+        state.model = item.model;
+        state.trim = item.trim ?? '';
+        state.drive = item.drive ?? '';
+        // Clear lists to trigger fetches via useYmm
+        state.list = {
+          ...state.list,
+          makes: [],
+          models: [],
+          trims: [],
+          drives: [],
+        };
+      }
     },
     removeFromGarage: (state, action: { payload: string }) => {
-      if (state.garage) {
-        state.garage = state.garage.filter(
-          (item) => item.id !== action.payload
-        );
+      if (state.garage && state.garage[action.payload]) {
+        delete state.garage[action.payload];
+      }
+      if (state.activeGarageId === action.payload) {
+        const remainingIds = Object.keys(state.garage ?? {});
+        state.activeGarageId = remainingIds.length ? remainingIds[0] : null;
       }
     },
     clearGarage: (state) => {
-      state.garage = [];
+      state.garage = {};
       state.activeGarageId = null;
     },
     setHomeYmmInView: (state, action: { payload: boolean }) => {

@@ -14,27 +14,27 @@ const TireYMMFilters = () => {
     isYearLoading,
     isMakeLoading,
     isModelLoading,
-    isBodyTypeLoading,
-    isSubmodelLoading,
+    isTrimLoading,
+    isDriveLoading,
     isYearDisabled,
     isMakeDisabled,
     isModelDisabled,
-    isBodyTypeDisabled,
-    isSubmodelDisabled,
+    isTrimDisabled,
+    isDriveDisabled,
     shouldShowSubmit,
-    list: { years, makes, models, bodyTypes, subModels },
+    list: { years, makes, models, trims, drives },
     onYearChange,
     onMakeChange,
     onModelChange,
-    onBodyTypeChange,
-    onSubModelChange,
+    onTrimChange,
+    onDriveChange,
     onSubmit,
     isDisabledSubmit,
     year,
     make,
     model,
-    bodyType,
-    subModel,
+    trim,
+    drive,
     isActive,
   } = useYmm("tire_ymm_filter");
 
@@ -57,8 +57,8 @@ const TireYMMFilters = () => {
   const handleYearChange = handleInteraction(onYearChange);
   const handleMakeChange = handleInteraction(onMakeChange);
   const handleModelChange = handleInteraction(onModelChange);
-  const handleBodyTypeChange = handleInteraction(onBodyTypeChange);
-  const handleSubModelChange = handleInteraction(onSubModelChange);
+  const handleTrimChange = handleInteraction(onTrimChange);
+  const handleDriveChange = handleInteraction(onDriveChange);
 
   // Auto-submit when fully populated
   useEffect(() => {
@@ -69,8 +69,8 @@ const TireYMMFilters = () => {
     }
   }, [isDisabledSubmit, shouldShowSubmit, onSubmit]);
 
-  const showBodyType = (bodyTypes?.length ?? 0) > 0;
-  const showSubmodel = (subModels?.length ?? 0) > 0;
+  const showTrim = (trims?.length ?? 0) > 0;
+  const showDrive = (drives?.length ?? 0) > 0;
 
   const handleOpenChange = (key: string) => (open: boolean) => {
     if (open) {
@@ -94,7 +94,7 @@ const TireYMMFilters = () => {
         if (containerRef.current?.offsetParent) {
           setActiveDropdown("make");
         }
-      }, 200);
+      }, 300);
     }
     return () => clearTimeout(timeoutId);
   }, [year, isMakeLoading, makes?.length, make, isActive]);
@@ -113,7 +113,7 @@ const TireYMMFilters = () => {
         if (containerRef.current?.offsetParent) {
           setActiveDropdown("model");
         }
-      }, 200);
+      }, 300);
     }
     return () => clearTimeout(timeoutId);
   }, [make, isModelLoading, models?.length, model, isActive]);
@@ -124,37 +124,37 @@ const TireYMMFilters = () => {
     if (
       hasUserInteracted.current &&
       model &&
-      !isBodyTypeLoading &&
-      (bodyTypes?.length ?? 0) > 0 &&
-      (!bodyType || bodyType === "__DEFAULT_BODYTYPE__")
+      !isTrimLoading &&
+      (trims?.length ?? 0) > 0 &&
+      (!trim || trim === "__DEFAULT_TRIM__")
     ) {
       timeoutId = setTimeout(() => {
         if (containerRef.current?.offsetParent) {
-          setActiveDropdown("bodyType");
+          setActiveDropdown("trim");
         }
-      }, 200);
+      }, 300);
     }
     return () => clearTimeout(timeoutId);
-  }, [model, isBodyTypeLoading, bodyTypes?.length, bodyType, isActive]);
+  }, [model, isTrimLoading, trims?.length, trim, isActive]);
 
   useEffect(() => {
     if (isFirstRender.current || !isActive) return;
     let timeoutId: NodeJS.Timeout;
     if (
       hasUserInteracted.current &&
-      bodyType &&
-      !isSubmodelLoading &&
-      (subModels?.length ?? 0) > 0 &&
-      (!subModel?.SubModel || subModel?.SubModel === "__DEFAULT_SUBMODEL__")
+      trim &&
+      !isDriveLoading &&
+      (drives?.length ?? 0) > 0 &&
+      (!drive || drive === "__DEFAULT_DRIVE__")
     ) {
       timeoutId = setTimeout(() => {
         if (containerRef.current?.offsetParent) {
-          setActiveDropdown("subModel");
+          setActiveDropdown("drive");
         }
-      }, 200);
+      }, 300);
     }
     return () => clearTimeout(timeoutId);
-  }, [bodyType, isSubmodelLoading, subModels?.length, subModel?.SubModel, isActive]);
+  }, [trim, isDriveLoading, drives?.length, drive, isActive]);
 
   return (
     <div ref={containerRef} className={"filter-shadow bg-gray-200"}>
@@ -220,38 +220,38 @@ const TireYMMFilters = () => {
               </SelectContent>
             </Select>
           </div>
-          {showBodyType && (
+          {showTrim && (
             <div className="w-full">
-              <Select open={activeDropdown === "bodyType"} onOpenChange={handleOpenChange("bodyType")} onValueChange={handleBodyTypeChange} value={bodyType || "__DEFAULT_BODYTYPE__"} disabled={isBodyTypeDisabled} >
+              <Select open={activeDropdown === "trim"} onOpenChange={handleOpenChange("trim")} onValueChange={handleTrimChange} value={trim || "__DEFAULT_TRIM__"} disabled={isTrimDisabled} >
                 <SelectTrigger className="w-full p-2 rounded bg-white text-base text-black">
-                  <SelectValue placeholder={isBodyTypeLoading ? "Loading..." : "Body Type"} />
+                  <SelectValue placeholder={isTrimLoading ? "Loading..." : "Trim"} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="__DEFAULT_BODYTYPE__" className="hidden" disabled>
-                    {isBodyTypeLoading ? "Loading..." : "Body Type"}
+                  <SelectItem value="__DEFAULT_TRIM__" className="hidden" disabled>
+                    {isTrimLoading ? "Loading..." : "Trim"}
                   </SelectItem>
-                  {bodyTypes?.map((bt) => (
-                    <SelectItem key={`bodyType-${bt}`} value={bt}>
-                      {bt}
+                  {trims?.map((item) => (
+                    <SelectItem key={`trim-${item}`} value={item}>
+                      {item}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
           )}
-          {showSubmodel && (
+          {showDrive && (
             <div className="w-full">
-              <Select open={activeDropdown === "subModel"} onOpenChange={handleOpenChange("subModel")} onValueChange={handleSubModelChange} value={subModel?.SubModel || "__DEFAULT_SUBMODEL__"} disabled={isSubmodelDisabled} >
+              <Select open={activeDropdown === "drive"} onOpenChange={handleOpenChange("drive")} onValueChange={handleDriveChange} value={drive || "__DEFAULT_DRIVE__"} disabled={isDriveDisabled} >
                 <SelectTrigger className="w-full p-2 rounded bg-white text-base text-black">
-                  <SelectValue placeholder={isSubmodelLoading ? "Loading..." : "Submodel"} />
+                  <SelectValue placeholder={isDriveLoading ? "Loading..." : "Drive"} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="__DEFAULT_SUBMODEL__" className="hidden" disabled>
-                    {isSubmodelLoading ? "Loading..." : "Submodel"}
+                  <SelectItem value="__DEFAULT_DRIVE__" className="hidden" disabled>
+                    {isDriveLoading ? "Loading..." : "Drive"}
                   </SelectItem>
-                  {subModels?.map((sm) => (
-                    <SelectItem key={`subModel-${sm.SubModel}`} value={sm.SubModel}>
-                      {sm.SubModel}
+                  {drives?.map((item) => (
+                    <SelectItem key={`drive-${item}`} value={item}>
+                      {item}
                     </SelectItem>
                   ))}
                 </SelectContent>

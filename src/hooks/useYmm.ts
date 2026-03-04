@@ -1,27 +1,15 @@
-import {
-  getBodyTypes,
-  getMakes,
-  getModels,
-  getSubModels,
-  getVehicleData,
-  getYears,
-} from '@/lib/driver-right-api';
-import {
-  setYmm,
-  addToGarage,
-  submitYmm,
-} from '@/redux/features/yearMakeModelSlice';
+import { FitmentVehicleResponse } from '@/lib/fitment-api';
+import { setYmm } from '@/redux/features/yearMakeModelSlice';
 import { useTypedSelector } from '@/redux/store';
 import {
-  useGetYearsQuery,
+  useGetDrivesQuery,
   useGetMakesQuery,
   useGetModelsQuery,
-  useGetBodyTypesQuery,
-  useGetSubModelsQuery,
+  useGetTrimsQuery,
   useGetVehicleDataQuery,
+  useGetYearsQuery,
 } from '@/redux/apis/ymmApi';
-
-import { TYmmGarageItem } from '@/types/ymm';
+import { TYmmVehicleInformation } from '@/types/ymm';
 import { useRouter, usePathname } from 'next/navigation';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -33,54 +21,31 @@ const useYmm = (ymmId?: string) => {
 
   const defaultMakeValue = '__DEFAULT_MAKE__';
   const defaultModelValue = '__DEFAULT_MODEL__';
-  const defaultBodyTypeValue = '__DEFAULT_BODYTYPE__';
-  const defaultSubModelValue = '__DEFAULT_SUBMODEL__';
+  const defaultTrimValue = '__DEFAULT_TRIM__';
+  const defaultDriveValue = '__DEFAULT_DRIVE__';
 
   const [selectedVehicle, setSelectedVehicle] = useState<{
     year?: string;
     make?: string;
     model?: string;
-    bodyType?: string;
-    subModel?: {
-      SubModel?: string;
-      DRChassisID?: string;
-      DRModelID?: string;
-    };
-    vehicleInformation?: {
-      supportedWheels: {
-        diameter: number;
-        width: number;
-        upStepType: string;
-        minOffset: number;
-        maxOffset: number;
-        comments: string;
-      }[];
-      boltPattern: string;
-      frontRimSize: string;
-      rearRimSize: string;
-      frontCenterBore: string;
-      rearCenterBore: string;
-      maxWheelLoad: string;
-      tireSizes: Record<'front' | 'rear', string>[];
-      tireSizesList?: string[];
-    };
+    trim?: string;
+    drive?: string;
+    vehicleInformation?: TYmmVehicleInformation;
   } | null>(null);
 
   const [isDisabledSubmit, setIsDisabledSubmit] = useState(true);
   const ymm = useTypedSelector((state) => state.persisted.yearMakeModel);
 
-  // Compute effective values (selectedVehicle local state takes precedence over Redux)
   const effectiveYear = selectedVehicle?.year ?? ymm.year;
   const effectiveMake = selectedVehicle?.make ?? ymm.make;
   const effectiveModel = selectedVehicle?.model ?? ymm.model;
-  const effectiveBodyType = selectedVehicle?.bodyType ?? ymm.bodyType;
+  const effectiveTrim = selectedVehicle?.trim ?? ymm.trim;
+  const effectiveDrive = selectedVehicle?.drive ?? ymm.drive;
 
   const isValidMake = !!effectiveMake && effectiveMake !== defaultMakeValue;
   const isValidModel = !!effectiveModel && effectiveModel !== defaultModelValue;
-  const isValidBodyType =
-    !!effectiveBodyType && effectiveBodyType !== defaultBodyTypeValue;
-
-  // ─── RTK Query hooks (auto-cached, no refetch if params unchanged) ───
+  const isValidTrim = !!effectiveTrim && effectiveTrim !== defaultTrimValue;
+  const isValidDrive = !!effectiveDrive && effectiveDrive !== defaultDriveValue;
 
   const { data: years, isLoading: isYearLoading } = useGetYearsQuery();
 
@@ -94,46 +59,83 @@ const useYmm = (ymmId?: string) => {
     { skip: !effectiveYear || !isValidMake }
   );
 
-  const { data: bodyTypes, isLoading: isBodyTypeLoading } =
-    useGetBodyTypesQuery(
-      { year: effectiveYear, make: effectiveMake, model: effectiveModel },
-      { skip: !effectiveYear || !effectiveMake || !isValidModel }
-    );
+  const { data: trims, isLoading: isTrimLoading } = useGetTrimsQuery(
+    { year: effectiveYear, make: effectiveMake, model: effectiveModel },
+    { skip: !effectiveYear || !isValidMake || !isValidModel }
+  );
 
-  const { data: subModels, isLoading: isSubmodelLoading } =
-    useGetSubModelsQuery(
-      {
-        year: effectiveYear,
-        make: effectiveMake,
-        model: effectiveModel,
-        bodyType: effectiveBodyType,
-      },
-      {
-        skip:
-          !effectiveYear ||
-          !effectiveMake ||
-          !effectiveModel ||
-          !isValidBodyType,
-      }
-    );
-
-  // Vehicle data query (only when we have chassis/model IDs)
-  // Fall back to Redux subModel so garage selection also triggers this query
-  const chassisId =
-    selectedVehicle?.subModel?.DRChassisID ?? ymm.subModel?.DRChassisID ?? '';
-  const modelId =
-    selectedVehicle?.subModel?.DRModelID ?? ymm.subModel?.DRModelID ?? '';
+  const { data: drives, isLoading: isDriveLoading } = useGetDrivesQuery(
+    {
+      year: effectiveYear,
+      make: effectiveMake,
+      model: effectiveModel,
+      trim: effectiveTrim,
+    },
+    { skip: !effectiveYear || !isValidMake || !isValidModel || !isValidTrim }
+  );
 
   const {
     data: vehicleData,
     isLoading: isVehicleDataLoading,
     isFetching: isVehicleDataFetching,
   } = useGetVehicleDataQuery(
-    { modelId, chassisId },
-    { skip: !chassisId || !modelId }
+    {
+      year: effectiveYear,
+      make: effectiveMake,
+      model: effectiveModel,
+      trim: effectiveTrim,
+      drive: effectiveDrive,
+    },
+    {
+      skip:
+        !effectiveYear ||
+        !isValidMake ||
+        !isValidModel ||
+        !isValidTrim ||
+        !isValidDrive,
+    }
   );
 
-  // ─── Sync RTK Query data back to Redux (for other consumers) ───
+  const emptyVehicleInformation: TYmmVehicleInformation = {
+    boltPattern: '',
+    frontRimSize: '',
+    rearRimSize: '',
+    frontCenterBore: '',
+    rearCenterBore: '',
+    maxWheelLoad: '',
+    tireSizes: [],
+    supportedWheels: [],
+    vehicle_details_2: null,
+    tire_fitment: null,
+  };
+
+  const normalizeVehicleInfo = (
+    response?: FitmentVehicleResponse
+  ): TYmmVehicleInformation => {
+    if (!response) return emptyVehicleInformation;
+    const details = response.vehicle_details_2;
+    const frontTire = details?.stockTireSize || '';
+    const rearTire = details?.stockTireSizeRear || frontTire;
+    return {
+      boltPattern: details?.boltpattern || '',
+      frontRimSize: details?.stockWheelDiameter || '',
+      rearRimSize: details?.stockWheelDiameterRear || details?.stockWheelDiameter || '',
+      frontCenterBore: details?.hub || '',
+      rearCenterBore: details?.hub || '',
+      maxWheelLoad: '',
+      tireSizes: frontTire
+        ? [
+            {
+              front: frontTire,
+              rear: rearTire,
+            },
+          ]
+        : [],
+      supportedWheels: [],
+      vehicle_details_2: details ?? null,
+      tire_fitment: response.tire_fitment ?? null,
+    };
+  };
 
   useEffect(() => {
     if (years && years.length > 0) {
@@ -154,54 +156,47 @@ const useYmm = (ymmId?: string) => {
   }, [models, dispatch]);
 
   useEffect(() => {
-    if (bodyTypes) {
-      dispatch(setYmm({ list: { bodyTypes } }));
+    if (trims) {
+      dispatch(setYmm({ list: { trims } }));
     }
-  }, [bodyTypes, dispatch]);
+  }, [trims, dispatch]);
 
   useEffect(() => {
-    if (subModels) {
-      dispatch(setYmm({ list: { subModels } }));
+    if (drives) {
+      dispatch(
+        setYmm({
+          list: {
+            drives,
+          },
+        })
+      );
     }
-  }, [subModels, dispatch]);
+  }, [drives, dispatch]);
 
-  // Sync vehicle data to local state when it arrives
   useEffect(() => {
     if (vehicleData) {
+      const normalized = normalizeVehicleInfo(vehicleData);
       setSelectedVehicle((prev) => ({
         ...prev,
-        vehicleInformation: vehicleData,
+        vehicleInformation: normalized,
       }));
-    }
-  }, [vehicleData]);
-
-  // Sync vehicle data to Redux so product pages can read it
-  useEffect(() => {
-    if (vehicleData) {
-      dispatch(setYmm({ vehicleInformation: vehicleData }));
+      dispatch(setYmm({ vehicleInformation: normalized }));
     }
   }, [vehicleData, dispatch]);
 
-  // ─── Reset & validation logic ───
-
-  // Reset local state when Redux state is cleared (e.g., clearYearMakeModel)
   useEffect(() => {
-    if (!ymm.year && !ymm.make && !ymm.model && !ymm.bodyType) {
+    if (!ymm.year && !ymm.make && !ymm.model && !ymm.trim && !ymm.drive) {
       setSelectedVehicle(null);
       setIsDisabledSubmit(true);
     }
-  }, [ymm.year, ymm.make, ymm.model, ymm.bodyType]);
+  }, [ymm.year, ymm.make, ymm.model, ymm.trim, ymm.drive]);
 
-  // Enable submit button when vehicleData (bolt pattern) is available
   useEffect(() => {
-    if (selectedVehicle?.vehicleInformation?.boltPattern) {
-      setIsDisabledSubmit(false);
-    } else {
-      setIsDisabledSubmit(true);
-    }
-  }, [selectedVehicle?.vehicleInformation]);
+    setIsDisabledSubmit(
+      !isValidDrive || isVehicleDataLoading || isVehicleDataFetching
+    );
+  }, [isValidDrive, isVehicleDataLoading, isVehicleDataFetching]);
 
-  // Ensure invalid selections are cleared when lists update
   useEffect(() => {
     if (
       makes &&
@@ -227,35 +222,25 @@ const useYmm = (ymmId?: string) => {
 
   useEffect(() => {
     if (
-      bodyTypes &&
-      selectedVehicle?.bodyType &&
-      !bodyTypes.includes(selectedVehicle.bodyType)
+      trims &&
+      selectedVehicle?.trim &&
+      !trims.includes(selectedVehicle.trim)
     ) {
       setSelectedVehicle((prev) => ({
         ...prev,
-        bodyType: defaultBodyTypeValue,
+        trim: defaultTrimValue,
       }));
     }
-  }, [bodyTypes]);
+  }, [trims]);
 
   useEffect(() => {
-    const hasSubModel = !!selectedVehicle?.subModel?.SubModel;
-    const exists =
-      hasSubModel && subModels
-        ? subModels.some(
-            (sm: { SubModel: string }) =>
-              sm.SubModel === selectedVehicle?.subModel?.SubModel
-          )
-        : false;
-    if (hasSubModel && !exists) {
+    if (drives && selectedVehicle?.drive && !drives.includes(selectedVehicle.drive)) {
       setSelectedVehicle((prev) => ({
         ...prev,
-        subModel: { SubModel: defaultSubModelValue },
+        drive: defaultDriveValue,
       }));
     }
-  }, [subModels]);
-
-  // ─── Change handlers ───
+  }, [drives]);
 
   const markActiveYmmInstance = () => {
     if (ymmId && ymm.activeYmmInstanceId !== ymmId) {
@@ -271,8 +256,8 @@ const useYmm = (ymmId?: string) => {
       year: newYear,
       make: defaultMakeValue,
       model: defaultModelValue,
-      bodyType: defaultBodyTypeValue,
-      subModel: { SubModel: defaultSubModelValue },
+      trim: defaultTrimValue,
+      drive: defaultDriveValue,
       vehicleInformation: undefined,
     }));
     dispatch(
@@ -280,25 +265,17 @@ const useYmm = (ymmId?: string) => {
         year: newYear,
         make: defaultMakeValue,
         model: defaultModelValue,
-        bodyType: defaultBodyTypeValue,
-        subModel: {
-          SubModel: defaultSubModelValue,
-          DRChassisID: '',
-          DRModelID: '',
+        trim: defaultTrimValue,
+        drive: defaultDriveValue,
+        list: {
+          makes: [],
+          models: [],
+          trims: [],
+          drives: [],
         },
-        vehicleInformation: {
-          boltPattern: '',
-          frontRimSize: '',
-          rearRimSize: '',
-          frontCenterBore: '',
-          rearCenterBore: '',
-          maxWheelLoad: '',
-          tireSizes: [],
-          supportedWheels: [],
-        },
+        vehicleInformation: emptyVehicleInformation,
       })
     );
-    setIsDisabledSubmit(true);
   };
 
   const onMakeChange = (data: ChangeEvent<HTMLSelectElement> | string) => {
@@ -308,33 +285,24 @@ const useYmm = (ymmId?: string) => {
       ...prev,
       make: newMake,
       model: defaultModelValue,
-      bodyType: defaultBodyTypeValue,
-      subModel: { SubModel: defaultSubModelValue },
+      trim: defaultTrimValue,
+      drive: defaultDriveValue,
       vehicleInformation: undefined,
     }));
     dispatch(
       setYmm({
         make: newMake,
         model: defaultModelValue,
-        bodyType: defaultBodyTypeValue,
-        subModel: {
-          SubModel: defaultSubModelValue,
-          DRChassisID: '',
-          DRModelID: '',
+        trim: defaultTrimValue,
+        drive: defaultDriveValue,
+        list: {
+          models: [],
+          trims: [],
+          drives: [],
         },
-        vehicleInformation: {
-          boltPattern: '',
-          frontRimSize: '',
-          rearRimSize: '',
-          frontCenterBore: '',
-          rearCenterBore: '',
-          maxWheelLoad: '',
-          tireSizes: [],
-          supportedWheels: [],
-        },
+        vehicleInformation: emptyVehicleInformation,
       })
     );
-    setIsDisabledSubmit(true);
   };
 
   const onModelChange = (data: ChangeEvent<HTMLSelectElement> | string) => {
@@ -343,80 +311,58 @@ const useYmm = (ymmId?: string) => {
     setSelectedVehicle((prev) => ({
       ...prev,
       model: newModel,
-      bodyType: defaultBodyTypeValue,
-      subModel: { SubModel: defaultSubModelValue },
+      trim: defaultTrimValue,
+      drive: defaultDriveValue,
       vehicleInformation: undefined,
     }));
     dispatch(
       setYmm({
         model: newModel,
-        bodyType: defaultBodyTypeValue,
-        subModel: {
-          SubModel: defaultSubModelValue,
-          DRChassisID: '',
-          DRModelID: '',
+        trim: defaultTrimValue,
+        drive: defaultDriveValue,
+        list: {
+          trims: [],
+          drives: [],
         },
-        vehicleInformation: {
-          boltPattern: '',
-          frontRimSize: '',
-          rearRimSize: '',
-          frontCenterBore: '',
-          rearCenterBore: '',
-          maxWheelLoad: '',
-          tireSizes: [],
-          supportedWheels: [],
-        },
+        vehicleInformation: emptyVehicleInformation,
       })
     );
-    setIsDisabledSubmit(true);
   };
 
-  const onBodyTypeChange = (data: ChangeEvent<HTMLSelectElement> | string) => {
+  const onTrimChange = (data: ChangeEvent<HTMLSelectElement> | string) => {
     markActiveYmmInstance();
-    const newBodyType = typeof data === 'string' ? data : data.target.value;
+    const newTrim = typeof data === 'string' ? data : data.target.value;
     setSelectedVehicle((prev) => ({
       ...prev,
-      bodyType: newBodyType,
-      subModel: { SubModel: defaultSubModelValue },
+      trim: newTrim,
+      drive: defaultDriveValue,
       vehicleInformation: undefined,
     }));
     dispatch(
       setYmm({
-        bodyType: newBodyType,
-        subModel: {
-          SubModel: defaultSubModelValue,
-          DRChassisID: '',
-          DRModelID: '',
+        trim: newTrim,
+        drive: defaultDriveValue,
+        list: {
+          drives: [],
         },
-        vehicleInformation: {
-          boltPattern: '',
-          frontRimSize: '',
-          rearRimSize: '',
-          frontCenterBore: '',
-          rearCenterBore: '',
-          maxWheelLoad: '',
-          tireSizes: [],
-          supportedWheels: [],
-        },
+        vehicleInformation: emptyVehicleInformation,
       })
     );
-    setIsDisabledSubmit(true);
   };
 
-  const onSubModelChange = (data: ChangeEvent<HTMLSelectElement> | string) => {
+  const onDriveChange = (data: ChangeEvent<HTMLSelectElement> | string) => {
     markActiveYmmInstance();
     const value = typeof data === 'string' ? data : data.target.value;
-    if (subModels) {
-      setSelectedVehicle((prev) => ({
-        ...prev,
-        subModel: subModels.find(
-          (subModel: { SubModel: string }) => subModel.SubModel === value
-        ) as (typeof subModels)[0],
-      }));
-    }
+    setSelectedVehicle((prev) => ({
+      ...prev,
+      drive: value,
+    }));
+    dispatch(
+      setYmm({
+        drive: value,
+      })
+    );
   };
-
-  // ─── Submit ───
 
   const onSubmit = (
     e?: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -431,46 +377,37 @@ const useYmm = (ymmId?: string) => {
     }
   };
 
-  // ─── Return values (same API surface as before) ───
-
-  // Use RTK Query data directly for lists, falling back to Redux
   const listData = {
     years: years ?? ymm.list?.years ?? [],
-    makes: makes ?? ymm.list?.makes ?? [],
-    models: models ?? ymm.list?.models ?? [],
-    bodyTypes: bodyTypes ?? ymm.list?.bodyTypes ?? [],
-    subModels: subModels ?? ymm.list?.subModels ?? [],
+    makes: (effectiveYear && !isMakeLoading) ? (makes ?? ymm.list?.makes ?? []) : [],
+    models: (isValidMake && !isModelLoading) ? (models ?? ymm.list?.models ?? []) : [],
+    trims: (isValidModel && !isTrimLoading) ? (trims ?? ymm.list?.trims ?? []) : [],
+    drives: (isValidTrim && !isDriveLoading) ? (drives ?? ymm.list?.drives ?? []) : [],
   };
 
   return {
     isYearLoading,
     isMakeLoading,
     isModelLoading,
-    isBodyTypeLoading,
-    isSubmodelLoading,
+    isTrimLoading,
+    isDriveLoading,
     isYearDisabled: isYearLoading,
     isMakeDisabled:
       !effectiveYear || isMakeLoading || (listData.makes.length ?? 0) === 0,
     isModelDisabled:
       !isValidMake || isModelLoading || (listData.models.length ?? 0) === 0,
-    isBodyTypeDisabled:
+    isTrimDisabled:
       !isValidModel ||
-      isBodyTypeLoading ||
-      (listData.bodyTypes.length ?? 0) === 0,
-    isSubmodelDisabled:
-      !isValidBodyType ||
-      isSubmodelLoading ||
-      (listData.subModels.length ?? 0) === 0,
-    shouldShowSubmit:
-      (selectedVehicle?.subModel?.DRChassisID &&
-        !isVehicleDataLoading &&
-        !isVehicleDataFetching) ||
-      !Boolean(selectedVehicle?.subModel?.DRChassisID),
+      isTrimLoading ||
+      (listData.trims.length ?? 0) === 0,
+    isDriveDisabled:
+      !isValidTrim || isDriveLoading || (listData.drives.length ?? 0) === 0,
+    shouldShowSubmit: isValidDrive,
     onYearChange,
     onMakeChange,
     onModelChange,
-    onBodyTypeChange,
-    onSubModelChange,
+    onTrimChange,
+    onDriveChange,
     onSubmit,
     isDisabledSubmit,
     isActive: !ymmId || ymm.activeYmmInstanceId === ymmId,
@@ -480,8 +417,8 @@ const useYmm = (ymmId?: string) => {
     year: effectiveYear,
     make: effectiveMake,
     model: effectiveModel,
-    bodyType: effectiveBodyType,
-    subModel: selectedVehicle?.subModel ?? ymm.subModel,
+    trim: effectiveTrim,
+    drive: effectiveDrive,
     vehicleInformation:
       selectedVehicle?.vehicleInformation ?? ymm.vehicleInformation,
   };
