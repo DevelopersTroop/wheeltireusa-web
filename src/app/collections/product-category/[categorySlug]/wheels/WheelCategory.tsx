@@ -21,6 +21,7 @@ import NoProductsFound from '../NoProductsFound';
 import WheelCard from './WheelCard';
 import WheelCardList from './WheelCardList';
 import WheelFilters from '../_filters/WheelFilters';
+import { normalizeWheelFitment } from '@/lib/fitment';
 
 const WheelCategory: React.FC<{
   page: number;
@@ -31,16 +32,14 @@ const WheelCategory: React.FC<{
   const { filters } = useFilterSync();
   const vehicleInformation = useTypedSelector((state) => state.persisted.yearMakeModel.vehicleInformation);
   const activeGarageId = useTypedSelector((state) => state.persisted.yearMakeModel.activeGarageId);
+  const wheelFitment = normalizeWheelFitment(vehicleInformation.vehicle_details_2)
   const { data, isLoading: loading, isFetching } = useGetProductsQuery({
     ...filters,
     category: 'wheels',
     ...(activeGarageId && vehicleInformation?.boltPattern ? {
-      vehicleInformation: {
-        ...vehicleInformation,
-        boltPattern: vehicleInformation.boltPattern.toUpperCase(),
-      }
+      ...(wheelFitment ? {wheelFitment: wheelFitment} : {})
     } : {}),
-  });
+  }, {refetchOnMountOrArgChange: true});
   const viewType = useSelector((state: RootState) => state.persisted.layout.viewType);
   return (
     <>

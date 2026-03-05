@@ -38,7 +38,7 @@ export type TYmmVehicleInformation = {
   rearCenterBore: string;
   maxWheelLoad: string;
   tireSizes: Record<'front' | 'rear', string>[];
-  vehicle_details_2: FitmentVehicleDetails | null;
+  vehicle_details_2: FitmentVehicleDetails;
   tire_fitment: {
     recommendations: FitmentRecommendations;
     factorySizes: FitmentRecommendationItem[];
