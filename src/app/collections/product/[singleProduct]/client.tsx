@@ -34,7 +34,7 @@ const SingleProductClient: React.FC<{ product: TInventoryItem }> = ({
 
   const categorySlug = product.category?.slug;
 
-
+  console.log("product", product)
 
   if (categorySlug === "wheels") {
     productBasedOnCategory = <Wheel product={productsByCategory(categorySlug, product)} />;

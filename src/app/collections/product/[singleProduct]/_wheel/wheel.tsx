@@ -11,6 +11,7 @@ import Item from "@/components/ui/breadcrumb/item";
 import { Reviews } from "@/components/shared/Reviews/Reviews";
 
 const Wheel = ({ product }: { product: TWheelProduct }) => {
+    console.log("product ===", product)
     return (
         <WheelProvider>
             <Breadcrumb>

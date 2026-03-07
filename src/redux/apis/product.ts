@@ -68,7 +68,7 @@ const products = baseApi.injectEndpoints({
             shallowParams.sort = [{ whom: 'description', order: 'desc' }];
             break;
           default:
-            shallowParams.sort = [{ whom: 'id', order: 'desc' }];
+            shallowParams.sort = [{ whom: 'createdAt', order: 'asc' }];
         }
 
         Object.entries(shallowParams).forEach(([key, value]) => {

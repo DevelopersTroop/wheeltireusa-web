@@ -81,7 +81,7 @@ const ProductGallery: React.FC<{
               })
             : data?.products.slice(0, 8).map((products, index) => {
                 const product = products[0];
-                console.log("getProductThumbnail(product)", getProductThumbnail(product), product)
+                console.log("products", products)
                 return (
                   <>
                     <SwiperSlide key={index}>
