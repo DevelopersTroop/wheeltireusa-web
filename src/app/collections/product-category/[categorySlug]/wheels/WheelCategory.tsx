@@ -32,7 +32,7 @@ const WheelCategory: React.FC<{
   const { filters } = useFilterSync();
   const vehicleInformation = useTypedSelector((state) => state.persisted.yearMakeModel.vehicleInformation);
   const activeGarageId = useTypedSelector((state) => state.persisted.yearMakeModel.activeGarageId);
-  const wheelFitment = normalizeWheelFitment(vehicleInformation.vehicle_details_2)
+  const wheelFitment = normalizeWheelFitment(vehicleInformation.VehicleDataFromDRD_NA, vehicleInformation.afterMarketDRSizes)
   const { data, isLoading: loading, isFetching } = useGetProductsQuery({
     ...filters,
     category: 'wheels',

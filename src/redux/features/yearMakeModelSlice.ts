@@ -27,6 +27,8 @@ const initialState: TYmm = {
     supportedWheels: [],
     vehicle_details_2: null,
     tire_fitment: null,
+    afterMarketDRSizes: [],
+    VehicleDataFromDRD_NA: null,
   },
   submitYmm: {},
   garage: {},

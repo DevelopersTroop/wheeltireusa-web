@@ -66,6 +66,7 @@
     "react-sticky-el": "^2.1.1",
     "react-tooltip": "^5.30.0",
     "redux-persist": "^6.0.0",
+    "redux-persist-indexeddb-storage": "^1.0.4",
     "sonner": "^2.0.7",
     "swiper": "^11.2.10",
     "tailwind-merge": "^3.4.0",

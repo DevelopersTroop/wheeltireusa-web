@@ -2,6 +2,8 @@ import {
   FitmentRecommendationItem,
   FitmentRecommendations,
   FitmentVehicleDetails,
+  DRUpstepWheel,
+  DRDVehicleDataNAResponse,
 } from '@/lib/fitment-api';
 
 export type TYmmGarageItem = {
@@ -38,11 +40,13 @@ export type TYmmVehicleInformation = {
   rearCenterBore: string;
   maxWheelLoad: string;
   tireSizes: Record<'front' | 'rear', string>[];
-  vehicle_details_2: FitmentVehicleDetails;
+  vehicle_details_2: FitmentVehicleDetails | null;
   tire_fitment: {
     recommendations: FitmentRecommendations;
     factorySizes: FitmentRecommendationItem[];
   } | null;
+  afterMarketDRSizes: DRUpstepWheel[];
+  VehicleDataFromDRD_NA: DRDVehicleDataNAResponse | null;
 };
 
 export type TYmm = {

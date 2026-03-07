@@ -16,7 +16,8 @@ import {
   REGISTER,
   REHYDRATE,
 } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+// @ts-ignore need not check typescript for this indexdb storage: storage("yearMakeModelWTU")
+import storage from 'redux-persist-indexeddb-storage';
 import { baseApi } from './apis/base';
 import { TypedUseSelectorHook, useSelector, useDispatch } from 'react-redux';
 import { checkoutListenerMiddleware } from './middleware/checkoutMiddleware';
@@ -26,14 +27,14 @@ import wheelReducer from './features/wheel';
 import layoutReducer from './features/layoutSlice';
 
 const rootPersistConfig = {
-  key: 'tirematic-store',
-  storage,
+  key: 'wheel-tire-usa-store',
+  storage: storage('wheelTireUSADB'),
 };
 
 // Persist only garage-related fields from yearMakeModel
 const ymmPersistConfig = {
   key: 'yearMakeModel',
-  storage,
+  storage: storage("yearMakeModelWTU"),
   whitelist: ['garage', 'activeGarageId'],
 };
 

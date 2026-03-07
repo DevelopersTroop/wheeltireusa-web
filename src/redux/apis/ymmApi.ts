@@ -6,6 +6,10 @@ import {
   getFitmentTrims,
   getFitmentVehicleInfo,
   getFitmentYears,
+  getUpstepWheelsByChassisID,
+  DRUpstepWheel,
+  getVehicleDataFromDRDNA,
+  DRDVehicleDataNAResponse,
 } from '@/lib/fitment-api';
 import { baseApi } from './base';
 
@@ -94,6 +98,31 @@ const ymmEndpoints = baseApi.injectEndpoints({
       },
       keepUnusedDataFor: 600,
     }),
+    getUpstepWheelsByChassisID: builder.query<DRUpstepWheel[], { chassisID: string }>({
+      queryFn: async ({ chassisID }) => {
+        try {
+          return { data: await getUpstepWheelsByChassisID(chassisID) };
+        } catch (error) {
+          return { error: toError(error) };
+        }
+      },
+      keepUnusedDataFor: 600,
+    }),
+    getVehicleDataFromDRDNA: builder.query<
+      DRDVehicleDataNAResponse,
+      { DRDModelID: string; DRDChassisID: string }
+    >({
+      queryFn: async ({ DRDModelID, DRDChassisID }) => {
+        try {
+          return {
+            data: await getVehicleDataFromDRDNA(DRDModelID, DRDChassisID),
+          };
+        } catch (error) {
+          return { error: toError(error) };
+        }
+      },
+      keepUnusedDataFor: 600,
+    }),
   }),
 });
 
@@ -104,4 +133,6 @@ export const {
   useGetTrimsQuery,
   useGetDrivesQuery,
   useGetVehicleDataQuery,
+  useGetUpstepWheelsByChassisIDQuery,
+  useGetVehicleDataFromDRDNAQuery,
 } = ymmEndpoints;

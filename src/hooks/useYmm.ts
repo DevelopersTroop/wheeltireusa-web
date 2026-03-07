@@ -8,6 +8,8 @@ import {
   useGetTrimsQuery,
   useGetVehicleDataQuery,
   useGetYearsQuery,
+  useGetUpstepWheelsByChassisIDQuery,
+  useGetVehicleDataFromDRDNAQuery,
 } from '@/redux/apis/ymmApi';
 import { TYmmVehicleInformation } from '@/types/ymm';
 import { useRouter, usePathname } from 'next/navigation';
@@ -96,6 +98,22 @@ const useYmm = (ymmId?: string) => {
     }
   );
 
+  const { data: upstepWheels } = useGetUpstepWheelsByChassisIDQuery(
+    { chassisID: (vehicleData?.vehicle_details_2?.drchassisid ?? '') as string },
+    { skip: !vehicleData?.vehicle_details_2?.drchassisid }
+  );
+  const { data: drdVehicleDataNA } = useGetVehicleDataFromDRDNAQuery(
+    {
+      DRDModelID: (vehicleData?.vehicle_details_2?.drmodelid ?? '') as string,
+      DRDChassisID: (vehicleData?.vehicle_details_2?.drchassisid ?? '') as string,
+    },
+    {
+      skip:
+        !vehicleData?.vehicle_details_2?.drmodelid ||
+        !vehicleData?.vehicle_details_2?.drchassisid,
+    }
+  );
+
   const emptyVehicleInformation: TYmmVehicleInformation = {
     boltPattern: '',
     frontRimSize: '',
@@ -107,6 +125,8 @@ const useYmm = (ymmId?: string) => {
     supportedWheels: [],
     vehicle_details_2: null,
     tire_fitment: null,
+    afterMarketDRSizes: [],
+    VehicleDataFromDRD_NA: null,
   };
 
   const normalizeVehicleInfo = (
@@ -134,6 +154,8 @@ const useYmm = (ymmId?: string) => {
       supportedWheels: [],
       vehicle_details_2: details ?? null,
       tire_fitment: response.tire_fitment ?? null,
+      afterMarketDRSizes: [],
+      VehicleDataFromDRD_NA: null,
     };
   };
 
@@ -183,6 +205,18 @@ const useYmm = (ymmId?: string) => {
       dispatch(setYmm({ vehicleInformation: normalized }));
     }
   }, [vehicleData, dispatch]);
+
+  useEffect(() => {
+    if (upstepWheels && upstepWheels.length) {
+      dispatch(setYmm({ vehicleInformation: { afterMarketDRSizes: upstepWheels } }));
+    }
+  }, [upstepWheels, dispatch]);
+
+  useEffect(() => {
+    if (drdVehicleDataNA) {
+      dispatch(setYmm({ vehicleInformation: { VehicleDataFromDRD_NA: drdVehicleDataNA } }));
+    }
+  }, [drdVehicleDataNA, dispatch]);
 
   useEffect(() => {
     if (!ymm.year && !ymm.make && !ymm.model && !ymm.trim && !ymm.drive) {
