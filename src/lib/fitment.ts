@@ -2,12 +2,12 @@ import { DRDVehicleDataNAResponse, DRUpstepWheel, FitmentVehicleDetails } from "
 export type WheelAxleFitment = {
   boltPattern: string;
   centerBore: number;
- loadRating: number;
- wheelDiameter: number;
- wheelWidth: number;
- minOffset: number;
- maxOffset: number;
- compatibility: "Front" | "Rear" | "Front and Rear"
+  loadRating: number;
+  wheelDiameter: number;
+  wheelWidth: number;
+  minOffset: number;
+  maxOffset: number;
+  compatibility: "Front" | "Rear" | "Front and Rear"
 };
 
 
@@ -57,8 +57,8 @@ export function normalizeWheelFitment(
       loadRating,
       wheelDiameter,
       wheelWidth,
-      minOffset,
-      maxOffset,
+      minOffset: minOffset - 5, // make aggressive
+      maxOffset: maxOffset + 5, // make aggressive
       compatibility: 'Front',
     }
     const fitmentRear: WheelAxleFitment = {
@@ -67,8 +67,8 @@ export function normalizeWheelFitment(
       loadRating,
       wheelDiameter,
       wheelWidth,
-      minOffset,
-      maxOffset,
+      minOffset: minOffset - 5, // make aggressive
+      maxOffset: maxOffset + 5, // make aggressive
       compatibility: 'Rear',
     }
 
