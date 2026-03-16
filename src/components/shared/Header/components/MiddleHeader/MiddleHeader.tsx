@@ -27,7 +27,7 @@ export default function MiddleHeader() {
 
   return (
     <Container>
-      <div className="border-b bg-white">
+      <div className="border-b bg-white px-10">
         {isSearchOpen && (
           <div className="fixed inset-0 z-50 bg-white lg:hidden">
             <div className="flex items-center gap-2 p-4">
@@ -74,18 +74,13 @@ export default function MiddleHeader() {
                 />
               </div>
 
-              <div className="hidden items-center gap-2 md:flex">
+              <div className="hidden items-center gap-4 md:flex">
                 <Link
                   href={user?.email ? '/dashboard' : '/login'}
                   className="flex items-center gap-2"
                 >
-                  <UserCircle size={26} className="text-gray-600" />
-                  <div className='sr-only'>
-                    <p className="text-sm font-medium sr-only">MY ACCOUNT</p>
-                    <p className="text-xs text-gray-500">
-                      Hello, {user?.email ? user.email : 'Login'}{' '}
-                    </p>
-                  </div>
+                  <BiUserCircle size={32} className="text-gray-600" />
+                 
                 </Link>
 
                 <div
@@ -98,10 +93,7 @@ export default function MiddleHeader() {
                       {cartQuantity}
                     </span>
                   </div>
-                  <div className="hidden md:block">
-                    <p className="text-sm font-medium sr-only">MY CART</p>
-                    {/* <p className="text-xs text-gray-500">$0.00</p> */}
-                  </div>
+                  
                 </div>
               </div>
 

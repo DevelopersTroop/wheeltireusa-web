@@ -2,7 +2,6 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { trackEvent } from "@/lib/tracker";
 import { useGetProductsQuery } from "@/redux/apis/product";
 import { getProductThumbnail } from "@/utils/product";
-// import { getProductThumbnail, isCustomProduct, isCustomWheel } from "@/app/utils/product";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
@@ -20,7 +19,6 @@ const SearchSuggestion = ({
   onHistorySelect?: (query: string) => void;
 }) => {
   const router = useRouter();
-  // const { getProducts } = useProductFetch(); // Using the custom hook to fetch products
 
   const [debouncedSearch] = useDebounce(searchInput);
 
@@ -35,9 +33,9 @@ const SearchSuggestion = ({
   );
 
   useEffect(() => {
-    trackEvent("search", {
-      query: debouncedSearch,
-    });
+    if (debouncedSearch) {
+      trackEvent("search", { query: debouncedSearch });
+    }
   }, [debouncedSearch]);
 
   const dispatch = useAppDispatch();
