@@ -10,6 +10,7 @@ import { trackEvent } from "@/lib/tracker";
 import { useAppDispatch } from "@/redux/store";
 import { addSearchHistory } from "@/redux/features/layoutSlice";
 import SearchSuggestion from "./components/SearchSuggestion/SearchSuggestion";
+import { cn } from "@/lib/utils";
 
 interface HeaderSearchButtonProps {
   isHomepage: boolean;
@@ -25,7 +26,7 @@ const HeaderSearchButton: React.FC<HeaderSearchButtonProps> = ({
   const { control, handleSubmit, watch, setValue } = useForm({
     defaultValues: { search: "" },
   });
-  
+
   const dispatch = useAppDispatch();
 
   const searchInput = watch("search");
@@ -92,12 +93,13 @@ const HeaderSearchButton: React.FC<HeaderSearchButtonProps> = ({
       {open && (
         <div className="lg:hidden fixed inset-0 z-150 flex flex-col bg-white">
           {/* Search bar container */}
-          <div className="relative w-full bg-white flex flex-col shadow-sm">
+          <div className="relative w-full bg-white flex flex-col shadow-sm border-b border-gray-200">
             <form
-              className="w-full flex items-center border-b border-gray-300 h-16"
+              className="w-full flex items-center h-16 px-3 gap-3"
               onSubmit={handleSubmit(onSubmit)}
             >
-              <div className="flex-1 h-full">
+              <div className="flex-1 flex items-center bg-gray-100/80 rounded-lg h-11 px-3 relative border border-gray-200 focus-within:ring-1 focus-within:ring-primary/50 focus-within:border-primary focus-within:bg-white transition-all overflow-hidden shadow-inner">
+                <BiSearch className="w-5 h-5 text-gray-400 mr-2 shrink-0 pointer-events-none" />
                 <Controller
                   name="search"
                   control={control}
@@ -105,44 +107,38 @@ const HeaderSearchButton: React.FC<HeaderSearchButtonProps> = ({
                     <input
                       {...field}
                       id="mobile-search-input"
-                      type="text"
+                      type="search"
                       autoComplete="off"
                       placeholder="Search..."
-                      className="px-4 py-3 text-sm font-medium h-full border-none focus:outline-none w-full bg-white placeholder:text-gray-500"
+                      className="flex-1 bg-transparent text-[16px] h-full border-none focus:outline-none w-full text-gray-900 placeholder:text-gray-500 [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden [&::-ms-clear]:hidden"
                       onChange={(e) => {
                         field.onChange(e);
                       }}
                     />
                   )}
                 />
-              </div>
-
-              {/* Action buttons */}
-              <div className="flex items-center h-full">
                 {searchInput?.length > 0 && (
-                  <Button
+                  <button
                     type="button"
-                    variant="ghost"
                     onClick={() => {
                       setValue("search", "");
                       document.getElementById("mobile-search-input")?.focus();
                     }}
+                    className="flex items-center justify-center w-5 h-5 rounded-full bg-gray-300 hover:bg-gray-400 text-gray-700 shrink-0 ml-2 transition-colors duration-200"
                     aria-label="Clear search"
-                    className="h-full w-12 p-0 hover:bg-transparent rounded-none"
                   >
-                    <X className="h-4 w-4 text-gray-400 hover:text-gray-600" />
-                  </Button>
+                    <X className="w-3.5 h-3.5" />
+                  </button>
                 )}
-                <Button
-                  type="button"
-                  onClick={() => setOpen(false)}
-                  variant="ghost"
-                  aria-label="Close mobile search"
-                  className="h-full w-12 p-0 hover:bg-gray-50 rounded-none border-l border-gray-300"
-                >
-                  <X className="h-5 w-5 text-gray-800" />
-                </Button>
               </div>
+
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                className="text-[15px] font-medium text-gray-700 hover:text-gray-900 shrink-0 px-2"
+              >
+                Cancel
+              </button>
             </form>
           </div>
 
@@ -157,18 +153,16 @@ const HeaderSearchButton: React.FC<HeaderSearchButtonProps> = ({
       <div className="h-full flex items-center justify-end flex-1">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className={`flex items-center justify-end h-full w-full max-w-xl xl:max-w-2xl 2xl:max-w-3xl ${
-            open ? "z-150 relative" : ""
-          }`}
+          className={`flex items-center justify-end h-full w-full max-w-xl xl:max-w-2xl 2xl:max-w-3xl ${open ? "z-150 relative" : ""
+            }`}
         >
           {/* DESKTOP SEARCH BAR */}
           <div className="hidden lg:flex flex-1 mx-4 h-10 relative">
             <div
-              className={`flex w-full bg-white rounded-sm border items-center transition-shadow ${
-                open
+              className={`flex w-full bg-white rounded-sm border items-center transition-shadow ${open
                   ? "rounded-b-none ring-1 ring-primary border-primary"
                   : "border-gray-300 shadow-sm"
-              }`}
+                }`}
             >
               <Controller
                 name="search"
@@ -177,10 +171,10 @@ const HeaderSearchButton: React.FC<HeaderSearchButtonProps> = ({
                   <input
                     {...field}
                     id="desktop-search-input"
-                    type="text"
+                    type="search"
                     autoComplete="off"
                     placeholder="Search by Make Model Year, Product Type, Part Number, or Brand..."
-                    className="flex-1 px-4 h-full bg-transparent text-sm placeholder:text-gray-500 font-medium focus:outline-none rounded-sm"
+                    className="flex-1 px-4 h-full bg-transparent text-sm placeholder:text-gray-500 font-medium focus:outline-none rounded-sm [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden [&::-ms-clear]:hidden"
                     onClick={() => {
                       if (!open) setOpen(true);
                     }}
@@ -205,9 +199,8 @@ const HeaderSearchButton: React.FC<HeaderSearchButtonProps> = ({
                       document.getElementById("desktop-search-input")?.focus();
                     }}
                     aria-label="Clear search"
-                    className={`w-10 h-full p-0 rounded-none hover:bg-transparent ${
-                      open ? "flex" : "hidden"
-                    }`}
+                    className={`w-10 h-full p-0 rounded-none hover:bg-transparent ${open ? "flex" : "hidden"
+                      }`}
                   >
                     <X className="h-4 w-4 text-gray-400 hover:text-gray-600" />
                   </Button>
@@ -235,7 +228,14 @@ const HeaderSearchButton: React.FC<HeaderSearchButtonProps> = ({
 
           {/* MOBILE SEARCH ICON */}
           <div
-            className="lg:hidden cursor-pointer shrink-0"
+            className={
+              cn(
+                "lg:hidden cursor-pointer shrink-0 z-0 relative",
+                {
+                  "hidden": open
+                }
+              )
+            }
             onClick={(e) => {
               e.preventDefault();
               setOpen(true);
