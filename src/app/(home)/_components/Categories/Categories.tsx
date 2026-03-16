@@ -19,8 +19,8 @@ const items = [
 
 export const Categories = () => {
   return (
-    <Container className="py-20">
-      <div className="grid grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 lg:gap-8 justify-items-center">
+    <Container className="py-30 px-40">
+      <div className="grid grid-cols-3 lg:grid-cols-4 xl:grid-cols-3 gap-10 lg:gap-8 justify-items-center">
         {items.map((item, index) => (
           <Link
             key={index}

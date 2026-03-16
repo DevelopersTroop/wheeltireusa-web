@@ -79,7 +79,9 @@ export default function RootLayout({
             <CheckoutProvider>
               <Header />
               <DynamicAnalytics />
-              <main>{children}</main>
+              <div className='-mt-1'>
+                <main>{children}</main>
+              </div>
               <Footer />
               <Toaster richColors />
             </CheckoutProvider>

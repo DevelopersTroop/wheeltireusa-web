@@ -55,7 +55,7 @@ const Newsletter = () => {
       >
         <DialogContent
           closeIconStyle="h-6 w-6 !text-white md:mr-0 md:mt-0 mt-5 mr-5 text-black"
-          className="max-w-3xl !rounded-none border-none md:p-0 p-6"
+          className="max-w-3xl  h-full mb- !rounded-none border-none md:p-0 p-6"
         >
           <DialogTitle className="sr-only">Newsletter Subscription</DialogTitle>
           <div className="flex flex-col md:flex-row  ">
