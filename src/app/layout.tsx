@@ -11,6 +11,7 @@ import { Roboto_Flex } from 'next/font/google';
 import Script from 'next/script';
 import { Toaster } from 'sonner';
 import CartSystem from './cart/v2/page';
+import { MaintenanceMode } from '@/components/maintenanceMode';
 const robotoFlex = Roboto_Flex({
   variable: '--font-roboto-flex',
   subsets: ['latin'],
@@ -74,20 +75,22 @@ export default function RootLayout({
         `,
           }}
         />
-        <GoogleMapScriptLoader>
-          <ReduxWrapper>
-            <CheckoutProvider>
-              <Header />
-              <DynamicAnalytics />
-              <main>{children}</main>
-              <Footer />
-              <Toaster richColors />
-            </CheckoutProvider>
-            <Newsletter />
-            <CartSystem />
-            {/* <ComparisonWidget /> */}
-          </ReduxWrapper>
-        </GoogleMapScriptLoader>
+        <ReduxWrapper>
+          <MaintenanceMode>
+            <GoogleMapScriptLoader>
+              <CheckoutProvider>
+                <Header />
+                <DynamicAnalytics />
+                <main>{children}</main>
+                <Footer />
+                <Toaster richColors />
+              </CheckoutProvider>
+              <Newsletter />
+              <CartSystem />
+            </GoogleMapScriptLoader>
+          </MaintenanceMode>
+          {/* <ComparisonWidget /> */}
+        </ReduxWrapper>
       </body>
     </html>
   );

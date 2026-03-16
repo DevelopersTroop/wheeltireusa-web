@@ -49,6 +49,18 @@ function NavBar() {
   const handleMouseLeave = () => {
     setSubmenuTimeout(setTimeout(() => setOpenMenu(null), 400)); // Slight delay before disappearing
   };
+
+  // Close menu on scroll
+  useEffect(() => {
+    if (!openMenu) return;
+
+    const handleScroll = () => {
+      setOpenMenu(null);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [openMenu]);
   return (
     <Container>
       <nav

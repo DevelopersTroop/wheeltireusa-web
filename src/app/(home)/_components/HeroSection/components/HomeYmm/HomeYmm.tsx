@@ -208,9 +208,9 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
   if (variant === "product") {
     if (hasVehicleSelected) {
       return (
-        <div className="w-full bg-white border-b-4 border-[#3D8B3D] px-4 md:px-6 py-4 shadow-md rounded-t-sm flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="w-full bg-white border-b-4 border-primary px-4 md:px-6 py-4 shadow-md rounded-t-sm flex flex-col md:flex-row items-center justify-center gap-5">
           <div className="flex items-center gap-3">
-            <CheckCircle2 className="w-6 h-6 shrink-0 fill-[#3D8B3D] text-white" />
+            <CheckCircle2 className="w-6 h-6 shrink-0 fill-primary text-white" />
             <span className="font-extrabold text-gray-900 uppercase text-[15px] tracking-tight">
               {activeGarageItem
                 ? `${activeGarageItem.year} ${activeGarageItem.make} ${activeGarageItem.model || ''} ${activeGarageItem.trim && activeGarageItem.trim !== '__DEFAULT_TRIM__' ? activeGarageItem.trim : ''} ${activeGarageItem.drive && activeGarageItem.drive !== '__DEFAULT_DRIVE__' ? activeGarageItem.drive : ''}`.trim()
@@ -337,7 +337,7 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
     return (
       <div className="w-full max-w-5xl mx-auto rounded-sm shadow-xl bg-[#F8F8F8] p-6 lg:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex items-center gap-4 lg:gap-6">
-          <CheckCircle2 className="w-10 h-10 shrink-0 fill-green-600 text-white" />
+          <CheckCircle2 className="w-10 h-10 shrink-0 fill-primary text-white" />
           <div className="flex flex-col">
             <span className="text-xs text-[#6B7280] font-bold uppercase tracking-wide mb-1">Shopping For</span>
             <span className="text-2xl lg:text-3xl font-black text-[#111827] uppercase leading-none">
@@ -355,7 +355,7 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
           </button>
           <button
             onClick={(e) => onSubmit(e, { targetPath: activeTab === 'tire' ? '/collections/product-category/tire' : '/collections/product-category/wheels' })}
-            className="flex-1 md:flex-none min-[375px]:px-4 px-6 lg:px-8 py-3 bg-[#dc5454] hover:bg-red-600 rounded-sm text-sm font-bold text-white uppercase shadow-sm whitespace-nowrap transition-colors"
+            className="flex-1 md:flex-none min-[375px]:px-4 px-6 lg:px-8 py-3 bg-primary hover:bg-primary/90 rounded-sm text-sm font-bold text-white uppercase shadow-sm whitespace-nowrap transition-colors"
           >
             SHOP NOW
           </button>
@@ -371,23 +371,23 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
         <TabsList className="w-full flex bg-[#F0F2F5] border-b border-gray-200 h-auto p-0 rounded-none justify-start">
           <TabsTrigger
             value="vehicle"
-            className=" cursor-pointer flex-1 py-4 flex justify-center items-center gap-2 font-bold text-xs sm:text-sm uppercase transition-colors relative rounded-none data-[state=active]:bg-white data-[state=active]:text-gray-900 border-b-2 border-transparent data-[state=active]:border-red-600 data-[state=active]:shadow-none text-gray-500 hover:bg-gray-50 bg-transparent"
+            className=" cursor-pointer flex-1 py-4 flex justify-center items-center gap-2 font-bold text-xs sm:text-sm uppercase transition-colors relative rounded-none data-[state=active]:bg-white data-[state=active]:text-gray-900 border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none text-gray-500 hover:bg-gray-50 bg-transparent"
           >
-            <CarFront className={cn("w-4 h-4", activeTab === "vehicle" ? "text-red-600" : "text-gray-400")} />
+            <CarFront className={cn("w-4 h-4", activeTab === "vehicle" ? "text-primary" : "text-gray-400")} />
             BY VEHICLE
           </TabsTrigger>
           <TabsTrigger
             value="wheel"
-            className=" cursor-pointer flex-1 py-4 flex justify-center items-center gap-2 font-bold text-xs sm:text-sm uppercase transition-colors relative rounded-none data-[state=active]:bg-white data-[state=active]:text-gray-900 border-b-2 border-transparent data-[state=active]:border-red-600 data-[state=active]:shadow-none text-gray-500 hover:bg-gray-50 bg-transparent"
+            className=" cursor-pointer flex-1 py-4 flex justify-center items-center gap-2 font-bold text-xs sm:text-sm uppercase transition-colors relative rounded-none data-[state=active]:bg-white data-[state=active]:text-gray-900 border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none text-gray-500 hover:bg-gray-50 bg-transparent"
           >
-            <GiCarWheel className={cn("w-4 h-4", activeTab === "wheel" ? "text-red-600" : "text-gray-400")} />
+            <GiCarWheel className={cn("w-4 h-4", activeTab === "wheel" ? "text-primary" : "text-gray-400")} />
             BY WHEEL
           </TabsTrigger>
           <TabsTrigger
             value="tire"
-            className=" cursor-pointer flex-1 py-4 flex justify-center items-center gap-2 font-bold text-xs sm:text-sm uppercase transition-colors relative rounded-none data-[state=active]:bg-white data-[state=active]:text-gray-900 border-b-2 border-transparent data-[state=active]:border-red-600 data-[state=active]:shadow-none text-gray-500 hover:bg-gray-50 bg-transparent"
+            className=" cursor-pointer flex-1 py-4 flex justify-center items-center gap-2 font-bold text-xs sm:text-sm uppercase transition-colors relative rounded-none data-[state=active]:bg-white data-[state=active]:text-gray-900 border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none text-gray-500 hover:bg-gray-50 bg-transparent"
           >
-            <PiTireThin className={cn("w-4 h-4", activeTab === "tire" ? "text-red-600" : "text-gray-400")} />
+            <PiTireThin className={cn("w-4 h-4", activeTab === "tire" ? "text-primary" : "text-gray-400")} />
             BY TIRE
           </TabsTrigger>
         </TabsList>
@@ -482,7 +482,7 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
                   disabled={isDisabledSubmit || !shouldShowSubmit}
                   className={cn(
                     "w-full h-12 text-white font-bold text-lg uppercase rounded shadow flex items-center justify-center transition-opacity",
-                    isDisabledSubmit || !shouldShowSubmit ? "bg-[#dca4a4] cursor-not-allowed opacity-80" : "bg-[#dc5454] hover:bg-red-600"
+                    isDisabledSubmit || !shouldShowSubmit ? "bg-primary/50 cursor-not-allowed opacity-80" : "bg-primary hover:bg-primary/90"
                   )}
                 >
                   GO
@@ -535,7 +535,7 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
               <div className="lg:w-32 shrink-0">
                 <button
                   className={cn(
-                    "w-full h-12 text-white font-bold text-lg uppercase rounded shadow flex items-center justify-center transition-opacity bg-[#dca4a4] cursor-not-allowed opacity-80"
+                    "w-full h-12 text-white font-bold text-lg uppercase rounded shadow flex items-center justify-center transition-opacity bg-primary/50 cursor-not-allowed opacity-80"
                   )}
                   disabled
                 >
@@ -589,7 +589,7 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
               <div className="lg:w-32 shrink-0">
                 <button
                   className={cn(
-                    "w-full h-12 text-white font-bold text-lg uppercase rounded shadow flex items-center justify-center transition-opacity bg-[#dca4a4] cursor-not-allowed opacity-80"
+                    "w-full h-12 text-white font-bold text-lg uppercase rounded shadow flex items-center justify-center transition-opacity bg-primary/50 cursor-not-allowed opacity-80"
                   )}
                   disabled
                 >
