@@ -44,7 +44,7 @@ const RegisterPage = () => {
       <div className="relative z-10 my-3 w-full max-w-4xl mx-4 rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row bg-white/10 backdrop-blur-lg border border-white/20">
         
         {/* Left Hero Section */}
-        <div className="hidden md:flex md:w-2/3 flex-col justify-center p-12 text-white">
+        <div className="hidden md:flex md:w-2/3 mb-70 flex-col justify-center p-12 text-white">
           <h1 className="text-5xl font-extrabold uppercase mb-4 animate-slide-up">
             Join Us Today
           </h1>
@@ -115,7 +115,7 @@ const RegisterPage = () => {
                         <Input
                           {...field}
                           placeholder="First Name"
-                          className={`w-full ${formErrors.firstName && touched.firstName ? "border-red-500" : ""}`}
+                          className={`w-full text-gray-300 ${formErrors.firstName && touched.firstName ? "border-red-500" : ""}`}
                         />
                       )}
                     </Field>
@@ -130,7 +130,7 @@ const RegisterPage = () => {
                         <Input
                           {...field}
                           placeholder="Last Name"
-                          className={`w-full ${formErrors.lastName && touched.lastName ? "border-red-500" : ""}`}
+                          className={`w-full text-gray-300 ${formErrors.lastName && touched.lastName ? "border-red-500" : ""}`}
                         />
                       )}
                     </Field>
@@ -148,7 +148,7 @@ const RegisterPage = () => {
                         {...field}
                         type="email"
                         placeholder="you@example.com"
-                        className={`w-full ${formErrors.email && touched.email ? "border-red-500" : ""}`}
+                        className={`w-full text-gray-300 ${formErrors.email && touched.email ? "border-red-500" : ""}`}
                       />
                     )}
                   </Field>
@@ -165,7 +165,7 @@ const RegisterPage = () => {
                         {...field}
                         type="password"
                         placeholder="••••••••"
-                        className={`w-full ${formErrors.password && touched.password ? "border-red-500" : ""}`}
+                        className={`w-full text-gray-300 ${formErrors.password && touched.password ? "border-red-500" : ""}`}
                       />
                     )}
                   </Field>
