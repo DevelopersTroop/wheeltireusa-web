@@ -7,6 +7,8 @@ import { X } from "lucide-react";
 import { BiSearch } from "react-icons/bi";
 import { Controller, useForm } from "react-hook-form";
 import { trackEvent } from "@/lib/tracker";
+import { useAppDispatch } from "@/redux/store";
+import { addSearchHistory } from "@/redux/features/layoutSlice";
 import SearchSuggestion from "./components/SearchSuggestion/SearchSuggestion";
 
 interface HeaderSearchButtonProps {
@@ -23,6 +25,8 @@ const HeaderSearchButton: React.FC<HeaderSearchButtonProps> = ({
   const { control, handleSubmit, watch, setValue } = useForm({
     defaultValues: { search: "" },
   });
+  
+  const dispatch = useAppDispatch();
 
   const searchInput = watch("search");
 
@@ -36,10 +40,12 @@ const HeaderSearchButton: React.FC<HeaderSearchButtonProps> = ({
       document.addEventListener("keydown", handleEscape);
       document.body.style.overflow = "hidden";
 
-      const input = document.querySelector<HTMLInputElement>(
-        'input[name="search"]'
-      );
-      input?.focus();
+      // Focus appropriate input based on screen size
+      if (window.innerWidth >= 1024) {
+        document.getElementById("desktop-search-input")?.focus();
+      } else {
+        document.getElementById("mobile-search-input")?.focus();
+      }
     } else {
       document.body.style.overflow = "auto";
     }
@@ -53,28 +59,42 @@ const HeaderSearchButton: React.FC<HeaderSearchButtonProps> = ({
   const onSubmit = (data: { search: string }) => {
     const trimmed = data.search.trim();
     if (!trimmed) return;
+    dispatch(addSearchHistory(trimmed));
     setOpen(true); // ✅ open overlay on actual submit
     trackEvent("search", {
       query: trimmed,
     });
   };
 
+  const handleHistorySelect = (query: string) => {
+    setValue("search", query);
+    setOpen(true);
+    // Focus appropriate input to run native onChange query search
+    if (window.innerWidth >= 1024) {
+      document.getElementById("desktop-search-input")?.focus();
+    } else {
+      document.getElementById("mobile-search-input")?.focus();
+    }
+  };
+
   return (
     <>
-      {/* FULLSCREEN SEARCH OVERLAY */}
+      {/* BACKGROUND OVERLAY FOR DESKTOP */}
       {open && (
-        <div className="fixed inset-0 z-150">
-          {/* Background overlay */}
-          <button
-            onClick={() => setOpen(false)}
-            className="absolute inset-0 bg-gray-900/40 cursor-default border-none"
-            aria-label="Close search overlay"
-          />
+        <button
+          onClick={() => setOpen(false)}
+          className="hidden lg:block fixed inset-0 bg-gray-900/60 cursor-default border-none z-140 transition-opacity"
+          aria-label="Close search overlay"
+        />
+      )}
 
+      {/* MOBILE FULLSCREEN SEARCH OVERLAY */}
+      {open && (
+        <div className="lg:hidden fixed inset-0 z-150 flex flex-col bg-white">
           {/* Search bar container */}
-          <div className="relative bg-white shadow-md h-20 mx-auto max-w-7xl">
+          <div className="relative w-full bg-white flex flex-col shadow-sm">
             <form
-              className="h-full flex items-center border-b border-gray-200"
+              className="w-full flex items-center border-b border-gray-300 h-16"
               onSubmit={handleSubmit(onSubmit)}
             >
               <div className="flex-1 h-full">
@@ -84,16 +104,13 @@ const HeaderSearchButton: React.FC<HeaderSearchButtonProps> = ({
                   render={({ field }) => (
                     <input
                       {...field}
+                      id="mobile-search-input"
                       type="text"
-                      placeholder="Search wheels"
-                      className="px-6 font-medium text-2xl h-full border-none focus:outline-none w-full bg-white"
-                      aria-label="Search for wheels and products"
+                      autoComplete="off"
+                      placeholder="Search..."
+                      className="px-4 py-3 text-sm font-medium h-full border-none focus:outline-none w-full bg-white placeholder:text-gray-500"
                       onChange={(e) => {
                         field.onChange(e);
-                        // ✅ Open overlay only once user *starts typing*
-                        if (!open && e.target.value.trim().length > 0) {
-                          setOpen(true);
-                        }
                       }}
                     />
                   )}
@@ -101,29 +118,37 @@ const HeaderSearchButton: React.FC<HeaderSearchButtonProps> = ({
               </div>
 
               {/* Action buttons */}
-              <div className="flex items-center gap-4 px-6">
+              <div className="flex items-center h-full">
+                {searchInput?.length > 0 && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    onClick={() => {
+                      setValue("search", "");
+                      document.getElementById("mobile-search-input")?.focus();
+                    }}
+                    aria-label="Clear search"
+                    className="h-full w-12 p-0 hover:bg-transparent rounded-none"
+                  >
+                    <X className="h-4 w-4 text-gray-400 hover:text-gray-600" />
+                  </Button>
+                )}
                 <Button
                   type="button"
-                  variant="ghost"
                   onClick={() => setOpen(false)}
-                  aria-label="Close search"
-                  className="p-2"
-                >
-                  <X className="h-6 w-6 text-gray-600" />
-                </Button>
-                <Button
-                  type="submit"
                   variant="ghost"
-                  aria-label="Submit search"
-                  className="p-2"
+                  aria-label="Close mobile search"
+                  className="h-full w-12 p-0 hover:bg-gray-50 rounded-none border-l border-gray-300"
                 >
-                  <BiSearch className="h-6 w-6 text-black" />
+                  <X className="h-5 w-5 text-gray-800" />
                 </Button>
               </div>
             </form>
+          </div>
 
-            {/* Suggestions */}
-            <SearchSuggestion setOpen={setOpen} searchInput={searchInput} />
+          {/* Suggestions Container */}
+          <div className="flex-1 bg-white overflow-y-auto">
+            <SearchSuggestion setOpen={setOpen} searchInput={searchInput} onHistorySelect={handleHistorySelect} />
           </div>
         </div>
       )}
@@ -132,23 +157,35 @@ const HeaderSearchButton: React.FC<HeaderSearchButtonProps> = ({
       <div className="h-full flex items-center justify-end flex-1">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex items-center justify-end h-full w-full max-w-xl xl:max-w-2xl 2xl:max-w-3xl"
+          className={`flex items-center justify-end h-full w-full max-w-xl xl:max-w-2xl 2xl:max-w-3xl ${
+            open ? "z-150 relative" : ""
+          }`}
         >
           {/* DESKTOP SEARCH BAR */}
-          <div className="hidden lg:flex flex-1 mx-4">
-            <div className="relative w-full">
+          <div className="hidden lg:flex flex-1 mx-4 h-10 relative">
+            <div
+              className={`flex w-full bg-white rounded-sm border items-center transition-shadow ${
+                open
+                  ? "rounded-b-none ring-1 ring-primary border-primary"
+                  : "border-gray-300 shadow-sm"
+              }`}
+            >
               <Controller
                 name="search"
                 control={control}
                 render={({ field }) => (
-                  <Input
+                  <input
                     {...field}
+                    id="desktop-search-input"
                     type="text"
-                    placeholder="Search wheels"
-                    className="w-full pl-4 pr-10 h-12"
+                    autoComplete="off"
+                    placeholder="Search by Make Model Year, Product Type, Part Number, or Brand..."
+                    className="flex-1 px-4 h-full bg-transparent text-sm placeholder:text-gray-500 font-medium focus:outline-none rounded-sm"
+                    onClick={() => {
+                      if (!open) setOpen(true);
+                    }}
                     onChange={(e) => {
                       field.onChange(e);
-                      // ✅ open overlay only when user *starts typing*
                       if (!open && e.target.value.trim().length > 0) {
                         setOpen(true);
                       }
@@ -156,20 +193,49 @@ const HeaderSearchButton: React.FC<HeaderSearchButtonProps> = ({
                   />
                 )}
               />
-              <Button
-                type="submit"
-                className="absolute right-0 top-1/2 bottom-0 px-3 -translate-y-1/2"
-                variant="ghost"
-                aria-label="Submit desktop search"
-              >
-                <BiSearch className="h-6 w-6" />
-              </Button>
+
+              <div className="flex items-center h-full">
+                {searchInput?.length > 0 && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setValue("search", "");
+                      document.getElementById("desktop-search-input")?.focus();
+                    }}
+                    aria-label="Clear search"
+                    className={`w-10 h-full p-0 rounded-none hover:bg-transparent ${
+                      open ? "flex" : "hidden"
+                    }`}
+                  >
+                    <X className="h-4 w-4 text-gray-400 hover:text-gray-600" />
+                  </Button>
+                )}
+                <Button
+                  type="submit"
+                  className="h-full px-3 hover:bg-gray-50 rounded-none border-l border-gray-200"
+                  variant="ghost"
+                  aria-label="Submit desktop search"
+                >
+                  <BiSearch className="h-5 w-5 text-gray-500" />
+                </Button>
+              </div>
             </div>
+
+            {/* DESKTOP DROPDOWN EXACTLY LIKE CARID */}
+            {open && (
+              <div className="absolute top-full left-0 right-0 mt-0 bg-white shadow-lg overflow-hidden border border-t-0 border-primary rounded-b-sm max-h-[70vh] flex flex-col z-150">
+                <div className="flex-1 overflow-y-auto w-full">
+                  <SearchSuggestion setOpen={setOpen} searchInput={searchInput} onHistorySelect={handleHistorySelect} />
+                </div>
+              </div>
+            )}
           </div>
 
           {/* MOBILE SEARCH ICON */}
           <div
-            className="lg:hidden cursor-pointer"
+            className="lg:hidden cursor-pointer shrink-0"
             onClick={(e) => {
               e.preventDefault();
               setOpen(true);
