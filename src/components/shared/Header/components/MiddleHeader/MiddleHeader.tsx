@@ -11,7 +11,7 @@ import { BiShoppingBag, BiUserCircle } from 'react-icons/bi';
 import HeaderSearchButton from './components/HeaderSearchButton/HeaderSearchButton';
 import MobileNavbar from './components/MobileNavBar/MobileNavBar';
 import Container from '@/components/ui/container/container';
-import { PhoneCall } from 'lucide-react';
+import { PhoneCall, ShoppingCartIcon, UserCircle } from 'lucide-react';
 
 export default function MiddleHeader() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -44,7 +44,7 @@ export default function MiddleHeader() {
         )}
 
         <div className="py-3">
-          <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center justify-between gap-8">
             <MobileNavbar />
 
             <div className="flex items-center overflow-hidden shrink-0">
@@ -74,14 +74,14 @@ export default function MiddleHeader() {
                 />
               </div>
 
-              <div className="hidden items-center gap-8 md:flex">
+              <div className="hidden items-center gap-2 md:flex">
                 <Link
                   href={user?.email ? '/dashboard' : '/login'}
                   className="flex items-center gap-2"
                 >
-                  <BiUserCircle size={32} className="text-gray-600" />
-                  <div>
-                    <p className="text-sm font-medium">MY ACCOUNT</p>
+                  <UserCircle size={26} className="text-gray-600" />
+                  <div className='sr-only'>
+                    <p className="text-sm font-medium sr-only">MY ACCOUNT</p>
                     <p className="text-xs text-gray-500">
                       Hello, {user?.email ? user.email : 'Login'}{' '}
                     </p>
@@ -93,13 +93,13 @@ export default function MiddleHeader() {
                   onClick={setOpen}
                 >
                   <div className="relative">
-                    <BiShoppingBag size={26} className="text-gray-600" />
+                    <ShoppingCartIcon size={26} className="text-gray-600" />
                     <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-xs text-white">
                       {cartQuantity}
                     </span>
                   </div>
                   <div className="hidden md:block">
-                    <p className="text-sm font-medium">MY CART</p>
+                    <p className="text-sm font-medium sr-only">MY CART</p>
                     {/* <p className="text-xs text-gray-500">$0.00</p> */}
                   </div>
                 </div>
@@ -110,7 +110,7 @@ export default function MiddleHeader() {
                   <PhoneCall size={22} />
                 </a>
                 <div onClick={setOpen} className="relative cursor-pointer">
-                  <BiShoppingBag size={26} className="text-gray-600" />
+                  <ShoppingCartIcon size={26} className="text-gray-600" />
                   <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-xs text-white">
                     {cartQuantity}
                   </span>
