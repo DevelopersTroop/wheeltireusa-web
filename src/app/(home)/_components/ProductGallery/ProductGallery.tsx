@@ -38,11 +38,11 @@ const ProductGallery: React.FC<{
   return (
     <div>
       {/* {galleryData.map((gallery, galleryIndex) => ( */}
-      <div className="max-w-[1350px] p-4 mx-auto py-10">
+      <div className="max-w-[1350px] p-4 mx-auto py-10 px-25">
         {/* Section Title */}
         <div className="py-4 lg:py-8">
           <hr className="border-primary border-[1.5px] w-[100px]" />
-          <h3 className="text-3xl lg:text-5xl font-bold uppercase">{title}</h3>
+          <h3 className="text-3xl lg:text-4xl font-bold uppercase">{title}</h3>
         </div>
 
         {/* Swiper Gallery */}
@@ -64,12 +64,12 @@ const ProductGallery: React.FC<{
           }}
           loop={true}
           spaceBetween={20}
-          className="relative !w-full"
+          className="relative !w-full "
         >
           <button
             className={`swiper-button-next-123 w-fit text-black rounded-md absolute left-0 top-1/2 cursor-pointer z-30`}
           >
-            <ChevronLeft size={38} />
+            <ChevronLeft  size={38} />
           </button>
           {isLoading
             ? Array.from({ length: 8 }).map((_, i) => {
@@ -96,7 +96,7 @@ const ProductGallery: React.FC<{
                           <h4 className="text-lg font-semibold mt-2 text-center">
                             {product?.title}
                           </h4>
-                          <h4 className="text-lg font-semibold mt-2 text-center">
+                          <h4 className="text-md font-semibold mt-2 text-center">
                             {product?.partNumber}
                           </h4>
                         </div>
@@ -113,12 +113,12 @@ const ProductGallery: React.FC<{
           </button>
         </Swiper>
 
-        <div className="text-center mt-4">
-          <button className="px-4 py-2 text-primary bg-white bg-opacity-50 text-2xl font-semibold uppercase outline outline-1 outline-primary hover:bg-primary hover:text-white">
-            <Link href="/collections/product-category/wheels">
-              View popular wheels
-            </Link>
-          </button>
+        <div className="text-center mt-8">
+          <button className="px-6 py-3 rounded-md text-primary bg-[#d4d2d2]/50 text-lg md:text-xl font-semibold uppercase border border-primary transition-all duration-300 ease-in-out hover:bg-primary hover:text-white">
+          <Link href="/collections/product-category/wheels">
+            View Popular Wheels
+          </Link>
+        </button>
         </div>
       </div>
       {/* ))} */}

@@ -15,11 +15,11 @@ const TodaysDeals = () => {
   const { data, isLoading } = useGetProductsQuery({});
 
   return (
-    <div className="max-w-[1350px] p-4 mx-auto py-10">
+    <div className="max-w-[1350px] p-4 mx-auto py-10 px-25">
       {/* Section Title */}
       <div className="py-4 lg:py-8">
         <hr className="border-primary border-[1.5px] w-[100px]" />
-        <h3 className="text-3xl lg:text-5xl font-bold uppercase">
+        <h3 className="text-3xl lg:text-4xl font-bold uppercase">
           Todays deals
         </h3>
       </div>
@@ -68,7 +68,7 @@ const TodaysDeals = () => {
                     <h4 className="text-lg font-semibold mt-2 text-center">
                       {product?.title}
                     </h4>
-                    <h4 className="text-lg font-semibold mt-2 text-center">
+                    <h4 className="text-md  mt-2 text-center">
                       {product?.partNumber}
                     </h4>
                   </div>
@@ -82,10 +82,10 @@ const TodaysDeals = () => {
         </button>
       </Swiper>
 
-      <div className="text-center mt-4">
-        <button className="px-4 py-2 text-primary bg-white bg-opacity-50 text-2xl font-semibold uppercase outline outline-1 outline-primary hover:bg-primary hover:text-white">
+      <div className="text-center mt-8">
+        <button className="px-6 py-3 rounded-md text-primary bg-[#d4d2d2]/50 text-lg md:text-xl font-semibold uppercase border border-primary transition-all duration-300 ease-in-out hover:bg-primary hover:text-white">
           <Link href="/collections/product-category/wheels">
-            View todays deals
+            View Todays Deals
           </Link>
         </button>
       </div>

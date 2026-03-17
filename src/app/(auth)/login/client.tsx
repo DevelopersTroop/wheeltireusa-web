@@ -55,7 +55,7 @@ const LoginPage = () => {
       <div className="relative z-10 my-3 w-full max-w-4xl mx-4 rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row bg-white/10 backdrop-blur-lg border border-white/20">
         
         {/* Left Hero Section */}
-        <div className="hidden md:flex md:w-2/3 flex-col justify-center p-12 text-white">
+        <div className="hidden md:flex md:w-2/3 mb-70 flex-col justify-center p-12 text-white">
           <h1 className="text-5xl font-extrabold uppercase mb-4 animate-slide-up">
             Welcome Back
           </h1>
@@ -113,12 +113,12 @@ const LoginPage = () => {
                         {...field}
                         type="email"
                         placeholder="you@example.com"
-                        className={`w-full ${formErrors.email && touched.email ? "border-red-500" : ""}`}
+                        className={`w-full text-gray-300 ${formErrors.email && touched.email ? "border-red-500" : ""}`}
                       />
                     )}
                   </Field>
                   {formErrors.email && touched.email && (
-                    <p className="mt-1 text-sm text-red-500">{formErrors.email}</p>
+                    <p className="mt-1 text-sm text-primary">{formErrors.email}</p>
                   )}
                 </div>
 
@@ -130,7 +130,7 @@ const LoginPage = () => {
                         {...field}
                         type="password"
                         placeholder="••••••••"
-                        className={`w-full ${formErrors.password && touched.password ? "border-red-500" : ""}`}
+                        className={`w-full text-gray-300 ${formErrors.password && touched.password ? "border-red-500" : ""}`}
                       />
                     )}
                   </Field>

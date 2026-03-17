@@ -47,65 +47,98 @@ const HomeBlogList = () => {
     ];
 
     return (
-        <Container className="my-12 py-10">
-            <div className="py-4 lg:py-8">
-                <hr className="border-primary border-[1.5px] w-[100px]" />
-                <h3 className="text-3xl lg:text-5xl font-bold uppercase">Latest News</h3>
-            </div>
+        <>
+            
 
-            <div className="relative">
-                <Swiper
-                    modules={[Autoplay, Navigation]}
-                    navigation={{
-                        nextEl: `.swiper-button-next-blog`,
-                        prevEl: `.swiper-button-prev-blog`,
-                    }}
-                    breakpoints={{
-                        320: { slidesPerView: 1 },
-                        640: { slidesPerView: 2 },
-                        1024: { slidesPerView: 3 },
-                    }}
-                    spaceBetween={24}
-                    className="!w-full !pb-10"
-                >
-                    {posts.map((blog, i) => (
-                        <SwiperSlide key={i} className="h-auto">
-                            <div className="bg-white shadow-lg rounded-[6px] p-4 flex flex-col h-full">
-                                <Link href={`/blog/${blog.slug}`} className="relative h-[180px] w-full block">
-                                    <Image
-                                        fill
-                                        src={blog.image}
-                                        alt={blog.title}
-                                        style={{ objectFit: "cover" }}
-                                    />
-                                </Link>
-                                <div className="mt-3 flex-1">
-                                    <Link href={`/blog/${blog.slug}`}>
-                                        <h3 className="font-bold text-xl">{blog.title}</h3>
+            <div className="max-w-[1350px] p-4 mx-auto py-10 px-25">
+                {/* Section Title */}
+                <div className="py-4 lg:py-8">
+                    <hr className="border-primary border-[1.5px] w-[100px]" />
+                    <h3 className="text-3xl lg:text-4xl font-bold uppercase">
+                        Latest News
+                    </h3>
+                </div>
+
+                {/* Slider */}
+                <div className="relative">
+                    <Swiper
+                        modules={[Autoplay, Navigation]}
+                        navigation={{
+                            nextEl: ".swiper-button-next-blog",
+                            prevEl: ".swiper-button-prev-blog",
+                        }}
+                        breakpoints={{
+                            320: { slidesPerView: 1 },
+                            640: { slidesPerView: 2 },
+                            1024: { slidesPerView: 3 },
+                        }}
+                        spaceBetween={45}
+                        loop={true}
+                        style={{ paddingLeft: 35, paddingRight: 35 }}
+                        className="!w-full !pb-10"
+                    >
+                        {/* LEFT BUTTON */}
+                        <button className="swiper-button-prev-blog cursor-pointer absolute left-0 top-1/2 -translate-y-1/2 z-30 hover:scale-110 transition-all duration-200">
+                            <ChevronLeft size={38} />
+                        </button>
+
+                        {/* Slides */}
+                        {posts.map((blog, i) => (
+                            <SwiperSlide key={i} className="flex">
+                                <div className="shadow-lg rounded-[6px] p-4 flex flex-col h-[360px] w-full hover:shadow-xl transition-all duration-300">
+
+                                    {/* Image */}
+                                    <Link
+                                        href={`/blog/${blog.slug}`}
+                                        className="relative h-[160px] w-full block overflow-hidden rounded-md"
+                                    >
+                                        <Image
+                                            fill
+                                            src={blog.image}
+                                            alt={blog.title}
+                                            style={{ objectFit: "cover" }}
+                                        />
                                     </Link>
-                                    <p className="text-muted font-semibold">{blog.date}</p>
-                                    <p className="text-muted">{truncWord(blog.excerpt, 30)}</p>
-                                </div>
-                                <Link
-                                    className="inline-flex text-primary font-medium text-sm items-center gap-1 mt-2"
-                                    href={`/blog/${blog.slug}`}
-                                >
-                                    <span>Read More</span>
-                                    <ChevronRight size={18} />
-                                </Link>
-                            </div>
-                        </SwiperSlide>
-                    ))}
-                </Swiper>
 
-                <button className="swiper-button-prev-blog w-fit text-black rounded-md absolute left-0 top-1/2 -translate-y-1/2 z-30 disabled:opacity-50">
-                    <ChevronLeft size={38} />
-                </button>
-                <button className="swiper-button-next-blog w-fit text-black rounded-md absolute right-0 top-1/2 -translate-y-1/2 z-30 disabled:opacity-50">
-                    <ChevronRight size={38} />
-                </button>
+                                    {/* Content */}
+                                    <div className="mt-3 flex flex-col flex-grow">
+                                        <Link href={`/blog/${blog.slug}`}>
+                                            <h3 className="font-bold text-lg line-clamp-2 hover:text-primary transition-colors">
+                                                {blog.title}
+                                            </h3>
+                                        </Link>
+
+                                        <p className="text-muted font-semibold text-sm mt-1">
+                                            {blog.date}
+                                        </p>
+
+                                        <p className="text-muted text-sm mt-1 line-clamp-3 flex-grow">
+                                            {truncWord(blog.excerpt, 22)}
+                                        </p>
+                                    </div>
+
+                                    {/* Bottom Button (always aligned) */}
+                                    <Link
+                                        className="inline-flex text-primary font-medium text-sm items-center gap-1 mt-2"
+                                        href={`/blog/${blog.slug}`}
+                                    >
+                                        <span>Read More</span>
+                                        <ChevronRight size={16} />
+                                    </Link>
+                                </div>
+                            </SwiperSlide>
+                        ))}
+
+                        {/* RIGHT BUTTON */}
+                        <button className="swiper-button-next-blog cursor-pointer absolute right-0 top-1/2 -translate-y-1/2 z-30 hover:scale-110 transition-all duration-200">
+                            <ChevronRight size={38} />
+                        </button>
+                    </Swiper>
+                </div>
             </div>
-        </Container>
+
+        </>
+
     );
 };
 
