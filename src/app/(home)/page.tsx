@@ -51,8 +51,8 @@ export default function Homepage() {
       />
       <TodaysDeals />
       <HomeBlogList />
-      <BannerAndPoster />
       <WheelsSection />
+      <BannerAndPoster />
       <ViewGallery />
       <SuspensionBrands />
       {/* <SuspensionSection /> */}

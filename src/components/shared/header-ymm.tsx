@@ -211,7 +211,7 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
       {/* Desktop View */}
       {!isMobile && <div
         ref={selectorRef}
-        className={`bg-[#E8EDF2] border-b border-gray-200 transition-all duration-300 z-20 fixed top-0 left-0 right-0 shadow-md ${shouldShow
+        className={`bg-[#E8EDF2] max-w-[1350px] mx-auto border-b border-gray-200 transition-all duration-300 z-20 fixed top-0 left-0 right-0 shadow-md ${shouldShow
           ? "opacity-100"
           : "-translate-y-full opacity-0 pointer-events-none"
           }`}
