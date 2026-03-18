@@ -47,8 +47,9 @@ export const VehicleSelectorModal = ({ isOpen, onOpenChange, skipToGarage }: { i
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-7xl p-0 border-none rounded-md overflow-hidden bg-white">
+    
+      <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogContent className=" max-w-[1000px] mx-auto  border-none rounded-md overflow-hidden bg-white">
         {view === 'garage' && garageCount > 0 ? (
           <GarageView
             garage={garage}
@@ -63,6 +64,7 @@ export const VehicleSelectorModal = ({ isOpen, onOpenChange, skipToGarage }: { i
         )}
       </DialogContent>
     </Dialog>
+  
   );
 };
 
@@ -87,7 +89,7 @@ const GarageView = ({ garage, activeGarageId, onAddVehicle, onClearAll, onRemove
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-bold">My Garage</h2>
-        <button onClick={onClearAll} className="text-[#3b5998] hover:text-[#2d4373] text-sm">
+        <button onClick={onClearAll} className="text-[#3b5998] mt-6 cursor-pointer hover:text-[#2d4373] text-sm">
           Clear All
         </button>
       </div>

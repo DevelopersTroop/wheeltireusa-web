@@ -7,26 +7,26 @@ const ViewGallery = () => {
       <img
         src="/images/gallery/image20.jpeg"
         alt="Gallery"
-        className="w-full h-[500px] object-cover md:h-[600px] transition-transform duration-500 hover:scale-105"
+        className="w-full h-[250px] sm:h-[380px] md:h-[500px] lg:h-[600px] object-cover transition-transform duration-500 hover:scale-105"
       />
 
-      {/* Overlay for text readability */}
-      <div className="absolute inset-0 bg-black/30"></div>
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black/30" />
 
       {/* Heading */}
-      <h1 className="absolute top-1/3 left-1/2 transform -translate-x-1/2 text-3xl md:text-4xl lg:text-5xl font-bold font-serif text-white uppercase text-center px-4 drop-shadow-lg">
-  Truck Gallery
-</h1>
+      <h1 className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-serif text-white uppercase text-center px-4 drop-shadow-lg whitespace-nowrap">
+        Truck Gallery
+      </h1>
 
       {/* Button */}
-      <div className="absolute bottom-40 left-1/2 transform -translate-x-1/2">
-  <Link href="/ktc-audio-gallery">
-    <button className="bg-primary text-white py-3 px-8 rounded-lg text-xl md:text-2xl font-medium 
-      shadow-md hover:shadow-xl hover:scale-105  transition-transform transition-shadow transition-colors duration-300">
-      View Gallery
-    </button>
-  </Link>
-</div>
+      <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2">
+        <Link
+          href="/ktc-audio-gallery"
+          className="inline-block bg-primary text-white py-2 px-5 sm:py-3 sm:px-8 rounded-lg text-base sm:text-xl md:text-2xl font-medium shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 whitespace-nowrap"
+        >
+          View Gallery
+        </Link>
+      </div>
     </div>
   );
 };
