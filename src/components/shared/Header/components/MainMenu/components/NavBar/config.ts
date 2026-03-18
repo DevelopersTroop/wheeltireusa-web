@@ -113,95 +113,7 @@ const navMenus: NavMenu[] = [
       },
     ],
   },
-
-  {
-    label: "Shop Tires",
-    href: "/collections/product-category/tires",
-    meagMenu: true,
-    children: [
-      {
-        label: "Shop Tires",
-        href: "/collections/product-category/tires",
-        children: [
-          {
-            label: "Shop all Tires",
-            href: "/collections/product-category/tires",
-          },
-          {
-            label: "Shop by brand",
-            href: "/brands?query=tires",
-          },
-        ],
-      },
-      {
-        label: "Tire Types",
-        children: [
-          { label: "All-Season", href: "/collections/product-category/tires" },
-          { label: "All-Terrain", href: "/collections/product-category/tires" },
-          { label: "Dessert Terrain", href: "/collections/product-category/tires" },
-          { label: "Hybrid AT/MT", href: "/collections/product-category/tires" },
-          { label: "Mud Terrain", href: "/collections/product-category/tires" },
-        ],
-      },
-    ],
-  },
-
-  {
-    label: "Wheel & Tire Packages",
-    href: "/collections/product-category/wheels",
-    meagMenu: true,
-    children: [
-      {
-        label: "Packages",
-        children: [
-          {
-            label: "Shop all packages",
-            href: "/collections/product-category/wheels",
-          },
-        ],
-      },
-    ],
-  },
-
-  {
-    label: "Suspension",
-    href: "#",
-    meagMenu: true,
-    children: [
-      {
-        label: "Suspension",
-        children: [
-          {
-            label: "Shop All Suspension",
-            href: "/collections/product-category/accessories",
-          },
-          {
-            label: "Shop By Brand",
-            href: "/collections/product-category/accessories",
-          },
-        ],
-      },
-      {
-        label: "Suspension Types",
-        children: [
-          {
-            label: "Leveling Kits",
-            href: "/collections/product-category/accessories",
-          },
-          {
-            label: "Lift Kits",
-            href: "/collections/product-category/accessories",
-          },
-          {
-            label: "Body Lifts",
-            href: "/collections/product-category/accessories",
-          },
-        ],
-      },
-    ],
-  },
-
-  {
+{
     label: "Accessories",
     href: "/collections/product-category/accessories",
     meagMenu: true,
@@ -313,6 +225,97 @@ const navMenus: NavMenu[] = [
       },
     ],
   },
+  
+  {
+    label: "Shop Tires",
+    href: "/collections/product-category/tires",
+    meagMenu: true,
+    children: [
+      {
+        label: "Shop Tires",
+        href: "/collections/product-category/tires",
+        children: [
+          {
+            label: "Shop all Tires",
+            href: "/collections/product-category/tires",
+          },
+          {
+            label: "Shop by brand",
+            href: "/brands?query=tires",
+          },
+        ],
+      },
+      {
+        label: "Tire Types",
+        children: [
+          { label: "All-Season", href: "/collections/product-category/tires" },
+          { label: "All-Terrain", href: "/collections/product-category/tires" },
+          { label: "Dessert Terrain", href: "/collections/product-category/tires" },
+          { label: "Hybrid AT/MT", href: "/collections/product-category/tires" },
+          { label: "Mud Terrain", href: "/collections/product-category/tires" },
+        ],
+      },
+    ],
+  },
+
+  
+
+  {
+    label: "Wheel & Tire Packages",
+    href: "/collections/product-category/wheels",
+    meagMenu: true,
+    children: [
+      {
+        label: "Packages",
+        children: [
+          {
+            label: "Shop all packages",
+            href: "/collections/product-category/wheels",
+          },
+        ],
+      },
+    ],
+  },
+
+  {
+    label: "Suspension",
+    href: "#",
+    meagMenu: true,
+    children: [
+      {
+        label: "Suspension",
+        children: [
+          {
+            label: "Shop All Suspension",
+            href: "/collections/product-category/accessories",
+          },
+          {
+            label: "Shop By Brand",
+            href: "/collections/product-category/accessories",
+          },
+        ],
+      },
+      {
+        label: "Suspension Types",
+        children: [
+          {
+            label: "Leveling Kits",
+            href: "/collections/product-category/accessories",
+          },
+          {
+            label: "Lift Kits",
+            href: "/collections/product-category/accessories",
+          },
+          {
+            label: "Body Lifts",
+            href: "/collections/product-category/accessories",
+          },
+        ],
+      },
+    ],
+  },
+
+  
 
   {
     label: "Resources",
