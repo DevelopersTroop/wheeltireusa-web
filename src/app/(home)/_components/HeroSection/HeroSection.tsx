@@ -8,7 +8,7 @@ export default function HeroSection() {
 
   return (
     <section
-      className="relative max-w-[1350px] mx-auto min-h-[90vh] flex items-center justify-center bg-cover bg-center"
+      className="relative max-w-[1350px] mx-auto min-h-[800px] flex items-center justify-center bg-cover bg-center"
       style={{
         backgroundImage: `url('/images/hero.jpeg')`,
       }}

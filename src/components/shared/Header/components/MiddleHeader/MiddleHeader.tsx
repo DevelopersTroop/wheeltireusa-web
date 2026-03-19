@@ -27,7 +27,7 @@ export default function MiddleHeader() {
 
   return (
     <Container>
-      <div className="border-b bg-white px-10">
+      <div className="border-b bg-white px-10 ">
         {isSearchOpen && (
           <div className="fixed inset-0 z-50 bg-white lg:hidden">
             <div className="flex items-center gap-2 p-4">

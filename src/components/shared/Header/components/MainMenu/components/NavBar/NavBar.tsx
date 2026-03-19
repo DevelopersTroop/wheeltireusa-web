@@ -51,27 +51,26 @@ function NavBar() {
               >
                 {/* Main menu button */}
                 <Link
-  target={menu.target}
-  href={menu.href || "#"}
-  className={cn(
-    "text-white px-2 py-2 flex items-center text-[13px] font-semibold tracking-wide relative group rounded-sm",
-    "transition-colors duration-500 ease-in-out",
-    // smooth background color transition on hover or open
-    openMenu === menu.label
-      ? "bg-primary text-white"
-      : "bg-transparent hover:bg-primary hover:text-white"
-  )}
->
-  <span className="relative z-10 flex items-center gap-1">
-    {menu.label}
-    {menu.children &&
-      (openMenu === menu.label ? (
-        <ChevronUp className="ml-1.5 w-4 h-4 z-10" />
-      ) : (
-        <ChevronDown className="ml-1.5 w-4 h-4 z-10" />
-      ))}
-  </span>
-</Link>
+                  target={menu.target}
+                  href={menu.href || "#"}
+                  className={cn(
+                    "text-white px-2 py-2 flex items-center text-[13px] font-semibold tracking-wide relative group rounded-sm",
+                    "transition-colors duration-500 ease-in-out",
+                    openMenu === menu.label
+                      ? "bg-primary text-white"
+                      : "bg-transparent hover:bg-primary hover:text-white"
+                  )}
+                >
+                  <span className="relative z-10 flex items-center gap-1">
+                    {menu.label}
+                    {menu.children &&
+                      (openMenu === menu.label ? (
+                        <ChevronUp className="ml-1.5 w-4 h-4 z-10" />
+                      ) : (
+                        <ChevronDown className="ml-1.5 w-4 h-4 z-10" />
+                      ))}
+                  </span>
+                </Link>
 
                 {/* Dropdown */}
                 {menu.children && (
@@ -84,68 +83,45 @@ function NavBar() {
                     )}
                     style={{
                       minWidth: menu.children.length > 1 ? `${menu.children.length * 200}px` : "200px",
+                      maxWidth: "100vw", // Ensure dropdown does not exceed the viewport width
+                      left: 0, // Ensure dropdown opens from the left edge
                     }}
                   >
                     <div className="px-6 py-4">
-                      {menu.children.some(c => c.children && c.children.length > 0) ? (
-                        <div className="flex gap-10">
-                          {menu.children.map((submenu, index) => (
-                            <div key={index} className="flex-1 min-w-0">
-                              <h4 className="font-bold text-[12px] uppercase tracking-wider text-white py-2 text-center bg-[#555555] mb-4 rounded-sm">
-                                {submenu.label}
-                              </h4>
-                              {submenu.children && (
-                                <ul className="flex flex-col gap-2">
-                                  {submenu.children.map((subsub) => (
-                                    <li key={subsub.label}>
-                                      <Link
-                                        href={subsub.href || "#"}
-                                        className={cn(
-                                          "text-[13px] text-white hover:text-gray-400 transition-colors duration-300",
-                                          "relative before:absolute before:inset-0 before:bg-primary before:opacity-0 before:rounded-sm before:transition-opacity before:duration-500 hover:before:opacity-10"
-                                        )}
-                                      >
-                                        <span className="relative z-10 px-1">{subsub.label}</span>
-                                      </Link>
-                                    </li>
-                                  ))}
-                                </ul>
-                              )}
-                              {submenu.href && (
-                                <Link
-                                  href={submenu.href}
-                                  className="inline-block mt-4 text-[11px] font-bold uppercase tracking-wider text-primary hover:text-red-400 transition-colors duration-300"
-                                >
-                                  View All {submenu.label}
-                                </Link>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="flex flex-col gap-2">
-                          {menu.children.map((submenu) => (
-                            <Link
-                              key={submenu.label}
-                              href={submenu.href || "#"}
-                              className={cn(
-                                "text-[13px] text-gray-400 hover:text-white transition-colors duration-300",
-                                "relative before:absolute before:inset-0 before:bg-primary before:opacity-0 before:rounded-sm before:transition-opacity before:duration-500 hover:before:opacity-10"
-                              )}
-                            >
-                              <span className="relative z-10 px-1">{submenu.label}</span>
-                            </Link>
-                          ))}
-                          {menu.href && (
-                            <Link
-                              href={menu.href}
-                              className="mt-4 text-[11px] font-bold uppercase tracking-wider text-primary hover:text-red-400 transition-colors duration-300"
-                            >
-                              View All
-                            </Link>
-                          )}
-                        </div>
-                      )}
+                      <div className="flex gap-10 max-w-full overflow-x-auto">
+                        {menu.children.map((submenu, index) => (
+                          <div key={index} className="flex-1 min-w-0">
+                            <h4 className="font-bold text-[12px] uppercase tracking-wider text-white py-2 text-center bg-[#555555] mb-4 rounded-sm">
+                              {submenu.label}
+                            </h4>
+                            {submenu.children && (
+                              <ul className="flex flex-col gap-2 max-w-full flex-wrap">
+                                {submenu.children.map((subsub) => (
+                                  <li key={subsub.label}>
+                                    <Link
+                                      href={subsub.href || "#"}
+                                      className={cn(
+                                        "text-[13px] text-white hover:text-gray-400 transition-colors duration-300",
+                                        "relative before:absolute before:inset-0 before:bg-primary before:opacity-0 before:rounded-sm before:transition-opacity before:duration-500 hover:before:opacity-10"
+                                      )}
+                                    >
+                                      <span className="relative z-10 px-1">{subsub.label}</span>
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                            {submenu.href && (
+                              <Link
+                                href={submenu.href}
+                                className="inline-block mt-4 text-[11px] font-bold uppercase tracking-wider text-primary hover:text-red-400 transition-colors duration-300"
+                              >
+                                View All {submenu.label}
+                              </Link>
+                            )}
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 )}
