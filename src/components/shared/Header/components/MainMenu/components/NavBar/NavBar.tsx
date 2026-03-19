@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import navMenus from "./config";
 import Container from "@/components/ui/container/container";
+import { setIsModalOpen } from "@/redux/features/ymmFilterSlice";
 
 function NavBar() {
   const pathname = usePathname();
@@ -35,7 +36,7 @@ function NavBar() {
 
   const handleSubmenuLabelClick = (submenu: { label: string }) => {
     if (submenu.label?.toLowerCase() === "shop wheels") {
-      console.log("works")
+      dispatch(setIsModalOpen(true));
     }
   }
   return (

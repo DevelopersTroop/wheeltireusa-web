@@ -76,10 +76,15 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'images.carid.com',
-      },{
+      }, 
+      {
         protocol: 'https',
         hostname: 'cloudfront.net',
       },
+      {
+        protocol: 'http',
+        hostname: 'd3pl580m833nyd.cloudfront.net',
+      }
     ],
   },
   rewrites: async () => {
@@ -92,4 +97,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-// export default nextConfig;
+export default nextConfig;
