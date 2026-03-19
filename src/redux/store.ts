@@ -6,6 +6,8 @@ import cartReducer from './features/cartSlice';
 import packageReducer from './features/packageSlice';
 import newsletterModalReducer from './features/newsletterModalSlice';
 import yearMakeModelReducer from './features/yearMakeModelSlice';
+import ymmFilterReducer from './features/ymmFilterSlice';
+
 import {
   FLUSH,
   PAUSE,
@@ -56,6 +58,7 @@ const persistedReducer = persistReducer(rootPersistConfig, persistingReducer);
 const rootReducer = combineReducers({
   persisted: persistedReducer,
   mainFilter: mailFilterReducer,
+  ymmFilter: ymmFilterReducer,
   [baseApi.reducerPath]: baseApi.reducer,
   wheel: wheelReducer,
 });

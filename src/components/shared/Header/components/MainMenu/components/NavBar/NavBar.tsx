@@ -32,6 +32,12 @@ function NavBar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+
+  const handleSubmenuLabelClick = (submenu: { label: string }) => {
+    if (submenu.label?.toLowerCase() === "shop wheels") {
+      console.log("works")
+    }
+  }
   return (
     <div
       className={cn(
@@ -91,7 +97,8 @@ function NavBar() {
                       <div className="flex gap-10 max-w-full overflow-x-auto">
                         {menu.children.map((submenu, index) => (
                           <div key={index} className="flex-1 min-w-0">
-                            <h4 className="font-bold text-[12px] uppercase tracking-wider text-white py-2 text-center bg-[#555555] mb-4 rounded-sm">
+                            <h4 className="font-bold text-[12px] uppercase tracking-wider text-white py-2 text-center bg-[#555555] mb-4 rounded-sm"
+                            onClick={() => handleSubmenuLabelClick(submenu)}>
                               {submenu.label}
                             </h4>
                             {submenu.children && (
