@@ -13,7 +13,6 @@ export default function ShopByBrandPanel() {
 
   return (
     <div className="pt-2">
-      <div className="my-6 h-px bg-gray-200" />
       <div className="mx-auto flex justify-center gap-3 sm:gap-4 mb-6">
         <button
           type="button"

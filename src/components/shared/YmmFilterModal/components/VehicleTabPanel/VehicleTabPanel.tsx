@@ -14,7 +14,7 @@ export default function VehicleTabPanel() {
     <>
       <VehicleSelectionHeader />
       <div className="pt-2">
-        <div className="my-6 h-px bg-gray-200" />
+        <div className="mt-2 mb-4 h-px bg-gray-200" />
         <VehicleStepIndicator />
         <div className="text-center text-xl sm:text-2xl font-bold mb-4">
           Enter your vehicle information.

@@ -64,7 +64,7 @@ export default function VehicleFitmentSelect({
       </button>
       {open ? (
         <div
-          className="absolute left-0 top-full mt-1 w-full z-60 rounded-md border bg-white shadow-lg overflow-y-auto max-h-[200px] custom-scrollbar"
+          className="absolute left-0 top-full mt-1 w-full z-60 rounded-md border bg-white shadow-lg overflow-y-auto max-h-[180px] custom-scrollbar"
         >
           <ul className="py-1">
             {options.map((option) => (
