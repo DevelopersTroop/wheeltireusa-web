@@ -395,3 +395,7 @@
 .selected-item-scrollbar::-webkit-scrollbar-button {
   display: none;
 }
+
+button {
+  cursor: pointer;
+}

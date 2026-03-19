@@ -219,9 +219,9 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
         <div className="max-w-7xl mx-auto px-4 py-3">
           {hasVehicleSelected ? (
             /* Selected Vehicle Display */
-            <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center justify-center gap-5">
               <div className="flex items-center gap-3">
-                <CheckCircle2 className="w-5 h-5 shrink-0 fill-green-600 text-white" />
+                <CheckCircle2 className="w-5 h-5 shrink-0 fill-primary text-white" />
                 <span className="font-bold text-gray-900 uppercase text-sm tracking-wide">
                   {vehicleLabel}
                 </span>
@@ -236,7 +236,7 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
                 </button>
                 <button
                   onClick={handleShopNow}
-                  className="px-8 py-2 bg-[#3b5998] hover:bg-[#2d4373] text-white font-bold text-sm rounded-sm transition-colors uppercase cursor-pointer"
+                  className="px-8 py-2 bg-primary hover:bg-primary/90 text-white font-bold text-sm rounded-sm transition-colors uppercase cursor-pointer"
                 >
                   SHOP NOW
                 </button>
@@ -249,7 +249,7 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
                 <div className="pl-3 pr-3 text-gray-900 font-bold text-sm">1</div>
                 <div className="w-px h-5 bg-gray-300"></div>
                 <Select open={activeDropdown === "year"} onOpenChange={handleOpenChange("year")} onValueChange={handleYearChange} value={year || undefined} disabled={isYearDisabled}>
-                  <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden">
+                  <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-14 [&>svg]:hidden">
                     <SelectValue placeholder={isYearLoading ? "LOADING..." : "YEAR"} />
                   </SelectTrigger>
                   <SelectContent>
@@ -265,7 +265,7 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
                 <div className="pl-3 pr-3 text-gray-900 font-bold text-sm">2</div>
                 <div className="w-px h-5 bg-gray-300"></div>
                 <Select open={activeDropdown === "make"} onOpenChange={handleOpenChange("make")} onValueChange={handleMakeChange} value={make || "__DEFAULT_MAKE__"} disabled={isMakeDisabled}>
-                  <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden">
+                  <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-14 [&>svg]:hidden">
                     <SelectValue placeholder={isMakeLoading ? "LOADING..." : "MAKE"} />
                   </SelectTrigger>
                   <SelectContent>
@@ -282,7 +282,7 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
                 <div className="pl-3 pr-3 text-gray-900 font-bold text-sm">3</div>
                 <div className="w-px h-5 bg-gray-300"></div>
                 <Select open={activeDropdown === "model"} onOpenChange={handleOpenChange("model")} onValueChange={handleModelChange} value={model || "__DEFAULT_MODEL__"} disabled={isModelDisabled}>
-                  <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden">
+                  <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-14 [&>svg]:hidden">
                     <SelectValue placeholder={isModelLoading ? "LOADING..." : "MODEL"} />
                   </SelectTrigger>
                   <SelectContent>
@@ -300,7 +300,7 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
                   <div className="pl-3 pr-3 text-gray-900 font-bold text-sm">4</div>
                   <div className="w-px h-5 bg-gray-300"></div>
                   <Select open={activeDropdown === "trim"} onOpenChange={handleOpenChange("trim")} onValueChange={handleTrimChange} value={trim || "__DEFAULT_TRIM__"} disabled={isTrimDisabled}>
-                    <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden">
+                    <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-14 [&>svg]:hidden">
                       <SelectValue placeholder={isTrimLoading ? "LOADING..." : "TRIM"} />
                     </SelectTrigger>
                     <SelectContent>
@@ -319,7 +319,7 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
                   <div className="pl-3 pr-3 text-gray-900 font-bold text-sm">{showTrim ? "5" : "4"}</div>
                   <div className="w-px h-5 bg-gray-300"></div>
                   <Select open={activeDropdown === "drive"} onOpenChange={handleOpenChange("drive")} onValueChange={handleDriveChange} value={drive || "__DEFAULT_DRIVE__"} disabled={isDriveDisabled}>
-                    <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden">
+                    <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-14 [&>svg]:hidden">
                       <SelectValue placeholder={isDriveLoading ? "LOADING..." : "DRIVE"} />
                     </SelectTrigger>
                     <SelectContent>
@@ -344,7 +344,7 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
               <button
                 onClick={() => onSubmit(undefined)}
                 disabled={isDisabledSubmit}
-                className="px-8 py-2.5 bg-[#3b5998] hover:bg-[#2d4373] text-white font-bold text-sm rounded-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-8 py-2.5 bg-primary hover:bg-primary/90 text-white font-bold text-sm rounded-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 GO
               </button>
@@ -367,7 +367,7 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
             <>
               <div className="flex-1 flex flex-col gap-2 px-4 py-3">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 shrink-0 fill-green-600 text-white" />
+                  <CheckCircle2 className="w-5 h-5 shrink-0 fill-primary text-white" />
                   <span className="font-bold text-gray-900 text-sm uppercase tracking-wide truncate">
                     {vehicleLabel}
                   </span>
@@ -382,7 +382,7 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
                   </button>
                   <button
                     onClick={handleShopNow}
-                    className="flex-1 px-3 py-2 bg-[#3b5998] hover:bg-[#2d4373] text-white font-bold text-xs rounded-sm transition-colors uppercase cursor-pointer"
+                    className="flex-1 px-3 py-2 bg-primary hover:bg-primary/90 text-white font-bold text-xs rounded-sm transition-colors uppercase cursor-pointer"
                   >
                     SHOP NOW
                   </button>
@@ -397,7 +397,7 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
                 className="flex-1 bg-[#E8EDF2] text-gray-900 px-4 py-3.5 flex items-center cursor-pointer justify-between text-sm font-bold uppercase tracking-wide"
               >
                 <div className="flex items-center gap-2">
-                  <CarFront className="w-4 h-4 text-[#3b5998]" />
+                  <CarFront className="w-4 h-4 text-primary" />
                   SELECT YOUR VEHICLE
                 </div>
                 <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${isMobileOpen ? "rotate-180" : ""}`} />
@@ -414,7 +414,7 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
                 <div className="pl-3 pr-2 text-gray-900 font-bold text-xs">1</div>
                 <div className="w-px h-4 bg-gray-300"></div>
                 <Select open={activeDropdown === "year"} onOpenChange={handleOpenChange("year")} onValueChange={handleYearChange} value={year || undefined} disabled={isYearDisabled}>
-                  <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden">
+                  <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-14 [&>svg]:hidden">
                     <SelectValue placeholder={isYearLoading ? "LOADING..." : "YEAR"} />
                   </SelectTrigger>
                   <SelectContent>
@@ -431,7 +431,7 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
                 <div className="pl-3 pr-2 text-gray-900 font-bold text-xs">2</div>
                 <div className="w-px h-4 bg-gray-300"></div>
                 <Select open={activeDropdown === "make"} onOpenChange={handleOpenChange("make")} onValueChange={handleMakeChange} value={make || "__DEFAULT_MAKE__"} disabled={isMakeDisabled}>
-                  <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden">
+                  <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-14 [&>svg]:hidden">
                     <SelectValue placeholder={isMakeLoading ? "LOADING..." : "MAKE"} />
                   </SelectTrigger>
                   <SelectContent>
@@ -449,7 +449,7 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
                 <div className="pl-3 pr-2 text-gray-900 font-bold text-xs">3</div>
                 <div className="w-px h-4 bg-gray-300"></div>
                 <Select open={activeDropdown === "model"} onOpenChange={handleOpenChange("model")} onValueChange={handleModelChange} value={model || "__DEFAULT_MODEL__"} disabled={isModelDisabled}>
-                  <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden">
+                  <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-14 [&>svg]:hidden">
                     <SelectValue placeholder={isModelLoading ? "LOADING..." : "MODEL"} />
                   </SelectTrigger>
                   <SelectContent>
@@ -468,7 +468,7 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
                   <div className="pl-3 pr-2 text-gray-900 font-bold text-xs">4</div>
                   <div className="w-px h-4 bg-gray-300"></div>
                   <Select open={activeDropdown === "trim"} onOpenChange={handleOpenChange("trim")} onValueChange={handleTrimChange} value={trim || "__DEFAULT_TRIM__"} disabled={isTrimDisabled}>
-                    <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden">
+                    <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-14 [&>svg]:hidden">
                       <SelectValue placeholder={isTrimLoading ? "LOADING..." : "TRIM"} />
                     </SelectTrigger>
                     <SelectContent>
@@ -487,7 +487,7 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
                   <div className="pl-3 pr-2 text-gray-900 font-bold text-xs">{showTrim ? "5" : "4"}</div>
                   <div className="w-px h-4 bg-gray-300"></div>
                   <Select open={activeDropdown === "drive"} onOpenChange={handleOpenChange("drive")} onValueChange={handleDriveChange} value={drive || "__DEFAULT_DRIVE__"} disabled={isDriveDisabled}>
-                    <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden">
+                    <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-14 [&>svg]:hidden">
                       <SelectValue placeholder={isDriveLoading ? "LOADING..." : "DRIVE"} />
                     </SelectTrigger>
                     <SelectContent>
@@ -515,7 +515,7 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
                     setIsMobileOpen(false)
                   }}
                   disabled={isDisabledSubmit}
-                  className="flex-1 py-2.5 bg-[#3b5998] hover:bg-[#2d4373] text-white font-bold text-sm rounded-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed uppercase"
+                  className="flex-1 py-2.5 bg-primary hover:bg-primary/90 text-white font-bold text-sm rounded-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed uppercase"
                 >
                   GO
                 </button>

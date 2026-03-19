@@ -11,7 +11,7 @@ import { BiShoppingBag, BiUserCircle } from 'react-icons/bi';
 import HeaderSearchButton from './components/HeaderSearchButton/HeaderSearchButton';
 import MobileNavbar from './components/MobileNavBar/MobileNavBar';
 import Container from '@/components/ui/container/container';
-import { PhoneCall } from 'lucide-react';
+import { PhoneCall, ShoppingCartIcon, UserCircle } from 'lucide-react';
 
 export default function MiddleHeader() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -88,7 +88,7 @@ export default function MiddleHeader() {
                   onClick={setOpen}
                 >
                   <div className="relative">
-                    <BiShoppingBag size={26} className="text-gray-600" />
+                    <ShoppingCartIcon size={26} className="text-gray-600" />
                     <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-xs text-white">
                       {cartQuantity}
                     </span>
@@ -102,7 +102,7 @@ export default function MiddleHeader() {
                   <PhoneCall size={22} />
                 </a>
                 <div onClick={setOpen} className="relative cursor-pointer">
-                  <BiShoppingBag size={26} className="text-gray-600" />
+                  <ShoppingCartIcon size={26} className="text-gray-600" />
                   <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-xs text-white">
                     {cartQuantity}
                   </span>

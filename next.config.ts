@@ -76,6 +76,9 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'images.carid.com',
+      },{
+        protocol: 'https',
+        hostname: 'cloudfront.net',
       },
     ],
   },
