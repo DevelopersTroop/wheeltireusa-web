@@ -10,10 +10,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useTypedSelector, useAppDispatch } from "@/redux/store";
-import { clearYearMakeModel } from "@/redux/features/yearMakeModelSlice";
+import { clearYearMakeModel, addToGarage, submitYmm } from "@/redux/features/yearMakeModelSlice";
+import { TYmmGarageItem } from "@/types/ymm";
 import { useRouter, usePathname } from "next/navigation";
+import YmmCustomSelect from "./YmmCustomSelect/YmmCustomSelect";
 
-const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
+const StickyVehicleSelector = ({ scrollOffset = 180 }: { scrollOffset?: number }) => {
   const {
     isYearLoading,
     isMakeLoading,
@@ -69,17 +71,8 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
     }
   }, []);
 
-  // Determine if a vehicle is fully selected - prefer garage item, fallback to hook state
-  const hasVehicleSelected = Boolean(activeGarageItem) || Boolean(
-    year &&
-    make &&
-    model &&
-    model !== "__DEFAULT_MODEL__" &&
-    trim &&
-    trim !== "__DEFAULT_TRIM__" &&
-    drive &&
-    drive !== "__DEFAULT_DRIVE__"
-  );
+  // Determine if a vehicle is fully selected - strict check for active garage item only
+  const hasVehicleSelected = Boolean(activeGarageId && activeGarageItem);
 
   // Track screen size to conditionally render desktop vs mobile
   useEffect(() => {
@@ -92,6 +85,31 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
     mql.addEventListener("change", handler);
     return () => mql.removeEventListener("change", handler);
   }, []);
+
+  const handleCustomSubmit = () => {
+    if (year && make && model) {
+      const cleanModel = model && model !== '__DEFAULT_MODEL__' ? model : '';
+      const cleanTrim = trim && trim !== '__DEFAULT_TRIM__' ? trim : '';
+      const cleanDrive = drive && drive !== '__DEFAULT_DRIVE__' ? drive : '';
+      
+      const newItem: TYmmGarageItem = {
+        year,
+        make,
+        model: cleanModel,
+        trim: cleanTrim,
+        drive: cleanDrive,
+      };
+      
+      dispatch(addToGarage(newItem));
+      dispatch(submitYmm(newItem));
+      
+      const targetPath = pathname?.includes('/tire')
+        ? '/collections/product-category/tire'
+        : '/collections/product-category/wheels';
+      
+      router.push(`${targetPath}?vehicle=selectedVehicleInformation`);
+    }
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -199,10 +217,10 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
   const showTrim = (trims?.length ?? 0) > 0 && model && model !== "__DEFAULT_MODEL__";
   const showDrive = (drives?.length ?? 0) > 0 && trim && trim !== "__DEFAULT_TRIM__";
 
-  // Build vehicle display string — prefer garage item data, fallback to hook state
+  // Build vehicle display string — strictly from active garage item
   const vehicleLabel = activeGarageItem
     ? `${activeGarageItem.year} ${activeGarageItem.make} ${activeGarageItem.model || ''} ${activeGarageItem.trim && activeGarageItem.trim !== '__DEFAULT_TRIM__' ? activeGarageItem.trim : ''} ${activeGarageItem.drive && activeGarageItem.drive !== '__DEFAULT_DRIVE__' ? activeGarageItem.drive : ''}`.trim()
-    : `${year} ${make} ${model}${trim && trim !== "__DEFAULT_TRIM__" ? ` ${trim}` : ""}${drive && drive !== "__DEFAULT_DRIVE__" ? ` ${drive}` : ""}`;
+    : "";
 
   return (
     <>
@@ -245,91 +263,67 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
           ) : (
             /* YMM Selector Dropdowns */
             <div className="flex items-center gap-2">
-              <div className="flex-1 relative flex items-center bg-white border border-gray-300 rounded-sm">
-                <div className="pl-3 pr-3 text-gray-900 font-bold text-sm">1</div>
-                <div className="w-px h-5 bg-gray-300"></div>
-                <Select open={activeDropdown === "year"} onOpenChange={handleOpenChange("year")} onValueChange={handleYearChange} value={year || undefined} disabled={isYearDisabled}>
-                  <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-14 [&>svg]:hidden">
-                    <SelectValue placeholder={isYearLoading ? "LOADING..." : "YEAR"} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {years?.map((y) => (
-                      <SelectItem key={`year-${y}`} value={y}>{y}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <ChevronDown className="absolute right-3 w-4 h-4 text-gray-500 pointer-events-none" />
+              <div className="flex-1 min-w-[140px]">
+                <YmmCustomSelect
+                  value={year || undefined}
+                  options={years || []}
+                  disabled={isYearDisabled}
+                  loading={isYearLoading}
+                  onChange={handleYearChange}
+                  placeholder="YEAR"
+                  stepNumber="1"
+                />
               </div>
 
-              <div className="flex-1 relative flex items-center bg-white border border-gray-300 rounded-sm">
-                <div className="pl-3 pr-3 text-gray-900 font-bold text-sm">2</div>
-                <div className="w-px h-5 bg-gray-300"></div>
-                <Select open={activeDropdown === "make"} onOpenChange={handleOpenChange("make")} onValueChange={handleMakeChange} value={make || "__DEFAULT_MAKE__"} disabled={isMakeDisabled}>
-                  <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-14 [&>svg]:hidden">
-                    <SelectValue placeholder={isMakeLoading ? "LOADING..." : "MAKE"} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="__DEFAULT_MAKE__" className="hidden" disabled>MAKE</SelectItem>
-                    {makes?.map((m) => (
-                      <SelectItem key={`make-${m}`} value={m}>{m}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <ChevronDown className="absolute right-3 w-4 h-4 text-gray-500 pointer-events-none" />
+              <div className="flex-1 min-w-[140px]">
+                <YmmCustomSelect
+                  value={make === "__DEFAULT_MAKE__" ? undefined : make}
+                  options={makes || []}
+                  disabled={isMakeDisabled}
+                  loading={isMakeLoading}
+                  onChange={handleMakeChange}
+                  placeholder="MAKE"
+                  stepNumber="2"
+                />
               </div>
 
-              <div className="flex-1 relative flex items-center bg-white border border-gray-300 rounded-sm">
-                <div className="pl-3 pr-3 text-gray-900 font-bold text-sm">3</div>
-                <div className="w-px h-5 bg-gray-300"></div>
-                <Select open={activeDropdown === "model"} onOpenChange={handleOpenChange("model")} onValueChange={handleModelChange} value={model || "__DEFAULT_MODEL__"} disabled={isModelDisabled}>
-                  <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-14 [&>svg]:hidden">
-                    <SelectValue placeholder={isModelLoading ? "LOADING..." : "MODEL"} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="__DEFAULT_MODEL__" className="hidden" disabled>MODEL</SelectItem>
-                    {models?.map((mdl) => (
-                      <SelectItem key={`model-${mdl}`} value={mdl}>{mdl}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <ChevronDown className="absolute right-3 w-4 h-4 text-gray-500 pointer-events-none" />
+              <div className="flex-1 min-w-[140px]">
+                <YmmCustomSelect
+                  value={model === "__DEFAULT_MODEL__" ? undefined : model}
+                  options={models || []}
+                  disabled={isModelDisabled}
+                  loading={isModelLoading}
+                  onChange={handleModelChange}
+                  placeholder="MODEL"
+                  stepNumber="3"
+                />
               </div>
 
               {showTrim && (
-                <div className="flex-1 relative flex items-center bg-white border border-gray-300 rounded-sm">
-                  <div className="pl-3 pr-3 text-gray-900 font-bold text-sm">4</div>
-                  <div className="w-px h-5 bg-gray-300"></div>
-                  <Select open={activeDropdown === "trim"} onOpenChange={handleOpenChange("trim")} onValueChange={handleTrimChange} value={trim || "__DEFAULT_TRIM__"} disabled={isTrimDisabled}>
-                    <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-14 [&>svg]:hidden">
-                      <SelectValue placeholder={isTrimLoading ? "LOADING..." : "TRIM"} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="__DEFAULT_TRIM__" className="hidden" disabled>TRIM</SelectItem>
-                      {trims?.map((item) => (
-                        <SelectItem key={`trim-${item}`} value={item}>{item}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <ChevronDown className="absolute right-3 w-4 h-4 text-gray-500 pointer-events-none" />
+                <div className="flex-1 min-w-[140px]">
+                  <YmmCustomSelect
+                    value={trim === "__DEFAULT_TRIM__" ? undefined : trim}
+                    options={trims || []}
+                    disabled={isTrimDisabled}
+                    loading={isTrimLoading}
+                    onChange={handleTrimChange}
+                    placeholder="TRIM"
+                    stepNumber="4"
+                  />
                 </div>
               )}
 
               {showDrive && (
-                <div className="flex-1 relative flex items-center bg-white border border-gray-300 rounded-sm">
-                  <div className="pl-3 pr-3 text-gray-900 font-bold text-sm">{showTrim ? "5" : "4"}</div>
-                  <div className="w-px h-5 bg-gray-300"></div>
-                  <Select open={activeDropdown === "drive"} onOpenChange={handleOpenChange("drive")} onValueChange={handleDriveChange} value={drive || "__DEFAULT_DRIVE__"} disabled={isDriveDisabled}>
-                    <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-14 [&>svg]:hidden">
-                      <SelectValue placeholder={isDriveLoading ? "LOADING..." : "DRIVE"} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="__DEFAULT_DRIVE__" className="hidden" disabled>DRIVE</SelectItem>
-                      {drives?.map((item) => (
-                        <SelectItem key={`drive-${item}`} value={item}>{item}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <ChevronDown className="absolute right-3 w-4 h-4 text-gray-500 pointer-events-none" />
+                <div className="flex-1 min-w-[140px]">
+                  <YmmCustomSelect
+                    value={drive === "__DEFAULT_DRIVE__" ? undefined : drive}
+                    options={drives || []}
+                    disabled={isDriveDisabled}
+                    loading={isDriveLoading}
+                    onChange={handleDriveChange}
+                    placeholder="DRIVE"
+                    stepNumber={showTrim ? "5" : "4"}
+                  />
                 </div>
               )}
 
@@ -342,7 +336,7 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
               </button>
 
               <button
-                onClick={() => onSubmit(undefined)}
+                onClick={handleCustomSubmit}
                 disabled={isDisabledSubmit}
                 className="px-8 py-2.5 bg-primary hover:bg-primary/90 text-white font-bold text-sm rounded-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
@@ -359,7 +353,7 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
           ? "opacity-100"
           : "-translate-y-full opacity-0 pointer-events-none"
           }`}
-        style={shouldShow ? { transform: `translateY(${offset}px)` } : {}}
+        style={shouldShow ? { transform: `translateY(${scrollOffset}px)` } : {}}
       >
         <div className="flex">
           {hasVehicleSelected ? (
@@ -410,94 +404,70 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
           <div className={`overflow-hidden transition-all duration-300 ${isMobileOpen ? "max-h-[600px]" : "max-h-0"}`}>
             <div className="bg-[#E8EDF2] px-4 pb-4 space-y-2.5">
               {/* Year */}
-              <div className="relative flex items-center bg-white border border-gray-300 rounded-sm">
-                <div className="pl-3 pr-2 text-gray-900 font-bold text-xs">1</div>
-                <div className="w-px h-4 bg-gray-300"></div>
-                <Select open={activeDropdown === "year"} onOpenChange={handleOpenChange("year")} onValueChange={handleYearChange} value={year || undefined} disabled={isYearDisabled}>
-                  <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-14 [&>svg]:hidden">
-                    <SelectValue placeholder={isYearLoading ? "LOADING..." : "YEAR"} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {years?.map((y) => (
-                      <SelectItem key={`year-${y}`} value={y}>{y}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <ChevronDown className="absolute right-3 w-4 h-4 text-gray-400 pointer-events-none" />
+              <div className="relative flex items-center">
+                <YmmCustomSelect
+                  value={year || undefined}
+                  options={years || []}
+                  disabled={isYearDisabled}
+                  loading={isYearLoading}
+                  onChange={handleYearChange}
+                  placeholder="YEAR"
+                  stepNumber="1"
+                />
               </div>
 
               {/* Make */}
-              <div className="relative flex items-center bg-white border border-gray-300 rounded-sm">
-                <div className="pl-3 pr-2 text-gray-900 font-bold text-xs">2</div>
-                <div className="w-px h-4 bg-gray-300"></div>
-                <Select open={activeDropdown === "make"} onOpenChange={handleOpenChange("make")} onValueChange={handleMakeChange} value={make || "__DEFAULT_MAKE__"} disabled={isMakeDisabled}>
-                  <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-14 [&>svg]:hidden">
-                    <SelectValue placeholder={isMakeLoading ? "LOADING..." : "MAKE"} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="__DEFAULT_MAKE__" className="hidden" disabled>MAKE</SelectItem>
-                    {makes?.map((m) => (
-                      <SelectItem key={`make-${m}`} value={m}>{m}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <ChevronDown className="absolute right-3 w-4 h-4 text-gray-400 pointer-events-none" />
+              <div className="relative flex items-center">
+                <YmmCustomSelect
+                  value={make === "__DEFAULT_MAKE__" ? undefined : make}
+                  options={makes || []}
+                  disabled={isMakeDisabled}
+                  loading={isMakeLoading}
+                  onChange={handleMakeChange}
+                  placeholder="MAKE"
+                  stepNumber="2"
+                />
               </div>
 
               {/* Model */}
-              <div className="relative flex items-center bg-white border border-gray-300 rounded-sm">
-                <div className="pl-3 pr-2 text-gray-900 font-bold text-xs">3</div>
-                <div className="w-px h-4 bg-gray-300"></div>
-                <Select open={activeDropdown === "model"} onOpenChange={handleOpenChange("model")} onValueChange={handleModelChange} value={model || "__DEFAULT_MODEL__"} disabled={isModelDisabled}>
-                  <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-14 [&>svg]:hidden">
-                    <SelectValue placeholder={isModelLoading ? "LOADING..." : "MODEL"} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="__DEFAULT_MODEL__" className="hidden" disabled>MODEL</SelectItem>
-                    {models?.map((mdl) => (
-                      <SelectItem key={`model-${mdl}`} value={mdl}>{mdl}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <ChevronDown className="absolute right-3 w-4 h-4 text-gray-400 pointer-events-none" />
+              <div className="relative flex items-center">
+                <YmmCustomSelect
+                  value={model === "__DEFAULT_MODEL__" ? undefined : model}
+                  options={models || []}
+                  disabled={isModelDisabled}
+                  loading={isModelLoading}
+                  onChange={handleModelChange}
+                  placeholder="MODEL"
+                  stepNumber="3"
+                />
               </div>
 
               {/* Body Type */}
               {showTrim && (
-                <div className="relative flex items-center bg-white border border-gray-300 rounded-sm">
-                  <div className="pl-3 pr-2 text-gray-900 font-bold text-xs">4</div>
-                  <div className="w-px h-4 bg-gray-300"></div>
-                  <Select open={activeDropdown === "trim"} onOpenChange={handleOpenChange("trim")} onValueChange={handleTrimChange} value={trim || "__DEFAULT_TRIM__"} disabled={isTrimDisabled}>
-                    <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-14 [&>svg]:hidden">
-                      <SelectValue placeholder={isTrimLoading ? "LOADING..." : "TRIM"} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="__DEFAULT_TRIM__" className="hidden" disabled>TRIM</SelectItem>
-                      {trims?.map((item) => (
-                        <SelectItem key={`trim-${item}`} value={item}>{item}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <ChevronDown className="absolute right-3 w-4 h-4 text-gray-400 pointer-events-none" />
+                <div className="relative flex items-center">
+                  <YmmCustomSelect
+                    value={trim === "__DEFAULT_TRIM__" ? undefined : trim}
+                    options={trims || []}
+                    disabled={isTrimDisabled}
+                    loading={isTrimLoading}
+                    onChange={handleTrimChange}
+                    placeholder="TRIM"
+                    stepNumber="4"
+                  />
                 </div>
               )}
 
               {showDrive && (
-                <div className="relative flex items-center bg-white border border-gray-300 rounded-sm">
-                  <div className="pl-3 pr-2 text-gray-900 font-bold text-xs">{showTrim ? "5" : "4"}</div>
-                  <div className="w-px h-4 bg-gray-300"></div>
-                  <Select open={activeDropdown === "drive"} onOpenChange={handleOpenChange("drive")} onValueChange={handleDriveChange} value={drive || "__DEFAULT_DRIVE__"} disabled={isDriveDisabled}>
-                    <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-3 py-2.5 shadow-none border-none ring-0 focus:ring-0 appearance-none h-14 [&>svg]:hidden">
-                      <SelectValue placeholder={isDriveLoading ? "LOADING..." : "DRIVE"} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="__DEFAULT_DRIVE__" className="hidden" disabled>DRIVE</SelectItem>
-                      {drives?.map((item) => (
-                        <SelectItem key={`drive-${item}`} value={item}>{item}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <ChevronDown className="absolute right-3 w-4 h-4 text-gray-400 pointer-events-none" />
+                <div className="relative flex items-center">
+                  <YmmCustomSelect
+                    value={drive === "__DEFAULT_DRIVE__" ? undefined : drive}
+                    options={drives || []}
+                    disabled={isDriveDisabled}
+                    loading={isDriveLoading}
+                    onChange={handleDriveChange}
+                    placeholder="DRIVE"
+                    stepNumber={showTrim ? "5" : "4"}
+                  />
                 </div>
               )}
 
@@ -511,7 +481,7 @@ const StickyVehicleSelector = ({ offset = 0 }: { offset?: number }) => {
                 </button>
                 <button
                   onClick={() => {
-                    onSubmit(undefined)
+                    handleCustomSubmit()
                     setIsMobileOpen(false)
                   }}
                   disabled={isDisabledSubmit}

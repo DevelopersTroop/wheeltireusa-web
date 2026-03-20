@@ -128,12 +128,26 @@ const products = baseApi.injectEndpoints({
         };
       },
     }),
-    getFilterList: builder.query<{ filters: TFilters }, void>({
-      query: () => ({
+    getFilterList: builder.query<
+      { filters: TFilters },
+      { category?: 'wheels' | 'tire' | 'accessories' } | void
+    >({
+      query: (arg) => ({
         url: '/products/filter-list',
-        params: { category: 'tire' },
+        params: { category: arg?.category ?? 'tire' },
       }),
-      transformResponse(baseQueryReturnValue: { filters: TFilters }) {
+      transformResponse(
+        baseQueryReturnValue: { filters: TFilters },
+        _meta,
+        arg
+      ) {
+        if (arg?.category && arg.category !== 'tire') {
+          return {
+            filters: {
+              ...baseQueryReturnValue.filters,
+            },
+          };
+        }
         return {
           filters: {
             ...baseQueryReturnValue.filters,

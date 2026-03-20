@@ -5,8 +5,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import navMenus from "./config";
+import navMenus, { NavMenu } from "./config";
 import Container from "@/components/ui/container/container";
+import { setIsModalOpen } from "@/redux/features/ymmFilterSlice";
 
 function NavBar() {
   const pathname = usePathname();
@@ -33,10 +34,39 @@ function NavBar() {
   }, []);
 
 
-  const handleSubmenuLabelClick = (submenu: { label: string }) => {
-    if (submenu.label?.toLowerCase() === "shop wheels") {
-      console.log("works")
+  const handleNavMenuClick = (menu: NavMenu) => {
+    if (menu.label?.toLowerCase() === "shop wheels") {
+      dispatch(setIsModalOpen({ 
+        isOpen: true, 
+        source: "nav_menu", 
+        redirectPath: "/collections/product-category/wheels",
+        brandCategory: "wheels"
+      }));
     }
+    if (menu.label?.toLowerCase() === "shop tires") {
+      dispatch(setIsModalOpen({ 
+        isOpen: true, 
+        source: "nav_menu", 
+        redirectPath: "/collections/product-category/tires" ,
+        brandCategory: "tire"
+      }));
+    }
+    // if (submenu.label?.toLowerCase() === "shop tires") {
+    //   dispatch(setIsModalOpen({ 
+    //     isOpen: true, 
+    //     source: "nav_menu", 
+    //     redirectPath: "/collections/product-category/tires" 
+    //   }));
+    // }
+    // if (submenu.label?.toLowerCase() === "wheels by brands") {
+    //   dispatch(setIsModalOpen({ 
+    //     isOpen: true, 
+    //     source: "nav_menu", 
+    //     redirectPath: "/collections/product-category/wheels",
+    //     mainTab: "brand",
+    //     brandCategory: "wheels"
+    //   }));
+    // }
   }
   return (
     <div
@@ -54,6 +84,7 @@ function NavBar() {
                 onMouseEnter={() => handleMouseEnter(menu.label || "")}
                 onMouseLeave={handleMouseLeave}
                 className="relative"
+                onClick={() => handleNavMenuClick(menu)}
               >
                 {/* Main menu button */}
                 <Link
@@ -98,7 +129,7 @@ function NavBar() {
                         {menu.children.map((submenu, index) => (
                           <div key={index} className="flex-1 min-w-0">
                             <h4 className="font-bold text-[12px] uppercase tracking-wider text-white py-2 text-center bg-[#555555] mb-4 rounded-sm"
-                            onClick={() => handleSubmenuLabelClick(submenu)}>
+                            >
                               {submenu.label}
                             </h4>
                             {submenu.children && (

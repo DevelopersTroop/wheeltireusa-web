@@ -15,6 +15,7 @@ import { ChevronDown, Trash2 } from "lucide-react";
 import useYmm from "@/hooks/useYmm";
 import { useAppDispatch, useTypedSelector } from "@/redux/store";
 import { addToGarage, removeFromGarage, clearGarage, submitYmm, setActiveGarage, clearYearMakeModel } from "@/redux/features/yearMakeModelSlice";
+import { setIsModalOpen } from "@/redux/features/ymmFilterSlice";
 import { TYmmGarageItem } from "@/types/ymm";
 import { useRouter, usePathname } from 'next/navigation';
 import { cn } from "@/lib/utils";
@@ -22,53 +23,55 @@ import { cn } from "@/lib/utils";
 export const VehicleSelectorModal = ({ isOpen, onOpenChange, skipToGarage }: { isOpen: boolean, onOpenChange: (open: boolean) => void, skipToGarage?: boolean }) => {
   const { garage, activeGarageId } = useTypedSelector((state) => state.persisted.yearMakeModel);
   const garageCount = Object.keys(garage || {}).length;
-  const [view, setView] = useState<'garage' | 'add'>(skipToGarage && garageCount > 0 ? 'garage' : 'add');
   const dispatch = useAppDispatch();
 
+  // Show garage view by default if there are vehicles, otherwise show add view
   useEffect(() => {
     if (isOpen) {
-      if (garageCount > 0 && skipToGarage) {
-        setView('garage');
-      } else {
-        setView('add');
+      if (garageCount === 0) {
+        onOpenChange(false);
+        // Dispatch to open the new YMM modal instead of using the local add view
+        dispatch(setIsModalOpen({ isOpen: true, source: "vehicle_selector_button" }));
       }
     }
-  }, [isOpen, garageCount, skipToGarage]);
+  }, [isOpen, garageCount, onOpenChange, dispatch]);
 
   const handleClearAll = () => {
     dispatch(clearGarage());
-    setView('add');
+    onOpenChange(false);
+    // Dispatch to open the new YMM modal instead
+    dispatch(setIsModalOpen({ isOpen: true, source: "vehicle_selector_button" }));
   };
 
   const handleRemove = (id: string) => {
     dispatch(removeFromGarage(id));
+    // If we removed the last vehicle, close this modal and open the add vehicle one
     if (garageCount <= 1) {
-      setView('add');
+      onOpenChange(false);
+      dispatch(setIsModalOpen({ isOpen: true, source: "vehicle_selector_button" }));
     }
   };
 
+  const handleAddVehicle = () => {
+    onOpenChange(false);
+    dispatch(setIsModalOpen({ isOpen: true, source: "vehicle_selector_button" }));
+  };
+
   return (
-    
-      <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className=" max-w-[1000px] mx-auto  border-none rounded-md overflow-hidden bg-white">
-        {view === 'garage' && garageCount > 0 ? (
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-[600px] mx-auto border-none rounded-md overflow-hidden bg-white">
+        <div className="bg-white">
           <GarageView
             garage={garage}
             activeGarageId={activeGarageId}
-            onAddVehicle={() => {
-              setView('add')
-              dispatch(clearYearMakeModel())
-            }}
+            onAddVehicle={handleAddVehicle}
             onClearAll={handleClearAll}
             onRemove={handleRemove}
             onClose={() => onOpenChange(false)}
           />
-        ) : (
-          <AddVehicleView onClose={() => onOpenChange(false)} />
-        )}
+        </div>
       </DialogContent>
     </Dialog>
-  
   );
 };
 
@@ -90,10 +93,10 @@ const GarageView = ({ garage, activeGarageId, onAddVehicle, onClearAll, onRemove
   };
 
   return (
-    <div className="p-6 max-w-2xl">
+    <div className="p-4 sm:p-6 w-full">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-bold">My Garage</h2>
-        <button onClick={onClearAll} className="text-[#3b5998] mt-6 cursor-pointer hover:text-[#2d4373] text-sm">
+        <button onClick={onClearAll} className="text-[#3b5998] cursor-pointer hover:text-[#2d4373] text-sm">
           Clear All
         </button>
       </div>
@@ -147,6 +150,10 @@ const GarageView = ({ garage, activeGarageId, onAddVehicle, onClearAll, onRemove
   );
 };
 
+/**
+ * @deprecated This component is no longer used for adding vehicles.
+ * Use the new YmmFilterModal component instead.
+ */
 const AddVehicleView = ({ onClose }: { onClose: () => void }) => {
   const {
     isYearLoading,
@@ -378,7 +385,8 @@ const AddVehicleView = ({ onClose }: { onClose: () => void }) => {
 };
 
 export const VehicleSelectorButton = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpenLocal, setIsModalOpenLocal] = useState(false);
+  const dispatch = useAppDispatch();
   const { garage, activeGarageId } = useTypedSelector(
     (state) => state.persisted.yearMakeModel
   );
@@ -392,7 +400,13 @@ export const VehicleSelectorButton = () => {
   return (
     <>
       <button
-        onClick={() => setIsModalOpen(true)}
+        onClick={() => {
+          if (count > 0) {
+            setIsModalOpenLocal(true);
+          } else {
+            dispatch(setIsModalOpen({ isOpen: true, source: "vehicle_selector_button" }));
+          }
+        }}
         className="flex items-center gap-2 px-3 py-2 bg-[#F0F4F8] hover:bg-[#E2E8F0] rounded-md transition-colors cursor-pointer w-full"
       >
         {/* Car icon */}
@@ -435,8 +449,8 @@ export const VehicleSelectorButton = () => {
       </button>
 
       <VehicleSelectorModal
-        isOpen={isModalOpen}
-        onOpenChange={setIsModalOpen}
+        isOpen={isModalOpenLocal}
+        onOpenChange={setIsModalOpenLocal}
         skipToGarage={count > 0}
       />
     </>

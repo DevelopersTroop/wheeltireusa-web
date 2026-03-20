@@ -1,5 +1,6 @@
 "use client"
 import StickyVehicleSelector from '../header-ymm';
+import YmmFilterModal from '../YmmFilterModal/YmmFilterModal';
 import MainMenu from './components/MainMenu/MainMenu';
 import MiddleHeader from './components/MiddleHeader/MiddleHeader';
 
@@ -15,6 +16,7 @@ const Header = () => {
             <div ref={menuRef} >
                 <MainMenu />
             </div>
+            <YmmFilterModal/>
             <StickyVehicleSelector />
         </>
     );

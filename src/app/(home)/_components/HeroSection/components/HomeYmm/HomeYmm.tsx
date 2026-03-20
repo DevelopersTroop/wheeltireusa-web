@@ -196,7 +196,7 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
     return () => clearTimeout(timeoutId);
   }, [trim, isDriveLoading, isDriveDisabled, drives?.length, drive, isInView, isActive]);
 
-  const hasVehicleSelected = Boolean(activeGarageItem) || Boolean(year && make && model && model !== "__DEFAULT_MODEL__" && trim && trim !== "__DEFAULT_TRIM__" && drive && drive !== "__DEFAULT_DRIVE__");
+  const hasVehicleSelected = Boolean(activeGarageId && activeGarageItem);
 
   // Optional rendering of sub-dropdowns based on whether they have items.
   // The mockups only show 3 inputs for the initial state, but we should let users select subModels if needed
@@ -212,18 +212,11 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
           <div className="flex items-center gap-3">
             <CheckCircle2 className="w-6 h-6 shrink-0 fill-primary text-white" />
             <span className="font-extrabold text-gray-900 uppercase text-[15px] tracking-tight">
-              {activeGarageItem
-                ? `${activeGarageItem.year} ${activeGarageItem.make} ${activeGarageItem.model || ''} ${activeGarageItem.trim && activeGarageItem.trim !== '__DEFAULT_TRIM__' ? activeGarageItem.trim : ''} ${activeGarageItem.drive && activeGarageItem.drive !== '__DEFAULT_DRIVE__' ? activeGarageItem.drive : ''}`.trim()
-                : `${year} ${make} ${model} ${trim && trim !== "__DEFAULT_TRIM__" ? trim : ""} ${drive && drive !== "__DEFAULT_DRIVE__" ? drive : ""}`.trim()}
+              {`${activeGarageItem?.year} ${activeGarageItem?.make} ${activeGarageItem?.model || ''} ${activeGarageItem?.trim && activeGarageItem.trim !== '__DEFAULT_TRIM__' ? activeGarageItem.trim : ''} ${activeGarageItem?.drive && activeGarageItem.drive !== '__DEFAULT_DRIVE__' ? activeGarageItem.drive : ''}`.trim()}
             </span>
           </div>
           <div className="flex items-center gap-6">
-            <Link
-              href={`/collections/product-category/wheels?q=${year}-${make}-${model}`}
-              className="text-xs font-bold text-[#111827] border-b-2 border-[#111827] uppercase hover:text-gray-600 hover:border-gray-600 transition-colors pb-0.5 tracking-wide"
-            >
-              VIEW ALL PRODUCTS FOR MY VEHICLE
-            </Link>
+            
             <button
               onClick={handleClear}
               className="px-6 py-2 border border-gray-300 rounded-sm text-xs font-bold text-[#4B5563] hover:bg-gray-50 uppercase tracking-wide transition-colors"
@@ -341,7 +334,7 @@ const HomeYmm = ({ variant = "hero" }: HomeYmmProps) => {
           <div className="flex flex-col">
             <span className="text-xs text-[#6B7280] font-bold uppercase tracking-wide mb-1">Shopping For</span>
             <span className="text-2xl lg:text-3xl font-black text-[#111827] uppercase leading-none">
-              {year} {make} {model} {trim && trim !== "__DEFAULT_TRIM__" ? trim : ""} {drive && drive !== "__DEFAULT_DRIVE__" ? drive : ""}
+              {`${activeGarageItem?.year} ${activeGarageItem?.make} ${activeGarageItem?.model || ''} ${activeGarageItem?.trim && activeGarageItem.trim !== "__DEFAULT_TRIM__" ? activeGarageItem.trim : ""} ${activeGarageItem?.drive && activeGarageItem.drive !== "__DEFAULT_DRIVE__" ? activeGarageItem.drive : ""}`.trim()}
             </span>
           </div>
         </div>

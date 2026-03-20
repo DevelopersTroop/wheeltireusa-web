@@ -79,7 +79,7 @@ const WheelActionButtons = ({ product }: { product: TWheelProduct }) => {
             res({ cartPackage });
         }).then((res) => {
             router.push(
-                `/collections/product-category/tires?wheelDiameter=${product.wheelDiameter}&cartPackage=${res.cartPackage}`
+                `/collections/product-category/tires?tireDiameter=${product.wheelDiameter}&cartPackage=${res.cartPackage}`
             );
         });
     };

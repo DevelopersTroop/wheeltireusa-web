@@ -82,9 +82,9 @@ const TireCategory: React.FC<{
   const viewType = useSelector((state: RootState) => state.persisted.layout.viewType);
   return (
     <>
-      <div className="flex justify-center items-center">
-        <h1 className="text-[20px] font-semibold">Aftermarket Truck Tires</h1>
-      </div>
+      {/* <div className="flex justify-center items-center">
+        <h1 className="text-[20px] mt-2 font-semibold">Aftermarket Truck Tires</h1>
+      </div> */}
       {topDescription && (
         <div
           className="container mx-auto px-4 my-4"
