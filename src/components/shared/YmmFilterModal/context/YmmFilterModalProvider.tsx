@@ -32,7 +32,7 @@ export default function YmmFilterModalProvider({ children }: Props) {
   const [activeMainTab, setActiveMainTab] = useState<"vehicle" | "brand" | "size">(
     initialMainTab || "vehicle"
   );
-  const [modalHeight, setModalHeight] = useState<number>(550);
+  const [modalHeight, setModalHeight] = useState<number>(500);
   const [brandCategory, setBrandCategory] = useState<"tire" | "wheels">(initialBrandCategory || "tire");
   const [sizeCategory, setSizeCategory] = useState<"tire" | "wheels">(initialSizeCategory || "wheels");
 

@@ -2,8 +2,8 @@
 
 import { cn } from "@/lib/utils";
 import useYmmFilterModal from "../../context/useYmmFilterModal";
-import WheelsSizeFlow from "./WheelsSizeFlow";
-import TireSizeFlow from "./TireSizeFlow";
+import WheelsSizeFlow from "./components/WheelsSizeFlow/WheelsSizeFlow";
+import TireSizeFlow from "./components/TireSizeFlow/TireSizeFlow";
 
 export default function ShopBySizePanel() {
   const { sizeCategory, setSizeCategory } = useYmmFilterModal();

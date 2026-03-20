@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useGetFilterListQuery } from "@/redux/apis/product";
-import useYmmFilterModal from "../../context/useYmmFilterModal";
-import SizeStepIndicator from "./components/SizeStepIndicator/SizeStepIndicator";
-import SizeListSkeleton from "./components/SizeListSkeleton/SizeListSkeleton";
-import SizeOptionButton from "./components/SizeOptionButton/SizeOptionButton";
+import useYmmFilterModal from "../../../../context/useYmmFilterModal";
+import SizeStepIndicator from "../SizeStepIndicator/SizeStepIndicator";
+import SizeListSkeleton from "../SizeListSkeleton/SizeListSkeleton";
+import SizeOptionButton from "../SizeOptionButton/SizeOptionButton";
 
 export default function TireSizeFlow() {
   const router = useRouter();
@@ -134,7 +134,7 @@ export default function TireSizeFlow() {
       {isFetching ? (
         <SizeListSkeleton />
       ) : (
-        <div className="pb-6">
+        <div className="pb-6 overflow-y-auto custom-scrollbar max-h-[300px]">
           {step === 1 && (
             <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3">
               {widths.map((w: any) => (

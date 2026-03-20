@@ -61,7 +61,7 @@ export default function ShopByBrandPanel() {
           No brands available right now.
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 pb-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 pb-4 overflow-y-auto custom-scrollbar max-h-[350px]">
           {brands.map((brand) => {
             const brandText = brand.toLowerCase().includes("tire") || brand.toLowerCase().includes("wheel")
               ? brand

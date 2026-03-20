@@ -1,5 +1,7 @@
 "use client";
 
+import { DialogHeader, DialogTitle } from "@/components/ui/dialog";
+
 export default function VehicleTabPanelLoadingFallback() {
   return (
     <div className="pt-2">

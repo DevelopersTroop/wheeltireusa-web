@@ -9,8 +9,8 @@ import { X } from "lucide-react";
 import YmmFilterModalProvider from "./context/YmmFilterModalProvider";
 import useYmmFilterModal from "./context/useYmmFilterModal";
 import ModalTopTabs from "./components/ModalTopTabs/ModalTopTabs";
-import VehicleTabPanelLoadingFallback from "./components/VehicleTabPanelLoadingFallback/VehicleTabPanelLoadingFallback";
-import ShopByBrandPanelLoadingFallback from "./components/ShopByBrandPanelLoadingFallback/ShopByBrandPanelLoadingFallback";
+import VehicleTabPanelLoadingFallback from "./components/VehicleTabPanel/components/VehicleTabPanelLoadingFallback/VehicleTabPanelLoadingFallback";
+import ShopByBrandPanelLoadingFallback from "./components/ShopByBrandPanel/components/ShopByBrandPanelLoadingFallback/ShopByBrandPanelLoadingFallback";
 
 const VehicleTabPanel = dynamic(
   () => import("./components/VehicleTabPanel/VehicleTabPanel"),
@@ -53,16 +53,15 @@ const YmmFilterModalDialog = () => {
     >
       <DialogContent 
         hideCloseButton 
-        onInteractOutside={() => closeModal()}
-        className="!left-0 !translate-x-0 w-screen max-w-none border-0 bg-transparent p-0 shadow-none"
+        onPointerDownOutside={() => closeModal()}
+        className="w-[95vw] sm:w-[92vw] !max-w-[980px] border-0 bg-transparent p-0 shadow-none"
         style={{ height: `${modalHeight}px` }}
       >
         <div 
-          className="mx-auto w-[95vw] sm:w-[92vw] max-w-[980px] rounded-md bg-white px-4 py-4 sm:px-6 sm:py-6 relative flex flex-col"
-          style={{ maxHeight: `${modalHeight}px` }}
+          className="w-full h-full rounded-md bg-white px-4 py-4 sm:px-6 sm:py-6 relative flex flex-col"
         >
-          <DialogClose className="absolute right-4 top-4 rounded-sm opacity-80 hover:opacity-100 z-10">
-            <X className="h-6 w-6 text-primary" />
+          <DialogClose className="absolute -top-3 -right-3 sm:-top-4 sm:-right-4 rounded-full bg-white p-1.5 sm:p-2 shadow-lg hover:bg-gray-100 z-50 border border-gray-200">
+            <X className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
           </DialogClose>
           <div className="shrink-0">
             <ModalTopTabs />
