@@ -154,41 +154,37 @@ export default function VehicleTab() {
             placeholder="MODEL"
           />
         </div>
+
+        {showTrim && (
+          <div className="flex-1">
+            <YmmCustomSelect
+              label="TRIM"
+              required={true}
+              value={trim === "__DEFAULT_TRIM__" ? undefined : trim}
+              options={trims || []}
+              disabled={isTrimDisabled}
+              loading={isTrimLoading}
+              onChange={handleTrimChange}
+              placeholder="TRIM"
+            />
+          </div>
+        )}
+
+        {showDrive && (
+          <div className="flex-1">
+            <YmmCustomSelect
+              label="DRIVE"
+              required={true}
+              value={drive === "__DEFAULT_DRIVE__" ? undefined : drive}
+              options={drives || []}
+              disabled={isDriveDisabled}
+              loading={isDriveLoading}
+              onChange={handleDriveChange}
+              placeholder="DRIVE"
+            />
+          </div>
+        )}
       </div>
-
-      {(showTrim || showDrive) && (
-        <div className="flex-1 flex flex-col sm:flex-row gap-3">
-          {showTrim && (
-            <div className="flex-1">
-              <YmmCustomSelect
-                label="TRIM"
-                required={true}
-                value={trim === "__DEFAULT_TRIM__" ? undefined : trim}
-                options={trims || []}
-                disabled={isTrimDisabled}
-                loading={isTrimLoading}
-                onChange={handleTrimChange}
-                placeholder="TRIM"
-              />
-            </div>
-          )}
-
-          {showDrive && (
-            <div className="flex-1">
-              <YmmCustomSelect
-                label="DRIVE"
-                required={true}
-                value={drive === "__DEFAULT_DRIVE__" ? undefined : drive}
-                options={drives || []}
-                disabled={isDriveDisabled}
-                loading={isDriveLoading}
-                onChange={handleDriveChange}
-                placeholder="DRIVE"
-              />
-            </div>
-          )}
-        </div>
-      )}
 
       <div className="lg:w-32 shrink-0">
         <button
