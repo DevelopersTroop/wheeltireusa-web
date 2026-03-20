@@ -27,37 +27,60 @@ export default function MobileNavbar() {
   const handleNavMenuClick = (menu: NavMenu, e: React.MouseEvent) => {
     let matched = false;
     if (menu.label?.toLowerCase() === "shop wheels") {
-      dispatch(setIsModalOpen({ 
-        isOpen: true, 
-        source: "nav_menu", 
+      dispatch(setIsModalOpen({
+        isOpen: true,
+        source: "nav_menu",
         redirectPath: "/collections/product-category/wheels",
-        mainTab: "size",
+        mainTab: "vehicle",
         brandCategory: "wheels",
         sizeCategory: "wheels"
       }));
       matched = true;
     }
     if (menu.label?.toLowerCase() === "shop tires") {
-      dispatch(setIsModalOpen({ 
-        isOpen: true, 
-        source: "nav_menu", 
+      dispatch(setIsModalOpen({
+        isOpen: true,
+        source: "nav_menu",
         redirectPath: "/collections/product-category/tires",
-        mainTab: "size",
+        mainTab: "vehicle",
         brandCategory: "tire",
         sizeCategory: "tire"
       }));
       matched = true;
+
     }
-    if (menu.label?.toLowerCase() === "wheels by brands") {
-      dispatch(setIsModalOpen({ 
-        isOpen: true, 
-        source: "nav_menu", 
-        redirectPath: "/collections/product-category/wheels",
-        mainTab: "brand",
-        brandCategory: "wheels"
-      }));
-      matched = true;
-    }
+    // if (menu.label?.toLowerCase() === "shop wheels") {
+    //   dispatch(setIsModalOpen({ 
+    //     isOpen: true, 
+    //     source: "nav_menu", 
+    //     redirectPath: "/collections/product-category/wheels",
+    //     mainTab: "size",
+    //     brandCategory: "wheels",
+    //     sizeCategory: "wheels"
+    //   }));
+    //   matched = true;
+    // }
+    // if (menu.label?.toLowerCase() === "shop tires") {
+    //   dispatch(setIsModalOpen({ 
+    //     isOpen: true, 
+    //     source: "nav_menu", 
+    //     redirectPath: "/collections/product-category/tires",
+    //     mainTab: "size",
+    //     brandCategory: "tire",
+    //     sizeCategory: "tire"
+    //   }));
+    //   matched = true;
+    // }
+    // if (menu.label?.toLowerCase() === "wheels by brands") {
+    //   dispatch(setIsModalOpen({ 
+    //     isOpen: true, 
+    //     source: "nav_menu", 
+    //     redirectPath: "/collections/product-category/wheels",
+    //     mainTab: "brand",
+    //     brandCategory: "wheels"
+    //   }));
+    //   matched = true;
+    // }
 
     if (matched) {
       e.preventDefault();

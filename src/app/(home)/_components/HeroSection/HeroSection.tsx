@@ -1,10 +1,7 @@
 'use client';
-import { useState } from "react";
-import HomeYmm from "./components/HomeYmm/HomeYmm";
+import HomeFilter from "./components/HomeFilter/HomeFilter";
 
 export default function HeroSection() {
-
-  const [activeTab, setActiveTab] = useState('vehicle');
 
   return (
     <section
@@ -28,33 +25,8 @@ export default function HeroSection() {
           </p>
         </div>
 
-        <div className="w-full max-w-5xl bg-white/95 backdrop-blur-md shadow-2xl rounded-2xl p-6 md:p-8 border border-white/30 transition-all duration-300 hover:shadow-3xl">
-
-          <div className="flex justify-center gap-4 mb-6">
-            <button
-              onClick={() => setActiveTab("vehicle")}
-              className={`px-6 py-2 rounded-full text-sm font-semibold transition ${
-                activeTab === "vehicle"
-                  ? "bg-primary text-white shadow-md"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-              }`}
-            >
-              Search by Vehicle
-            </button>
-
-            <button
-              onClick={() => setActiveTab("size")}
-              className={`px-6 py-2 rounded-full text-sm font-semibold transition ${
-                activeTab === "size"
-                  ? "bg-primary text-white shadow-md"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-              }`}
-            >
-              Search by Size
-            </button>
-          </div>
-
-          <HomeYmm />
+        <div className="w-full max-w-5xl transition-all duration-300">
+          <HomeFilter />
         </div>
 
       </div>

@@ -86,9 +86,9 @@ export default function TireSizeFlow() {
   ];
 
   const renderStepIndicator = () => (
-    <div className="relative">
+    <div className="relative flex flex-col sm:block items-center">
       <SizeStepIndicator steps={steps} />
-      <button className="absolute right-0 top-1 sm:top-2 text-primary text-sm hover:underline flex items-center gap-1">
+      <button className="sm:absolute sm:right-0 sm:top-1 lg:top-2 text-primary text-sm hover:underline flex items-center gap-1 sm:mt-0 mb-6 sm:mb-0">
         <span className="w-4 h-4 rounded-full border border-primary text-[10px] flex items-center justify-center font-bold">i</span>
         need help?
       </button>
