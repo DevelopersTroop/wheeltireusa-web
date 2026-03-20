@@ -11,6 +11,7 @@ import useYmmFilterModal from "./context/useYmmFilterModal";
 import ModalTopTabs from "./components/ModalTopTabs/ModalTopTabs";
 import VehicleTabPanelLoadingFallback from "./components/VehicleTabPanel/components/VehicleTabPanelLoadingFallback/VehicleTabPanelLoadingFallback";
 import ShopByBrandPanelLoadingFallback from "./components/ShopByBrandPanel/components/ShopByBrandPanelLoadingFallback/ShopByBrandPanelLoadingFallback";
+import ShopBySizePanelLoadingFallback from "./components/ShopBySizePanel/components/ShopBySizePanelLoadingFallback/ShopBySizePanelLoadingFallback";
 
 const VehicleTabPanel = dynamic(
   () => import("./components/VehicleTabPanel/VehicleTabPanel"),
@@ -29,7 +30,7 @@ const ShopByBrandPanel = dynamic(
 const ShopBySizePanel = dynamic(
   () => import("./components/ShopBySizePanel/ShopBySizePanel"),
   {
-    loading: () => <div className="p-8 text-center text-gray-500">Loading Size Filter...</div>,
+    loading: () => <ShopBySizePanelLoadingFallback />,
   }
 );
 
