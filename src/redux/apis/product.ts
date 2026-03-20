@@ -130,11 +130,25 @@ const products = baseApi.injectEndpoints({
     }),
     getFilterList: builder.query<
       { filters: TFilters },
-      { category?: 'wheels' | 'tire' | 'accessories' } | void
+      { 
+        category?: 'wheels' | 'tire' | 'accessories', 
+        wheelDiameter?: string, 
+        wheelWidth?: string,
+        tireWidth?: string,
+        tireRatio?: string,
+        tireDiameter?: string
+      } | void
     >({
       query: (arg) => ({
         url: '/products/filter-list',
-        params: { category: arg?.category ?? 'tire' },
+        params: { 
+          category: arg?.category ?? 'tire',
+          ...(arg?.wheelDiameter ? { wheelDiameter: arg.wheelDiameter } : {}),
+          ...(arg?.wheelWidth ? { wheelWidth: arg.wheelWidth } : {}),
+          ...(arg?.tireWidth ? { tireWidth: arg.tireWidth } : {}),
+          ...(arg?.tireRatio ? { tireRatio: arg.tireRatio } : {}),
+          ...(arg?.tireDiameter ? { tireDiameter: arg.tireDiameter } : {}),
+        },
       }),
       transformResponse(
         baseQueryReturnValue: { filters: TFilters },

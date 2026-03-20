@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type YmmModalSource = "nav_menu" | "vehicle_selector_button" | "other";
-export type YmmMainTab = "vehicle" | "brand";
+export type YmmMainTab = "vehicle" | "brand" | "size";
 export type YmmBrandCategory = "tire" | "wheels";
+export type YmmSizeCategory = "tire" | "wheels";
 
 interface YmmFilterState {
   isModalOpen: boolean;
@@ -10,6 +11,7 @@ interface YmmFilterState {
   redirectPath: string | null;
   initialMainTab: YmmMainTab;
   initialBrandCategory: YmmBrandCategory;
+  initialSizeCategory: YmmSizeCategory;
 }
 
 const initialState: YmmFilterState = {
@@ -18,6 +20,7 @@ const initialState: YmmFilterState = {
   redirectPath: null,
   initialMainTab: "vehicle",
   initialBrandCategory: "tire",
+  initialSizeCategory: "wheels",
 };
 
 const ymmFilterSlice = createSlice({
@@ -33,6 +36,7 @@ const ymmFilterSlice = createSlice({
           redirectPath?: string | null;
           mainTab?: YmmMainTab;
           brandCategory?: YmmBrandCategory;
+          sizeCategory?: YmmSizeCategory;
         }
       >
     ) => {
@@ -43,6 +47,7 @@ const ymmFilterSlice = createSlice({
           state.redirectPath = null;
           state.initialMainTab = "vehicle";
           state.initialBrandCategory = "tire";
+          state.initialSizeCategory = "wheels";
         }
       } else {
         state.isModalOpen = action.payload.isOpen;
@@ -51,6 +56,7 @@ const ymmFilterSlice = createSlice({
         if (action.payload.isOpen) {
           state.initialMainTab = action.payload.mainTab || "vehicle";
           state.initialBrandCategory = action.payload.brandCategory || "tire";
+          state.initialSizeCategory = action.payload.sizeCategory || "wheels";
         }
       }
     },

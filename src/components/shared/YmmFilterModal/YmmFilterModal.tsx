@@ -26,6 +26,13 @@ const ShopByBrandPanel = dynamic(
   }
 );
 
+const ShopBySizePanel = dynamic(
+  () => import("./components/ShopBySizePanel/ShopBySizePanel"),
+  {
+    loading: () => <div className="p-8 text-center text-gray-500">Loading Size Filter...</div>,
+  }
+);
+
 const YmmFilterModal = () => {
   return (
     <YmmFilterModalProvider>
@@ -61,7 +68,9 @@ const YmmFilterModalDialog = () => {
             <ModalTopTabs />
           </div>
           <div className="flex-1 overflow-y-auto min-h-0 custom-scrollbar">
-            {activeMainTab === "vehicle" ? <VehicleTabPanel /> : <ShopByBrandPanel />}
+            {activeMainTab === "vehicle" && <VehicleTabPanel />}
+            {activeMainTab === "brand" && <ShopByBrandPanel />}
+            {activeMainTab === "size" && <ShopBySizePanel />}
           </div>
         </div>
       </DialogContent>

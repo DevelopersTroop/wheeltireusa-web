@@ -18,7 +18,7 @@ const TireFilters = React.memo(() => {
           { key: "price" },
           { key: "tireDiameter", title: "Tire Diameter", defaultOpen: true },
           { key: "tireWidth", title: "Tire Width" },
-          { key: "tireAspectRatio", title: "Aspect Ratio" },
+          { key: "tireRatio", title: "Aspect Ratio" },
           { key: "tireType", title: "Tire Type" },
           { key: "brand", title: "Brand" },
           { key: "model", title: "Model" },

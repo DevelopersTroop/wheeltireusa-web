@@ -7,8 +7,8 @@ export type TYmmFilterModalContext = {
   closeModal: () => void;
   modalHeight: number;
   setModalHeight: (height: number) => void;
-  activeMainTab: "vehicle" | "brand";
-  setActiveMainTab: (tab: "vehicle" | "brand") => void;
+  activeMainTab: "vehicle" | "brand" | "size";
+  setActiveMainTab: (tab: "vehicle" | "brand" | "size") => void;
   headerTitle: string;
   headerSubtitle: string;
   activeStep: 1 | 2;
@@ -17,6 +17,8 @@ export type TYmmFilterModalContext = {
   isVehicleStepCompleted: boolean;
   brandCategory: "tire" | "wheels";
   setBrandCategory: (category: "tire" | "wheels") => void;
+  sizeCategory: "tire" | "wheels";
+  setSizeCategory: (category: "tire" | "wheels") => void;
   brands: string[];
   isBrandsLoading: boolean;
   yearValue?: string;

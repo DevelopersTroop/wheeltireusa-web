@@ -17,59 +17,69 @@ export interface NavMenu {
 
 // Array of navigation menu items
 const mobileNavMenus: NavMenu[] = [
+  // {
+  //   label: 'Shop Wheels', // Main menu item
+  //   href: '/collections/product-category/wheels', // Link to the wheels category
+  //   meagMenu: true, // Indicates this is part of a mega menu
+  //   children: [
+  //     {
+  //       label: 'Shop all wheels',
+  //       href: '/collections/product-category/wheels',
+  //     },
+  //     {
+  //       label: 'Shop by brands',
+  //       href: '/brands?query=wheels',
+  //     },
+  //     {
+  //       label: 'Make your wheel and tire packages now',
+  //       href: '/collections/product-category/wheels',
+  //     },
+  //   ],
+  // },
+  // {
+  //   label: 'Shop Tires',
+  //   href: '/collections/product-category/tires',
+  //   meagMenu: false,
+  //   children: [
+  //     {
+  //       label: 'Shop all Tires',
+  //       href: '/collections/product-category/tires',
+  //     },
+  //     {
+  //       label: 'All-Season',
+  //       href: '/collections/product-category/tires',
+  //     },
+  //     {
+  //       label: 'All-Terrain',
+  //       href: '/collections/product-category/tires',
+  //     },
+  //     {
+  //       label: 'Dessert Terrain',
+  //       href: '/collections/product-category/tires',
+  //     },
+  //     {
+  //       label: 'Hybrid at/mt',
+  //       href: '/collections/product-category/tires',
+  //     },
+  //     {
+  //       label: 'Mud terrain',
+  //       href: '/collections/product-category/tires',
+  //     },
+  //     {
+  //       label: 'Shop by brand',
+  //       href: '/brands?query=tires',
+  //     },
+  //   ],
+  // },
   {
-    label: 'Shop Wheels', // Main menu item
-    href: '/collections/product-category/wheels', // Link to the wheels category
-    meagMenu: true, // Indicates this is part of a mega menu
-    children: [
-      {
-        label: 'Shop all wheels',
-        href: '/collections/product-category/wheels',
-      },
-      {
-        label: 'Shop by brands',
-        href: '/brands?query=wheels',
-      },
-      {
-        label: 'Make your wheel and tire packages now',
-        href: '/collections/product-category/wheels',
-      },
-    ],
+    label: "Shop Wheels",
+    href: "#",
+    meagMenu: false,
   },
   {
-    label: 'Shop Tires',
-    href: '/collections/product-category/tires',
+    label: "Shop Tires",
+    href: "#",
     meagMenu: false,
-    children: [
-      {
-        label: 'Shop all Tires',
-        href: '/collections/product-category/tires',
-      },
-      {
-        label: 'All-Season',
-        href: '/collections/product-category/tires',
-      },
-      {
-        label: 'All-Terrain',
-        href: '/collections/product-category/tires',
-      },
-      {
-        label: 'Dessert Terrain',
-        href: '/collections/product-category/tires',
-      },
-      {
-        label: 'Hybrid at/mt',
-        href: '/collections/product-category/tires',
-      },
-      {
-        label: 'Mud terrain',
-        href: '/collections/product-category/tires',
-      },
-      {
-        label: 'Shop by brand',
-        href: '/brands?query=tires',
-      },
-    ],
   },
   {
     meagMenu: false,

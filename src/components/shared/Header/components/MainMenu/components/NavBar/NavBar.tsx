@@ -40,15 +40,19 @@ function NavBar() {
         isOpen: true, 
         source: "nav_menu", 
         redirectPath: "/collections/product-category/wheels",
-        brandCategory: "wheels"
+        mainTab: "vehicle",
+        brandCategory: "wheels",
+        sizeCategory: "wheels"
       }));
     }
     if (menu.label?.toLowerCase() === "shop tires") {
       dispatch(setIsModalOpen({ 
         isOpen: true, 
         source: "nav_menu", 
-        redirectPath: "/collections/product-category/tires" ,
-        brandCategory: "tire"
+        redirectPath: "/collections/product-category/tires",
+        mainTab: "vehicle",
+        brandCategory: "tire",
+        sizeCategory: "tire"
       }));
     }
     // if (submenu.label?.toLowerCase() === "shop tires") {

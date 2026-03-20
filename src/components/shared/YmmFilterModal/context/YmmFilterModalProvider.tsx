@@ -25,14 +25,16 @@ export default function YmmFilterModalProvider({ children }: Props) {
   const redirectPath = useTypedSelector((state) => state.ymmFilter.redirectPath);
   const initialMainTab = useTypedSelector((state) => state.ymmFilter.initialMainTab);
   const initialBrandCategory = useTypedSelector((state) => state.ymmFilter.initialBrandCategory);
+  const initialSizeCategory = useTypedSelector((state) => state.ymmFilter.initialSizeCategory);
   const dispatch = useDispatch();
   const router = useRouter();
   const pathname = usePathname();
-  const [activeMainTab, setActiveMainTab] = useState<"vehicle" | "brand">(
+  const [activeMainTab, setActiveMainTab] = useState<"vehicle" | "brand" | "size">(
     initialMainTab || "vehicle"
   );
   const [modalHeight, setModalHeight] = useState<number>(550);
   const [brandCategory, setBrandCategory] = useState<"tire" | "wheels">(initialBrandCategory || "tire");
+  const [sizeCategory, setSizeCategory] = useState<"tire" | "wheels">(initialSizeCategory || "wheels");
 
   const {
     list: { years, makes, models, trims, drives },
@@ -75,8 +77,9 @@ export default function YmmFilterModalProvider({ children }: Props) {
       setActiveStep(1);
       setActiveMainTab(initialMainTab || "vehicle");
       setBrandCategory(initialBrandCategory || "tire");
+      setSizeCategory(initialSizeCategory || "wheels");
     }
-  }, [isModalOpen, dispatch, initialMainTab, initialBrandCategory]);
+  }, [isModalOpen, dispatch, initialMainTab, initialBrandCategory, initialSizeCategory]);
 
   const brands = useMemo(
     () =>
@@ -155,6 +158,8 @@ export default function YmmFilterModalProvider({ children }: Props) {
       isVehicleStepCompleted,
       brandCategory,
       setBrandCategory,
+      sizeCategory,
+      setSizeCategory,
       brands,
       isBrandsLoading: isBrandsLoading || isBrandsFetching,
       yearValue,
@@ -197,6 +202,7 @@ export default function YmmFilterModalProvider({ children }: Props) {
       modelValue,
       isVehicleStepCompleted,
       brandCategory,
+      sizeCategory,
       brands,
       isBrandsLoading,
       isBrandsFetching,
