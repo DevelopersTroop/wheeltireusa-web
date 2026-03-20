@@ -1,6 +1,9 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { useAppDispatch } from "@/redux/store";
+import { setActiveGarage } from "@/redux/features/yearMakeModelSlice";
+import { useRouter } from "next/navigation";
 import useYmmFilterModal from "../../context/useYmmFilterModal";
 
 export default function ShopByBrandPanel() {
@@ -9,7 +12,18 @@ export default function ShopByBrandPanel() {
     setBrandCategory,
     brands,
     isBrandsLoading,
+    closeModal,
   } = useYmmFilterModal();
+
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+
+  const handleBrandClick = (brandName: string) => {
+    dispatch(setActiveGarage(null));
+    closeModal();
+    const categoryPath = brandCategory === "tire" ? "tires" : "wheels";
+    router.push(`/collections/product-category/${categoryPath}?brand=${encodeURIComponent(brandName)}`);
+  };
 
   return (
     <div className="pt-2">
@@ -56,6 +70,7 @@ export default function ShopByBrandPanel() {
               <button
                 key={brand}
                 type="button"
+                onClick={() => handleBrandClick(brand)}
                 className="py-3 px-2 rounded-md border border-gray-300 bg-white text-center text-sm sm:text-base font-bold text-gray-800 transition-colors hover:border-primary hover:text-primary"
               >
                 {brandText}

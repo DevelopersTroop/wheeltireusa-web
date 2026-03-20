@@ -12,18 +12,27 @@ import {
   YmmFilterModalContext,
 } from "./YmmFilterModalContext";
 
+import { addToGarage, submitYmm, clearYearMakeModel } from "@/redux/features/yearMakeModelSlice";
+import { TYmmGarageItem } from "@/types/ymm";
+import { useRouter, usePathname } from "next/navigation";
+
 type Props = {
   children: ReactNode;
 };
 
 export default function YmmFilterModalProvider({ children }: Props) {
   const isModalOpen = useTypedSelector((state) => state.ymmFilter.isModalOpen);
+  const redirectPath = useTypedSelector((state) => state.ymmFilter.redirectPath);
+  const initialMainTab = useTypedSelector((state) => state.ymmFilter.initialMainTab);
+  const initialBrandCategory = useTypedSelector((state) => state.ymmFilter.initialBrandCategory);
   const dispatch = useDispatch();
+  const router = useRouter();
+  const pathname = usePathname();
   const [activeMainTab, setActiveMainTab] = useState<"vehicle" | "brand">(
-    "vehicle"
+    initialMainTab || "vehicle"
   );
   const [modalHeight, setModalHeight] = useState<number>(550);
-  const [brandCategory, setBrandCategory] = useState<"tire" | "wheels">("tire");
+  const [brandCategory, setBrandCategory] = useState<"tire" | "wheels">(initialBrandCategory || "tire");
 
   const {
     list: { years, makes, models, trims, drives },
@@ -59,6 +68,16 @@ export default function YmmFilterModalProvider({ children }: Props) {
     { skip: !isModalOpen || activeMainTab !== "brand" }
   );
 
+  // Reset YMM local state whenever modal opens so it's fresh
+  useEffect(() => {
+    if (isModalOpen) {
+      dispatch(clearYearMakeModel());
+      setActiveStep(1);
+      setActiveMainTab(initialMainTab || "vehicle");
+      setBrandCategory(initialBrandCategory || "tire");
+    }
+  }, [isModalOpen, dispatch, initialMainTab, initialBrandCategory]);
+
   const brands = useMemo(
     () =>
       ((filterData?.filters?.brand as TSingleFilter[] | undefined) ?? [])
@@ -78,6 +97,37 @@ export default function YmmFilterModalProvider({ children }: Props) {
   const modelValue = displayModel || undefined;
   const trimValue = displayTrim || undefined;
   const driveValue = displayDrive || undefined;
+
+  const handleDriveChange = (val: string) => {
+    onDriveChange(val);
+    
+    // Automatically submit and add to garage when drive is selected
+    const cleanModel = model && model !== '__DEFAULT_MODEL__' ? model : '';
+    const cleanTrim = trim && trim !== '__DEFAULT_TRIM__' ? trim : '';
+    const cleanDrive = val && val !== '__DEFAULT_DRIVE__' ? val : '';
+    
+    const newItem: TYmmGarageItem = {
+      year,
+      make,
+      model: cleanModel,
+      trim: cleanTrim,
+      drive: cleanDrive,
+    };
+    
+    dispatch(addToGarage(newItem));
+    dispatch(submitYmm(newItem));
+    dispatch(setIsModalOpen(false));
+    
+    // Check dynamic redirection logic requested via redux state
+    if (redirectPath) {
+      router.push(redirectPath);
+    } else if (pathname && !pathname.includes('/collections')) {
+      const targetPath = pathname.includes('/tire')
+        ? '/collections/product-category/tire'
+        : '/collections/product-category/wheels';
+      router.push(targetPath);
+    }
+  };
 
   const isVehicleStepCompleted = Boolean(yearValue && makeValue && modelValue);
 
@@ -131,7 +181,7 @@ export default function YmmFilterModalProvider({ children }: Props) {
       onMakeChange: (value: string) => onMakeChange(value),
       onModelChange: (value: string) => onModelChange(value),
       onTrimChange: (value: string) => onTrimChange(value),
-      onDriveChange: (value: string) => onDriveChange(value),
+      onDriveChange: (value: string) => handleDriveChange(value),
     }),
     [
       isModalOpen,
@@ -173,7 +223,7 @@ export default function YmmFilterModalProvider({ children }: Props) {
       onMakeChange,
       onModelChange,
       onTrimChange,
-      onDriveChange,
+      onDriveChange, handleDriveChange,
     ]
   );
 

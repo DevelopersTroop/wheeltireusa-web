@@ -17,103 +17,144 @@ export interface NavMenu {
 
 // Array of navigation menu items
 const navMenus: NavMenu[] = [
+  // {
+  //   label: "Shop Wheels",
+  //   href: "/collections/product-category/wheels",
+  //   meagMenu: true,
+  //   children: [
+  //     {
+  //       label: "Shop Wheels By Vehicle",
+  //       href: "/collections/product-category/wheels",
+  //       children: [
+  //         {
+  //           label: "Shop all wheels",
+  //           href: "/collections/product-category/wheels",
+  //         },
+  //         {
+  //           label: "Shop by brands",
+  //           href: "/brands?query=wheels",
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       label: "Wheels By Brands",
+  //       children: [
+  //         {
+  //           label: "Arena",
+  //           href: "/collections/product-category/wheels?brand_desc=Arena",
+  //         },
+  //         {
+  //           label: "Azara",
+  //           href: "/collections/product-category/wheels?brand_desc=Azara",
+  //         },
+  //         {
+  //           label: "XF Off road",
+  //           href: "/collections/product-category/wheels?brand_desc=XF+Offroad",
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       label: "Wheels By Vehicle Type",
+  //       children: [
+  //         {
+  //           label: "Passenger Car",
+  //           href: "/collections/product-category/wheels?q=Passenger Car",
+  //         },
+  //         {
+  //           label: "SUV/Crossover",
+  //           href: "/collections/product-category/wheels?q=SUV/Crossover",
+  //         },
+  //         {
+  //           label: "Truck",
+  //           href: "/collections/product-category/wheels?q=Truck",
+  //         },
+  //         {
+  //           label: "Off-road/Jeep",
+  //           href: "/collections/product-category/wheels?q=Off-road/Jeep",
+  //         },
+  //         {
+  //           label: "Sports/Performance",
+  //           href: "/collections/product-category/wheels?q=Sports/Performance",
+  //         },
+  //         {
+  //           label: "Luxury",
+  //           href: "/collections/product-category/wheels?q=Luxury",
+  //         },
+  //         {
+  //           label: "Winter Wheels",
+  //           href: "/collections/product-category/wheels?q=Winter Wheels",
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       label: "Dually Wheels",
+  //       children: [
+  //         {
+  //           label: "Chevy Silverado 3500",
+  //           href: "/collections/product-category/wheels?q=Chevy Silverado 3500",
+  //         },
+  //         {
+  //           label: "Ford F350/450",
+  //           href: "/collections/product-category/wheels?q=Ford F350/450",
+  //         },
+  //         {
+  //           label: "Ford F450",
+  //           href: "/collections/product-category/wheels?q=Ford F450",
+  //         },
+  //         {
+  //           label: "GMC Sierra 3500",
+  //           href: "/collections/product-category/wheels?q=GMC Sierra 3500",
+  //         },
+  //         {
+  //           label: "Ram 3500",
+  //           href: "/collections/product-category/wheels?q=Ram 3500",
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // },
+  //  {
+  //   label: "Shop Tires",
+  //   href: "/collections/product-category/tires",
+  //   meagMenu: true,
+  //   children: [
+  //     {
+  //       label: "Shop Tires",
+  //       href: "/collections/product-category/tires",
+  //       children: [
+  //         {
+  //           label: "Shop all Tires",
+  //           href: "/collections/product-category/tires",
+  //         },
+  //         {
+  //           label: "Shop by brand",
+  //           href: "/brands?query=tires",
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       label: "Tire Types",
+  //       children: [
+  //         { label: "All-Season", href: "/collections/product-category/tires" },
+  //         { label: "All-Terrain", href: "/collections/product-category/tires" },
+  //         { label: "Dessert Terrain", href: "/collections/product-category/tires" },
+  //         { label: "Hybrid AT/MT", href: "/collections/product-category/tires" },
+  //         { label: "Mud Terrain", href: "/collections/product-category/tires" },
+  //       ],
+  //     },
+  //   ],
+  // },
   {
-    label: "Shop Wheels",
-    href: "/collections/product-category/wheels",
-    meagMenu: true,
-    children: [
-      {
-        label: "Shop Wheels",
-        href: "/collections/product-category/wheels",
-        children: [
-          {
-            label: "Shop all wheels",
-            href: "/collections/product-category/wheels",
-          },
-          {
-            label: "Shop by brands",
-            href: "/brands?query=wheels",
-          },
-        ],
-      },
-      {
-        label: "Wheels By Brands",
-        children: [
-          {
-            label: "Arena",
-            href: "/collections/product-category/wheels?brand_desc=Arena",
-          },
-          {
-            label: "Azara",
-            href: "/collections/product-category/wheels?brand_desc=Azara",
-          },
-          {
-            label: "XF Off road",
-            href: "/collections/product-category/wheels?brand_desc=XF+Offroad",
-          },
-        ],
-      },
-      {
-        label: "Wheels By Vehicle Type",
-        children: [
-          {
-            label: "Passenger Car",
-            href: "/collections/product-category/wheels?q=Passenger Car",
-          },
-          {
-            label: "SUV/Crossover",
-            href: "/collections/product-category/wheels?q=SUV/Crossover",
-          },
-          {
-            label: "Truck",
-            href: "/collections/product-category/wheels?q=Truck",
-          },
-          {
-            label: "Off-road/Jeep",
-            href: "/collections/product-category/wheels?q=Off-road/Jeep",
-          },
-          {
-            label: "Sports/Performance",
-            href: "/collections/product-category/wheels?q=Sports/Performance",
-          },
-          {
-            label: "Luxury",
-            href: "/collections/product-category/wheels?q=Luxury",
-          },
-          {
-            label: "Winter Wheels",
-            href: "/collections/product-category/wheels?q=Winter Wheels",
-          },
-        ],
-      },
-      {
-        label: "Dually Wheels",
-        children: [
-          {
-            label: "Chevy Silverado 3500",
-            href: "/collections/product-category/wheels?q=Chevy Silverado 3500",
-          },
-          {
-            label: "Ford F350/450",
-            href: "/collections/product-category/wheels?q=Ford F350/450",
-          },
-          {
-            label: "Ford F450",
-            href: "/collections/product-category/wheels?q=Ford F450",
-          },
-          {
-            label: "GMC Sierra 3500",
-            href: "/collections/product-category/wheels?q=GMC Sierra 3500",
-          },
-          {
-            label: "Ram 3500",
-            href: "/collections/product-category/wheels?q=Ram 3500",
-          },
-        ],
-      },
-    ],
+       label: "Shop Wheels",
+    href: "#",
+    meagMenu: false,
   },
-{
+  {
+       label: "Shop Tires",
+    href: "#",
+    meagMenu: false,
+  },
+  {
     label: "Accessories",
     href: "/collections/product-category/accessories",
     meagMenu: true,
@@ -225,40 +266,10 @@ const navMenus: NavMenu[] = [
       },
     ],
   },
-  
-  {
-    label: "Shop Tires",
-    href: "/collections/product-category/tires",
-    meagMenu: true,
-    children: [
-      {
-        label: "Shop Tires",
-        href: "/collections/product-category/tires",
-        children: [
-          {
-            label: "Shop all Tires",
-            href: "/collections/product-category/tires",
-          },
-          {
-            label: "Shop by brand",
-            href: "/brands?query=tires",
-          },
-        ],
-      },
-      {
-        label: "Tire Types",
-        children: [
-          { label: "All-Season", href: "/collections/product-category/tires" },
-          { label: "All-Terrain", href: "/collections/product-category/tires" },
-          { label: "Dessert Terrain", href: "/collections/product-category/tires" },
-          { label: "Hybrid AT/MT", href: "/collections/product-category/tires" },
-          { label: "Mud Terrain", href: "/collections/product-category/tires" },
-        ],
-      },
-    ],
-  },
 
-  
+ 
+
+
 
   {
     label: "Wheel & Tire Packages",
@@ -315,7 +326,7 @@ const navMenus: NavMenu[] = [
     ],
   },
 
-  
+
 
   {
     label: "Resources",
@@ -331,10 +342,10 @@ const navMenus: NavMenu[] = [
           },
           {
             label: "Gallery",
-             href: "/gallery",
+            href: "/gallery",
           }
         ]
-        
+
       },
     ],
   },

@@ -46,6 +46,7 @@ const YmmFilterModalDialog = () => {
     >
       <DialogContent 
         hideCloseButton 
+        onInteractOutside={() => closeModal()}
         className="!left-0 !translate-x-0 w-screen max-w-none border-0 bg-transparent p-0 shadow-none"
         style={{ height: `${modalHeight}px` }}
       >
