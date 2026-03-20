@@ -89,7 +89,7 @@ function BrandListSkeleton() {
       {Array.from({ length: 16 }).map((_, index) => (
         <div
           key={`brand-skeleton-${index}`}
-          className="h-12 rounded-md border border-gray-200 bg-gradient-to-r from-gray-50 via-gray-100 to-gray-50 animate-pulse"
+          className="h-12 rounded-md border border-gray-200 bg-linear-to-r from-gray-50 via-gray-100 to-gray-50 animate-pulse"
         />
       ))}
     </div>

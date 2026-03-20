@@ -54,7 +54,7 @@ const YmmFilterModalDialog = () => {
       <DialogContent 
         hideCloseButton 
         onPointerDownOutside={() => closeModal()}
-        className="w-[95vw] sm:w-[92vw] !max-w-[980px] border-0 bg-transparent p-0 shadow-none"
+        className="w-[95vw] sm:w-[92vw] max-w-[980px]! border-0 bg-transparent p-0 shadow-none"
         style={{ height: `${modalHeight}px` }}
       >
         <div 
