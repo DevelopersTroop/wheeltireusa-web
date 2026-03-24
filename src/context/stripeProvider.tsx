@@ -14,6 +14,7 @@ import React, {
   use,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -37,120 +38,155 @@ const stripePromise = loadStripe(
 );
 
 // --------------------
+// Constants
+// --------------------
+const REQUIRED_ADDRESS_FIELDS: (keyof TBillingAddress)[] = [
+  "address1",
+  "zipCode",
+  "country",
+  "cityState",
+  "phone",
+  "email",
+  "fname",
+  "lname",
+];
+
+const DEBOUNCE_MS = 600;
+
+// --------------------
+// Helpers
+// --------------------
+function hasAllRequiredFields(address: TBillingAddress | null): boolean {
+  if (!address) return false;
+  return REQUIRED_ADDRESS_FIELDS.every((field) => {
+    const value = address[field];
+    return value !== undefined && value !== null && value !== "";
+  });
+}
+
+// --------------------
 // Provider Component
 // --------------------
 export default function StripeProvider({ children }: React.PropsWithChildren) {
-  const { totalCost, step } = useCheckout();
-  const { billingAddress, shippingAddress, paymentIntentId, productsInfo } =
-    useTypedSelector((state) => state.persisted.checkout);
+  const { totalCost } = useCheckout();
+  const { billingAddress, shippingAddress, paymentIntentId } = useTypedSelector(
+    (state) => state.persisted.checkout
+  );
 
   const stripe = use(stripePromise);
   const [loading, setLoading] = useState(false);
-  const [clientSecret, setClientSecret] = useState<string>('');
-  const lastFetchedAddresses = useRef<string>('');
+  const [clientSecret, setClientSecret] = useState<string>("");
+  const lastFetchedHash = useRef<string>("");
   const dispatch = useAppDispatch();
-  const [err, setErr] = useState('');
+  const [err, setErr] = useState("");
 
-  const requiredFields: (keyof TBillingAddress)[] = [
-    'address1',
-    'zipCode',
-    'country',
-    'cityState',
-    'phone',
-    'email',
-    'fname',
-    'lname',
-  ];
+  // Stable serialized strings — only recompute when the underlying object changes
+  const billingHash = useMemo(
+    () => JSON.stringify(billingAddress),
+    [billingAddress]
+  );
+  const shippingHash = useMemo(
+    () => JSON.stringify(shippingAddress),
+    [shippingAddress]
+  );
 
-  // Helper function to check if an address has all required fields
-  const hasAllRequiredFields = (address: TBillingAddress | null): boolean => {
-    if (!address) return false;
-    return requiredFields.every((field) => {
-      const value = address[field];
-      return value !== undefined && value !== null && value !== '';
-    });
-  };
-
-  // Check if addresses are complete
-  const isBillingComplete = hasAllRequiredFields(billingAddress);
-  const isShippingComplete = hasAllRequiredFields(shippingAddress);
-  const areAddressesComplete = isBillingComplete || isShippingComplete;
+  // Derived flags (memoized so they don't re-trigger effects unnecessarily)
+  const areAddressesComplete = useMemo(
+    () =>
+      hasAllRequiredFields(billingAddress) ||
+      hasAllRequiredFields(shippingAddress),
+    [billingAddress, shippingAddress]
+  );
 
   useEffect(() => {
-    // Don't fetch if no totalCost
+    // ── Guard: nothing to charge ──
     if (!totalCost) return;
 
-    // Don't fetch if addresses aren't complete
+    // ── Guard: addresses not ready yet ──
     if (!areAddressesComplete) {
-      setClientSecret('');
-      setErr('');
+      setClientSecret("");
+      setErr("");
       return;
     }
 
-    // Create a hash of the current addresses to detect changes
-    const currentAddressHash = JSON.stringify({
-      billing: billingAddress,
-      shipping: shippingAddress,
-      totalCost,
-    });
+    // ── Build a comparable hash of the inputs ──
+    const currentHash = `${billingHash}|${shippingHash}|${totalCost}`;
 
-    // Don't refetch if addresses haven't changed
-    if (lastFetchedAddresses.current === currentAddressHash) {
+    // ── Guard: nothing changed since last successful fetch ──
+    if (lastFetchedHash.current === currentHash) {
       return;
     }
 
-    // Update the last fetched addresses
-    lastFetchedAddresses.current = currentAddressHash;
+    // ── Debounce: wait for the user to stop typing ──
+    const abortController = new AbortController();
 
-    setLoading(true);
-    setErr('');
+    const timerId = setTimeout(() => {
+      // Re-check hash inside the timeout callback in case it was already
+      // fetched while we were waiting (e.g. another effect instance ran).
+      if (lastFetchedHash.current === currentHash) return;
 
-    const amount = Math.round(parseFloat(totalCost) * 100); // always integer cents
+      setLoading(true);
+      setErr("");
 
-    apiInstance
-      .post<{
-        data: {
-          secret: string;
-          id: string;
-          taxAmount: number;
-          totalWithTax: number;
-        };
-      }>('/payments/stripe/intent', {
-        amount,
-        currency: 'USD',
-        billingAddress,
-        shippingAddress,
-        products: productsInfo,
-      })
-      .then((res) => {
-        setClientSecret(res.data.data.secret);
-        dispatch(setPaymentIntentId(res.data.data.id));
-        dispatch(
-          setTaxAmount({
-            taxAmount: res.data.data.taxAmount / 100,
-            totalWithTax: res.data.data.totalWithTax / 100,
-          })
-        );
-      })
-      .catch((err) => {
-        console.error('StripeProvider error:', err);
-        setErr(
-          err?.error?.data?.errors?.map((c: any) => c.message).join(', ') ||
-            'Failed to create payment intent'
-        );
-        setClientSecret('');
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [
-    totalCost,
-    JSON.stringify(billingAddress),
-    JSON.stringify(shippingAddress),
-    areAddressesComplete,
-    dispatch,
-    productsInfo,
-  ]);
+      const amount = Math.round(parseFloat(totalCost) * 100);
+
+      apiInstance
+        .post<{
+          data: {
+            secret: string;
+            id: string;
+            taxAmount: number;
+            totalWithTax: number;
+          };
+        }>(
+          "/payments/stripe/intent",
+          {
+            amount,
+            currency: "USD",
+            billingAddress,
+            shippingAddress,
+          },
+          { signal: abortController.signal }
+        )
+        .then((res) => {
+          // Only apply the result if this request wasn't aborted
+          if (abortController.signal.aborted) return;
+
+          lastFetchedHash.current = currentHash;
+          setClientSecret(res.data.data.secret);
+          dispatch(setPaymentIntentId(res.data.data.id));
+          dispatch(
+            setTaxAmount({
+              taxAmount: res.data.data.taxAmount / 100,
+              totalWithTax: res.data.data.totalWithTax / 100,
+            })
+          );
+        })
+        .catch((error) => {
+          // Ignore aborted requests — they're expected during rapid changes
+          if (abortController.signal.aborted) return;
+
+          console.error("StripeProvider error:", error);
+          setErr(
+            error?.error?.data?.errors
+              ?.map((c: any) => c.message)
+              .join(", ") || "Failed to create payment intent"
+          );
+          setClientSecret("");
+        })
+        .finally(() => {
+          if (!abortController.signal.aborted) {
+            setLoading(false);
+          }
+        });
+    }, DEBOUNCE_MS);
+
+    // ── Cleanup: cancel pending debounce timer & abort in-flight request ──
+    return () => {
+      clearTimeout(timerId);
+      abortController.abort();
+    };
+  }, [totalCost, billingHash, shippingHash, areAddressesComplete, dispatch]);
 
   // Wait until clientSecret is ready
   if (loading) return <LoadingSpinner />;
@@ -158,7 +194,7 @@ export default function StripeProvider({ children }: React.PropsWithChildren) {
   if (!clientSecret) {
     return (
       <div className="text-left text-xl text-primary font-semibold">
-        <h2>{err || 'Please enter your address to select payment methods'}</h2>
+        <h2>{err || "Please enter your address to select payment methods"}</h2>
       </div>
     );
   }
@@ -166,13 +202,13 @@ export default function StripeProvider({ children }: React.PropsWithChildren) {
   // Stripe Element appearance and options
   const options: StripeElementsOptions = {
     clientSecret,
-    loader: 'always',
+    loader: "always",
     appearance: {
-      theme: 'flat',
+      theme: "flat",
       variables: {
-        colorPrimary: '#000',
-        accordionItemSpacing: '16px',
-        borderRadius: '12px',
+        colorPrimary: "#000",
+        accordionItemSpacing: "16px",
+        borderRadius: "12px",
       },
     },
   };
@@ -192,6 +228,6 @@ export default function StripeProvider({ children }: React.PropsWithChildren) {
 export const useStripeContext = () => {
   const context = useContext(StripeContext);
   if (!context)
-    throw new Error('useStripeContext must be used within StripeProvider');
+    throw new Error("useStripeContext must be used within StripeProvider");
   return context;
 };
