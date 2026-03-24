@@ -216,7 +216,7 @@ const HeaderSearchButton: React.FC<HeaderSearchButtonProps> = ({
               </div>
             </div>
 
-            {/* DESKTOP DROPDOWN EXACTLY LIKE CARID */}
+            {/* DESKTOP DROPDOWN */}
             {open && (
               <div className="absolute top-full left-0 right-0 mt-0 bg-white shadow-lg overflow-hidden border border-t-0 border-primary rounded-b-sm max-h-[70vh] flex flex-col z-150">
                 <div className="flex-1 overflow-y-auto w-full">

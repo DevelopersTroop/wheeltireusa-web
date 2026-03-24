@@ -38,94 +38,70 @@ function ProductItem({ product, type, isPartOfPackage, isLast }: ProductItemProp
   };
 
   return (
-    <div className={`flex flex-col sm:flex-row gap-4 sm:gap-6 py-6 ${!isLast && isPartOfPackage ? 'border-b border-dashed border-slate-200' : ''} group/item transition-all hover:bg-slate-50/50 rounded-2xl px-4 -mx-4`}>
-      {/* Product Image & Pricing Mobile Header */}
-      <div className="flex sm:block gap-4 items-center">
-        {/* Product Image */}
-        <div className="relative w-24 h-24 sm:w-28 sm:h-28 shrink-0">
-          <div className="absolute inset-0 bg-primary/5 blur-xl rounded-full scale-0 group-hover/item:scale-100 transition-transform duration-500" />
-          <div className="relative w-full h-full bg-white rounded-2xl flex items-center justify-center overflow-hidden border border-slate-100 shadow-sm transition-all group-hover/item:shadow-md group-hover/item:-translate-y-1">
-            <img
-              src={getProductThumbnail(product)}
-              alt={product.title ?? ''}
-              className="w-full h-full object-contain p-2"
-            />
-          </div>
-          {isPartOfPackage && (
-            <div className="absolute -bottom-2 -right-2 bg-slate-900 text-white text-[8px] font-black uppercase tracking-tighter px-2 py-1 rounded-md shadow-lg border border-white/20">
-              P-ITEM
-            </div>
-          )}
-        </div>
+    <div
+  className={`flex gap-3 py-3 ${
+    !isLast && isPartOfPackage ? 'border-b border-gray-200' : ''
+  }`}
+>
+  {/* 🖼 Image */}
+  <div className="w-16 h-16 shrink-0 bg-white border rounded-lg flex items-center justify-center overflow-hidden">
+    <img
+      src={getProductThumbnail(product)}
+      alt={product.title ?? ''}
+      className="w-full h-full object-contain p-1"
+    />
+  </div>
 
-        {/* Pricing Mobile (Visible only on mobile) */}
-        <div className="sm:hidden flex-1 text-right">
-          {msrpPrice > totalPrice && (
-            <p className="text-[10px] text-slate-400 line-through font-bold">
-              {formatPrice(msrpPrice)}
-            </p>
-          )}
-          <p className="text-xl font-black text-slate-900 tracking-tighter tabular-nums">
-            {formatPrice(totalPrice)}
-          </p>
-        </div>
+  {/* 📄 Content */}
+  <div className="flex-1 min-w-0 flex flex-col justify-between">
+    
+    {/* Title + Price */}
+    <div className="flex justify-between gap-2">
+      <div className="min-w-0">
+        <p className="text-[10px] text-primary font-semibold uppercase">
+          {typeLabels[type]}
+        </p>
+
+        <h4 className="text-sm font-semibold text-slate-900 truncate">
+          {product.brand || 'Brand'}
+        </h4>
+
+        <p className="text-xs text-slate-500 truncate">
+          {product.model || product.title}
+        </p>
       </div>
 
-      <div className="flex-1 min-w-0 py-1">
-        <div className="flex justify-between items-start gap-4">
-          <div className="min-w-0 flex-1">
-            {/* Type Label */}
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em]">
-                {typeLabels[type]}
-              </span>
-              <div className="h-px w-4 bg-slate-100" />
-            </div>
-
-            {/* Brand & Model */}
-            <h4 className="font-black text-lg sm:text-xl text-slate-900 leading-tight tracking-tight uppercase italic break-words">
-              {product.brand || 'Brand'}
-            </h4>
-            <p className="text-slate-500 text-sm font-medium mt-0.5 break-words">
-              {product.model || product.title || 'Product'}
-            </p>
-          </div>
-
-          {/* Pricing Desktop (Hidden on mobile) */}
-          <div className="hidden sm:block text-right shrink-0">
-            {msrpPrice > totalPrice && (
-              <p className="text-xs text-slate-400 line-through font-bold">
-                {formatPrice(msrpPrice)}
-              </p>
-            )}
-            <p className="text-2xl font-black text-slate-900 tracking-tighter tabular-nums">
-              {formatPrice(totalPrice)}
-            </p>
-          </div>
-        </div>
-
-        {/* Actions Row */}
-        <div className="flex items-center justify-between sm:justify-start gap-4 mt-4">
-          <button
-            onClick={() => {
-              setOpen(true, product)
-            }}
-            className="group/btn flex items-center gap-2 bg-white hover:bg-slate-900 border border-slate-200 rounded-xl px-4 py-2 text-xs font-black text-slate-900 hover:text-white transition-all shadow-sm hover:shadow-md active:scale-95"
-          >
-            QTY: <span className="text-primary group-hover/btn:text-white">{product.quantity}</span>
-            <ChevronDown size={14} className="group-hover/btn:rotate-180 transition-transform" />
-          </button>
-
-          <button
-            onClick={removeCartProduct}
-            className="p-2.5 text-slate-300 hover:text-white hover:bg-rose-500 rounded-xl transition-all shadow-sm hover:shadow-lg active:scale-90"
-            aria-label="Remove item"
-          >
-            <Trash2 size={18} />
-          </button>
-        </div>
+      <div className="text-right shrink-0">
+        {msrpPrice > totalPrice && (
+          <p className="text-[10px] text-gray-400 line-through">
+            {formatPrice(msrpPrice)}
+          </p>
+        )}
+        <p className="text-sm font-bold text-slate-900">
+          {formatPrice(totalPrice)}
+        </p>
       </div>
     </div>
+
+    {/* Actions */}
+    <div className="flex items-center justify-between mt-2">
+      <button
+        onClick={() => setOpen(true, product)}
+        className="flex items-center gap-1 text-[11px] px-2 py-1 border rounded-md hover:bg-gray-100"
+      >
+        QTY: {product.quantity}
+        <ChevronDown size={12} />
+      </button>
+
+      <button
+        onClick={removeCartProduct}
+        className="p-1.5 text-gray-400 hover:text-red-500"
+      >
+        <Trash2 size={14} />
+      </button>
+    </div>
+  </div>
+</div>
   );
 }
 
@@ -154,7 +130,7 @@ export default function ProductCard({ packageGroup }: { packageGroup: TGroupedPr
       {/* Glow Effect */}
       <div className="absolute -inset-1 bg-linear-to-r from-primary/20 via-slate-200/20 to-primary/20 rounded-[2.5rem] blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200" />
 
-      <div className="relative bg-white/60 backdrop-blur-xl rounded-[2rem] border border-white/50 shadow-2xl overflow-hidden transition-all duration-500 hover:-translate-y-2">
+      <div className="relative bg-white/60 backdrop-blur-xl rounded-md  border border-white/50 shadow-xl overflow-hidden transition-all duration-500 hover:-translate-y-2">
         {/* Package Header - Only show for bundles */}
         {isBundle && (
           <div className="flex items-center justify-between px-4 sm:px-8 py-4 sm:py-5 bg-slate-900/5 backdrop-blur-sm border-b border-white/20">
@@ -181,7 +157,7 @@ export default function ProductCard({ packageGroup }: { packageGroup: TGroupedPr
         )}
 
         {/* Package Items */}
-        <div className="px-4 sm:px-8 py-2 sm:py-4">
+        <div className="px-4 sm:px-8 py-2 sm:py-1">
           {items.map(({ product, type }, index) => (
             <ProductItem
               key={product.id}
