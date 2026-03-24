@@ -79,7 +79,7 @@ function NavBar() {
         scrolling ? "bg-[#2F2F2F] shadow-md" : "bg-[#2F2F2F] shadow-none"
       )}
     >
-      <Container>
+      <div className="max-w-full">
         <nav className="w-full lg:flex items-center justify-between relative hidden text-white px-2 py-3">
           <ul className="flex space-x-5 py-2 items-center uppercase z-50">
             {navMenus.map((menu) => (
@@ -123,7 +123,7 @@ function NavBar() {
                         : "opacity-0 -translate-y-2 invisible pointer-events-none"
                     )}
                     style={{
-                      minWidth: menu.children.length > 1 ? `${menu.children.length * 200}px` : "200px",
+                      minWidth: menu.children.length > 1 ? `${menu.children.length * 190}px` : "200px",
                       maxWidth: "100vw", // Ensure dropdown does not exceed the viewport width
                       left: 0, // Ensure dropdown opens from the left edge
                     }}
@@ -180,7 +180,7 @@ function NavBar() {
             <span>Call us:</span>+1 (813) 812-5257
           </a>
         </nav>
-      </Container>
+      </div>
     </div>
   );
 }
