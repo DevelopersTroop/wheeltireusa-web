@@ -2,12 +2,12 @@ import { DRDVehicleDataNAResponse, DRUpstepWheel, FitmentVehicleDetails } from "
 export type WheelAxleFitment = {
   boltPattern: string;
   centerBore: number;
- loadRating: number;
- wheelDiameter: number;
- wheelWidth: number;
- minOffset: number;
- maxOffset: number;
- compatibility: "Front" | "Rear" | "Front and Rear"
+  loadRating: number;
+  wheelDiameter: number;
+  wheelWidth: number;
+  minOffset: number;
+  maxOffset: number;
+  compatibility: "Front" | "Rear" | "Front and Rear"
 };
 
 
@@ -35,6 +35,8 @@ export function normalizeWheelFitment(
   const centerBoreRear = parseFloat(centerBoreRearRaw || String(centerBoreFront))
   const loadRating = parseFloat(String(chassis.WheelLoad_Max_Lbs ?? '').trim() || '0')
 
+  console.log("wheelTire", wheelTire)
+
   for (const item of wheelTire) {
     if (!item || typeof item !== 'object') continue
     const sizeText = String(item.WheelSize ?? '').toLowerCase()
@@ -57,8 +59,8 @@ export function normalizeWheelFitment(
       loadRating,
       wheelDiameter,
       wheelWidth,
-      minOffset,
-      maxOffset,
+      minOffset: minOffset - 10, // make aggressive
+      maxOffset: maxOffset + 10, // make aggressive
       compatibility: 'Front',
     }
     const fitmentRear: WheelAxleFitment = {
@@ -67,8 +69,8 @@ export function normalizeWheelFitment(
       loadRating,
       wheelDiameter,
       wheelWidth,
-      minOffset,
-      maxOffset,
+      minOffset: minOffset - 10, // make aggressive
+      maxOffset: maxOffset + 10, // make aggressive
       compatibility: 'Rear',
     }
 

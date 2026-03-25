@@ -4,124 +4,96 @@ import Link from 'next/link';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/zoom';
-import { Autoplay, Navigation, Zoom } from 'swiper/modules'; // Correct ES modules import
+import { Autoplay, Navigation, Zoom } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SkeletonCard from './components/SkeletonCard/SkeletonCard';
-import { useFilterSync } from '@/hooks/useFilterSync';
 import { useGetProductsQuery } from '@/redux/apis/product';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { getProductThumbnail } from '@/utils/product';
 import React from 'react';
 
-// const galleryData = [
-//   {
-//     type: "Wheels",
-//     items: [
-//       { image: "/images/wheels/wheels1.png", title: "American Force" },
-//       { image: "/images/wheels/wheels2.png", title: "American Force" },
-//       { image: "/images/wheels/wheels3.png", title: "American Force" },
-//       { image: "/images/wheels/wheels4.png", title: "American Force" },
-//       { image: "/images/wheels/wheels5.png", title: "American Force" },
-//     ],
-//   },
-// ];
+const ProductGallery: React.FC<{ category: string; title: string }> = ({ category, title }) => {
+  const { data, isLoading } = useGetProductsQuery({ category });
 
-const ProductGallery: React.FC<{
-  category: string;
-  title: string;
-}> = ({ category, title }) => {
-  const { filters } = useFilterSync();
-  const { data, isLoading } = useGetProductsQuery({
-    category,
-  });
+  // Unique nav class per category to avoid conflicts if multiple galleries render
+  const navId = category.replace(/\s+/g, '-').toLowerCase();
 
   return (
-    <div>
-      {/* {galleryData.map((gallery, galleryIndex) => ( */}
-      <div className="max-w-[1350px] p-4 mx-auto py-10">
-        {/* Section Title */}
-        <div className="py-4 lg:py-8">
-          <hr className="border-primary border-[1.5px] w-[100px]" />
-          <h3 className="text-3xl lg:text-5xl font-bold uppercase">{title}</h3>
-        </div>
+    <div className="max-w-[1350px] mx-auto py-8 sm:py-10 px-4 sm:px-6 lg:px-10">
+      {/* Section Title */}
+      <div className="py-4 lg:py-8">
+        <hr className="border-primary border-[1.5px] w-[100px] mb-2" />
+        <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold uppercase">{title}</h3>
+      </div>
 
-        {/* Swiper Gallery */}
+      {/* Swiper + nav buttons scoped inside a relative wrapper */}
+      <div className="relative">
         <Swiper
           modules={[Autoplay, Navigation, Zoom]}
           zoom={true}
           navigation={{
-            nextEl: `.swiper-button-next-123`,
-            prevEl: `.swiper-button-prev-123`,
+            nextEl: `.swiper-next-${navId}`,
+            prevEl: `.swiper-prev-${navId}`,
           }}
           breakpoints={{
-            320: { slidesPerView: 1 },
-            480: { slidesPerView: 2 },
-            1024: { slidesPerView: 4 },
-          }}
-          style={{
-            paddingLeft: 35,
-            paddingRight: 35,
+            320:  { slidesPerView: 1, spaceBetween: 12 },
+            480:  { slidesPerView: 2, spaceBetween: 14 },
+            768:  { slidesPerView: 3, spaceBetween: 16 },
+            1024: { slidesPerView: 4, spaceBetween: 20 },
           }}
           loop={true}
-          spaceBetween={20}
-          className="relative !w-full"
+          className="!px-8 sm:!px-10"
         >
-          <button
-            className={`swiper-button-next-123 w-fit text-black rounded-md absolute left-0 top-1/2 cursor-pointer z-30`}
-          >
-            <ChevronLeft size={38} />
-          </button>
           {isLoading
-            ? Array.from({ length: 8 }).map((_, i) => {
-                return (
-                  <SwiperSlide key={i}>
-                    <SkeletonCard />
-                  </SwiperSlide>
-                );
-              })
+            ? Array.from({ length: 8 }).map((_, i) => (
+                <SwiperSlide key={i}>
+                  <SkeletonCard />
+                </SwiperSlide>
+              ))
             : data?.products.slice(0, 8).map((products, index) => {
                 const product = products[0];
-                console.log("products", products)
                 return (
-                  <>
-                    <SwiperSlide key={index}>
-                      <Link href={`/collections/product/${product.slug}`}>
-                        <div className="p-4">
+                  <SwiperSlide key={index}>
+                    <Link href={`/collections/product/${product.slug}`} className="group block">
+                      <div className="p-2 sm:p-3 md:p-4">
+                        <div className="overflow-hidden rounded-sm">
                           <img
                             src={getProductThumbnail(product)}
                             alt={product?.title || ''}
-                            className="w-full p-4 h-auto object-cover"
+                            className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105"
                           />
-
-                          <h4 className="text-lg font-semibold mt-2 text-center">
-                            {product?.title}
-                          </h4>
-                          <h4 className="text-lg font-semibold mt-2 text-center">
-                            {product?.partNumber}
-                          </h4>
                         </div>
-                      </Link>
-                    </SwiperSlide>
-                  </>
+                        <h4 className="text-sm sm:text-base lg:text-lg font-semibold mt-2 text-center group-hover:text-primary transition-colors duration-200 line-clamp-2">
+                          {product?.title}
+                        </h4>
+                        <h4 className="text-xs sm:text-sm font-medium mt-1 text-center text-gray-500">
+                          {product?.partNumber}
+                        </h4>
+                      </div>
+                    </Link>
+                  </SwiperSlide>
                 );
               })}
-
-          <button
-            className={`swiper-button-prev-123 w-fit text-black rounded-md absolute right-0 top-1/2 flex items-center cursor-pointer z-30`}
-          >
-            <ChevronRight size={38} />
-          </button>
         </Swiper>
 
-        <div className="text-center mt-4">
-          <button className="px-4 py-2 text-primary bg-white bg-opacity-50 text-2xl font-semibold uppercase outline outline-1 outline-primary hover:bg-primary hover:text-white">
-            <Link href="/collections/product-category/wheels">
-              View popular wheels
-            </Link>
-          </button>
-        </div>
+        {/* Nav buttons outside Swiper children, inside relative wrapper */}
+        <button className={`swiper-prev-${navId} absolute left-0 top-1/2 -translate-y-1/2 z-30 text-black hover:text-primary transition-colors duration-200 cursor-pointer`}>
+          <ChevronLeft size={32} className="sm:w-9 sm:h-9" />
+        </button>
+        <button className={`swiper-next-${navId} absolute right-0 top-1/2 -translate-y-1/2 z-30 text-black hover:text-primary transition-colors duration-200 cursor-pointer`}>
+          <ChevronRight size={32} className="sm:w-9 sm:h-9" />
+        </button>
       </div>
-      {/* ))} */}
+
+      {/* CTA */}
+      <div className="text-center mt-6 sm:mt-8">
+        <Link
+          href="/collections/product-category/wheels"
+          className="inline-block px-5 sm:px-6 py-2.5 sm:py-3 rounded-md text-primary bg-[#d4d2d2]/50 text-base sm:text-lg md:text-xl font-semibold uppercase border border-primary transition-all duration-300 ease-in-out hover:bg-primary hover:text-white"
+        >
+          View Popular Wheels
+        </Link>
+      </div>
     </div>
   );
 };

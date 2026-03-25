@@ -18,7 +18,7 @@ import { useSelector } from "react-redux";
 import { RootState, useTypedSelector } from "@/redux/store";
 import Container from "@/components/ui/container/container";
 import { cn } from "@/lib/utils";
-import HomeYmm from "@/app/(home)/_components/HeroSection/components/HomeYmm/HomeYmm";
+import HomeFilter from "@/app/(home)/_components/HeroSection/components/HomeFilter/HomeFilter";
 
 const TireCategory: React.FC<{
   page: number;
@@ -82,16 +82,16 @@ const TireCategory: React.FC<{
   const viewType = useSelector((state: RootState) => state.persisted.layout.viewType);
   return (
     <>
-      <div className="flex justify-center items-center">
-        <h1 className="text-[20px] font-semibold">Aftermarket Truck Tires</h1>
-      </div>
+      {/* <div className="flex justify-center items-center">
+        <h1 className="text-[20px] mt-2 font-semibold">Aftermarket Truck Tires</h1>
+      </div> */}
       {topDescription && (
         <div
           className="container mx-auto px-4 my-4"
           dangerouslySetInnerHTML={{ __html: topDescription }}
         />
       )}
-      <HomeYmm variant="product" />
+      <HomeFilter variant="product" />
       <Container className={
         cn(
           "flex w-full flex-col gap-6 md:px-4 pb-6 pt-2 md:flex-row",

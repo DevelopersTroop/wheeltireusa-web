@@ -14,53 +14,62 @@ import {
 import { ChevronDown, Trash2 } from "lucide-react";
 import useYmm from "@/hooks/useYmm";
 import { useAppDispatch, useTypedSelector } from "@/redux/store";
-import { addToGarage, removeFromGarage, clearGarage, submitYmm, setActiveGarage } from "@/redux/features/yearMakeModelSlice";
+import { addToGarage, removeFromGarage, clearGarage, submitYmm, setActiveGarage, clearYearMakeModel } from "@/redux/features/yearMakeModelSlice";
+import { setIsModalOpen } from "@/redux/features/ymmFilterSlice";
 import { TYmmGarageItem } from "@/types/ymm";
 import { useRouter, usePathname } from 'next/navigation';
+import { cn } from "@/lib/utils";
 
 export const VehicleSelectorModal = ({ isOpen, onOpenChange, skipToGarage }: { isOpen: boolean, onOpenChange: (open: boolean) => void, skipToGarage?: boolean }) => {
   const { garage, activeGarageId } = useTypedSelector((state) => state.persisted.yearMakeModel);
   const garageCount = Object.keys(garage || {}).length;
-  const [view, setView] = useState<'garage' | 'add'>(skipToGarage && garageCount > 0 ? 'garage' : 'add');
   const dispatch = useAppDispatch();
 
+  // Show garage view by default if there are vehicles, otherwise show add view
   useEffect(() => {
     if (isOpen) {
-      if (garageCount > 0 && skipToGarage) {
-        setView('garage');
-      } else {
-        setView('add');
+      if (garageCount === 0) {
+        onOpenChange(false);
+        // Dispatch to open the new YMM modal instead of using the local add view
+        dispatch(setIsModalOpen({ isOpen: true, source: "vehicle_selector_button" }));
       }
     }
-  }, [isOpen, garageCount, skipToGarage]);
+  }, [isOpen, garageCount, onOpenChange, dispatch]);
 
   const handleClearAll = () => {
     dispatch(clearGarage());
-    setView('add');
+    onOpenChange(false);
+    // Dispatch to open the new YMM modal instead
+    dispatch(setIsModalOpen({ isOpen: true, source: "vehicle_selector_button" }));
   };
 
   const handleRemove = (id: string) => {
     dispatch(removeFromGarage(id));
+    // If we removed the last vehicle, close this modal and open the add vehicle one
     if (garageCount <= 1) {
-      setView('add');
+      onOpenChange(false);
+      dispatch(setIsModalOpen({ isOpen: true, source: "vehicle_selector_button" }));
     }
+  };
+
+  const handleAddVehicle = () => {
+    onOpenChange(false);
+    dispatch(setIsModalOpen({ isOpen: true, source: "vehicle_selector_button" }));
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-7xl p-0 border-none rounded-md overflow-hidden bg-white">
-        {view === 'garage' && garageCount > 0 ? (
+      <DialogContent className="max-w-[600px] mx-auto border-none rounded-md overflow-hidden bg-white">
+        <div className="bg-white">
           <GarageView
             garage={garage}
             activeGarageId={activeGarageId}
-            onAddVehicle={() => setView('add')}
+            onAddVehicle={handleAddVehicle}
             onClearAll={handleClearAll}
             onRemove={handleRemove}
             onClose={() => onOpenChange(false)}
           />
-        ) : (
-          <AddVehicleView onClose={() => onOpenChange(false)} />
-        )}
+        </div>
       </DialogContent>
     </Dialog>
   );
@@ -84,10 +93,10 @@ const GarageView = ({ garage, activeGarageId, onAddVehicle, onClearAll, onRemove
   };
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6 w-full">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-bold">My Garage</h2>
-        <button onClick={onClearAll} className="text-[#3b5998] hover:text-[#2d4373] text-sm">
+        <button onClick={onClearAll} className="text-[#3b5998] cursor-pointer hover:text-[#2d4373] text-sm">
           Clear All
         </button>
       </div>
@@ -97,25 +106,25 @@ const GarageView = ({ garage, activeGarageId, onAddVehicle, onClearAll, onRemove
           <div
             key={id}
             onClick={() => handleSelectVehicle(id, item)}
-            className={`p-4 rounded-md border-l-4 cursor-pointer transition-colors ${id === activeGarageId ? 'bg-blue-50/50 border-[#3b5998]' : 'bg-gray-50 border-gray-200 hover:bg-gray-100'}`}
+            className={`p-4 rounded-md border-l-4 cursor-pointer transition-colors ${id === activeGarageId ? 'bg-primary/5 border-primary' : 'bg-gray-50 border-gray-200 hover:bg-gray-100'}`}
           >
             <div className="flex justify-between items-start">
               <div className="flex gap-3">
                 <div className="mt-1">
-                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${id === activeGarageId ? 'border-yellow-400' : 'border-gray-300'}`}>
-                    {id === activeGarageId && <div className="w-2.5 h-2.5 rounded-full bg-yellow-400" />}
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${id === activeGarageId ? 'border-primary' : 'border-gray-300'}`}>
+                    {id === activeGarageId && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
                   </div>
                 </div>
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <span className="font-bold text-gray-900">{item.year} {item.make} {item.model && item.model !== '__DEFAULT_MODEL__' ? item.model : ''} {item.trim && item.trim !== '__DEFAULT_TRIM__' ? item.trim : ''} {item.drive && item.drive !== '__DEFAULT_DRIVE__' ? item.drive : ''}</span>
                     {id === activeGarageId && (
-                      <span className="bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded font-bold uppercase">Main</span>
+                      <span className="bg-primary text-white text-[10px] px-1.5 py-0.5 rounded font-bold uppercase">Main</span>
                     )}
                   </div>
                   <button
                     onClick={(e) => { e.stopPropagation(); handleSelectVehicle(id, item); }}
-                    className="text-[#3b5998] border border-[#3b5998] px-3 py-1.5 text-xs font-bold rounded-sm hover:bg-blue-50"
+                    className="text-primary border border-primary px-3 py-1.5 text-xs font-bold rounded-sm hover:bg-primary/10"
                   >
                     BROWSE CATALOG
                   </button>
@@ -141,6 +150,10 @@ const GarageView = ({ garage, activeGarageId, onAddVehicle, onClearAll, onRemove
   );
 };
 
+/**
+ * @deprecated This component is no longer used for adding vehicles.
+ * Use the new YmmFilterModal component instead.
+ */
 const AddVehicleView = ({ onClose }: { onClose: () => void }) => {
   const {
     isYearLoading,
@@ -271,7 +284,7 @@ const AddVehicleView = ({ onClose }: { onClose: () => void }) => {
           <div className="pl-3 pr-2 text-gray-900 font-bold text-sm">1</div>
           <div className="w-px h-5 bg-gray-300"></div>
           <Select open={activeDropdown === "year"} onOpenChange={handleOpenChange("year")} onValueChange={handleYearChange} value={year || undefined} disabled={isYearDisabled}>
-            <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-2 py-3 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden shrink-0 whitespace-nowrap">
+            <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-2 py-3 shadow-none border-none ring-0 focus:ring-0 appearance-none h-14 [&>svg]:hidden shrink-0 whitespace-nowrap">
               <SelectValue placeholder={isYearLoading ? "LOADING..." : "YEAR"} />
             </SelectTrigger>
             <SelectContent>
@@ -288,7 +301,7 @@ const AddVehicleView = ({ onClose }: { onClose: () => void }) => {
           <div className="pl-3 pr-2 text-gray-900 font-bold text-sm">2</div>
           <div className="w-px h-5 bg-gray-300"></div>
           <Select open={activeDropdown === "make"} onOpenChange={handleOpenChange("make")} onValueChange={handleMakeChange} value={make || "__DEFAULT_MAKE__"} disabled={isMakeDisabled}>
-            <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-2 py-3 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden shrink-0 whitespace-nowrap">
+            <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-2 py-3 shadow-none border-none ring-0 focus:ring-0 appearance-none h-14 [&>svg]:hidden shrink-0 whitespace-nowrap">
               <SelectValue placeholder={isMakeLoading ? "LOADING..." : "MAKE"} />
             </SelectTrigger>
             <SelectContent>
@@ -306,7 +319,7 @@ const AddVehicleView = ({ onClose }: { onClose: () => void }) => {
           <div className="pl-3 pr-2 text-gray-900 font-bold text-sm">3</div>
           <div className="w-px h-5 bg-gray-300"></div>
           <Select open={activeDropdown === "model"} onOpenChange={handleOpenChange("model")} onValueChange={handleModelChange} value={model || "__DEFAULT_MODEL__"} disabled={isModelDisabled}>
-            <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-2 py-3 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden shrink-0 whitespace-nowrap">
+            <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-2 py-3 shadow-none border-none ring-0 focus:ring-0 appearance-none h-14 [&>svg]:hidden shrink-0 whitespace-nowrap">
               <SelectValue placeholder={isModelLoading ? "LOADING..." : "MODEL"} />
             </SelectTrigger>
             <SelectContent>
@@ -324,7 +337,7 @@ const AddVehicleView = ({ onClose }: { onClose: () => void }) => {
             <div className="pl-3 pr-2 text-gray-900 font-bold text-sm">4</div>
             <div className="w-px h-5 bg-gray-300"></div>
             <Select open={activeDropdown === "trim"} onOpenChange={handleOpenChange("trim")} onValueChange={handleTrimChange} value={trim || "__DEFAULT_TRIM__"} disabled={isTrimDisabled}>
-              <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-2 py-3 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden shrink-0 whitespace-nowrap">
+              <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-2 py-3 shadow-none border-none ring-0 focus:ring-0 appearance-none h-14 [&>svg]:hidden shrink-0 whitespace-nowrap">
                 <SelectValue placeholder={isTrimLoading ? "LOADING..." : "TRIM"} />
               </SelectTrigger>
               <SelectContent>
@@ -343,7 +356,7 @@ const AddVehicleView = ({ onClose }: { onClose: () => void }) => {
             <div className="pl-3 pr-2 text-gray-900 font-bold text-sm">5</div>
             <div className="w-px h-5 bg-gray-300"></div>
             <Select open={activeDropdown === "drive"} onOpenChange={handleOpenChange("drive")} onValueChange={handleDriveChange} value={drive || "__DEFAULT_DRIVE__"} disabled={isDriveDisabled}>
-              <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-2 py-3 shadow-none border-none ring-0 focus:ring-0 appearance-none h-auto [&>svg]:hidden shrink-0 whitespace-nowrap">
+              <SelectTrigger className="w-full bg-transparent text-gray-600 uppercase text-xs font-semibold px-2 py-3 shadow-none border-none ring-0 focus:ring-0 appearance-none h-14 [&>svg]:hidden shrink-0 whitespace-nowrap">
                 <SelectValue placeholder={isDriveLoading ? "LOADING..." : "DRIVE"} />
               </SelectTrigger>
               <SelectContent>
@@ -360,7 +373,7 @@ const AddVehicleView = ({ onClose }: { onClose: () => void }) => {
         <button
           onClick={handleSubmit}
           disabled={isDisabledSubmit}
-          className="w-full sm:w-auto px-8 py-3 whitespace-nowrap bg-[#3b5998] hover:bg-[#2d4373] text-white font-bold text-sm rounded-sm transition-colors disabled:opacity-50"
+          className="w-full sm:w-auto px-8 py-3 whitespace-nowrap bg-primary hover:bg-primary/90 text-white font-bold text-sm rounded-sm transition-colors disabled:opacity-50"
         >
           GO
         </button>
@@ -372,7 +385,8 @@ const AddVehicleView = ({ onClose }: { onClose: () => void }) => {
 };
 
 export const VehicleSelectorButton = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpenLocal, setIsModalOpenLocal] = useState(false);
+  const dispatch = useAppDispatch();
   const { garage, activeGarageId } = useTypedSelector(
     (state) => state.persisted.yearMakeModel
   );
@@ -381,12 +395,18 @@ export const VehicleSelectorButton = () => {
   const count = Object.keys(garage || {}).length;
   const activeLabel = activeItem
     ? `${activeItem.year} ${activeItem.make} ${activeItem.model && activeItem.model !== '__DEFAULT_MODEL__' ? activeItem.model : ''} ${activeItem.trim && activeItem.trim !== '__DEFAULT_TRIM__' ? activeItem.trim : ''} ${activeItem.drive && activeItem.drive !== '__DEFAULT_DRIVE__' ? activeItem.drive : ''}`.trim()
-    : "SHOP BY VEHICLE";
+    : "SELECT YOUR VEHICLE";
 
   return (
     <>
       <button
-        onClick={() => setIsModalOpen(true)}
+        onClick={() => {
+          if (count > 0) {
+            setIsModalOpenLocal(true);
+          } else {
+            dispatch(setIsModalOpen({ isOpen: true, source: "vehicle_selector_button" }));
+          }
+        }}
         className="flex items-center gap-2 px-3 py-2 bg-[#F0F4F8] hover:bg-[#E2E8F0] rounded-md transition-colors cursor-pointer w-full"
       >
         {/* Car icon */}
@@ -407,24 +427,30 @@ export const VehicleSelectorButton = () => {
               <path d="M9 17h6" />
               <circle cx="17" cy="17" r="2" />
             </svg>
-            <div className="absolute -top-2 -right-2.5 bg-green-600 text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold border border-white">
+            <div className="absolute -top-2 -right-2.5 bg-primary text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold border border-white">
               {Object.keys(garage)?.length || 0}
             </div>
           </div>
 
-          <span className="text-[#3b5998] font-bold text-xs sm:text-sm whitespace-nowrap tracking-wide">
+          <span className="text-primary font-bold text-xs sm:text-sm whitespace-nowrap tracking-wide">
             {activeLabel}
           </span>
         </div>
-        <span className="h-6 bg-gray-300 w-px block" />
-        <span className="text-[#3b5998] font-bold text-xs sm:text-sm whitespace-nowrap tracking-wide">
-          Change Vehicle
-        </span>
+        {
+          activeItem ? (
+            <>
+              <span className="h-6 bg-gray-300 w-px block" />
+              <span className="text-primary font-bold text-xs sm:text-sm whitespace-nowrap tracking-wide">
+                CHANGE
+              </span>
+            </>
+          ) : null
+        }
       </button>
 
       <VehicleSelectorModal
-        isOpen={isModalOpen}
-        onOpenChange={setIsModalOpen}
+        isOpen={isModalOpenLocal}
+        onOpenChange={setIsModalOpenLocal}
         skipToGarage={count > 0}
       />
     </>

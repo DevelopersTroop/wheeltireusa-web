@@ -304,7 +304,7 @@ export default function MultiStepBuildForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-300 via-slate-200 to-slate-300 py-8 px-4">
+    <div className="min-h-screen bg-linear-to-br from-slate-300 via-slate-200 to-slate-300 py-8 px-4">
       <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-xl overflow-hidden">
         {/* Header */}
         <div className="bg-white pt-8 pb-6 px-8">
@@ -854,7 +854,7 @@ export default function MultiStepBuildForm() {
                       className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-white border rounded flex-shrink-0 flex items-center justify-center">
+                        <div className="w-10 h-10 bg-white border rounded shrink-0 flex items-center justify-center">
                           {product.thumbnail ? (
                             <img
                               src={product.thumbnail}

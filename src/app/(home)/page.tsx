@@ -14,15 +14,21 @@ import BannerAndPoster from './_components/BannerAndPoster/BannerAndPoster';
 
 // Metadata for the page
 export const metadata = metaDataHelper({
-  title: 'Home - Wheel Tire USA',
-  keywords: '',
-  description: '',
+  title: "Wheel Tire USA | Premium Wheels, Tires & Automotive Accessories",
+  description:
+    "Shop premium wheels, tires, and automotive accessories at Wheel Tire USA. Discover high-performance rims, forged wheels, and custom wheel solutions with fast shipping across the USA.",
+  keywords:
+    "wheels, tires, forged wheels, custom wheels, performance rims, car wheels USA, aftermarket wheels, alloy wheels, wheel tire USA",
   openGraph: {
-    title: '',
-    description: '',
+    title: "Wheel Tire USA | Premium Wheels & Tires for Performance Vehicles",
+    description:
+      "Explore premium wheels, tires, and performance automotive accessories. Upgrade your ride with high-quality forged and custom wheels from Wheel Tire USA.",
+    url: "https://wheeltireusa.com/",
+    siteName: "Wheel Tire USA",
+    type: "website",
   },
   alternates: {
-    canonical: 'https://wheeltireusa.com/',
+    canonical: "https://wheeltireusa.com/",
   },
 });
 
@@ -45,8 +51,8 @@ export default function Homepage() {
       />
       <TodaysDeals />
       <HomeBlogList />
-      <BannerAndPoster />
       <WheelsSection />
+      <BannerAndPoster />
       <ViewGallery />
       <SuspensionBrands />
       {/* <SuspensionSection /> */}

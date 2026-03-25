@@ -1,5 +1,5 @@
 'use client';
-import HomeYmm from '@/app/(home)/_components/HeroSection/components/HomeYmm/HomeYmm';
+import HomeFilter from '@/app/(home)/_components/HeroSection/components/HomeFilter/HomeFilter';
 import { Paginate } from '@/components/shared/Paginate/Paginate';
 import ViewToggle from '@/components/shared/ViewToggle/ViewToggle';
 import Breadcrumb from '@/components/ui/breadcrumb/breadcrumb';
@@ -50,7 +50,7 @@ const WheelCategory: React.FC<{
         />
       )}
 
-      <HomeYmm variant="product" />
+      <HomeFilter variant="product" />
       <Container className={
         cn(
           "flex w-full flex-col gap-6 md:px-4 pb-6 pt-2 md:flex-row",

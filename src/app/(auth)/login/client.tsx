@@ -27,17 +27,8 @@ const validationSchema = Yup.object().shape({
 const LoginPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
-
-  const [errors, setErrors] = useState<
-    {
-      name: string;
-      message: string;
-    }[]
-  >([]);
-  const [success, setSuccess] = useState<{
-    isSuccess: boolean;
-    message: string;
-  }>({
+  const [errors, setErrors] = useState<{ name: string; message: string }[]>([]);
+  const [success, setSuccess] = useState<{ isSuccess: boolean; message: string }>({
     message: "",
     isSuccess: false,
   });
@@ -45,194 +36,169 @@ const LoginPage = () => {
   const dispatch = useDispatch();
   const { user } = useAuth();
 
-  // const form = useForm({
-  //   defaultValues: {
-  //     email: '',
-  //     password: '',
-  //     rememberMe: true
-  //   }
-  // })
-
   useEffect(() => {
-    if (user) {
-      router.push("/dashboard/orders");
-    }
+    if (user) router.push("/dashboard/orders");
   }, [user, router]);
 
-  const banner = {
-    backgroundImage: `url('/images/loginhero.jpeg')`,
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover",
-    height: "750px",
-  };
-
   return (
-    <div className='px-4 pt-2 md:p-0' style={banner}>
-      <div className='flex w-full flex-col rounded-md bg-gray-400 bg-opacity-70 px-4 py-8 md:h-full md:flex-row md:bg-transparent md:p-0'>
-        <div className='w-full text-white md:w-[60%] md:pt-2'>
-          <h1 className='hidden text-center text-6xl uppercase md:block'>
-            Get Access
-          </h1>
-          <h1 className='block text-center text-2xl uppercase md:hidden'>
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Hero Background Image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center opacity-80 animate-fade-in"
+        style={{ backgroundImage: "url('/images/loginhero.jpeg')" }}
+      ></div>
+
+      {/* Transparent Gray Overlay */}
+      <div className="absolute inset-0 bg-gray-900/50"></div>
+
+      {/* Login Container */}
+      <div className="relative z-10 my-3 w-full max-w-4xl mx-4 rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row bg-white/10 backdrop-blur-lg border border-white/20">
+        
+        {/* Left Hero Section */}
+        <div className="hidden md:flex md:w-2/3 mb-70 flex-col justify-center p-12 text-white">
+          <h1 className="text-5xl font-extrabold uppercase mb-4 animate-slide-up">
             Welcome Back
           </h1>
-          <div className='h-2 w-full bg-primary'></div>
+          <p className="text-lg text-gray-200 animate-slide-up animate-delay-200">
+            Access your dashboard and manage your orders seamlessly.
+          </p>
+          <div className="mt-6 w-24 h-1 bg-primary rounded"></div>
         </div>
 
-        <div className='flex w-full items-center justify-center md:w-[40%] md:bg-gray-400 md:bg-opacity-90'>
-          <div className='w-full pt-2 shadow-[0_1px_3px_0_rgba(0,0,0,0.09)] md:px-12 md:py-20'>
-            <h2 className='border-b border-gray-200 pb-4 text-2xl font-bold uppercase text-white'>
-              Login
-            </h2>
-            {errors.length > 0 &&
-              errors.map((error: any) => (
-                <Alert
-                  variant='destructive'
-                  key={error.message}
-                  className='mt-4'
-                >
-                  <AlertDescription>{error.message}</AlertDescription>
-                </Alert>
-              ))}
-            {success.isSuccess && (
-              <Alert className='mt-4'>
-                <AlertDescription>{success.message}</AlertDescription>
+        {/* Right Login Form */}
+        <div className="w-full md:w-2/3 p-8 md:p-12 flex flex-col items-center justify-center bg-gray-800/40 backdrop-blur-lg animate-slide-up rounded-lg">
+          <h2 className="text-2xl font-bold text-white mb-6 border-b border-white/30 w-full pb-3 uppercase">
+            Login
+          </h2>
+
+          {/* Error & Success Alerts */}
+          {errors.length > 0 &&
+            errors.map((error) => (
+              <Alert variant="destructive" key={error.message} className="mb-3 w-full">
+                <AlertDescription>{error.message}</AlertDescription>
               </Alert>
+            ))}
+          {success.isSuccess && (
+            <Alert className="mb-3 w-full">
+              <AlertDescription>{success.message}</AlertDescription>
+            </Alert>
+          )}
+
+          {/* Formik Form */}
+          <Formik
+            initialValues={{ email: "", password: "" }}
+            validationSchema={validationSchema}
+            onSubmit={(values) => {
+              setIsSubmitting(true);
+              userLogin({ email: values.email, password: values.password })
+                .then((data) => {
+                  if (Array.isArray(data)) return setErrors(data);
+                  setErrors([]);
+                  setSuccess({ isSuccess: true, message: "Login successful" });
+                  dispatch(setAccessToken({ accessToken: data.token.accessToken }));
+                  dispatch(setRefreshToken({ refreshToken: data.token.refreshToken }));
+                  dispatch(setUserDetails({ userDetails: data.user }));
+                  router.push("/dashboard");
+                })
+                .finally(() => setIsSubmitting(false));
+            }}
+          >
+            {({ errors: formErrors, touched }) => (
+              <Form className="w-full space-y-4">
+                <div>
+                  <label className="block mb-1 font-semibold text-white">Email</label>
+                  <Field name="email">
+                    {({ field }: any) => (
+                      <Input
+                        {...field}
+                        type="email"
+                        placeholder="you@example.com"
+                        className={`w-full text-gray-300 ${formErrors.email && touched.email ? "border-red-500" : ""}`}
+                      />
+                    )}
+                  </Field>
+                  {formErrors.email && touched.email && (
+                    <p className="mt-1 text-sm text-primary">{formErrors.email}</p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block mb-1 font-semibold text-white">Password</label>
+                  <Field name="password">
+                    {({ field }: any) => (
+                      <Input
+                        {...field}
+                        type="password"
+                        placeholder="••••••••"
+                        className={`w-full text-gray-300 ${formErrors.password && touched.password ? "border-red-500" : ""}`}
+                      />
+                    )}
+                  </Field>
+                  {formErrors.password && touched.password && (
+                    <p className="mt-1 text-sm text-red-500">{formErrors.password}</p>
+                  )}
+                </div>
+
+                <div className="text-end">
+                  <Link href="/forgot-password" className="text-sm text-white hover:underline">
+                    Forgot password?
+                  </Link>
+                </div>
+
+                <Button
+                  type="submit"
+                  className="w-full bg-primary hover:bg-primary-dark transition-colors duration-300 uppercase"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Signing In..." : "Sign In"}
+                </Button>
+              </Form>
             )}
-            <Formik
-              initialValues={{ email: "", password: "" }}
-              validationSchema={validationSchema}
-              onSubmit={(values) => {
-                setIsSubmitting(true);
-                userLogin({ email: values.email, password: values.password })
-                  .then(async (data) => {
-                    if (Array.isArray(data)) {
-                      setSuccess({ isSuccess: false, message: "" });
-                      return setErrors(data);
-                    }
-                    setErrors([]);
-                    setSuccess({
-                      isSuccess: true,
-                      message: "Login successful",
-                    });
-                    dispatch(
-                      setAccessToken({ accessToken: data.token.accessToken })
-                    );
-                    dispatch(
-                      setRefreshToken({
-                        refreshToken: data.token.refreshToken,
-                      })
-                    );
-                    dispatch(setUserDetails({ userDetails: data.user }));
+          </Formik>
 
-                    router.push("/dashboard");
-                  })
-                  .finally(() => {
-                    setIsSubmitting(false);
-                  });
-              }}
-            >
-              {({ errors: formErrors, touched }: any) => (
-                <Form className='mt-6 space-y-4'>
-                  <div>
-                    <label
-                      className='mb-1 block font-semibold text-white'
-                      htmlFor='email'
-                    >
-                      Email address
-                    </label>
-                    <Field name='email'>
-                      {({ field }: any) => (
-                        <Input
-                          {...field}
-                          type='email'
-                          className={`bg-white ${formErrors.email && touched.email
-                            ? "border-red-500"
-                            : ""
-                            }`}
-                        />
-                      )}
-                    </Field>
-                    {formErrors.email && touched.email && (
-                      <p className='mt-1 text-sm text-red-500'>
-                        {formErrors.email}
-                      </p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label
-                      className='mb-1 block font-semibold text-white'
-                      htmlFor='password'
-                    >
-                      Password
-                    </label>
-                    <Field name='password'>
-                      {({ field }: any) => (
-                        <Input
-                          {...field}
-                          type='password'
-                          className={`bg-white ${formErrors.password && touched.password
-                            ? "border-red-500"
-                            : ""
-                            }`}
-                        />
-                      )}
-                    </Field>
-                    {formErrors.password && touched.password && (
-                      <p className='mt-1 text-sm text-red-500'>
-                        {formErrors.password}
-                      </p>
-                    )}
-                  </div>
-                  <div className='text-end'>
-                    <p className='text-sm text-white'>
-                      <Link href='/forgot-password' className='hover:underline'>
-                        Forgot password?
-                      </Link>
-                    </p>
-                  </div>
-                  <Button
-                    type='submit'
-                    className='w-full bg-primary uppercase'
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? "Please wait..." : "Sign In"}
-                  </Button>
-                </Form>
-              )}
-            </Formik>
-
-            <div className='flex flex-col'>
-              <p className='text-center flex text-white gap-2 justify-center items-center mt-5'>
-                <hr className='border-t w-1/2' />
-                Or <hr className='border-t w-1/2' />
-              </p>
-
-              <div className='flex flex-col items-center justify-center'>
-                <GoogleAuth />
-                <FacebookAuth />
-              </div>
+          {/* Social Login */}
+          <div className="w-full mt-6 flex flex-col items-center">
+            <p className="text-white mb-3">Or continue with</p>
+            <div className="flex flex-col w-full">
+              <GoogleAuth />
+              <FacebookAuth />
             </div>
-            <div className='my-4 flex items-center justify-end gap-1'>
-              <div className='w-full'>
-                <hr className='border-t border-gray-200' />
-              </div>
-              <p className='text-nowrap text-sm text-white'>
-                <Link href='/register' className='hover:underline'>
-                  {"Don't have an account?"}
-                </Link>
-              </p>
-              <div className='w-full '>
-                <hr className='border-t border-gray-200' />
-              </div>
-            </div>
-
-            <img className="w-40 mx-auto" src="/images/logo.png" alt="logo" />
           </div>
+
+          {/* Register Link */}
+          <p className="mt-6 text-white text-sm">
+            Don&apos;t have an account?{" "}
+            <Link href="/register" className="underline font-semibold">
+              Sign Up
+            </Link>
+          </p>
+
+          {/* Logo */}
+          <img className="w-28 mt-6" src="/images/logo.png" alt="logo" />
         </div>
       </div>
+
+      {/* Animations */}
+      <style jsx>{`
+        @keyframes fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        .animate-fade-in {
+          animation: fade-in 1.5s ease-in-out;
+        }
+
+        @keyframes slide-up {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide-up {
+          animation: slide-up 0.8s ease-out forwards;
+        }
+        .animate-delay-200 {
+          animation-delay: 0.2s;
+        }
+      `}</style>
     </div>
   );
 };

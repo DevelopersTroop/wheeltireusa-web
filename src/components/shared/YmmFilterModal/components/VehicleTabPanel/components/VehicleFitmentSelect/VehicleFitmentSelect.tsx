@@ -1,0 +1,19 @@
+"use client";
+
+import YmmCustomSelect from "../../../../../YmmCustomSelect/YmmCustomSelect";
+
+type VehicleFitmentSelectProps = {
+  value?: string;
+  placeholder?: string;
+  options: string[];
+  disabled?: boolean;
+  loading?: boolean;
+  onChange: (value: string) => void;
+  className?: string;
+  label?: string;
+  required?: boolean;
+};
+
+export default function VehicleFitmentSelect(props: VehicleFitmentSelectProps) {
+  return <YmmCustomSelect {...props} />;
+}

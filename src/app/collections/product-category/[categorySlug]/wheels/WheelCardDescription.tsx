@@ -169,7 +169,7 @@ const WheelCardDescription = ({ product }: { product: TWheelProduct }) => {
       </div>
 
       <button
-        className="mt-4 font-semibold bg-primary w-full inline-block text-center text-white rounded-xl py-2 cursor-pointer"
+        className="mt-4 uppercase font-semibold bg-primary w-full inline-block text-center text-white rounded-xl py-2 cursor-pointer"
         onClick={() => {
           if (cartPackage) {
             addWheelsToPackage();

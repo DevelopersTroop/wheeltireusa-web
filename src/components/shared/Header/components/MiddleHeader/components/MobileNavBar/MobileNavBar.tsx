@@ -6,6 +6,8 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import navMenus, { NavMenu } from "./config";
 import { BiMenu } from 'react-icons/bi'
+import { useDispatch } from "react-redux";
+import { setIsModalOpen } from "@/redux/features/ymmFilterSlice";
 // import SearchUnderMenu from "../../../SearchUnderMenu/SearchUnderMenu";
 
 
@@ -13,12 +15,79 @@ import { BiMenu } from 'react-icons/bi'
 export default function MobileNavbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [openKeys, setOpenKeys] = useState<string[]>([]); // track all open items
+  const dispatch = useDispatch();
 
   // toggle open/close for a label
   const toggleKey = (label: string) => {
     setOpenKeys((prev) =>
       prev.includes(label) ? prev.filter((k) => k !== label) : [...prev, label]
     );
+  };
+
+  const handleNavMenuClick = (menu: NavMenu, e: React.MouseEvent) => {
+    let matched = false;
+    if (menu.label?.toLowerCase() === "shop wheels") {
+      dispatch(setIsModalOpen({
+        isOpen: true,
+        source: "nav_menu",
+        redirectPath: "/collections/product-category/wheels",
+        mainTab: "vehicle",
+        brandCategory: "wheels",
+        sizeCategory: "wheels"
+      }));
+      matched = true;
+    }
+    if (menu.label?.toLowerCase() === "shop tires") {
+      dispatch(setIsModalOpen({
+        isOpen: true,
+        source: "nav_menu",
+        redirectPath: "/collections/product-category/tires",
+        mainTab: "vehicle",
+        brandCategory: "tire",
+        sizeCategory: "tire"
+      }));
+      matched = true;
+
+    }
+    // if (menu.label?.toLowerCase() === "shop wheels") {
+    //   dispatch(setIsModalOpen({ 
+    //     isOpen: true, 
+    //     source: "nav_menu", 
+    //     redirectPath: "/collections/product-category/wheels",
+    //     mainTab: "size",
+    //     brandCategory: "wheels",
+    //     sizeCategory: "wheels"
+    //   }));
+    //   matched = true;
+    // }
+    // if (menu.label?.toLowerCase() === "shop tires") {
+    //   dispatch(setIsModalOpen({ 
+    //     isOpen: true, 
+    //     source: "nav_menu", 
+    //     redirectPath: "/collections/product-category/tires",
+    //     mainTab: "size",
+    //     brandCategory: "tire",
+    //     sizeCategory: "tire"
+    //   }));
+    //   matched = true;
+    // }
+    // if (menu.label?.toLowerCase() === "wheels by brands") {
+    //   dispatch(setIsModalOpen({ 
+    //     isOpen: true, 
+    //     source: "nav_menu", 
+    //     redirectPath: "/collections/product-category/wheels",
+    //     mainTab: "brand",
+    //     brandCategory: "wheels"
+    //   }));
+    //   matched = true;
+    // }
+
+    if (matched) {
+      e.preventDefault();
+      setIsOpen(false);
+    } else if (!menu.children) {
+      setIsOpen(false);
+    }
   };
 
   /**
@@ -51,9 +120,7 @@ export default function MobileNavbar() {
                 <Link
                   href={item.href ?? "#"}
                   target={item.target}
-                  onClick={() => {
-                    if (!item.children) setIsOpen(false);
-                  }}
+                  onClick={(e) => handleNavMenuClick(item, e)}
                   className="flex-1 text-left relative after:absolute after:h-[2px] after:w-[15%] after:bg-primary after:bottom-0 after:left-0"
                 >
                   {item.label}
