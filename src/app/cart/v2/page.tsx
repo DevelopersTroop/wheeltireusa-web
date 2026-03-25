@@ -173,7 +173,7 @@ const CartSystem = () => {
                   <span className="text-[10px] uppercase text-gray-300">
                     Total 
                   </span>
-                  <span className="text-lg font-bold">
+                  <span className="text-xs font-bold">
                     ${subTotalCost}
                   </span>
                 </div>
