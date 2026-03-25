@@ -14,8 +14,6 @@ import { addToCart } from '@/redux/features/cartSlice';
 import { CartData } from '@/types/cart';
 import { useCartHook } from '@/hooks/useCartHook';
 import CompareButton from '@/components/shared/CompareButton/CompareButton';
-import { MdOutlineShoppingCart, MdFavoriteBorder, MdSave } from 'react-icons/md';
-import { TbArrowsExchange } from 'react-icons/tb';
 
 const ActionButtons = ({ product }: { product: TTireProduct }) => {
   const searchParams = useSearchParams();
@@ -51,7 +49,7 @@ const ActionButtons = ({ product }: { product: TTireProduct }) => {
     });
   };
 
-  const [addToCartText, setAddToCartText] = React.useState('Add To Cart');
+  const [addToCartText, setAddToCartText] = React.useState('ADD TO CART');
   const [loading, setLoading] = React.useState(false);
 
   const addWheels = () => {
@@ -78,15 +76,9 @@ const ActionButtons = ({ product }: { product: TTireProduct }) => {
   return (
     <div className="flex flex-col gap-3">
 
-      {/* Total + quantity row */}
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-xs text-gray-400 uppercase tracking-wider">Total</p>
-          <p className="text-xl font-extrabold text-gray-900">
-            ${((product?.sellingPrice ?? 0) * quantity).toFixed(2)}
-          </p>
-        </div>
-        <div className="max-w-[130px]">
+      {/* Quantity + Add to Cart inline */}
+      <div className="flex items-stretch gap-2">
+        <div className="w-[120px] shrink-0">
           <QuantityInput
             product={product}
             inventoryAvailable={20}
@@ -94,28 +86,34 @@ const ActionButtons = ({ product }: { product: TTireProduct }) => {
             id="quantity"
           />
         </div>
+        <button
+          onClick={() => {
+            setLoading(true);
+            setAddToCartText('Adding...');
+            wait(400).then(() => {
+              addProductToCart();
+              setOpen();
+              setTimeout(() => {
+                setAddToCartText('ADD TO CART');
+                setLoading(false);
+              }, 1200);
+            });
+          }}
+          disabled={loading}
+          className="flex-1 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 active:scale-[0.99] text-white font-bold py-3 rounded-lg uppercase tracking-wide text-sm transition-all disabled:opacity-60"
+        >
+          {addToCartText}
+        </button>
       </div>
 
-      {/* Primary CTA: Add to Cart */}
-      <button
-        onClick={() => {
-          setLoading(true);
-          setAddToCartText('Adding...');
-          wait(400).then(() => {
-            addProductToCart();
-            setOpen();
-            setTimeout(() => {
-              setAddToCartText('Add To Cart');
-              setLoading(false);
-            }, 1200);
-          });
-        }}
-        disabled={loading}
-        className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-[#ea6c0a] active:scale-[0.99] text-white font-bold py-3.5 rounded-xl uppercase tracking-wide text-sm transition-all shadow-md shadow-[#f97316]/20 disabled:opacity-60"
-      >
-        <MdOutlineShoppingCart className="w-5 h-5" />
-        {addToCartText}
-      </button>
+      {/* Installation service */}
+      <div className="flex items-start gap-3 border border-gray-100 rounded-lg p-3 bg-gray-50">
+        <span className="text-xl shrink-0">🔧</span>
+        <div className="text-sm text-gray-600">
+          <span className="font-medium">Installation service available</span>
+          <span className="text-gray-400"> (selectable in cart)</span>
+        </div>
+      </div>
 
       {/* Build wheel & tire package */}
       {wheel?.id ? (
@@ -128,23 +126,11 @@ const ActionButtons = ({ product }: { product: TTireProduct }) => {
       ) : (
         <button
           onClick={addWheels}
-          className="w-full flex items-center justify-center gap-2 border border-gray-200 text-gray-700 hover:border-[#111111] hover:text-[#111111] transition-all font-semibold py-3 rounded-xl text-sm"
+          className="w-full flex items-center justify-center gap-2 bg-green-700 border border-gray-200 text-white hover:bg-green-600 transition-all font-semibold py-2.5 rounded-xl text-sm"
         >
           🔧 Build a wheel and tire package
         </button>
       )}
-
-      {/* Save to email + Save for later */}
-      <div className="grid grid-cols-2 gap-2 pt-1">
-        <button className="flex items-center justify-center gap-1.5 border border-gray-200 text-gray-500 hover:border-gray-300 hover:text-gray-800 transition-all rounded-lg py-2.5 text-xs font-medium">
-          <MdFavoriteBorder className="w-4 h-4" />
-          Save to email
-        </button>
-        <button className="flex items-center justify-center gap-1.5 border border-gray-200 text-gray-500 hover:border-gray-300 hover:text-gray-800 transition-all rounded-lg py-2.5 text-xs font-medium">
-          <MdSave className="w-4 h-4" />
-          Save for later
-        </button>
-      </div>
 
       {/* Compare */}
       <CompareButton product={product} variant="outline" />

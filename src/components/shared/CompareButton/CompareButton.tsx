@@ -48,7 +48,7 @@ const CompareButton = ({ product, variant = 'default' }: CompareButtonProps) => 
         return (
             <button
                 onClick={handleComparisonToggle}
-                className={`flex cursor-pointer items-center justify-center gap-2 px-4 py-2.5 rounded-lg border transition-all duration-200 font-medium ${isInComparison
+                className={`flex cursor-pointer items-center justify-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 font-medium ${isInComparison
                     ? 'bg-primary/10 text-primary border-primary'
                     : 'bg-white text-[#212227] border-[#cfcfcf] hover:border-primary hover:text-primary'
                     }`}

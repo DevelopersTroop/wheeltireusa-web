@@ -46,7 +46,7 @@ const TireDetails = ({ product }: { product: TTireProduct }) => {
       </div>
 
       {/* Spec chips */}
-      <div className="grid grid-cols-4 gap-1.5">
+     <div className="hidden sm:grid grid-cols-4 gap-1.5">
         {chips.map((chip) =>
           chip.value ? (
             <div
@@ -80,6 +80,8 @@ const TireDetails = ({ product }: { product: TTireProduct }) => {
       </div>
 
         <ActionButtons product={product} />
+
+        
     </div>
   );
 };
