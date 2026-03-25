@@ -1,35 +1,38 @@
-"use client";
-import { Field, Form, Formik } from "formik";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+'use client';
+import { Field, Form, Formik } from 'formik';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 import {
   setAccessToken,
   setRefreshToken,
   setUserDetails,
-} from "@/redux/features/userSlice";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import useAuth from "@/hooks/useAuth";
-import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import * as Yup from "yup";
-import { userLogin } from "./login";
-import GoogleAuth from "@/components/shared/GoogleAuth";
-import FacebookAuth from "@/components/shared/FacebookAuth";
+} from '@/redux/features/userSlice';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import useAuth from '@/hooks/useAuth';
+import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import * as Yup from 'yup';
+import { userLogin } from './login';
+import GoogleAuth from '@/components/shared/GoogleAuth';
+import FacebookAuth from '@/components/shared/FacebookAuth';
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().email("Invalid email").required("Email is required"),
-  password: Yup.string().required("Password is required"),
+  email: Yup.string().email('Invalid email').required('Email is required'),
+  password: Yup.string().required('Password is required'),
 });
 
 const LoginPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const [errors, setErrors] = useState<{ name: string; message: string }[]>([]);
-  const [success, setSuccess] = useState<{ isSuccess: boolean; message: string }>({
-    message: "",
+  const [success, setSuccess] = useState<{
+    isSuccess: boolean;
+    message: string;
+  }>({
+    message: '',
     isSuccess: false,
   });
 
@@ -37,7 +40,7 @@ const LoginPage = () => {
   const { user } = useAuth();
 
   useEffect(() => {
-    if (user) router.push("/dashboard/orders");
+    if (user) router.push('/dashboard/orders');
   }, [user, router]);
 
   return (
@@ -53,7 +56,6 @@ const LoginPage = () => {
 
       {/* Login Container */}
       <div className="relative z-10 my-3 w-full max-w-4xl mx-4 rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row bg-white/10 backdrop-blur-lg border border-white/20">
-        
         {/* Left Hero Section */}
         <div className="hidden md:flex md:w-2/3 mb-70 flex-col justify-center p-12 text-white">
           <h1 className="text-5xl font-extrabold uppercase mb-4 animate-slide-up">
@@ -74,7 +76,11 @@ const LoginPage = () => {
           {/* Error & Success Alerts */}
           {errors.length > 0 &&
             errors.map((error) => (
-              <Alert variant="destructive" key={error.message} className="mb-3 w-full">
+              <Alert
+                variant="destructive"
+                key={error.message}
+                className="mb-3 w-full"
+              >
                 <AlertDescription>{error.message}</AlertDescription>
               </Alert>
             ))}
@@ -86,7 +92,7 @@ const LoginPage = () => {
 
           {/* Formik Form */}
           <Formik
-            initialValues={{ email: "", password: "" }}
+            initialValues={{ email: '', password: '' }}
             validationSchema={validationSchema}
             onSubmit={(values) => {
               setIsSubmitting(true);
@@ -94,11 +100,15 @@ const LoginPage = () => {
                 .then((data) => {
                   if (Array.isArray(data)) return setErrors(data);
                   setErrors([]);
-                  setSuccess({ isSuccess: true, message: "Login successful" });
-                  dispatch(setAccessToken({ accessToken: data.token.accessToken }));
-                  dispatch(setRefreshToken({ refreshToken: data.token.refreshToken }));
+                  setSuccess({ isSuccess: true, message: 'Login successful' });
+                  dispatch(
+                    setAccessToken({ accessToken: data.token.accessToken })
+                  );
+                  dispatch(
+                    setRefreshToken({ refreshToken: data.token.refreshToken })
+                  );
                   dispatch(setUserDetails({ userDetails: data.user }));
-                  router.push("/dashboard");
+                  router.push('/dashboard');
                 })
                 .finally(() => setIsSubmitting(false));
             }}
@@ -106,41 +116,52 @@ const LoginPage = () => {
             {({ errors: formErrors, touched }) => (
               <Form className="w-full space-y-4">
                 <div>
-                  <label className="block mb-1 font-semibold text-white">Email</label>
+                  <label className="block mb-1 font-semibold text-white">
+                    Email
+                  </label>
                   <Field name="email">
                     {({ field }: any) => (
                       <Input
                         {...field}
                         type="email"
                         placeholder="you@example.com"
-                        className={`w-full text-gray-300 ${formErrors.email && touched.email ? "border-red-500" : ""}`}
+                        className={`w-full text-gray-300 ${formErrors.email && touched.email ? 'border-red-500' : ''}`}
                       />
                     )}
                   </Field>
                   {formErrors.email && touched.email && (
-                    <p className="mt-1 text-sm text-primary">{formErrors.email}</p>
+                    <p className="mt-1 text-sm text-primary">
+                      {formErrors.email}
+                    </p>
                   )}
                 </div>
 
                 <div>
-                  <label className="block mb-1 font-semibold text-white">Password</label>
+                  <label className="block mb-1 font-semibold text-white">
+                    Password
+                  </label>
                   <Field name="password">
                     {({ field }: any) => (
                       <Input
                         {...field}
                         type="password"
                         placeholder="••••••••"
-                        className={`w-full text-gray-300 ${formErrors.password && touched.password ? "border-red-500" : ""}`}
+                        className={`w-full text-gray-300 ${formErrors.password && touched.password ? 'border-red-500' : ''}`}
                       />
                     )}
                   </Field>
                   {formErrors.password && touched.password && (
-                    <p className="mt-1 text-sm text-red-500">{formErrors.password}</p>
+                    <p className="mt-1 text-sm text-red-500">
+                      {formErrors.password}
+                    </p>
                   )}
                 </div>
 
                 <div className="text-end">
-                  <Link href="/forgot-password" className="text-sm text-white hover:underline">
+                  <Link
+                    href="/forgot-password"
+                    className="text-sm text-white hover:underline"
+                  >
                     Forgot password?
                   </Link>
                 </div>
@@ -150,7 +171,7 @@ const LoginPage = () => {
                   className="w-full bg-primary hover:bg-primary-dark transition-colors duration-300 uppercase"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? "Signing In..." : "Sign In"}
+                  {isSubmitting ? 'Signing In...' : 'Sign In'}
                 </Button>
               </Form>
             )}
@@ -160,14 +181,14 @@ const LoginPage = () => {
           <div className="w-full mt-6 flex flex-col items-center">
             <p className="text-white mb-3">Or continue with</p>
             <div className="flex flex-col w-full">
-              <GoogleAuth />
-              <FacebookAuth />
+              <GoogleAuth role="customer" />
+              <FacebookAuth role="customer" />
             </div>
           </div>
 
           {/* Register Link */}
           <p className="mt-6 text-white text-sm">
-            Don&apos;t have an account?{" "}
+            Don&apos;t have an account?{' '}
             <Link href="/register" className="underline font-semibold">
               Sign Up
             </Link>
@@ -181,16 +202,26 @@ const LoginPage = () => {
       {/* Animations */}
       <style jsx>{`
         @keyframes fade-in {
-          from { opacity: 0; }
-          to { opacity: 1; }
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
         }
         .animate-fade-in {
           animation: fade-in 1.5s ease-in-out;
         }
 
         @keyframes slide-up {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
         .animate-slide-up {
           animation: slide-up 0.8s ease-out forwards;
