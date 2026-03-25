@@ -360,7 +360,7 @@ export const WriteAReview: React.FC<{ productId: string | undefined }> = ({
           <div className="pt-1">
             <Button
               type="submit"
-              className="inline-flex items-center gap-2 px-8 h-12 bg-[#dc5454] hover:bg-[#c04444] text-white font-bold text-sm uppercase tracking-wider rounded-lg shadow-sm hover:shadow-md transition-all duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none"
+              className="inline-flex items-center gap-2 px-5 py-2 bg-primary hover:bg-[#c04444] text-white font-bold text-xs uppercase tracking-wider rounded-lg shadow-sm hover:shadow-md transition-all duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none"
               disabled={isLoading || !!fileError}
             >
               {isLoading ? (
