@@ -8,6 +8,7 @@ import Breadcrumb from "@/components/ui/breadcrumb/breadcrumb";
 import Link from "next/link";
 import { MdChevronRight } from "react-icons/md";
 import TireTabs from "./tire-tabs";
+import MobileStickyBar from "./mobile-sticky-bar";
 
 export const step = 4;
 export const duallyStep = 6;
@@ -47,8 +48,8 @@ const Tire = ({ product }: { product: TTireProduct }) => {
           </div>
         </div>
 
-       
-        
+
+
 
         {/* ── MAIN BODY ── */}
         <div className="max-w-7xl sm:px-6 py-4">
@@ -82,14 +83,17 @@ const Tire = ({ product }: { product: TTireProduct }) => {
                   <div className="p-5">
                     <TireDetails product={product} />
                   </div>
+                    <div>
+                      <MobileStickyBar product={product} />
 
+                    </div>
                   {/* MOBILE: full specs under pricing */}
-                  
+
 
                   {/* DESKTOP: full specs in sidebar */}
-                 <div className="lg:hidden px-4 sm:px-6 mt-4">
-  <TireSpecifications product={product} variant="full" />
-</div>
+                  <div className="lg:hidden px-4 sm:px-6 mt-4">
+                    <TireSpecifications product={product} variant="full" />
+                  </div>
 
                 </div>
 
