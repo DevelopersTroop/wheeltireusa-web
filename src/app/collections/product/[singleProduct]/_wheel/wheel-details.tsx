@@ -1,111 +1,99 @@
 import { TWheelProduct } from "@/types/product";
-import Image from "next/image";
-import Link from "next/link";
-import { LiaShippingFastSolid } from "react-icons/lia";
-import { MdOutlineLocalPhone, MdOutlineShoppingCart } from "react-icons/md";
+import { MdCheckCircle, MdLocationOn, MdOutlineLocalPhone } from "react-icons/md";
 import { PiHandCoinsDuotone } from "react-icons/pi";
+import { TbRulerMeasure, TbWeight } from "react-icons/tb";
+import { MdOutlineColorLens } from "react-icons/md";
+import { LiaShippingFastSolid } from "react-icons/lia";
+import WheelActionButtons from "./wheel-action-buttons";
 
 const WheelDetails = ({ product }: { product: TWheelProduct }) => {
-    return (
-        <div className="flex flex-col gap-5">
-            <div>
-                <p className="text-gray-700">
-                    <span className="font-semibold text-2xl">${product.sellingPrice}</span> each{" "}
-                    <span className="font-semibold text-2xl">
-                        /{((product?.sellingPrice ?? 0) * 4).toFixed(2) || "N/A"}
-                    </span>{" "}
-                    set
-                </p>
-            </div>
+  // Delivery date
+  const today = new Date();
+  const end = new Date(today);
+  end.setDate(today.getDate() + 7);
+  const deliveryDate = end.toLocaleString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+  });
 
-            <div className=" flex items-center gap-2">
-                <div className={"rounded-full p-1 inline-block bg-primary"}>
-                    <LiaShippingFastSolid className={"text-white"} />
-                </div>
-                <div className="text-base uppercase">
-                    <p className="text-gray-600">
-                        Free Mount & Balance with Wheel packaging!
-                    </p>
-                </div>
-            </div>
+  const chips = [
+    {
+      icon: <TbRulerMeasure className="w-4 h-4" />,
+      label: "SIZE",
+      value: product?.wheelSize || `${product?.wheelDiameter}" x ${product?.wheelWidth}"`,
+    },
+    {
+      icon: <TbWeight className="w-4 h-4" />,
+      label: "BOLT",
+      value: product?.boltPatterns?.[0],
+    },
+    {
+      icon: <MdOutlineColorLens className="w-4 h-4" />,
+      label: "COLOR",
+      value: product?.color,
+    },
+    {
+      icon: <LiaShippingFastSolid className="w-4 h-4" />,
+      label: "OFFSET",
+      value: product?.offset ? `${product.offset}mm` : undefined,
+    },
+  ];
 
-            <div className=" flex items-center gap-2">
-                <div className={"rounded-full p-1 inline-block bg-primary"}>
-                    <MdOutlineShoppingCart className={"text-white"} />
-                </div>
-                <div className="text-base uppercase">
-                    <p className="text-gray-600">In stock & Free Quick Delivery</p>
-                    <p className="text-gray-600"> As Fast As: {" "}
-                        <span className="text-black font-semibold">
-                            {(() => {
-                                const today = new Date();
-                                const start = new Date(today);
-                                start.setDate(today.getDate() + 3);
-                                const end = new Date(today);
-                                end.setDate(today.getDate() + 7);
+  return (
+    <div className="flex flex-col gap-4">
 
-                                const format = (date: Date) =>
-                                    date.toLocaleString("en-US", {
-                                        month: "short",
-                                        day: "2-digit",
-                                    });
-
-                                return `${format(start)} - ${format(end)}`;
-                            })()}
-                        </span>
-                        {" "} to the lower 48
-                    </p>
-                </div>
-            </div>
-
-            <div className=" flex items-center gap-2">
-                <div className={"rounded-full p-1 inline-block bg-primary"}>
-                    <PiHandCoinsDuotone className={"text-white"} />
-                </div>
-                <div className="text-base">
-                    <p className="text-gray-800">
-                        Starting at $79/mo or 0% APR with{" "}
-                        <span className="text-btext font-bold">affirm</span>{" "}
-                        <Link href="#" className="text-gray-900">
-                            Check your purchasing power
-                        </Link>
-                    </p>
-                </div>
-            </div>
-
-            <div className=" flex items-center gap-2">
-                <div className={"rounded-full p-1 inline-block bg-primary"}>
-                    <MdOutlineLocalPhone className={"text-white"} />
-                </div>
-                <p className="text-base uppercase text-gray-600">
-                    Questions or Help Needed? Call our experts at{" "}
-                    <span className="text-primary"> +1 (813) 812-5257 </span>
-                </p>
-            </div>
-
-            {/* <div className=" flex items-center gap-2">
-                <div className={"rounded-full p-1 inline-block bg-primary"}>
-                    <PiHandCoinsDuotone className={"text-white"} />
-                </div>
-                <div className="text-base">
-                    <Link href="#">
-                        <p className="underline">
-                            Make 6 payments of <br /> $210.00/mo at 0% APR with
-                            <Image
-                                src="/paypal.svg"
-                                alt="paypal"
-                                className="h-5 inline-block"
-                                width={60}
-                                height={20}
-                            />
-                            <br />
-                            <span className="underline text-primary">Learn More</span>{" "}
-                        </p>
-                    </Link>
-                </div>
-            </div> */}
+      {/* Pricing */}
+      <div>
+        <div className="flex items-end gap-2 flex-wrap">
+          <span className="text-3xl font-extrabold text-gray-900">${product.sellingPrice}</span>
+          <span className="text-gray-400 text-sm mb-1">/ wheel</span>
         </div>
-    );
+        <div className="flex items-center gap-2 mt-1">
+          <span className="text-gray-400 text-xs uppercase tracking-wider">Set of 4</span>
+          <span className="text-primary text-xl font-extrabold">
+            ${((product?.sellingPrice ?? 0) * 4).toFixed(2)}
+          </span>
+        </div>
+      </div>
+
+      {/* Spec chips */}
+      <div className="hidden sm:grid grid-cols-4 gap-1.5">
+        {chips.map((chip) =>
+          chip.value ? (
+            <div
+              key={chip.label}
+              className="flex flex-col items-center gap-0.5 rounded-lg border border-gray-200 bg-gray-50 py-2.5 px-1"
+            >
+              <span className="text-gray-400">{chip.icon}</span>
+              <span className="text-[9px] text-gray-400 font-bold tracking-wider uppercase">{chip.label}</span>
+              <span className="text-gray-900 text-xs text-center font-bold">{chip.value}</span>
+            </div>
+          ) : null
+        )}
+      </div>
+
+      {/* Stock + delivery */}
+      <div className="rounded-xl bg-gray-50 border border-gray-100 px-4 py-3 flex flex-col gap-2">
+        <div className="flex items-center gap-2">
+          <MdCheckCircle className="text-green-500 w-4 h-4 flex-shrink-0" />
+          <span className="text-green-600 font-semibold text-sm">In Stock</span>
+        </div>
+        <div className="flex items-start gap-2 text-gray-500 text-xs">
+          <MdLocationOn className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-gray-400" />
+          <span>
+            Delivery by{" "}
+            <span className="font-semibold text-gray-800">{deliveryDate}</span>{" "}
+            to the lower 48
+          </span>
+        </div>
+      </div>
+
+
+      {/* Wheel Action Buttons */}
+      <WheelActionButtons product={product} />
+    </div>
+  );
 };
 
 export default WheelDetails;

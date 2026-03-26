@@ -1,10 +1,9 @@
 'use client';
 
-import store, { useAppDispatch, useTypedSelector } from '@/redux/store';
+import { useAppDispatch, useTypedSelector } from '@/redux/store';
 import { TWheelProduct } from '@/types/product';
 import { v4 as uuidv4 } from 'uuid';
 import React, { useContext } from 'react';
-import wait from 'wait';
 import WheelQuantityInput from './wheel-quantity-input';
 import { WheelContext } from './context/WheelProvider';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -14,138 +13,151 @@ import { addToCart } from '@/redux/features/cartSlice';
 import { CartData } from '@/types/cart';
 import { useCartHook } from '@/hooks/useCartHook';
 import CompareButton from '@/components/shared/CompareButton/CompareButton';
+import { MdOutlineLocalPhone } from 'react-icons/md';
 
 const WheelActionButtons = ({ product }: { product: TWheelProduct }) => {
-    const searchParams = useSearchParams();
-    const cartPackage = searchParams.get('cartPackage') as string;
-    const packages = useTypedSelector((state) => state.persisted.package);
-    const dispatch = useAppDispatch();
-    const { quantity } = useContext(WheelContext);
-    const { setOpen } = useCartHook();
+  const searchParams = useSearchParams();
+  const cartPackage = searchParams.get('cartPackage') as string;
 
-    const tire = packages[cartPackage]?.tire;
+  const packages = useTypedSelector((state) => state.persisted.package);
+  const cartProducts = useTypedSelector(
+    (state) => state.persisted.cart.products
+  );
 
-    const router = useRouter();
+  const dispatch = useAppDispatch();
+  const { quantity } = useContext(WheelContext);
+  const { setOpen } = useCartHook();
+  const router = useRouter();
 
-    const addProductToCart = async (meta?: any) => {
-        triggerGaAddToCart(product, quantity);
-        const data = await new Promise<CartData>((resolve, reject) => {
-            try {
-                const packageId = uuidv4();
-                const cartSerial = uuidv4();
-                const metaData = meta || {};
-                dispatch(
-                    addToCart({
-                        ...product,
-                        cartPackage: packageId,
-                        cartSerial: cartSerial,
-                        quantity: quantity,
-                        metaData,
-                    })
-                );
-                setTimeout(() => {
-                    const updatedProducts = store.getState().persisted.cart.products;
-                    const addedProduct = Object.values(updatedProducts).find(
-                        (p) =>
-                            p.id === product.id &&
-                            JSON.stringify(p.metaData) === JSON.stringify(metaData)
-                    );
-                    resolve({
-                        cartSerial: addedProduct?.cartSerial || cartSerial,
-                        cartPackage: addedProduct?.cartPackage || packageId,
-                    });
-                }, 1000);
-            } catch (error) {
-                reject(error);
-            }
-        });
-        return data;
-    };
+  const tire = packages[cartPackage]?.tire;
 
-    const [addToCartText, setAddToCartText] = React.useState('Buy Wheels Only');
+  const [loading, setLoading] = React.useState(false);
 
-    const addTires = () => {
-        new Promise<{ cartPackage: string }>((res) => {
-            const cartPackage = uuidv4();
-            dispatch(
-                addPackage({
-                    packageId: cartPackage,
-                    wheel: {
-                        ...product,
-                        cartPackage,
-                    },
-                })
-            );
-            res({ cartPackage });
-        }).then((res) => {
-            router.push(
-                `/collections/product-category/tires?tireDiameter=${product.wheelDiameter}&cartPackage=${res.cartPackage}`
-            );
-        });
-    };
+  // ✅ check if already in cart
+  const isInCart = Object.values(cartProducts).some(
+    (p: any) => p.id === product.id
+  );
 
-    const addWheelsToPackage = () => {
-        new Promise<{ cartPackage: string }>((res) => {
-            dispatch(
-                addPackage({
-                    packageId: cartPackage,
-                    wheel: {
-                        ...product,
-                        cartPackage,
-                    },
-                })
-            );
-            res({ cartPackage });
-        }).then((res) => {
-            router.push(`/wheel-and-tire-package?cartPackage=${res.cartPackage}`);
-        });
-    };
+  // ✅ clean add to cart
+  const addProductToCart = async (): Promise<CartData> => {
+    triggerGaAddToCart(product, quantity);
 
-    return (
-        <>
-            <div className="flex flex-col justify-center gap-4">
-                <div className="max-w-52">
-                    <WheelQuantityInput
-                        product={product}
-                        inventoryAvailable={20}
-                        name={'quantity'}
-                        id={'quantity'}
-                    />
-                </div>
-                {tire?.id ? (
-                    <button
-                        onClick={addWheelsToPackage}
-                        className={'w-full rounded py-1 outline outline-primary'}
-                    >
-                        Add Wheels to your package
-                    </button>
-                ) : null}
-                {tire?.id ? null : (
-                    <button
-                        onClick={addTires}
-                        className={'bg-primary py-3 text-white rounded text-xl w-full'}
-                    >
-                        Add Tires & Save More !
-                    </button>
-                )}
-            </div>
-            <div className="mt-4 flex flex-col gap-3">
-                <button
-                    onClick={() => {
-                        wait(400).then(() => {
-                            addProductToCart();
-                            setAddToCartText('Loading..');
-                            setOpen();
-                        });
-                    }}
-                    className={' py-1 rounded outline outline-primary w-full'}
-                >
-                    {addToCartText}
-                </button>
-                <CompareButton product={product} variant="outline" />
-            </div>
-        </>
+    const packageId = uuidv4();
+    const cartSerial = uuidv4();
+
+    dispatch(
+      addToCart({
+        ...product,
+        cartPackage: packageId,
+        cartSerial,
+        quantity,
+        metaData: {},
+      })
     );
+
+    return { cartSerial, cartPackage: packageId };
+  };
+
+  // ✅ handle add to cart
+  const handleAddToCart = async () => {
+    if (isInCart) {
+      setOpen();
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await addProductToCart();
+      setOpen();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ✅ build tire flow
+  const addTires = () => {
+    const pkg = uuidv4();
+
+    dispatch(
+      addPackage({
+        packageId: pkg,
+        wheel: { ...product, cartPackage: pkg },
+      })
+    );
+
+    router.push(
+      `/collections/product-category/tires?tireDiameter=${product.wheelDiameter}&cartPackage=${pkg}`
+    );
+  };
+
+  // ✅ add wheels to existing package
+  const addWheelsToPackage = () => {
+    dispatch(
+      addPackage({
+        packageId: cartPackage,
+        wheel: { ...product, cartPackage },
+      })
+    );
+
+    router.push(`/wheel-and-tire-package?cartPackage=${cartPackage}`);
+  };
+
+  return (
+    <div className="flex flex-col gap-3">
+
+      {/* Quantity + Add to Cart */}
+      <div className="flex items-stretch gap-2">
+        <div className="w-[120px] shrink-0">
+          <WheelQuantityInput
+            product={product}
+            inventoryAvailable={20}
+            name="quantity"
+            id="quantity"
+          />
+        </div>
+
+        <button
+          onClick={handleAddToCart}
+          disabled={loading}
+          className="flex-1 flex items-center justify-center gap-2 bg-primary hover:bg-red-600 active:scale-[0.99] text-white font-bold py-3 rounded-lg uppercase tracking-wide text-sm transition-all disabled:opacity-60"
+        >
+          {loading ? "ADDING..." : isInCart ? "GO TO CART" : "ADD TO CART"}
+        </button>
+      </div>
+
+      
+      <div className="flex items-start gap-3 border border-gray-100 rounded-lg p-3 bg-gray-50">
+        {/* Phone */}
+      <div className="flex items-center gap-2">
+        <MdOutlineLocalPhone className="text-primary w-4 h-4 flex-shrink-0" />
+        <p className="text-xs uppercase text-gray-600">
+          Questions? Call{" "}
+          <span className="text-primary font-semibold">+1 (813) 812-5257</span>
+        </p>
+      </div>
+      </div>
+
+      {/* Package Builder */}
+      {tire?.id ? (
+        <button
+          onClick={addWheelsToPackage}
+          className="w-full flex items-center justify-center gap-2 border-2 border-[#111111] text-[#111111] hover:bg-[#111111] hover:text-white transition-all font-bold py-3 rounded-xl uppercase tracking-wide text-sm"
+        >
+          Add Wheels to Your Package
+        </button>
+      ) : (
+        <button
+          onClick={addTires}
+          className="w-full flex items-center justify-center gap-2 bg-green-700 border border-gray-200 text-white hover:bg-green-600 transition-all font-semibold py-2.5 rounded-xl text-sm"
+        >
+          Build a wheel and tire package
+        </button>
+      )}
+
+      {/* Compare */}
+      <CompareButton product={product} variant="outline" />
+    </div>
+  );
 };
 
 export default WheelActionButtons;

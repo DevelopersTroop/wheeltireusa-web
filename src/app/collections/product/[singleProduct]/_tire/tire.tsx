@@ -87,11 +87,10 @@ const Tire = ({ product }: { product: TTireProduct }) => {
                       <MobileStickyBar product={product} />
 
                     </div>
-                  {/* MOBILE: full specs under pricing */}
 
 
                   {/* DESKTOP: full specs in sidebar */}
-                  <div className="lg:hidden px-4 sm:px-6 mt-4">
+                  <div className="lg:hidden px-4 sm:px-6 mt-4 pb-4">
                     <TireSpecifications product={product} variant="full" />
                   </div>
 

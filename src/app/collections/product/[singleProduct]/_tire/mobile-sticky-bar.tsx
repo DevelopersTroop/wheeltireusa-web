@@ -111,7 +111,7 @@ const MobileStickyBar = ({ product }: { product: TTireProduct }) => {
         <button
           onClick={handleAddToCart}
           disabled={loading}
-          className="flex-1 flex items-center justify-center bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg uppercase text-sm disabled:opacity-60"
+          className="flex-1 flex items-center justify-center bg-primary hover:bg-red-600 text-white font-bold py-3 rounded-lg uppercase text-sm disabled:opacity-60"
         >
           {getButtonText()}
         </button>

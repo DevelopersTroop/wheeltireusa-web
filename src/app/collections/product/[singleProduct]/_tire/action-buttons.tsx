@@ -14,6 +14,7 @@ import { addToCart } from '@/redux/features/cartSlice';
 import { CartData } from '@/types/cart';
 import { useCartHook } from '@/hooks/useCartHook';
 import CompareButton from '@/components/shared/CompareButton/CompareButton';
+import { MdOutlineLocalPhone } from 'react-icons/md';
 
 const ActionButtons = ({ product }: { product: TTireProduct }) => {
   const searchParams = useSearchParams();
@@ -100,18 +101,20 @@ const ActionButtons = ({ product }: { product: TTireProduct }) => {
             });
           }}
           disabled={loading}
-          className="flex-1 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 active:scale-[0.99] text-white font-bold py-3 rounded-lg uppercase tracking-wide text-sm transition-all disabled:opacity-60"
+          className="flex-1 flex items-center justify-center gap-2 bg-primary hover:bg-red-600 active:scale-[0.99] text-white font-bold py-3 rounded-lg uppercase tracking-wide text-sm transition-all disabled:opacity-60"
         >
           {addToCartText}
         </button>
       </div>
 
-      {/* Installation service */}
       <div className="flex items-start gap-3 border border-gray-100 rounded-lg p-3 bg-gray-50">
-        <span className="text-xl shrink-0">🔧</span>
-        <div className="text-sm text-gray-600">
-          <span className="font-medium">Installation service available</span>
-          <span className="text-gray-400"> (selectable in cart)</span>
+        {/* Phone */}
+        <div className="flex items-center gap-2">
+          <MdOutlineLocalPhone className="text-primary w-4 h-4 flex-shrink-0" />
+          <p className="text-xs uppercase text-gray-600">
+            Questions? Call{" "}
+            <span className="text-primary font-semibold">+1 (813) 812-5257</span>
+          </p>
         </div>
       </div>
 
@@ -128,7 +131,7 @@ const ActionButtons = ({ product }: { product: TTireProduct }) => {
           onClick={addWheels}
           className="w-full flex items-center justify-center gap-2 bg-green-700 border border-gray-200 text-white hover:bg-green-600 transition-all font-semibold py-2.5 rounded-xl text-sm"
         >
-          🔧 Build a wheel and tire package
+          Build a wheel and tire package
         </button>
       )}
 

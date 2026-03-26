@@ -11,7 +11,7 @@ export async function generateMetadata({
   params: Promise<{ singleProduct: string }>;
 }): Promise<Metadata> {
   try {
-    const { singleProduct } = await params; // Extract product ID from params.
+    const { singleProduct } = await params; 
     const response = await fetch(`${apiBaseUrl}/products/${singleProduct}`, {
       cache: "force-cache",
       next: { revalidate: 300 },
