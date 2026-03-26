@@ -3,11 +3,10 @@ import { TTireProduct } from "@/types/product";
 const TireDescription = ({ product }: { product: TTireProduct }) => {
   return (
     <div className="w-full">
-      <h2 className="text-4xl text-gray-700 font-bold">
-        {" "}
-        About The {product.brand}{" "}
+      <h2 className="text-lg font-bold text-gray-900 mb-3">
+        About The {product.brand}
       </h2>
-      <p className="text-base text-gray-600 mt-2">{product?.title}</p>
+      <p className="text-gray-600 text-base leading-relaxed">{product?.title}</p>
     </div>
   );
 };

@@ -3,7 +3,7 @@ import { TWheelProduct } from "@/types/product";
 const WheelDescription = ({ product }: { product: TWheelProduct }) => {
     return (
         <div className="w-full">
-            <h2 className="text-4xl text-gray-700 font-bold">
+            <h2 className="text-2xl text-gray-700 font-bold">
                 {" "}
                 About The {product.brand}{" "}
             </h2>

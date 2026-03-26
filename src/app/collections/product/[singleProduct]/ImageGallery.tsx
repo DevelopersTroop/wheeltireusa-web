@@ -70,7 +70,7 @@ const ImageGallery = ({ product, fallbackImage }: ImageGalleryProps) => {
 
   return (
     <div className="flex justify-center">
-      <div className="w-4/5 md:w-3/5">
+      <div className="w-3/5 md:w-2/5">
         <Gallery
           showPlayButton={false}
           showNav={true}

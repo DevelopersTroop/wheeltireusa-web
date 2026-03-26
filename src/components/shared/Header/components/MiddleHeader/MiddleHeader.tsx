@@ -1,17 +1,16 @@
 'use client';
 import { VehicleSelectorButton } from '@/components/shared/VehicleSelectorModal';
 import { Button } from '@/components/ui/button';
+import Container from '@/components/ui/container/container';
 import { Input } from '@/components/ui/input';
 import useAuth from '@/hooks/useAuth';
 import { useCartHook } from '@/hooks/useCartHook';
 import { useTypedSelector } from '@/redux/store';
+import { PhoneCall, ShoppingCartIcon, UserCircle } from 'lucide-react';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
-import { BiShoppingBag, BiUserCircle } from 'react-icons/bi';
 import HeaderSearchButton from './components/HeaderSearchButton/HeaderSearchButton';
 import MobileNavbar from './components/MobileNavBar/MobileNavBar';
-import Container from '@/components/ui/container/container';
-import { PhoneCall, ShoppingCartIcon, UserCircle } from 'lucide-react';
 
 export default function MiddleHeader() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -79,8 +78,8 @@ export default function MiddleHeader() {
                   href={user?.email ? '/dashboard' : '/login'}
                   className="flex items-center gap-2"
                 >
-                  <BiUserCircle size={32} className="text-gray-600" />
-                 
+                  <UserCircle size={26} className="text-gray-600" />
+
                 </Link>
 
                 <div
@@ -89,11 +88,11 @@ export default function MiddleHeader() {
                 >
                   <div className="relative">
                     <ShoppingCartIcon size={26} className="text-gray-600" />
-                    <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-xs text-white">
+                    <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-xs text-white">
                       {cartQuantity}
                     </span>
                   </div>
-                  
+
                 </div>
               </div>
 

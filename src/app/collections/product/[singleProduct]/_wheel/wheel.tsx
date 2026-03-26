@@ -1,61 +1,103 @@
 import { TWheelProduct } from "@/types/product";
 import ImageGallery from "../ImageGallery";
-import WheelActionButtons from "./wheel-action-buttons";
-import WheelDescription from "./wheel-description";
 import WheelDetails from "./wheel-details";
 import WheelSpecifications from "./wheel-specifications";
 import WheelTitle from "./wheel-title";
 import WheelProvider from "./context/WheelProvider";
 import Breadcrumb from "@/components/ui/breadcrumb/breadcrumb";
-import Item from "@/components/ui/breadcrumb/item";
-import { Reviews } from "@/components/shared/Reviews/Reviews";
+import Link from "next/link";
+import { MdChevronRight } from "react-icons/md";
+import WheelTabs from "./wheel-tabs";
+import WheelMobileStickyBar from "./mobile-sticky-bar";
 
 const Wheel = ({ product }: { product: TWheelProduct }) => {
-    console.log("product ===", product)
-    return (
-        <WheelProvider>
+  return (
+    <WheelProvider>
+      <div className="min-h-screen bg-white">
+
+        {/* ── DARK HEADER BAND ── */}
+        <div className="bg-[#2F2F2F] rounded-t-xs">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 border-b border-white/10">
             <Breadcrumb>
-                <Item href={"/"}>Home</Item>
-                <Item href={"/collections/product-category/wheels"}>Collection</Item>
-                <Item href={"/collections/product-category/wheels"}>Wheels</Item>
-                <Item href={`/collections/product/${product.slug}`}>
-                    {product?.partNumber}
-                </Item>
+              {[
+                { label: "Home", href: "/" },
+                { label: "Collection", href: "/collections/product-category/wheels" },
+                { label: "Wheels", href: "/collections/product-category/wheels" },
+                { label: product?.partNumber ?? "", href: `/collections/product/${product.slug}` },
+              ].map((item, index, arr) => (
+                <li key={index} className="flex items-center gap-1 text-xs">
+                  <Link
+                    href={item.href}
+                    className="text-white/40 hover:text-white transition-colors font-medium"
+                  >
+                    {item.label}
+                  </Link>
+                  {index < arr.length - 1 && (
+                    <MdChevronRight className="text-white/20" />
+                  )}
+                </li>
+              ))}
             </Breadcrumb>
-            <div className="mt-4 flex w-full flex-col gap-4 sm:p-4 lg:border">
-                <WheelTitle product={product} />
-                <div className="flex flex-col gap-4 lg:flex-row">
-                    {/* image gallery */}
-                    <div className="w-full">
-                        <div>
-                            <ImageGallery product={product} fallbackImage="/wheel-not-available.webp" />
-                        </div>
-                        <div className="mt-4 hidden lg:block">
-                            <WheelSpecifications product={product} />
-                        </div>
-                    </div>
-                    {/* product details */}
-                    <div className="mx-auto flex max-w-[330px] flex-col gap-4 p-2">
-                        <WheelDetails product={product} />
-                        <div>
-                            <WheelActionButtons product={product} />
-                        </div>
-                    </div>
-                </div>
+          </div>
 
-                <div className="lg:hidden">
-                    <WheelSpecifications product={product} />
-                </div>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
+            <WheelTitle product={product} />
+          </div>
+        </div>
 
-                <div className="mt-4">
-                    <WheelDescription product={product} />
-                </div>
-                <div className="mt-4">
-                    <Reviews productId={product.id} />
-                </div>
+        {/* ── MAIN BODY ── */}
+        <div className="max-w-7xl sm:px-6 py-4">
+          <div className="flex flex-col lg:flex-row gap-10 items-center relative">
+
+            {/* LEFT */}
+            <div className="flex-1 min-w-0">
+              <div className="rounded-2xl border border-gray-100 overflow-hidden bg-gray-50">
+                <ImageGallery
+                  product={product}
+                  fallbackImage="/wheel-not-available.webp"
+                />
+              </div>
+
+              <div className="mt-8">
+                <WheelTabs product={product} />
+              </div>
             </div>
-        </WheelProvider>
-    );
+
+            {/* RIGHT SIDEBAR */}
+            <div className="lg:w-[400px] w-full flex-shrink-0 self-start sticky top-6">
+              <div className="flex flex-col gap-4">
+
+                <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+                  <div className="bg-[#2F2F2F] px-5 py-3">
+                    <p className="text-gray-200 text-xs font-semibold uppercase tracking-widest">
+                      Pricing & Details
+                    </p>
+                  </div>
+
+                  <div className="p-5">
+                    <WheelDetails product={product} />
+                  </div>
+
+                  {/* SAME AS TIRE (mobile sticky inside card) */}
+                  <div>
+                    <WheelMobileStickyBar product={product} />
+                  </div>
+
+                  {/* SAME RESPONSIVE LOGIC AS YOUR TIRE PAGE */}
+                  <div className="lg:hidden px-4 sm:px-6 mt-4 pb-4">
+                    <WheelSpecifications product={product} variant="full" />
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </WheelProvider>
+  );
 };
 
 export default Wheel;
