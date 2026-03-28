@@ -122,7 +122,7 @@ const CartSystem = () => {
         ) : (
           <>
             {/* Header */}
-            <div className="bg-primary text-white px-5 py-3 flex justify-between items-center">
+            <div className="bg-slate-900 text-white px-5 py-3 flex justify-between items-center">
               <h3 className="text-sm font-semibold uppercase tracking-wide">
                 Cart Overview
               </h3>
@@ -167,7 +167,7 @@ const CartSystem = () => {
                   dispatch(setSelectedOptionTitle('Direct to Customer'));
                   setOpen();
                 }}
-                className="w-full flex items-center justify-start gap-20 bg-slate-900 text-white px-4 py-2 rounded-xl hover:bg-primary transition"
+                className="w-full flex items-center justify-start gap-20 bg-primary text-white px-4 py-2 rounded-xl hover:bg-primary transition"
               >
                 <div className="flex flex-col">
                   <span className="text-[10px] uppercase text-gray-300">
@@ -178,7 +178,7 @@ const CartSystem = () => {
                   </span>
                 </div>
 
-                <div className="flex items-center gap-2 text-sm font-semibold">
+                <div className="flex items-center gap-2 text-lg font-semibold">
                   <Lock size={16} />
                   Checkout
                   <ArrowRight size={16} />

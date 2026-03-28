@@ -43,7 +43,7 @@ export default function MiddleHeader() {
         )}
 
         <div className="py-3">
-          <div className="flex items-center justify-between gap-0">
+          <div className="flex items-center justify-between gap-2">
             <MobileNavbar />
 
             <div className="flex items-center overflow-hidden shrink-0">
@@ -51,7 +51,7 @@ export default function MiddleHeader() {
                 <img
                   src="/images/logo.png"
                   alt="Custom Offsets"
-                  className="h-6 max-[400px]:h-7 min-[401px]:h-8 lg:h-8 xl:h-12"
+                  className="h-6 max-[400px]:h-7 min-[401px]:h-8 lg:h-8 xl:h-9"
                 />
               </Link>
             </div>

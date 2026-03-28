@@ -5,17 +5,17 @@ export default function HeroSection() {
 
   return (
     <section
-      className="relative max-w-[1350px] mx-auto min-h-[800px] flex items-center justify-center bg-cover bg-center"
+      className="relative max-w-[1350px] mx-auto min-h-[500px] flex items-center justify-center bg-cover bg-center"
       style={{
         backgroundImage: `url('/images/hero.jpeg')`,
       }}
     >
-      <div className="absolute inset-0 bg-black/55 backdrop-brightness-75"></div>
+      <div className="absolute inset-0 bg-black/55 backdrop-brightness-35"></div>
 
       <div className="relative container mx-auto px-4 py-16 flex flex-col items-center text-center gap-10">
 
         <div className="max-w-4xl space-y-5">
-          <h1 className="text-3xl md:text-6xl font-extrabold text-white uppercase leading-tight tracking-tight">
+          <h1 className="text-3xl md:text-5xl font-extrabold text-white uppercase leading-tight tracking-tight">
             Find The Best <span className="text-primary">Wheels & Tires</span>
           </h1>
 

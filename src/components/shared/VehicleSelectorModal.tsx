@@ -397,6 +397,12 @@ export const VehicleSelectorButton = () => {
     ? `${activeItem.year} ${activeItem.make} ${activeItem.model && activeItem.model !== '__DEFAULT_MODEL__' ? activeItem.model : ''} ${activeItem.trim && activeItem.trim !== '__DEFAULT_TRIM__' ? activeItem.trim : ''} ${activeItem.drive && activeItem.drive !== '__DEFAULT_DRIVE__' ? activeItem.drive : ''}`.trim()
     : "SELECT YOUR VEHICLE";
 
+  // Helper to truncate text
+  const truncateText = (text: string, maxLength: number) => {
+    if (text.length <= maxLength) return text;
+    return text.slice(0, maxLength) + '...';
+  };
+
   return (
     <>
       <button
@@ -432,15 +438,15 @@ export const VehicleSelectorButton = () => {
             </div>
           </div>
 
-          <span className="text-primary font-bold text-xs sm:text-sm whitespace-nowrap tracking-wide">
-            {activeLabel}
+          <span className="text-primary font-bold text-xs sm:text-xs whitespace-nowrap tracking-wide overflow-hidden">
+            {truncateText(activeLabel, 19)}
           </span>
         </div>
         {
           activeItem ? (
             <>
               <span className="h-6 bg-gray-300 w-px block" />
-              <span className="text-primary font-bold text-xs sm:text-sm whitespace-nowrap tracking-wide">
+              <span className="text-blue-500 font-bold text-xs sm:text-sm whitespace-nowrap tracking-wide hover:underline">
                 CHANGE
               </span>
             </>

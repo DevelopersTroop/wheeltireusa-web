@@ -76,11 +76,11 @@ function NavBar() {
     <div
       className={cn(
         "sticky top-0 z-50 transition-all duration-300 max-w-[1350px] mx-auto px-4",
-        scrolling ? "bg-[#2F2F2F] shadow-md" : "bg-[#2F2F2F] shadow-none"
+        scrolling ? "bg-[#0F172B] shadow-md" : "bg-[#0F172B] shadow-none"
       )}
     >
       <div className="max-w-full">
-        <nav className="w-full lg:flex items-center justify-between relative hidden text-white px-2 py-3">
+        <nav className="w-full lg:flex items-center justify-around relative hidden text-white px-2 py-0">
           <ul className="flex space-x-5 py-2 items-center uppercase z-50">
             {navMenus.map((menu) => (
               <li
