@@ -12,6 +12,8 @@ type VehicleFitmentSelectProps = {
   className?: string;
   label?: string;
   required?: boolean;
+  dropdownMaxHeight?: string | number;
+  useDynamicHeight?: boolean;
 };
 
 export default function VehicleFitmentSelect(props: VehicleFitmentSelectProps) {
