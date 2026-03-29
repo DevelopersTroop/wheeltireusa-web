@@ -99,7 +99,7 @@ const WheelMobileStickyBar = ({ product }: { product: TWheelProduct }) => {
       ${isVisible ? 'translate-y-0' : 'translate-y-full'}
     `}>
 
-      <div className="flex items-center justify-between px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 gap-2 sm:gap-3">
+      <div className="flex items-center justify-between px-3 sm:px-4 md:px-6 lg:px-8 xl:px-25 py-2.5 sm:py-3 gap-2 sm:gap-3">
 
         {/* Product Image + Title + Price */}
         <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
@@ -127,7 +127,7 @@ const WheelMobileStickyBar = ({ product }: { product: TWheelProduct }) => {
         <button
           onClick={handleAddToCart}
           disabled={loading}
-          className="shrink-0 px-4 sm:px-6 py-2.5 sm:py-3 bg-primary hover:bg-red-600 text-white font-semibold rounded uppercase text-xs sm:text-sm disabled:opacity-60 transition-all duration-200"
+          className="shrink-0 px-4 sm:px-12 py-2.5 sm:py-3  bg-primary hover:bg-red-600 text-white font-semibold rounded uppercase text-xs sm:text-sm disabled:opacity-60 transition-all duration-200"
         >
           {getButtonText()}
         </button>
