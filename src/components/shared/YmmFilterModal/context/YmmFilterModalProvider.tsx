@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import useYmm from "@/hooks/useYmm";
 import { TSingleFilter } from "@/types/filter";
@@ -12,7 +12,7 @@ import {
   YmmFilterModalContext,
 } from "./YmmFilterModalContext";
 
-import { addToGarage, submitYmm, clearYearMakeModel } from "@/redux/features/yearMakeModelSlice";
+import { addToGarage, submitYmm, clearYearMakeModel, setYmm } from "@/redux/features/yearMakeModelSlice";
 import { TYmmGarageItem } from "@/types/ymm";
 import { useRouter, usePathname } from "next/navigation";
 
@@ -26,6 +26,8 @@ export default function YmmFilterModalProvider({ children }: Props) {
   const initialMainTab = useTypedSelector((state) => state.ymmFilter.initialMainTab);
   const initialBrandCategory = useTypedSelector((state) => state.ymmFilter.initialBrandCategory);
   const initialSizeCategory = useTypedSelector((state) => state.ymmFilter.initialSizeCategory);
+  const activeGarageId = useTypedSelector((state) => state.persisted.yearMakeModel.activeGarageId);
+  const garage = useTypedSelector((state) => state.persisted.yearMakeModel.garage);
   const dispatch = useDispatch();
   const router = useRouter();
   const pathname = usePathname();
@@ -33,8 +35,10 @@ export default function YmmFilterModalProvider({ children }: Props) {
     initialMainTab || "vehicle"
   );
   const [modalHeight, setModalHeight] = useState<number>(500);
+  const [isNeedHelpModalOpen, setIsNeedHelpModalOpen] = useState<boolean>(false);
   const [brandCategory, setBrandCategory] = useState<"tire" | "wheels">(initialBrandCategory || "tire");
   const [sizeCategory, setSizeCategory] = useState<"tire" | "wheels">(initialSizeCategory || "wheels");
+  const hasAutoFilled = useRef(false);
 
   const {
     list: { years, makes, models, trims, drives },
@@ -60,7 +64,6 @@ export default function YmmFilterModalProvider({ children }: Props) {
     isDriveLoading,
   } = useYmm("ymm_filter_modal");
 
-  const [activeStep, setActiveStep] = useState<1 | 2>(1);
   const {
     data: filterData,
     isLoading: isBrandsLoading,
@@ -71,15 +74,37 @@ export default function YmmFilterModalProvider({ children }: Props) {
   );
 
   // Reset YMM local state whenever modal opens so it's fresh
+  // If there's an active garage, auto-fill from it
   useEffect(() => {
     if (isModalOpen) {
-      dispatch(clearYearMakeModel());
-      setActiveStep(1);
       setActiveMainTab(initialMainTab || "vehicle");
       setBrandCategory(initialBrandCategory || "tire");
       setSizeCategory(initialSizeCategory || "wheels");
+      hasAutoFilled.current = false;
+
+      // Check if there's an active garage and auto-fill
+      if (activeGarageId && garage[activeGarageId]) {
+        const garageItem = garage[activeGarageId];
+        dispatch(setYmm({
+          year: garageItem.year,
+          make: garageItem.make,
+          model: garageItem.model,
+          trim: garageItem.trim || '',
+          drive: garageItem.drive || '',
+          list: {
+            years: [],
+            makes: [],
+            models: [],
+            trims: [],
+            drives: [],
+          },
+        }));
+        hasAutoFilled.current = true;
+      } else {
+        dispatch(clearYearMakeModel());
+      }
     }
-  }, [isModalOpen, dispatch, initialMainTab, initialBrandCategory, initialSizeCategory]);
+  }, [isModalOpen, dispatch, initialMainTab, initialBrandCategory, initialSizeCategory, activeGarageId, garage]);
 
   const brands = useMemo(
     () =>
@@ -132,30 +157,26 @@ export default function YmmFilterModalProvider({ children }: Props) {
     }
   };
 
-  const isVehicleStepCompleted = Boolean(yearValue && makeValue && modelValue);
+  const openNeedHelpModal = () => {
+    setIsNeedHelpModalOpen(true);
+    dispatch(setIsModalOpen(false)); // Close the main modal
+  };
 
-  useEffect(() => {
-    if (modelValue) setActiveStep(2);
-    else setActiveStep(1);
-  }, [modelValue]);
+  const closeNeedHelpModal = () => {
+    setIsNeedHelpModalOpen(false);
+  };
 
   const value = useMemo<TYmmFilterModalContext>(
     () => ({
       isModalOpen,
       closeModal: () => dispatch(setIsModalOpen(false)),
+      isNeedHelpModalOpen,
+      openNeedHelpModal,
+      closeNeedHelpModal,
       modalHeight,
       setModalHeight,
       activeMainTab,
       setActiveMainTab,
-      headerTitle:
-        [year || "", displayMake].filter(Boolean).join(" ") || "Select Vehicle",
-      headerSubtitle: [displayModel, displayTrim, displayDrive]
-        .filter(Boolean)
-        .join(" "),
-      activeStep,
-      setActiveStep,
-      canOpenClassifierStep: Boolean(modelValue),
-      isVehicleStepCompleted,
       brandCategory,
       setBrandCategory,
       sizeCategory,
@@ -191,16 +212,9 @@ export default function YmmFilterModalProvider({ children }: Props) {
     [
       isModalOpen,
       dispatch,
+      isNeedHelpModalOpen,
       modalHeight,
       activeMainTab,
-      year,
-      displayMake,
-      displayModel,
-      displayTrim,
-      displayDrive,
-      activeStep,
-      modelValue,
-      isVehicleStepCompleted,
       brandCategory,
       sizeCategory,
       brands,

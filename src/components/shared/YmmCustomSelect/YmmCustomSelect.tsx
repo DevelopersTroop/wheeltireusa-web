@@ -18,6 +18,14 @@ type YmmCustomSelectProps = {
    * If provided, renders an absolute positioned number indicator inside the button
    */
   stepNumber?: string | number;
+  /**
+   * Maximum height for the dropdown options list
+   */
+  dropdownMaxHeight?: string | number;
+  /**
+   * Calculate available height dynamically based on modal/container bounds
+   */
+  useDynamicHeight?: boolean;
 };
 
 export default function YmmCustomSelect({
@@ -31,9 +39,14 @@ export default function YmmCustomSelect({
   label,
   required,
   stepNumber,
+  dropdownMaxHeight = "250px",
+  useDynamicHeight = false,
 }: YmmCustomSelectProps) {
   const [open, setOpen] = useState(false);
+  const [dynamicMaxHeight, setDynamicMaxHeight] = useState<number | undefined>(undefined);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
@@ -44,11 +57,43 @@ export default function YmmCustomSelect({
     return () => document.removeEventListener("mousedown", onClick);
   }, []);
 
+  // Calculate available height when dropdown opens
+  useEffect(() => {
+    if (open && useDynamicHeight && buttonRef.current) {
+      const buttonRect = buttonRef.current.getBoundingClientRect();
+
+      // Find the closest scrollable parent or modal content
+      let scrollableParent: HTMLElement | null = containerRef.current;
+      while (scrollableParent && scrollableParent !== document.body) {
+        const overflowY = window.getComputedStyle(scrollableParent).overflowY;
+        if (overflowY === 'auto' || overflowY === 'scroll') {
+          break;
+        }
+        scrollableParent = scrollableParent.parentElement;
+      }
+
+      if (scrollableParent && scrollableParent !== document.body) {
+        const parentRect = scrollableParent.getBoundingClientRect();
+        const availableHeight = parentRect.bottom - buttonRect.bottom - 8; // 8px for margin
+        setDynamicMaxHeight(Math.max(150, availableHeight)); // Minimum 150px
+      } else {
+        // Fallback to viewport
+        const availableHeight = window.innerHeight - buttonRect.bottom - 8;
+        setDynamicMaxHeight(Math.max(150, availableHeight));
+      }
+    } else {
+      setDynamicMaxHeight(undefined);
+    }
+  }, [open, useDynamicHeight]);
+
   const currentLabel = loading ? "LOADING..." : value || placeholder || "";
+
+  const maxHeight = dynamicMaxHeight ?? dropdownMaxHeight;
 
   return (
     <div ref={containerRef} className={cn("relative w-full", className)}>
       <button
+        ref={buttonRef}
         type="button"
         onClick={() => !disabled && setOpen((prev) => !prev)}
         disabled={disabled}
@@ -57,8 +102,8 @@ export default function YmmCustomSelect({
           // Base styles mimicking the requested original UI
           "text-gray-600 uppercase text-xs font-semibold px-3 py-2.5",
           // Border handling based on state
-          open 
-            ? "border border-primary ring-1 ring-primary z-10" 
+          open
+            ? "border border-primary ring-1 ring-primary z-10"
             : "border border-gray-300 hover:border-primary",
           disabled && "opacity-50 cursor-not-allowed",
           // Make room for the step number if it exists
@@ -80,19 +125,23 @@ export default function YmmCustomSelect({
             {label}
           </span>
         ) : null}
-        
+
         <span className="truncate">{currentLabel}</span>
-        
-        <ChevronDown 
+
+        <ChevronDown
           className={cn(
-            "h-4 w-4 text-gray-500 pointer-events-none transition-transform shrink-0", 
+            "h-4 w-4 text-gray-500 pointer-events-none transition-transform shrink-0",
             open && "rotate-180 text-primary"
-          )} 
+          )}
         />
       </button>
 
       {open && (
-        <div className="absolute left-0 top-full mt-1 w-full z-50 rounded-md border bg-white shadow-lg overflow-y-auto max-h-[250px] custom-scrollbar">
+        <div
+          ref={dropdownRef}
+          className="absolute left-0 top-full mt-1 w-full z-50 rounded-md border bg-white shadow-lg overflow-y-auto custom-scrollbar"
+          style={{ maxHeight: typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight }}
+        >
           <ul className="py-1">
             {options.map((option) => (
               <li key={option}>

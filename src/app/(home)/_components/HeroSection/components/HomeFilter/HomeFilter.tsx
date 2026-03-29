@@ -2,21 +2,19 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import { CarFront } from "lucide-react";
+import { CarFront, Tag, Ruler } from "lucide-react";
 import { useState } from "react";
-import { GiCarWheel } from "react-icons/gi";
-import { PiTireThin } from "react-icons/pi";
 import VehicleTab from "./components/VehicleTab/VehicleTab";
-import TireTab from "./components/TireTab/TireTab";
+import BrandTab from "./components/BrandTab/BrandTab";
+import SizeTab from "./components/SizeTab/SizeTab";
 import { useTypedSelector } from "@/redux/store";
 import { CheckCircle2, ArrowLeftRight } from "lucide-react";
 import { clearYearMakeModel } from "@/redux/features/yearMakeModelSlice";
 import { useAppDispatch } from "@/redux/store";
 import { useRouter } from "next/navigation";
-import WheelTab from "./components/WheelTab/WheelTab";
 
 export default function HomeFilter({ variant = "hero" }: { variant?: "hero" | "product" }) {
-  const [activeTab, setActiveTab] = useState<"vehicle" | "wheel" | "tire">("vehicle");
+  const [activeTab, setActiveTab] = useState<"vehicle" | "brand" | "size">("vehicle");
   const dispatch = useAppDispatch();
   const router = useRouter();
 
@@ -31,12 +29,8 @@ export default function HomeFilter({ variant = "hero" }: { variant?: "hero" | "p
   };
 
   const handleShopNow = () => {
-    // If we had a target path logic from `onSubmit`, we can navigate
-    if (activeTab === "tire") {
-      router.push("/collections/product-category/tire");
-    } else {
-      router.push("/collections/product-category/wheels");
-    }
+    // Navigate to wheels collection by default
+    router.push("/collections/product-category/wheels");
   };
 
   if (variant === "product") {
@@ -127,22 +121,22 @@ export default function HomeFilter({ variant = "hero" }: { variant?: "hero" | "p
             BY VEHICLE
           </TabsTrigger>
           <TabsTrigger
-            value="wheel"
+            value="brand"
             className="cursor-pointer flex-1 py-4 flex justify-center items-center gap-2 font-bold text-xs sm:text-sm uppercase transition-colors relative rounded-none data-[state=active]:bg-white data-[state=active]:text-gray-900 border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none text-gray-500 hover:bg-gray-50 bg-transparent"
           >
-            <GiCarWheel
-              className={cn("w-4 h-4", activeTab === "wheel" ? "text-primary" : "text-gray-400")}
+            <Tag
+              className={cn("w-4 h-4", activeTab === "brand" ? "text-primary" : "text-gray-400")}
             />
-            BY WHEEL
+            SHOP BY BRAND
           </TabsTrigger>
           <TabsTrigger
-            value="tire"
+            value="size"
             className="cursor-pointer flex-1 py-4 flex justify-center items-center gap-2 font-bold text-xs sm:text-sm uppercase transition-colors relative rounded-none data-[state=active]:bg-white data-[state=active]:text-gray-900 border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none text-gray-500 hover:bg-gray-50 bg-transparent"
           >
-            <PiTireThin
-              className={cn("w-4 h-4", activeTab === "tire" ? "text-primary" : "text-gray-400")}
+            <Ruler
+              className={cn("w-4 h-4", activeTab === "size" ? "text-primary" : "text-gray-400")}
             />
-            BY TIRE
+            SHOP BY SIZE
           </TabsTrigger>
         </TabsList>
 
@@ -152,12 +146,12 @@ export default function HomeFilter({ variant = "hero" }: { variant?: "hero" | "p
             <VehicleTab />
           </TabsContent>
 
-          <TabsContent value="wheel" className="m-0 mt-0">
-            <WheelTab />
+          <TabsContent value="brand" className="m-0 mt-0">
+            <BrandTab />
           </TabsContent>
 
-          <TabsContent value="tire" className="m-0 mt-0">
-            <TireTab />
+          <TabsContent value="size" className="m-0 mt-0">
+            <SizeTab />
           </TabsContent>
         </div>
       </Tabs>

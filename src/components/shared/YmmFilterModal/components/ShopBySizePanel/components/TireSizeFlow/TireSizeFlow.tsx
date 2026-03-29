@@ -10,7 +10,7 @@ import SizeOptionButton from "../SizeOptionButton/SizeOptionButton";
 
 export default function TireSizeFlow() {
   const router = useRouter();
-  const { closeModal } = useYmmFilterModal();
+  const { closeModal, openNeedHelpModal } = useYmmFilterModal();
 
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
   const [selectedWidth, setSelectedWidth] = useState<string | null>(null);
@@ -86,12 +86,17 @@ export default function TireSizeFlow() {
   ];
 
   const renderStepIndicator = () => (
-    <div className="relative flex flex-col sm:block items-center">
-      <SizeStepIndicator steps={steps} />
-      <button className="sm:absolute sm:right-0 sm:top-1 lg:top-2 text-primary text-sm hover:underline flex items-center gap-1 sm:mt-0 mb-6 sm:mb-0">
-        <span className="w-4 h-4 rounded-full border border-primary text-[10px] flex items-center justify-center font-bold">i</span>
-        need help?
-      </button>
+    <div className="space-y-3">
+      <div className="flex justify-between items-start">
+        <SizeStepIndicator steps={steps} />
+        <button
+          onClick={openNeedHelpModal}
+          className="text-primary text-xs font-semibold hover:underline flex items-center gap-1.5 shrink-0 ml-2"
+        >
+          <span className="w-5 h-5 rounded-full border border-primary text-[10px] flex items-center justify-center font-bold">i</span>
+          need help?
+        </button>
+      </div>
     </div>
   );
 
