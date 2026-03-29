@@ -68,7 +68,7 @@ const ProductInfoCenter = ({ product }: ProductInfoCenterProps) => {
       <VehicleSpecificNote product={product} />
 
       {/* Key-Value Pairs - Product Specs */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-xs">
+      <div className="grid grid-cols-1 sm:grid-cols-1 gap-x-4 gap-y-2 text-xs">
         {/* Size */}
         {product?.wheelSize && (
           <div className="flex items-center gap-2">
