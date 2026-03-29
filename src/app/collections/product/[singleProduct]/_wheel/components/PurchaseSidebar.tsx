@@ -163,7 +163,7 @@ const PurchaseSidebar = ({ product }: PurchaseSidebarProps) => {
           className="
             w-full py-2.5 sm:py-3 px-4 sm:px-6 rounded
             bg-primary hover:bg-primary/90 text-white
-            text-base sm:text-lg font-bold uppercase tracking-wide
+            text-base sm:text-base font-semibold uppercase tracking-wide
             transition-all duration-200
             disabled:opacity-50 disabled:cursor-not-allowed
           "
