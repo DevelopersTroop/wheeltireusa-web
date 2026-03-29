@@ -36,18 +36,18 @@ const WheelSpecifications = ({
   /* ───────── COMPACT (MOBILE TOP) ───────── */
   if (variant === "compact") {
     return (
-      <div className="flex flex-col gap-1.5 text-sm">
+      <div className="flex flex-col gap-1 sm:gap-1.5 text-xs sm:text-sm">
 
         {/* Brand */}
         <div className="flex justify-between">
-          <span className="text-gray-500">Brand</span>
-          <span className="font-medium text-gray-800">{product?.brand}</span>
+          <span className="text-gray-500 text-[11px] sm:text-xs">Brand</span>
+          <span className="font-medium text-gray-800 text-[11px] sm:text-xs">{product?.brand}</span>
         </div>
 
         {/* Model */}
         <div className="flex justify-between">
-          <span className="text-gray-500">Model</span>
-          <span className="font-medium text-gray-800">{product?.model}</span>
+          <span className="text-gray-500 text-[11px] sm:text-xs">Model</span>
+          <span className="font-medium text-gray-800 text-[11px] sm:text-xs">{product?.model}</span>
         </div>
 
         {mobile_specs_key.map((key) => {
@@ -56,8 +56,8 @@ const WheelSpecifications = ({
 
           return (
             <div key={key} className="flex justify-between">
-              <span className="text-gray-500">{camelCaseToWords(key)}</span>
-              <span className="font-medium text-gray-800">{displayValue}</span>
+              <span className="text-gray-500 text-[11px] sm:text-xs">{camelCaseToWords(key)}</span>
+              <span className="font-medium text-gray-800 text-[11px] sm:text-xs">{displayValue}</span>
             </div>
           );
         })}
@@ -69,38 +69,38 @@ const WheelSpecifications = ({
   return (
     <div className="w-full">
 
-      <div className="flex items-center gap-3 mb-4">
-        <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-gray-600">
+      <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+        <h2 className="text-xs sm:text-sm font-bold uppercase tracking-[0.15em] text-gray-600">
           Specifications
         </h2>
         <div className="flex-1 h-px bg-gray-100" />
       </div>
 
-      <div className="rounded-xl border border-gray-200 overflow-hidden divide-y divide-gray-100">
+      <div className="rounded border border-gray-200 overflow-hidden divide-y divide-gray-100">
 
         {/* Header */}
-        <div className="grid grid-cols-2 bg-[#111111] px-4 py-2.5">
-          <span className="text-xs font-bold text-gray-300 uppercase tracking-wider">
+        <div className="grid grid-cols-2 bg-[#111111] px-4 sm:px-6 md:px-10 py-2 sm:py-2.5">
+          <span className="text-[10px] sm:text-xs font-bold text-gray-300 uppercase tracking-wider">
             Spec
           </span>
         </div>
 
         {/* Brand */}
-        <div className="grid grid-cols-2 px-4 py-3 bg-gray-50">
-          <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+        <div className="grid grid-cols-2 px-4 sm:px-6 md:px-10 py-2 sm:py-3 bg-gray-50">
+          <span className="text-[10px] sm:text-xs font-semibold text-gray-400 uppercase tracking-wider">
             Brand
           </span>
-          <span className="text-sm font-semibold text-gray-800 text-right">
+          <span className="text-xs sm:text-sm font-semibold text-gray-800 text-right">
             {product?.brand}
           </span>
         </div>
 
         {/* Model */}
-        <div className="grid grid-cols-2 px-4 py-3">
-          <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+        <div className="grid grid-cols-2 px-4 sm:px-6 md:px-10 py-2 sm:py-3">
+          <span className="text-[10px] sm:text-xs font-semibold text-gray-400 uppercase tracking-wider">
             Model
           </span>
-          <span className="text-sm font-semibold text-gray-800 text-right">
+          <span className="text-xs sm:text-sm font-semibold text-gray-800 text-right">
             {product?.model}
           </span>
         </div>
@@ -112,14 +112,14 @@ const WheelSpecifications = ({
           return (
             <div
               key={key}
-              className={`grid grid-cols-2 px-4 py-3 ${
+              className={`grid grid-cols-2 px-4 sm:px-6 md:px-10 py-2 sm:py-3 ${
                 i % 2 === 0 ? "bg-gray-50" : "bg-white"
               }`}
             >
-              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+              <span className="text-[10px] sm:text-xs font-semibold text-gray-400 uppercase tracking-wider">
                 {camelCaseToWords(key)}
               </span>
-              <span className="text-sm text-gray-800 font-medium text-right">
+              <span className="text-xs sm:text-sm text-gray-800 font-medium text-right">
                 {displayValue}
               </span>
             </div>

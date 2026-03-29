@@ -413,3 +413,38 @@
 button {
   cursor: pointer;
 }
+
+/* Brevo Chat Widget - Styled with Primary Color */
+#brevo-conversations,
+.brevo-conversations-wrapper,
+[class*="brevo"],
+[class*="Brevo"],
+[id*="brevo"],
+[id*="Brevo"] {
+  /* Position above mobile sticky bar */
+  bottom: 85px !important;
+}
+
+/* Desktop specific */
+@media (min-width: 769px) {
+  #brevo-conversations,
+  .brevo-conversations-wrapper,
+  [class*="brevo"],
+  [class*="Brevo"],
+  [id*="brevo"],
+  [id*="Brevo"] {
+    bottom: 20px !important;
+  }
+}
+
+/* Mobile specific */
+@media (max-width: 768px) {
+  #brevo-conversations,
+  .brevo-conversations-wrapper,
+  [class*="brevo"],
+  [class*="Brevo"],
+  [id*="brevo"],
+  [id*="Brevo"] {
+    bottom: 75px !important;
+  }
+}
