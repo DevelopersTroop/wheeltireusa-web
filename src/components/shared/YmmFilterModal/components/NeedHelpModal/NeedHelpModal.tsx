@@ -46,9 +46,9 @@ export function NeedHelpModal({ isOpen, onClose }: NeedHelpModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl p-0 overflow-hidden border-0 rounded-2xl bg-white shadow-2xl">
-        <div className="flex flex-col md:flex-row">
+        <div className="flex flex-col md:flex-row max-h-[85vh] md:max-h-[600px]">
           {/* Left Side: Image / Brand */}
-          <div className="hidden md:flex relative w-2/5 bg-[#1a0000] overflow-hidden flex-col justify-between p-10 text-white">
+          <div className="hidden md:flex relative w-2/5 bg-[#1a0000] overflow-hidden flex-col justify-between p-8 text-white">
             <div className="absolute inset-0 z-0">
               <div
                 className="absolute inset-0 bg-cover bg-no-repeat bg-[center_bottom] opacity-30"
@@ -72,7 +72,7 @@ export function NeedHelpModal({ isOpen, onClose }: NeedHelpModalProps) {
           </div>
 
           {/* Right Side: Form */}
-          <div className="flex-1 p-6 sm:p-8 md:p-12 relative">
+          <div className="flex-1 p-6 sm:p-8 md:p-8 relative overflow-y-auto">
             {/* Mobile close button */}
             <button
               onClick={onClose}
@@ -81,18 +81,18 @@ export function NeedHelpModal({ isOpen, onClose }: NeedHelpModalProps) {
               <X className="h-5 w-5 text-primary" />
             </button>
 
-            <DialogHeader className="mb-8">
-              <DialogTitle className="text-xl sm:text-2xl md:text-3xl font-black tracking-[0.1em] text-gray-900 mb-2">
+            <DialogHeader className="mb-6">
+              <DialogTitle className="text-xl sm:text-2xl md:text-2xl font-black tracking-[0.1em] text-gray-900 mb-2">
                 GET A CUSTOM QUOTE
               </DialogTitle>
-              <DialogDescription className="text-sm text-gray-500 leading-relaxed max-w-sm">
+              <DialogDescription className="text-sm text-gray-500 leading-relaxed">
                 Fill out the details below and a dedicated specialist will contact you shortly to
                 help you find the perfect setup.
               </DialogDescription>
             </DialogHeader>
 
             <form onSubmit={handleSubmit}>
-              <div className="grid gap-5 sm:gap-6">
+              <div className="grid gap-4 sm:gap-5">
                 <div className="grid gap-2">
                   <Label
                     htmlFor="name"
@@ -145,11 +145,11 @@ export function NeedHelpModal({ isOpen, onClose }: NeedHelpModalProps) {
                 </div>
               </div>
 
-              <div className="mt-8 sm:mt-10 flex justify-end">
+              <div className="mt-6 sm:mt-8 flex justify-end">
                 <button
                   type="submit"
                   disabled={loading}
-                  className="bg-primary hover:bg-red-800 text-white text-xs font-black tracking-[0.15em] px-6 sm:px-8 py-3 sm:py-4 w-full sm:w-auto transition-all duration-300 shadow-lg hover:shadow-xl rounded-sm disabled:opacity-50"
+                  className="bg-primary hover:bg-red-800 text-white text-xs font-black tracking-[0.15em] px-6 sm:px-8 py-3 sm:py-3 w-full sm:w-auto transition-all duration-300 shadow-lg hover:shadow-xl rounded-sm disabled:opacity-50"
                 >
                   {loading ? "SUBMITTING..." : "SUBMIT REQUEST"}
                 </button>

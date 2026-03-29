@@ -86,12 +86,14 @@ export default function TireSizeFlow() {
   ];
 
   const renderStepIndicator = () => (
-    <div className="space-y-3">
-      <div className="flex justify-between items-start">
-        <SizeStepIndicator steps={steps} />
+    <div className="w-full mb-8">
+      <div className="flex items-start w-full gap-4">
+        <div className="flex-1">
+          <SizeStepIndicator steps={steps} />
+        </div>
         <button
           onClick={openNeedHelpModal}
-          className="text-primary text-xs font-semibold hover:underline flex items-center gap-1.5 shrink-0 ml-2"
+          className="text-primary text-xs font-semibold hover:underline flex items-center gap-1.5 shrink-0 mt-1"
         >
           <span className="w-5 h-5 rounded-full border border-primary text-[10px] flex items-center justify-center font-bold">i</span>
           need help?
