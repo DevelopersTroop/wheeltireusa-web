@@ -37,7 +37,7 @@ export default function SizeTab() {
   const { data: wheelData, isLoading: isWheelLoading } = useGetFilterListQuery({
     category: "wheels",
     ...(wheelDiameter ? { wheelDiameter } : {}),
-    ...(wheelWidth && wheelWidth !== "any" ? { wheelWidth, wheelDiameter } : {}),
+    ...(wheelWidth && wheelWidth !== "any" && wheelDiameter ? { wheelWidth, wheelDiameter } : {}),
   });
 
   // Reset state when category changes
@@ -51,13 +51,13 @@ export default function SizeTab() {
   }, [category]);
 
   // Get options from API data
-  const tireWidths = tireData?.filters?.tireWidth ?? [];
-  const tireRatios = tireData?.filters?.tireRatio ?? [];
-  const tireDiameters = tireData?.filters?.tireDiameter ?? [];
+  const tireWidths = Array.isArray(tireData?.filters?.tireWidth) ? tireData.filters.tireWidth : [];
+  const tireRatios = Array.isArray(tireData?.filters?.tireRatio) ? tireData.filters.tireRatio : [];
+  const tireDiameters = Array.isArray(tireData?.filters?.tireDiameter) ? tireData.filters.tireDiameter : [];
 
-  const wheelDiameters = wheelData?.filters?.wheelDiameter ?? [];
-  const wheelWidths = wheelData?.filters?.wheelWidth ?? [];
-  const boltPatterns = wheelData?.filters?.boltPatterns ?? [];
+  const wheelDiameters = Array.isArray(wheelData?.filters?.wheelDiameter) ? wheelData.filters.wheelDiameter : [];
+  const wheelWidths = Array.isArray(wheelData?.filters?.wheelWidth) ? wheelData.filters.wheelWidth : [];
+  const boltPatterns = Array.isArray(wheelData?.filters?.boltPatterns) ? wheelData.filters.boltPatterns : [];
 
   const canShowTireRatio = tireWidth !== null;
   const canShowTireDiameter = tireRatio !== null;

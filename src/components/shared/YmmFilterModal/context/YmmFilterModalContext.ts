@@ -9,6 +9,12 @@ export type TYmmFilterModalContext = {
   openNeedHelpModal: () => void;
   closeNeedHelpModal: () => void;
   modalHeight: number;
+  headerTitle: string;
+  headerSubtitle: string;
+  activeStep: 1 | 2;
+  setActiveStep: (step: 1 | 2) => void;
+  isVehicleStepCompleted: boolean;
+  canOpenClassifierStep: boolean;
   setModalHeight: (height: number) => void;
   activeMainTab: "vehicle" | "brand" | "size";
   setActiveMainTab: (tab: "vehicle" | "brand" | "size") => void;

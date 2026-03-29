@@ -36,6 +36,7 @@ export default function YmmFilterModalProvider({ children }: Props) {
   );
   const [modalHeight, setModalHeight] = useState<number>(500);
   const [isNeedHelpModalOpen, setIsNeedHelpModalOpen] = useState<boolean>(false);
+  const [activeStep, setActiveStep] = useState<1 | 2>(1);
   const [brandCategory, setBrandCategory] = useState<"tire" | "wheels">(initialBrandCategory || "tire");
   const [sizeCategory, setSizeCategory] = useState<"tire" | "wheels">(initialSizeCategory || "wheels");
   const hasAutoFilled = useRef(false);
@@ -166,6 +167,33 @@ export default function YmmFilterModalProvider({ children }: Props) {
     setIsNeedHelpModalOpen(false);
   };
 
+  // Compute header title and subtitle based on current selection state
+  const headerTitle = useMemo(() => {
+    if (yearValue && makeValue && modelValue) {
+      return `${yearValue} ${makeValue} ${modelValue}`;
+    } else if (yearValue && makeValue) {
+      return `${yearValue} ${makeValue}`;
+    } else if (yearValue) {
+      return yearValue;
+    }
+    return "Select Your Vehicle";
+  }, [yearValue, makeValue, modelValue]);
+
+  const headerSubtitle = useMemo(() => {
+    if (trimValue) {
+      return trimValue;
+    }
+    return "";
+  }, [trimValue]);
+
+  // Vehicle step is completed when year, make, and model are selected
+  const isVehicleStepCompleted = useMemo(() => {
+    return !!(yearValue && makeValue && modelValue);
+  }, [yearValue, makeValue, modelValue]);
+
+  // Can open classifier step when vehicle step is completed
+  const canOpenClassifierStep = isVehicleStepCompleted;
+
   const value = useMemo<TYmmFilterModalContext>(
     () => ({
       isModalOpen,
@@ -175,6 +203,12 @@ export default function YmmFilterModalProvider({ children }: Props) {
       closeNeedHelpModal,
       modalHeight,
       setModalHeight,
+      headerTitle,
+      headerSubtitle,
+      activeStep,
+      setActiveStep,
+      isVehicleStepCompleted,
+      canOpenClassifierStep,
       activeMainTab,
       setActiveMainTab,
       brandCategory,
@@ -214,6 +248,11 @@ export default function YmmFilterModalProvider({ children }: Props) {
       dispatch,
       isNeedHelpModalOpen,
       modalHeight,
+      headerTitle,
+      headerSubtitle,
+      activeStep,
+      isVehicleStepCompleted,
+      canOpenClassifierStep,
       activeMainTab,
       brandCategory,
       sizeCategory,
