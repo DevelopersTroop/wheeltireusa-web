@@ -16,15 +16,16 @@ export default function WheelsSizeFlow() {
   const [selectedDiameter, setSelectedDiameter] = useState<string | null>(null);
   const [selectedWidth, setSelectedWidth] = useState<string | null>(null);
 
-  const { data: filterData, isFetching } = useGetFilterListQuery({
+  const { data: filterData, isLoading, isFetching } = useGetFilterListQuery({
     category: "wheels",
     ...(step >= 2 && selectedDiameter ? { wheelDiameter: selectedDiameter } : {}),
     ...(step >= 3 && selectedWidth && selectedWidth !== "any" ? { wheelWidth: selectedWidth } : {}),
   });
 
-  const diameters = Array.isArray(filterData?.filters?.wheelDiameter) ? filterData.filters.wheelDiameter : [];
-  const widths = Array.isArray(filterData?.filters?.wheelWidth) ? filterData.filters.wheelWidth : [];
-  const boltPatterns = Array.isArray(filterData?.filters?.boltPatterns) ? filterData.filters.boltPatterns : [];
+  // Clear data when fetching to avoid showing stale options
+  const diameters = (!isLoading && !isFetching && Array.isArray(filterData?.filters?.wheelDiameter)) ? filterData.filters.wheelDiameter : [];
+  const widths = (step >= 2 && !isLoading && !isFetching && Array.isArray(filterData?.filters?.wheelWidth)) ? filterData.filters.wheelWidth : [];
+  const boltPatterns = (step >= 3 && !isLoading && !isFetching && Array.isArray(filterData?.filters?.boltPatterns)) ? filterData.filters.boltPatterns : [];
 
   const handleDiameterSelect = (val: string) => {
     setSelectedDiameter(val);

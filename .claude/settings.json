@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(rm -rf components hooks)",
-      "Bash(mkdir -p CategoryToggle VehicleDropdowns GoButton DesktopView MobileView)"
+      "Bash(mkdir -p CategoryToggle VehicleDropdowns GoButton DesktopView MobileView)",
+      "mcp__context7__query-docs"
     ]
   }
 }

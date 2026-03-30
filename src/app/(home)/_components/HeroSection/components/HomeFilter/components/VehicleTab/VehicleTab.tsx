@@ -23,6 +23,11 @@ export default function VehicleTab() {
     isModelLoading,
     isTrimLoading,
     isDriveLoading,
+    isYearFetching,
+    isMakeFetching,
+    isModelFetching,
+    isTrimFetching,
+    isDriveFetching,
     isYearDisabled,
     isMakeDisabled,
     isModelDisabled,
@@ -46,8 +51,6 @@ export default function VehicleTab() {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const isFirstRender = useRef(true);
-  const hasUserInteracted = useRef(false);
-  const [isInView, setIsInView] = useState(false);
 
   // Get garage state
   const garage = useTypedSelector((state) => state.persisted.yearMakeModel.garage);
@@ -56,7 +59,7 @@ export default function VehicleTab() {
   const activeGarageItem = activeGarageId ? garage?.[activeGarageId] : undefined;
 
   // Use shared auto-open dropdown hook
-  const { dropdownState, trackedHandlers, setOpenMake, setOpenModel, setOpenTrim, setOpenDrive } =
+  const { dropdownState, trackedHandlers, setOpenMake, setOpenModel, setOpenTrim, setOpenDrive, hasUserManuallyChanged } =
     useAutoOpenYmmDropdowns({
       makes: makes || [],
       models: models || [],
@@ -109,7 +112,6 @@ export default function VehicleTab() {
     if (!el) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsInView(entry.isIntersecting);
         dispatch(setHomeYmmInView(entry.isIntersecting));
       },
       { threshold: 0.1 }
@@ -121,18 +123,9 @@ export default function VehicleTab() {
     };
   }, [dispatch]);
 
-  // Auto-submit when fully populated
+  // Auto-submit and redirect when Drive is selected (only if valid YMM exists and user manually changed a value)
   useEffect(() => {
-    const isReady = !isDisabledSubmit && shouldShowSubmit;
-    if (isReady && hasUserInteracted.current) {
-      handleSubmit(undefined);
-      hasUserInteracted.current = false;
-    }
-  }, [isDisabledSubmit, shouldShowSubmit, onSubmit]);
-
-  // Auto-submit and redirect when Drive is selected (only if valid YMM exists)
-  useEffect(() => {
-    if (year && make && model && drive && drive !== "__DEFAULT_DRIVE__") {
+    if (year && make && model && drive && drive !== "__DEFAULT_DRIVE__" && hasUserManuallyChanged) {
       // Redirect based on selected category
       const targetPath = category === "tire" ? "/collections/product-category/tires" : "/collections/product-category/wheels";
 
@@ -149,7 +142,7 @@ export default function VehicleTab() {
       dispatch(submitYmm(newItem));
       router.push(targetPath);
     }
-  }, [year, make, model, trim, drive, dispatch, router]);
+  }, [year, make, model, trim, drive, dispatch, router, category, hasUserManuallyChanged]);
 
   const handleSubmit = (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>, options?: { targetPath?: string }) => {
     const cleanModel = model && model !== "__DEFAULT_MODEL__" ? model : "";
@@ -207,7 +200,7 @@ export default function VehicleTab() {
               value={year || undefined}
               options={years || []}
               disabled={isYearDisabled}
-              loading={isYearLoading}
+              loading={isYearLoading || isYearFetching}
               onChange={trackedHandlers.onYearChange}
               placeholder="YEAR"
             />
@@ -220,7 +213,7 @@ export default function VehicleTab() {
               value={make === "__DEFAULT_MAKE__" ? undefined : make}
               options={(makes || []).filter((m) => m !== "__DEFAULT_MAKE__")}
               disabled={isMakeDisabled}
-              loading={isMakeLoading}
+              loading={isMakeLoading || isMakeFetching}
               onChange={trackedHandlers.onMakeChange}
               placeholder="MAKE"
               open={dropdownState.openMake}
@@ -235,7 +228,7 @@ export default function VehicleTab() {
               value={model === "__DEFAULT_MODEL__" ? undefined : model}
               options={models || []}
               disabled={isModelDisabled}
-              loading={isModelLoading}
+              loading={isModelLoading || isModelFetching}
               onChange={trackedHandlers.onModelChange}
               placeholder="MODEL"
               open={dropdownState.openModel}
@@ -251,7 +244,7 @@ export default function VehicleTab() {
                 value={trim === "__DEFAULT_TRIM__" ? undefined : trim}
                 options={trims || []}
                 disabled={isTrimDisabled}
-                loading={isTrimLoading}
+                loading={isTrimLoading || isTrimFetching}
                 onChange={trackedHandlers.onTrimChange}
                 placeholder="TRIM"
                 open={dropdownState.openTrim}
@@ -268,7 +261,7 @@ export default function VehicleTab() {
                 value={drive === "__DEFAULT_DRIVE__" ? undefined : drive}
                 options={drives || []}
                 disabled={isDriveDisabled}
-                loading={isDriveLoading}
+                loading={isDriveLoading || isDriveFetching}
                 onChange={trackedHandlers.onDriveChange}
                 placeholder="DRIVE"
                 open={dropdownState.openDrive}

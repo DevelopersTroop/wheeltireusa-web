@@ -51,6 +51,11 @@ export default function StickyVehicleBar() {
     isModelLoading,
     isTrimLoading,
     isDriveLoading,
+    isYearFetching,
+    isMakeFetching,
+    isModelFetching,
+    isTrimFetching,
+    isDriveFetching,
     isYearDisabled,
     isMakeDisabled,
     isModelDisabled,
@@ -87,13 +92,13 @@ export default function StickyVehicleBar() {
 
   const loading: YmmLoading = useMemo(
     () => ({
-      isYearLoading,
-      isMakeLoading,
-      isModelLoading,
-      isTrimLoading,
-      isDriveLoading,
+      isYearLoading: isYearLoading || isYearFetching,
+      isMakeLoading: isMakeLoading || isMakeFetching,
+      isModelLoading: isModelLoading || isModelFetching,
+      isTrimLoading: isTrimLoading || isTrimFetching,
+      isDriveLoading: isDriveLoading || isDriveFetching,
     }),
-    [isYearLoading, isMakeLoading, isModelLoading, isTrimLoading, isDriveLoading]
+    [isYearLoading, isMakeLoading, isModelLoading, isTrimLoading, isDriveLoading, isYearFetching, isMakeFetching, isModelFetching, isTrimFetching, isDriveFetching]
   );
 
   const disabled: YmmDisabled = useMemo(
@@ -136,7 +141,7 @@ export default function StickyVehicleBar() {
 
   // ==================== AUTO-OPEN DROPDOWNS (SHARED HOOK) ====================
 
-  const { dropdownState: autoOpenState, trackedHandlers, setOpenMake, setOpenModel, setOpenTrim, setOpenDrive } =
+  const { dropdownState: autoOpenState, trackedHandlers, setOpenMake, setOpenModel, setOpenTrim, setOpenDrive, hasUserManuallyChanged } =
     useAutoOpenYmmDropdowns({
       makes: makes || [],
       models: models || [],
@@ -164,9 +169,9 @@ export default function StickyVehicleBar() {
 
   // ==================== AUTO-REDIRECT ON DRIVE CHANGE ====================
 
-  // Auto-submit and redirect when Drive is selected (only if valid YMM exists)
+  // Auto-submit and redirect when Drive is selected (only if valid YMM exists and user manually changed a value)
   useEffect(() => {
-    if (year && make && model && drive && drive !== "__DEFAULT_DRIVE__") {
+    if (year && make && model && drive && drive !== "__DEFAULT_DRIVE__" && hasUserManuallyChanged) {
       // Redirect based on selected category
       const targetPath = category === "tire" ? "/collections/product-category/tires" : "/collections/product-category/wheels";
 
@@ -183,7 +188,7 @@ export default function StickyVehicleBar() {
       dispatch(submitYmm(newItem));
       router.push(targetPath);
     }
-  }, [year, make, model, trim, drive, dispatch, router]);
+  }, [year, make, model, trim, drive, dispatch, router, category, hasUserManuallyChanged]);
 
   // ==================== HANDLERS ====================
 

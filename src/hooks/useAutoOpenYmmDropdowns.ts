@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 /**
  * Shared hook for auto-open YMM dropdown behavior.
@@ -54,6 +54,8 @@ interface UseAutoOpenYmmDropdownsReturn {
   };
   /** Call this to mark that a manual change occurred */
   markManualChange: () => void;
+  /** Whether user has made a manual change */
+  hasUserManuallyChanged: boolean;
 }
 
 export default function useAutoOpenYmmDropdowns({
@@ -83,11 +85,11 @@ export default function useAutoOpenYmmDropdowns({
     openDrive: false,
   });
 
-  const hasUserManuallyChangedRef = useRef(false);
+  const [hasUserManuallyChanged, setHasUserManuallyChanged] = useState(false);
 
   // Mark that user has made a manual change
   const markManualChange = useCallback(() => {
-    hasUserManuallyChangedRef.current = true;
+    setHasUserManuallyChanged(true);
   }, []);
 
   // Create tracked handlers that mark manual changes before calling original handlers
@@ -119,7 +121,7 @@ export default function useAutoOpenYmmDropdowns({
 
   // Auto-open Make when makes are loaded after manual Year selection
   useEffect(() => {
-    if (!hasUserManuallyChangedRef.current) return;
+    if (!hasUserManuallyChanged) return;
     const shouldOpen = Boolean(!isMakeLoading && makes.length > 0 && year);
     setDropdownState((prev) => ({
       ...prev,
@@ -128,11 +130,11 @@ export default function useAutoOpenYmmDropdowns({
       openTrim: false,
       openDrive: false,
     }));
-  }, [isMakeLoading, makes.length, year]);
+  }, [isMakeLoading, makes.length, year, hasUserManuallyChanged]);
 
   // Auto-open Model when models are loaded after manual Make selection
   useEffect(() => {
-    if (!hasUserManuallyChangedRef.current) return;
+    if (!hasUserManuallyChanged) return;
     const shouldOpen = Boolean(!isModelLoading && models.length > 0 && make && make !== "__DEFAULT_MAKE__");
     setDropdownState((prev) => ({
       ...prev,
@@ -141,11 +143,11 @@ export default function useAutoOpenYmmDropdowns({
       openTrim: false,
       openDrive: false,
     }));
-  }, [isModelLoading, models.length, make]);
+  }, [isModelLoading, models.length, make, hasUserManuallyChanged]);
 
   // Auto-open Trim when trims are loaded after manual Model selection
   useEffect(() => {
-    if (!hasUserManuallyChangedRef.current) return;
+    if (!hasUserManuallyChanged) return;
     const shouldOpen = Boolean(!isTrimLoading && trims.length > 0 && model && model !== "__DEFAULT_MODEL__");
     setDropdownState((prev) => ({
       ...prev,
@@ -154,11 +156,11 @@ export default function useAutoOpenYmmDropdowns({
       openTrim: shouldOpen,
       openDrive: false,
     }));
-  }, [isTrimLoading, trims.length, model]);
+  }, [isTrimLoading, trims.length, model, hasUserManuallyChanged]);
 
   // Auto-open Drive when drives are loaded after manual Trim selection
   useEffect(() => {
-    if (!hasUserManuallyChangedRef.current) return;
+    if (!hasUserManuallyChanged) return;
     const shouldOpen = Boolean(!isDriveLoading && drives.length > 0 && trim && trim !== "__DEFAULT_TRIM__");
     setDropdownState((prev) => ({
       ...prev,
@@ -167,7 +169,7 @@ export default function useAutoOpenYmmDropdowns({
       openTrim: false,
       openDrive: shouldOpen,
     }));
-  }, [isDriveLoading, drives.length, trim]);
+  }, [isDriveLoading, drives.length, trim, hasUserManuallyChanged]);
 
   // Individual setters for manual control
   const setOpenMake = useCallback((open: boolean) => {
@@ -194,5 +196,6 @@ export default function useAutoOpenYmmDropdowns({
     setOpenDrive,
     trackedHandlers,
     markManualChange,
+    hasUserManuallyChanged,
   };
 }

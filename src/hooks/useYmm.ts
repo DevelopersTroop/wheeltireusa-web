@@ -49,24 +49,24 @@ const useYmm = (ymmId?: string) => {
   const isValidTrim = !!effectiveTrim && effectiveTrim !== defaultTrimValue;
   const isValidDrive = !!effectiveDrive && effectiveDrive !== defaultDriveValue;
 
-  const { data: years, isLoading: isYearLoading } = useGetYearsQuery();
+  const { data: years, isLoading: isYearLoading, isFetching: isYearFetching } = useGetYearsQuery();
 
-  const { data: makes, isLoading: isMakeLoading } = useGetMakesQuery(
+  const { data: makes, isLoading: isMakeLoading, isFetching: isMakeFetching } = useGetMakesQuery(
     { year: effectiveYear },
     { skip: !effectiveYear }
   );
 
-  const { data: models, isLoading: isModelLoading } = useGetModelsQuery(
+  const { data: models, isLoading: isModelLoading, isFetching: isModelFetching } = useGetModelsQuery(
     { year: effectiveYear, make: effectiveMake },
     { skip: !effectiveYear || !isValidMake }
   );
 
-  const { data: trims, isLoading: isTrimLoading } = useGetTrimsQuery(
+  const { data: trims, isLoading: isTrimLoading, isFetching: isTrimFetching } = useGetTrimsQuery(
     { year: effectiveYear, make: effectiveMake, model: effectiveModel },
     { skip: !effectiveYear || !isValidMake || !isValidModel }
   );
 
-  const { data: drives, isLoading: isDriveLoading } = useGetDrivesQuery(
+  const { data: drives, isLoading: isDriveLoading, isFetching: isDriveFetching } = useGetDrivesQuery(
     {
       year: effectiveYear,
       make: effectiveMake,
@@ -412,11 +412,11 @@ const useYmm = (ymmId?: string) => {
   };
 
   const listData = {
-    years: years ?? ymm.list?.years ?? [],
-    makes: (effectiveYear && !isMakeLoading) ? (makes ?? ymm.list?.makes ?? []) : [],
-    models: (isValidMake && !isModelLoading) ? (models ?? ymm.list?.models ?? []) : [],
-    trims: (isValidModel && !isTrimLoading) ? (trims ?? ymm.list?.trims ?? []) : [],
-    drives: (isValidTrim && !isDriveLoading) ? (drives ?? ymm.list?.drives ?? []) : [],
+    years: (isYearFetching || isYearLoading) ? [] : (years ?? ymm.list?.years ?? []),
+    makes: (effectiveYear && !isMakeLoading && !isMakeFetching) ? (makes ?? ymm.list?.makes ?? []) : [],
+    models: (isValidMake && !isModelLoading && !isModelFetching) ? (models ?? ymm.list?.models ?? []) : [],
+    trims: (isValidModel && !isTrimLoading && !isTrimFetching) ? (trims ?? ymm.list?.trims ?? []) : [],
+    drives: (isValidTrim && !isDriveLoading && !isDriveFetching) ? (drives ?? ymm.list?.drives ?? []) : [],
   };
 
   return {
@@ -425,17 +425,22 @@ const useYmm = (ymmId?: string) => {
     isModelLoading,
     isTrimLoading,
     isDriveLoading,
-    isYearDisabled: isYearLoading,
+    isYearFetching,
+    isMakeFetching,
+    isModelFetching,
+    isTrimFetching,
+    isDriveFetching,
+    isYearDisabled: isYearLoading || isYearFetching,
     isMakeDisabled:
-      !effectiveYear || isMakeLoading || (listData.makes.length ?? 0) === 0,
+      !effectiveYear || isMakeLoading || isMakeFetching || (listData.makes.length ?? 0) === 0,
     isModelDisabled:
-      !isValidMake || isModelLoading || (listData.models.length ?? 0) === 0,
+      !isValidMake || isModelLoading || isModelFetching || (listData.models.length ?? 0) === 0,
     isTrimDisabled:
       !isValidModel ||
-      isTrimLoading ||
+      isTrimLoading || isTrimFetching ||
       (listData.trims.length ?? 0) === 0,
     isDriveDisabled:
-      !isValidTrim || isDriveLoading || (listData.drives.length ?? 0) === 0,
+      !isValidTrim || isDriveLoading || isDriveFetching || (listData.drives.length ?? 0) === 0,
     shouldShowSubmit: isValidDrive,
     onYearChange,
     onMakeChange,

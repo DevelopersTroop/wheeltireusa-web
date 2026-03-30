@@ -12,12 +12,12 @@ export default function BrandTab() {
   const [brand, setBrand] = useState<string | null>(null);
   const [openDropdown, setOpenDropdown] = useState<"category" | "brand" | null>(null);
 
-  const { data: filterData, isLoading: isBrandsLoading } = useGetFilterListQuery(
+  const { data: filterData, isLoading: isBrandsLoading, isFetching: isBrandsFetching } = useGetFilterListQuery(
     { category },
     { skip: false }
   );
 
-  const brands = filterData?.filters?.brand
+  const brands = (!isBrandsLoading && !isBrandsFetching && filterData?.filters?.brand)
     ? (filterData.filters.brand as { value: string }[]).map((item) => item.value.toString().trim())
     : [];
 
@@ -78,8 +78,8 @@ export default function BrandTab() {
                   setOpenDropdown(null);
                 }}
                 className={cn(
-                  "w-full text-left px-3 py-3 text-sm uppercase font-bold transition-colors hover:bg-primary/10",
-                  category === "tire" && "text-primary bg-primary/5"
+                  "w-full text-left px-3 py-3 text-sm transition-colors hover:bg-primary/10",
+                  category === "tire" && "text-primary font-bold bg-primary/5"
                 )}
               >
                 Tire
@@ -91,8 +91,8 @@ export default function BrandTab() {
                   setOpenDropdown(null);
                 }}
                 className={cn(
-                  "w-full text-left px-3 py-3 text-sm uppercase font-bold transition-colors hover:bg-primary/10",
-                  category === "wheels" && "text-primary bg-primary/5"
+                  "w-full text-left px-3 py-3 text-sm transition-colors hover:bg-primary/10",
+                  category === "wheels" && "text-primary font-bold bg-primary/5"
                 )}
               >
                 Wheels
@@ -108,14 +108,14 @@ export default function BrandTab() {
           <button
             type="button"
             onClick={() => setOpenDropdown(openDropdown === "brand" ? null : "brand")}
-            disabled={isBrandsLoading}
+            disabled={isBrandsLoading || isBrandsFetching}
             className={cn(
               "w-full bg-white flex items-center justify-between shadow-none ring-0 focus:ring-0 appearance-none h-14 relative rounded-sm transition-colors",
               "text-gray-600 uppercase text-xs font-semibold px-3 py-2.5",
               openDropdown === "brand"
                 ? "border border-primary ring-1 ring-primary z-10"
                 : "border border-gray-300 hover:border-primary",
-              isBrandsLoading && "opacity-50 cursor-not-allowed"
+              (isBrandsLoading || isBrandsFetching) && "opacity-50 cursor-not-allowed"
             )}
           >
             <span className="absolute -top-2 left-2 px-1 bg-white text-xs font-semibold text-gray-700">
@@ -123,7 +123,7 @@ export default function BrandTab() {
               <span className="text-red-600 ml-0.5">*</span>
             </span>
             <span className="truncate">
-              {isBrandsLoading ? "Loading..." : brand || "Select Brand"}
+              {(isBrandsLoading || isBrandsFetching) ? "Loading..." : brand || "Select Brand"}
             </span>
             <svg
               className={cn(
@@ -152,8 +152,8 @@ export default function BrandTab() {
                       setOpenDropdown(null);
                     }}
                     className={cn(
-                      "w-full text-left px-3 py-2.5 text-sm uppercase font-bold transition-colors hover:bg-primary/10",
-                      brand === brandName && "text-primary bg-primary/5"
+                      "w-full text-left px-3 py-2.5 text-sm transition-colors hover:bg-primary/10",
+                      brand === brandName && "text-primary font-bold bg-primary/5"
                     )}
                   >
                     {brandName}

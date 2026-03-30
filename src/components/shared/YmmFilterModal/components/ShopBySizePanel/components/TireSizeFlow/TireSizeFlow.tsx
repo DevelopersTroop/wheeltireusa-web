@@ -17,15 +17,16 @@ export default function TireSizeFlow() {
   const [selectedRatio, setSelectedRatio] = useState<string | null>(null);
   const [selectedDiameter, setSelectedDiameter] = useState<string | null>(null);
 
-  const { data: filterData, isFetching } = useGetFilterListQuery({
+  const { data: filterData, isLoading, isFetching } = useGetFilterListQuery({
     category: "tire",
     ...(step >= 2 && selectedWidth ? { tireWidth: selectedWidth } : {}),
     ...(step >= 3 && selectedRatio && selectedWidth ? { tireRatio: selectedRatio, tireWidth: selectedWidth } : {}),
   });
 
-  const widths = Array.isArray(filterData?.filters?.tireWidth) ? filterData.filters.tireWidth : [];
-  const ratios = Array.isArray(filterData?.filters?.tireRatio) ? filterData.filters.tireRatio : [];
-  const diameters = Array.isArray(filterData?.filters?.tireDiameter) ? filterData.filters.tireDiameter : [];
+  // Clear data when fetching to avoid showing stale options
+  const widths = (!isLoading && !isFetching && Array.isArray(filterData?.filters?.tireWidth)) ? filterData.filters.tireWidth : [];
+  const ratios = (step >= 2 && !isLoading && !isFetching && Array.isArray(filterData?.filters?.tireRatio)) ? filterData.filters.tireRatio : [];
+  const diameters = (step >= 3 && !isLoading && !isFetching && Array.isArray(filterData?.filters?.tireDiameter)) ? filterData.filters.tireDiameter : [];
 
   const handleWidthSelect = (val: string) => {
     setSelectedWidth(val);

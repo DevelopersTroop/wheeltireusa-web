@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { useGetFilterListQuery } from "@/redux/apis/product";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/redux/store";
 import { setActiveGarage } from "@/redux/features/yearMakeModelSlice";
+import { Loader2 } from "lucide-react";
 
 type Category = "tire" | "wheels";
 
@@ -15,6 +16,7 @@ export default function SizeTab() {
 
   const [category, setCategory] = useState<Category>("tire");
   const [openDropdown, setOpenDropdown] = useState<"category" | "width" | "ratio" | "diameter" | "boltPattern" | null>(null);
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   // Tire flow state
   const [tireWidth, setTireWidth] = useState<string | null>(null);
@@ -26,15 +28,18 @@ export default function SizeTab() {
   const [wheelWidth, setWheelWidth] = useState<string | null>(null);
   const [boltPattern, setBoltPattern] = useState<string | null>(null);
 
+  // Track if user made manual selection (to prevent auto-redirect on initial load)
+  const hasUserManuallyChangedRef = useRef(false);
+
   // Fetch tire data
-  const { data: tireData, isLoading: isTireLoading } = useGetFilterListQuery({
+  const { data: tireData, isLoading: isTireLoading, isFetching: isTireFetching } = useGetFilterListQuery({
     category: "tire",
     ...(tireWidth ? { tireWidth } : {}),
     ...(tireRatio && tireWidth ? { tireRatio, tireWidth } : {}),
   });
 
   // Fetch wheel data
-  const { data: wheelData, isLoading: isWheelLoading } = useGetFilterListQuery({
+  const { data: wheelData, isLoading: isWheelLoading, isFetching: isWheelFetching } = useGetFilterListQuery({
     category: "wheels",
     ...(wheelDiameter ? { wheelDiameter } : {}),
     ...(wheelWidth && wheelWidth !== "any" && wheelDiameter ? { wheelWidth, wheelDiameter } : {}),
@@ -48,16 +53,29 @@ export default function SizeTab() {
     setWheelDiameter(null);
     setWheelWidth(null);
     setBoltPattern(null);
+    hasUserManuallyChangedRef.current = false;
+    setIsRedirecting(false);
   }, [category]);
 
-  // Get options from API data
-  const tireWidths = Array.isArray(tireData?.filters?.tireWidth) ? tireData.filters.tireWidth : [];
-  const tireRatios = Array.isArray(tireData?.filters?.tireRatio) ? tireData.filters.tireRatio : [];
-  const tireDiameters = Array.isArray(tireData?.filters?.tireDiameter) ? tireData.filters.tireDiameter : [];
+  // Determine which specific dropdown should show loading
+  // For tires: width only loads initially, ratio loads when width changes, diameter loads when ratio changes
+  const isWidthLoading = isTireLoading;
+  const isRatioLoading = Boolean(tireWidth && isTireFetching && !tireRatio);
+  const isDiameterLoading = Boolean(tireRatio && isTireFetching);
 
-  const wheelDiameters = Array.isArray(wheelData?.filters?.wheelDiameter) ? wheelData.filters.wheelDiameter : [];
-  const wheelWidths = Array.isArray(wheelData?.filters?.wheelWidth) ? wheelData.filters.wheelWidth : [];
-  const boltPatterns = Array.isArray(wheelData?.filters?.boltPatterns) ? wheelData.filters.boltPatterns : [];
+  // For wheels: diameter only loads initially, width loads when diameter changes, bolt pattern loads when width changes
+  const isWheelDiameterLoading = isWheelLoading;
+  const isWheelWidthLoading = Boolean(wheelDiameter && isWheelFetching && !wheelWidth);
+  const isBoltPatternLoading = Boolean(wheelWidth && wheelWidth !== "any" && isWheelFetching);
+
+  // Get options from API data - only return empty for the specific dropdown that's loading
+  const tireWidths = (!isWidthLoading && Array.isArray(tireData?.filters?.tireWidth)) ? tireData.filters.tireWidth : [];
+  const tireRatios = (tireWidth && !isRatioLoading && Array.isArray(tireData?.filters?.tireRatio)) ? tireData.filters.tireRatio : [];
+  const tireDiameters = (tireRatio && !isDiameterLoading && Array.isArray(tireData?.filters?.tireDiameter)) ? tireData.filters.tireDiameter : [];
+
+  const wheelDiameters = (!isWheelDiameterLoading && Array.isArray(wheelData?.filters?.wheelDiameter)) ? wheelData.filters.wheelDiameter : [];
+  const wheelWidths = (wheelDiameter && !isWheelWidthLoading && Array.isArray(wheelData?.filters?.wheelWidth)) ? wheelData.filters.wheelWidth : [];
+  const boltPatterns = (wheelWidth && wheelWidth !== "any" && !isBoltPatternLoading && Array.isArray(wheelData?.filters?.boltPatterns)) ? wheelData.filters.boltPatterns : [];
 
   const canShowTireRatio = tireWidth !== null;
   const canShowTireDiameter = tireRatio !== null;
@@ -81,6 +99,28 @@ export default function SizeTab() {
     url += `&boltPatterns=${encodeURIComponent(boltPattern)}`;
     router.push(url);
   };
+
+  // Auto-redirect when tire diameter is selected (last field for tire flow)
+  useEffect(() => {
+    if (tireWidth && tireRatio && tireDiameter && hasUserManuallyChangedRef.current) {
+      setIsRedirecting(true);
+      const timer = setTimeout(() => {
+        handleTireSubmit();
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [tireDiameter, tireWidth, tireRatio, dispatch, router]);
+
+  // Auto-redirect when bolt pattern is selected (last field for wheel flow)
+  useEffect(() => {
+    if (wheelDiameter && wheelWidth && boltPattern && hasUserManuallyChangedRef.current) {
+      setIsRedirecting(true);
+      const timer = setTimeout(() => {
+        handleWheelSubmit();
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [boltPattern, wheelDiameter, wheelWidth, dispatch, router]);
 
   return (
     <div>
@@ -130,8 +170,9 @@ export default function SizeTab() {
                   setTireRatio(null);
                   setTireDiameter(null);
                   setOpenDropdown(null);
+                  setIsRedirecting(false);
                 }}
-                isLoading={isTireLoading}
+                isLoading={isWidthLoading}
               />
             </div>
 
@@ -148,8 +189,10 @@ export default function SizeTab() {
                   setTireRatio(val);
                   setTireDiameter(null);
                   setOpenDropdown(null);
+                  setIsRedirecting(false);
+                  hasUserManuallyChangedRef.current = true;
                 }}
-                isLoading={isTireLoading}
+                isLoading={isRatioLoading}
               />
             </div>
 
@@ -165,8 +208,9 @@ export default function SizeTab() {
                 onSelect={(val) => {
                   setTireDiameter(val);
                   setOpenDropdown(null);
+                  hasUserManuallyChangedRef.current = true;
                 }}
-                isLoading={isTireLoading}
+                isLoading={isDiameterLoading}
               />
             </div>
 
@@ -205,8 +249,9 @@ export default function SizeTab() {
                   setWheelWidth(null);
                   setBoltPattern(null);
                   setOpenDropdown(null);
+                  setIsRedirecting(false);
                 }}
-                isLoading={isWheelLoading}
+                isLoading={isWheelDiameterLoading}
               />
             </div>
 
@@ -226,8 +271,10 @@ export default function SizeTab() {
                   setWheelWidth(val);
                   setBoltPattern(null);
                   setOpenDropdown(null);
+                  setIsRedirecting(false);
+                  hasUserManuallyChangedRef.current = true;
                 }}
-                isLoading={isWheelLoading}
+                isLoading={isWheelWidthLoading}
               />
             </div>
 
@@ -243,8 +290,9 @@ export default function SizeTab() {
                 onSelect={(val) => {
                   setBoltPattern(val);
                   setOpenDropdown(null);
+                  hasUserManuallyChangedRef.current = true;
                 }}
-                isLoading={isWheelLoading}
+                isLoading={isBoltPatternLoading}
               />
             </div>
 
@@ -283,6 +331,14 @@ export default function SizeTab() {
           <div className="font-semibold text-lg uppercase">
             {wheelDiameter}" x {wheelWidth === "any" ? "Any" : wheelWidth} - {boltPattern}
           </div>
+        </div>
+      )}
+
+      {/* Redirecting Indicator */}
+      {isRedirecting && (
+        <div className="mt-3 flex items-center justify-center gap-2 text-primary">
+          <Loader2 className="w-5 h-5 animate-spin" />
+          <span className="text-sm font-semibold">Redirecting...</span>
         </div>
       )}
     </div>
@@ -345,8 +401,8 @@ function DropdownSelect({ label, value, placeholder, options, isOpen, onToggle, 
                 type="button"
                 onClick={() => onSelect(option.value)}
                 className={cn(
-                  "w-full text-left px-3 py-2.5 text-sm uppercase font-bold transition-colors hover:bg-primary/10",
-                  value === option.value && "text-primary bg-primary/5"
+                  "w-full text-left px-3 py-2.5 text-sm transition-colors hover:bg-primary/10",
+                  value === option.value && "text-primary font-bold bg-primary/5"
                 )}
               >
                 {option.label}

@@ -18,7 +18,7 @@ type Props = {
 
 export default function SizeStepIndicator({ steps }: Props) {
   return (
-    <div className="flex items-center justify-between w-full mb-8 relative">
+    <div className="flex items-center justify-center w-fit mx-auto mb-8 relative">
       {steps.map((step, index) => (
         <div key={step.id} className="flex items-center">
           <button
