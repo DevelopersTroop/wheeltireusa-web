@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ChevronDown, Trash2 } from "lucide-react";
+import { ChevronDown, Trash2, CarFront, Check, Circle, X, CircleDot } from "lucide-react";
 import useYmm from "@/hooks/useYmm";
 import { useAppDispatch, useTypedSelector } from "@/redux/store";
 import { addToGarage, removeFromGarage, clearGarage, submitYmm, setActiveGarage, clearYearMakeModel } from "@/redux/features/yearMakeModelSlice";
@@ -59,17 +59,18 @@ export const VehicleSelectorModal = ({ isOpen, onOpenChange, skipToGarage }: { i
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[600px] mx-auto border-none rounded-md overflow-hidden bg-white">
-        <div className="bg-white">
-          <GarageView
-            garage={garage}
-            activeGarageId={activeGarageId}
-            onAddVehicle={handleAddVehicle}
-            onClearAll={handleClearAll}
-            onRemove={handleRemove}
-            onClose={() => onOpenChange(false)}
-          />
-        </div>
+      <DialogContent
+        className="max-w-[480px] mx-auto p-0 gap-0 border border-border/50 shadow-xl rounded overflow-hidden bg-background"
+        hideCloseButton
+      >
+        <GarageView
+          garage={garage}
+          activeGarageId={activeGarageId}
+          onAddVehicle={handleAddVehicle}
+          onClearAll={handleClearAll}
+          onRemove={handleRemove}
+          onClose={() => onOpenChange(false)}
+        />
       </DialogContent>
     </Dialog>
   );
@@ -80,70 +81,172 @@ const GarageView = ({ garage, activeGarageId, onAddVehicle, onClearAll, onRemove
   const router = useRouter();
   const pathname = usePathname();
 
-  const handleSelectVehicle = (id: string, item: TYmmGarageItem) => {
+  // Sets vehicle as active BEFORE navigation
+  const handleBrowseTires = (id: string, item: TYmmGarageItem) => {
+    // Always set as active first (even if already active)
     dispatch(setActiveGarage(id));
     dispatch(submitYmm({ ...item }));
     onClose();
-    if (pathname && !pathname.includes('/collections')) {
-      const targetPath = pathname.includes('/tire')
-        ? '/collections/product-category/tire'
-        : '/collections/product-category/wheels';
-      router.push(targetPath);
-    }
+    router.push('/collections/product-category/tires');
   };
 
+  const handleBrowseWheels = (id: string, item: TYmmGarageItem) => {
+    // Always set as active first (even if already active)
+    dispatch(setActiveGarage(id));
+    dispatch(submitYmm({ ...item }));
+    onClose();
+    router.push('/collections/product-category/wheels');
+  };
+
+  // Click on card - only set active, no redirect
+  const handleCardClick = (id: string, item: TYmmGarageItem) => {
+    dispatch(setActiveGarage(id));
+    dispatch(submitYmm({ ...item }));
+  };
+
+  const vehicleCount = Object.keys(garage || {}).length;
+
   return (
-    <div className="p-4 sm:p-6 w-full">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold">My Garage</h2>
-        <button onClick={onClearAll} className="text-[#3b5998] cursor-pointer hover:text-[#2d4373] text-sm">
-          Clear All
-        </button>
+    <div className="w-full bg-background">
+      {/* Header - Clean, light background */}
+      <div className="px-5 py-4 border-b border-border/60 bg-background">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-lg font-bold text-foreground">My Garage</h2>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              {vehicleCount} {vehicleCount === 1 ? 'vehicle' : 'vehicles'} saved
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            {vehicleCount > 0 && (
+              <button
+                onClick={onClearAll}
+                className="text-xs text-muted-foreground hover:text-destructive transition-colors font-medium"
+              >
+                Clear All
+              </button>
+            )}
+            <button
+              onClick={onClose}
+              className="w-7 h-7 flex items-center justify-center rounded text-muted-foreground/60 hover:text-foreground hover:bg-muted/50 transition-all"
+              aria-label="Close"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
       </div>
 
-      <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2">
-        {Object.entries((garage as Record<string, TYmmGarageItem>) || {}).map(([id, item]) => (
-          <div
-            key={id}
-            onClick={() => handleSelectVehicle(id, item)}
-            className={`p-4 rounded-md border-l-4 cursor-pointer transition-colors ${id === activeGarageId ? 'bg-primary/5 border-primary' : 'bg-gray-50 border-gray-200 hover:bg-gray-100'}`}
-          >
-            <div className="flex justify-between items-start">
-              <div className="flex gap-3">
-                <div className="mt-1">
-                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${id === activeGarageId ? 'border-primary' : 'border-gray-300'}`}>
-                    {id === activeGarageId && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
+      {/* Vehicle List */}
+      <div className="max-h-[360px] overflow-y-auto custom-scrollbar">
+        {vehicleCount === 0 ? (
+          <div className="flex flex-col items-center justify-center py-14 px-4">
+            <div className="w-14 h-14 rounded-xl bg-gray-100 flex items-center justify-center mb-3">
+              <CarFront className="w-7 h-7 text-gray-400" />
+            </div>
+            <p className="text-foreground font-semibold mb-1">Your garage is empty</p>
+            <p className="text-sm text-muted-foreground text-center max-w-[200px]">
+              Add a vehicle to see products that fit
+            </p>
+          </div>
+        ) : (
+          <div className="divide-y divide-border/50">
+            {Object.entries((garage as Record<string, TYmmGarageItem>) || {}).map(([id, item]) => (
+              <div
+                key={id}
+                onClick={() => handleCardClick(id, item)}
+                className={`group relative transition-all duration-200 cursor-pointer ${
+                  id === activeGarageId
+                    ? 'bg-primary/[0.04]'
+                    : 'bg-background hover:bg-blue-50/50'
+                }`}
+              >
+                {/* Active indicator - subtle left accent */}
+                {id === activeGarageId && (
+                  <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-primary rounded-r-full" />
+                )}
+
+                <div className="p-4 pl-5">
+                  <div className="flex items-start gap-3">
+                    {/* Vehicle Icon - Light, soft background */}
+                    <div className={`shrink-0 w-10 h-10 rounded flex items-center justify-center ${
+                      id === activeGarageId ? 'bg-primary/10' : 'bg-gray-100'
+                    }`}>
+                      <CarFront className={`w-5 h-5 ${id === activeGarageId ? 'text-primary' : 'text-gray-500'}`} />
+                    </div>
+
+                    {/* Vehicle Info */}
+                    <div className="flex-1 min-w-0">
+                      {/* Vehicle Name - Clear hierarchy */}
+                      <h3 className="font-semibold text-foreground text-sm leading-snug">
+                        {item.year} {item.make}
+                        {item.model && item.model !== '__DEFAULT_MODEL__' && (
+                          <span className="font-normal text-foreground/80"> {item.model}</span>
+                        )}
+                      </h3>
+
+                      {/* Trim/Details - Subtle */}
+                      {(item.trim && item.trim !== '__DEFAULT_TRIM__') || (item.drive && item.drive !== '__DEFAULT_DRIVE__') ? (
+                        <p className="text-xs text-muted-foreground mt-0.5 mb-2">
+                          {[item.trim, item.drive].filter(Boolean).join(' · ')}
+                        </p>
+                      ) : (
+                        <div className="mb-2" />
+                      )}
+
+                      {/* Action Buttons - Clear, clickable styling */}
+                      <div className="flex items-center gap-3">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleBrowseTires(id, item); }}
+                          className="text-xs font-semibold text-primary hover:text-primary/80 transition-colors"
+                        >
+                          Browse Tires
+                        </button>
+                        <span className="text-gray-200">|</span>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleBrowseWheels(id, item); }}
+                          className="text-xs font-semibold text-primary hover:text-primary/80 transition-colors"
+                        >
+                          Browse Wheels
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Right Side */}
+                    <div className="flex flex-col items-end gap-1">
+                      {/* Active Badge - Clean pill */}
+                      {id === activeGarageId && (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-semibold rounded">
+                          <CircleDot className="w-2.5 h-2.5 fill-current" />
+                          Active
+                        </span>
+                      )}
+
+                      {/* Delete Icon - Subtle */}
+                      <button
+                        onClick={(e) => { e.stopPropagation(); onRemove(id); }}
+                        className="w-6 h-6 flex items-center justify-center rounded text-gray-300 hover:text-red-500 hover:bg-red-50 transition-all"
+                        aria-label="Remove vehicle"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="font-bold text-gray-900">{item.year} {item.make} {item.model && item.model !== '__DEFAULT_MODEL__' ? item.model : ''} {item.trim && item.trim !== '__DEFAULT_TRIM__' ? item.trim : ''} {item.drive && item.drive !== '__DEFAULT_DRIVE__' ? item.drive : ''}</span>
-                    {id === activeGarageId && (
-                      <span className="bg-primary text-white text-[10px] px-1.5 py-0.5 rounded font-bold uppercase">Main</span>
-                    )}
-                  </div>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); handleSelectVehicle(id, item); }}
-                    className="text-primary border border-primary px-3 py-1.5 text-xs font-bold rounded-sm hover:bg-primary/10"
-                  >
-                    BROWSE CATALOG
-                  </button>
                 </div>
               </div>
-              <button onClick={(e) => { e.stopPropagation(); onRemove(id); }} className="text-gray-400 hover:text-red-500">
-                <Trash2 className="w-5 h-5" />
-              </button>
-            </div>
+            ))}
           </div>
-        ))}
+        )}
       </div>
 
-      <div className="mt-6 pt-6 border-t border-gray-100">
+      {/* Footer - Light background, clean button */}
+      <div className="p-4 border-t border-border/60 bg-background">
         <button
           onClick={onAddVehicle}
-          className="w-full py-3 border border-gray-900 text-gray-900 font-bold uppercase text-sm hover:bg-gray-50 rounded-sm"
+          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-primary text-primary-foreground font-semibold rounded hover:bg-primary/90 transition-colors"
         >
-          ADD VEHICLE
+          <CarFront className="w-4 h-4" />
+          Add Vehicle
         </button>
       </div>
     </div>
