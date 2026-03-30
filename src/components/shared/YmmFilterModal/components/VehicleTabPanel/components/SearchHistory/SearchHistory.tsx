@@ -1,7 +1,6 @@
 "use client";
 
 import { Clock, CarFront, CircleDot, X } from "lucide-react";
-import { TYmmGarageItem } from "@/types/ymm";
 import useYmmFilterModal from "../../../../context/useYmmFilterModal";
 import { useAppDispatch } from "@/redux/store";
 import { removeFromGarage } from "@/redux/features/yearMakeModelSlice";

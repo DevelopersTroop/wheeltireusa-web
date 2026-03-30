@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext } from "react";
+import { TYmmGarageItem } from "@/types/ymm";
 
 export type TYmmFilterModalContext = {
   isModalOpen: boolean;

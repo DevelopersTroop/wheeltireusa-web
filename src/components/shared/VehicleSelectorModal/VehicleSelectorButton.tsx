@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { useAppDispatch, useTypedSelector } from '@/redux/store';
 import { setIsModalOpen } from '@/redux/features/ymmFilterSlice';
-import { TYmmGarageItem } from '@/types/ymm';
 import VehicleSelectorModal from './VehicleSelectorModal';
 
 /**
