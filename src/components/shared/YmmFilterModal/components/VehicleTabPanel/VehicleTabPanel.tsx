@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import useYmmFilterModal from "../../context/useYmmFilterModal";
+import useAutoOpenYmmDropdowns from "@/hooks/useAutoOpenYmmDropdowns";
 import FitmentGuidanceCard from "./components/FitmentGuidanceCard/FitmentGuidanceCard";
 import VehicleFitmentSelect from "./components/VehicleFitmentSelect/VehicleFitmentSelect";
 
@@ -34,9 +35,32 @@ export default function VehicleTabPanel() {
     onDriveChange,
   } = useYmmFilterModal();
 
+  // Use shared auto-open dropdown hook
+  const { dropdownState, trackedHandlers, setOpenMake, setOpenModel, setOpenTrim, setOpenDrive } =
+    useAutoOpenYmmDropdowns({
+      makes: makes || [],
+      models: models || [],
+      trims: trims || [],
+      drives: drives || [],
+      isMakeLoading,
+      isModelLoading,
+      isTrimLoading,
+      isDriveLoading,
+      year: yearValue,
+      make: makeValue,
+      model: modelValue,
+      trim: trimValue,
+      drive: driveValue,
+      onYearChange,
+      onMakeChange,
+      onModelChange,
+      onTrimChange,
+      onDriveChange,
+    });
+
   // Show trim/drive if there's data OR if there's an auto-filled value from garage
-  const showTrim = (trims?.length ?? 0) > 0 || (trimValue !== undefined && trimValue !== '');
-  const showDrive = (drives?.length ?? 0) > 0 || (driveValue !== undefined && driveValue !== '');
+  const showTrim = (trims?.length ?? 0) > 0 || (trimValue !== undefined && trimValue !== "");
+  const showDrive = (drives?.length ?? 0) > 0 || (driveValue !== undefined && driveValue !== "");
 
   // Calculate grid columns based on visible fields
   const gridCols = useMemo(() => {
@@ -47,21 +71,11 @@ export default function VehicleTabPanel() {
   }, [showTrim, showDrive]);
 
   // Build selection display text
-  const selectionDisplay = [
-    yearValue,
-    makeValue,
-    modelValue,
-    trimValue,
-    driveValue,
-  ]
-    .filter(Boolean)
-    .join(" / ");
+  const selectionDisplay = [yearValue, makeValue, modelValue, trimValue, driveValue].filter(Boolean).join(" / ");
 
   return (
     <div className="pt-2">
-      <div className="text-center text-xl sm:text-2xl font-bold mb-4">
-        Enter your vehicle information.
-      </div>
+      <div className="text-center text-xl sm:text-2xl font-bold mb-4">Enter your vehicle information.</div>
 
       {/* Use inline style for dynamic grid columns since Tailwind JIT doesn't support dynamic classes */}
       <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(${gridCols}, minmax(0, 1fr))` }}>
@@ -70,13 +84,9 @@ export default function VehicleTabPanel() {
           placeholder={isYearLoading ? "Loading..." : "Year"}
           label="Year"
           required
-          options={
-            yearValue && !years.includes(yearValue)
-              ? [...years, yearValue]
-              : years
-          }
+          options={yearValue && !years.includes(yearValue) ? [...years, yearValue] : years}
           disabled={isYearDisabled}
-          onChange={onYearChange}
+          onChange={trackedHandlers.onYearChange}
           useDynamicHeight
         />
         <VehicleFitmentSelect
@@ -84,28 +94,24 @@ export default function VehicleTabPanel() {
           placeholder={isMakeLoading ? "Loading..." : "Make"}
           label="Make"
           required
-          options={
-            makeValue && !makes.includes(makeValue)
-              ? [...makes, makeValue]
-              : makes
-          }
+          options={makeValue && !makes.includes(makeValue) ? [...makes, makeValue] : makes}
           disabled={isMakeDisabled}
-          onChange={onMakeChange}
+          onChange={trackedHandlers.onMakeChange}
           useDynamicHeight
+          open={dropdownState.openMake}
+          onOpenChange={setOpenMake}
         />
         <VehicleFitmentSelect
           value={modelValue}
           placeholder={isModelLoading ? "Loading..." : "Model"}
           label="Model"
           required
-          options={
-            modelValue && !models.includes(modelValue)
-              ? [...models, modelValue]
-              : models
-          }
+          options={modelValue && !models.includes(modelValue) ? [...models, modelValue] : models}
           disabled={isModelDisabled}
-          onChange={onModelChange}
+          onChange={trackedHandlers.onModelChange}
           useDynamicHeight
+          open={dropdownState.openModel}
+          onOpenChange={setOpenModel}
         />
         {showTrim && (
           <VehicleFitmentSelect
@@ -113,14 +119,12 @@ export default function VehicleTabPanel() {
             placeholder={isTrimLoading ? "Loading..." : "Trim"}
             label="Trim"
             required
-            options={
-              trimValue && !trims.includes(trimValue)
-                ? [...trims, trimValue]
-                : trims
-            }
+            options={trimValue && !trims.includes(trimValue) ? [...trims, trimValue] : trims}
             disabled={isTrimDisabled}
-            onChange={onTrimChange}
+            onChange={trackedHandlers.onTrimChange}
             useDynamicHeight
+            open={dropdownState.openTrim}
+            onOpenChange={setOpenTrim}
           />
         )}
         {showDrive && (
@@ -129,14 +133,12 @@ export default function VehicleTabPanel() {
             placeholder={isDriveLoading ? "Loading..." : "Drive"}
             label="Drive"
             required
-            options={
-              driveValue && !drives.includes(driveValue)
-                ? [...drives, driveValue]
-                : drives
-            }
+            options={driveValue && !drives.includes(driveValue) ? [...drives, driveValue] : drives}
             disabled={isDriveDisabled}
-            onChange={onDriveChange}
+            onChange={trackedHandlers.onDriveChange}
             useDynamicHeight
+            open={dropdownState.openDrive}
+            onOpenChange={setOpenDrive}
           />
         )}
       </div>

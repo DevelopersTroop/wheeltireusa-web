@@ -1,25 +1,16 @@
 "use client";
 
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTypedSelector, useAppDispatch } from "@/redux/store";
 import { addToGarage, submitYmm } from "@/redux/features/yearMakeModelSlice";
 import { TYmmGarageItem } from "@/types/ymm";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import useYmm from "@/hooks/useYmm";
+import useAutoOpenYmmDropdowns from "@/hooks/useAutoOpenYmmDropdowns";
 
 // Hooks
-import {
-  useMobileDetection,
-  useScrollVisibility,
-  useAutoOpenDropdowns,
-  useGarageSync,
-  useTrackedHandlers,
-  type YmmValues,
-  type YmmData,
-  type YmmLoading,
-  type YmmHandlers,
-} from "./hooks";
+import { useMobileDetection, useScrollVisibility, useGarageSync, type YmmValues, type YmmData, type YmmLoading, type YmmHandlers, type YmmDisabled } from "./hooks";
 
 // Components
 import CategoryToggle from "./CategoryToggle";
@@ -28,7 +19,6 @@ import GoButton from "./GoButton";
 import DesktopView from "./DesktopView";
 import MobileView from "./MobileView";
 
-import type { YmmDisabled } from "./hooks";
 import type { Category } from "./CategoryToggle";
 
 // ============================================================================
@@ -41,7 +31,7 @@ export default function StickyVehicleBar() {
 
   // ==================== STATE ====================
 
-  const [category, setCategory] = useState<"tire" | "wheels">("wheels");
+  const [category, setCategory] = useState<Category>("wheels");
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   // ==================== REFS ====================
@@ -73,6 +63,7 @@ export default function StickyVehicleBar() {
     onModelChange,
     onTrimChange,
     onDriveChange,
+    onSubmit,
     isDisabledSubmit,
     year,
     make,
@@ -87,12 +78,12 @@ export default function StickyVehicleBar() {
   const garage = useTypedSelector((state) => state.persisted.yearMakeModel.garage);
   const activeGarageId = useTypedSelector((state) => state.persisted.yearMakeModel.activeGarageId);
 
-  // ==================== DERIVED VALUES ====================
-
   const activeGarageItem = useMemo(
     () => (activeGarageId ? garage?.[activeGarageId] : undefined),
     [activeGarageId, garage]
   );
+
+  // ==================== DERIVED VALUES ====================
 
   const loading: YmmLoading = useMemo(
     () => ({
@@ -143,16 +134,56 @@ export default function StickyVehicleBar() {
     [onYearChange, onMakeChange, onModelChange, onTrimChange, onDriveChange]
   );
 
-  // ==================== AUTO-OPEN DROPDOWNS ====================
+  // ==================== AUTO-OPEN DROPDOWNS (SHARED HOOK) ====================
 
-  const { dropdownState, setOpenMake, setOpenModel, setOpenTrim, setOpenDrive, markManualChange } =
-    useAutoOpenDropdowns(loading, data, values);
-
-  const trackedHandlers = useTrackedHandlers(handlers, markManualChange);
+  const { dropdownState: autoOpenState, trackedHandlers, setOpenMake, setOpenModel, setOpenTrim, setOpenDrive } =
+    useAutoOpenYmmDropdowns({
+      makes: makes || [],
+      models: models || [],
+      trims: trims || [],
+      drives: drives || [],
+      isMakeLoading,
+      isModelLoading,
+      isTrimLoading,
+      isDriveLoading,
+      year,
+      make,
+      model,
+      trim,
+      drive,
+      onYearChange,
+      onMakeChange,
+      onModelChange,
+      onTrimChange,
+      onDriveChange,
+    });
 
   // ==================== GARAGE SYNC ====================
 
   useGarageSync(activeGarageItem, values, trackedHandlers);
+
+  // ==================== AUTO-REDIRECT ON DRIVE CHANGE ====================
+
+  // Auto-submit and redirect when Drive is selected (only if valid YMM exists)
+  useEffect(() => {
+    if (year && make && model && drive && drive !== "__DEFAULT_DRIVE__") {
+      // Redirect based on selected category
+      const targetPath = category === "tire" ? "/collections/product-category/tires" : "/collections/product-category/wheels";
+
+      // Create garage item
+      const newItem: TYmmGarageItem = {
+        year,
+        make,
+        model: model !== "__DEFAULT_MODEL__" ? model : "",
+        trim: trim !== "__DEFAULT_TRIM__" ? trim : "",
+        drive: drive !== "__DEFAULT_DRIVE__" ? drive : "",
+      };
+
+      dispatch(addToGarage(newItem));
+      dispatch(submitYmm(newItem));
+      router.push(targetPath);
+    }
+  }, [year, make, model, trim, drive, dispatch, router]);
 
   // ==================== HANDLERS ====================
 
@@ -175,7 +206,7 @@ export default function StickyVehicleBar() {
         ? "/collections/product-category/tires"
         : "/collections/product-category/wheels";
 
-    router.push(`${targetPath}?vehicle=selectedVehicleInformation`);
+    router.push(targetPath);
   }, [year, make, model, trim, drive, category, dispatch, router]);
 
   // ==================== COMPUTED VALUES ====================
@@ -191,7 +222,7 @@ export default function StickyVehicleBar() {
     loading,
     disabled,
     handlers: trackedHandlers,
-    dropdownState,
+    dropdownState: autoOpenState,
     onOpenChange: {
       make: setOpenMake,
       model: setOpenModel,

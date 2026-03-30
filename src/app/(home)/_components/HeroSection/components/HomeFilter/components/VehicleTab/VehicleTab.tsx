@@ -8,11 +8,13 @@ import { useAppDispatch, useTypedSelector } from "@/redux/store";
 import { setHomeYmmInView, addToGarage, submitYmm } from "@/redux/features/yearMakeModelSlice";
 import { TYmmGarageItem } from "@/types/ymm";
 import { useRouter } from "next/navigation";
+import useAutoOpenYmmDropdowns from "@/hooks/useAutoOpenYmmDropdowns";
 
 type Category = "tire" | "wheels";
 
 export default function VehicleTab() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const [category, setCategory] = useState<Category>("wheels");
 
   const {
@@ -42,23 +44,39 @@ export default function VehicleTab() {
     drive,
   } = useYmm("home_hero_ymm");
 
-  const dispatch = useAppDispatch();
   const containerRef = useRef<HTMLDivElement>(null);
   const isFirstRender = useRef(true);
   const hasUserInteracted = useRef(false);
   const [isInView, setIsInView] = useState(false);
 
   // Get garage state
-  const garage = useTypedSelector(
-    (state) => state.persisted.yearMakeModel.garage
-  );
-  const activeGarageId = useTypedSelector(
-    (state) => state.persisted.yearMakeModel.activeGarageId
-  );
+  const garage = useTypedSelector((state) => state.persisted.yearMakeModel.garage);
+  const activeGarageId = useTypedSelector((state) => state.persisted.yearMakeModel.activeGarageId);
 
-  const activeGarageItem = activeGarageId
-    ? garage?.[activeGarageId]
-    : undefined;
+  const activeGarageItem = activeGarageId ? garage?.[activeGarageId] : undefined;
+
+  // Use shared auto-open dropdown hook
+  const { dropdownState, trackedHandlers, setOpenMake, setOpenModel, setOpenTrim, setOpenDrive } =
+    useAutoOpenYmmDropdowns({
+      makes: makes || [],
+      models: models || [],
+      trims: trims || [],
+      drives: drives || [],
+      isMakeLoading,
+      isModelLoading,
+      isTrimLoading,
+      isDriveLoading,
+      year,
+      make,
+      model,
+      trim,
+      drive,
+      onYearChange,
+      onMakeChange,
+      onModelChange,
+      onTrimChange,
+      onDriveChange,
+    });
 
   // Sync with active garage vehicle on mount
   useEffect(() => {
@@ -108,14 +126,32 @@ export default function VehicleTab() {
     const isReady = !isDisabledSubmit && shouldShowSubmit;
     if (isReady && hasUserInteracted.current) {
       handleSubmit(undefined);
-      hasUserInteracted.current = false; // Reset to prevent multiple submissions
+      hasUserInteracted.current = false;
     }
   }, [isDisabledSubmit, shouldShowSubmit, onSubmit]);
 
-  const handleSubmit = (
-    e?: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    options?: { targetPath?: string }
-  ) => {
+  // Auto-submit and redirect when Drive is selected (only if valid YMM exists)
+  useEffect(() => {
+    if (year && make && model && drive && drive !== "__DEFAULT_DRIVE__") {
+      // Redirect based on selected category
+      const targetPath = category === "tire" ? "/collections/product-category/tires" : "/collections/product-category/wheels";
+
+      // Create garage item
+      const newItem: TYmmGarageItem = {
+        year,
+        make,
+        model: model !== "__DEFAULT_MODEL__" ? model : "",
+        trim: trim !== "__DEFAULT_TRIM__" ? trim : "",
+        drive: drive !== "__DEFAULT_DRIVE__" ? drive : "",
+      };
+
+      dispatch(addToGarage(newItem));
+      dispatch(submitYmm(newItem));
+      router.push(targetPath);
+    }
+  }, [year, make, model, trim, drive, dispatch, router]);
+
+  const handleSubmit = (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>, options?: { targetPath?: string }) => {
     const cleanModel = model && model !== "__DEFAULT_MODEL__" ? model : "";
     const cleanTrim = trim && trim !== "__DEFAULT_TRIM__" ? trim : "";
     const cleanDrive = drive && drive !== "__DEFAULT_DRIVE__" ? drive : "";
@@ -131,29 +167,13 @@ export default function VehicleTab() {
       dispatch(addToGarage(newItem));
       dispatch(submitYmm(newItem));
 
-      // Redirect based on selected category
-      const targetPath = category === "tire"
-        ? "/collections/product-category/tires"
-        : "/collections/product-category/wheels";
+      const targetPath = category === "tire" ? "/collections/product-category/tires" : "/collections/product-category/wheels";
 
-      router.push(`${targetPath}?vehicle=selectedVehicleInformation`);
+      router.push(targetPath);
     } else {
       onSubmit(e, options);
     }
   };
-
-  const handleInteraction = <T extends (...args: any[]) => void>(fn: T) => {
-    return (...args: Parameters<T>) => {
-      hasUserInteracted.current = true;
-      fn(...args);
-    };
-  };
-
-  const handleYearChange = handleInteraction(onYearChange);
-  const handleMakeChange = handleInteraction(onMakeChange);
-  const handleModelChange = handleInteraction(onModelChange);
-  const handleTrimChange = handleInteraction(onTrimChange);
-  const handleDriveChange = handleInteraction(onDriveChange);
 
   const showTrim = (trims?.length ?? 0) > 0;
   const showDrive = (drives?.length ?? 0) > 0;
@@ -165,24 +185,14 @@ export default function VehicleTab() {
         <button
           type="button"
           onClick={() => setCategory("tire")}
-          className={cn(
-            "px-3 py-1 rounded text-[10px] font-semibold uppercase transition-colors",
-            category === "tire"
-              ? "bg-primary text-white"
-              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-          )}
+          className={cn("px-3 py-1 rounded text-[10px] font-semibold uppercase transition-colors", category === "tire" ? "bg-primary text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200")}
         >
           Tires
         </button>
         <button
           type="button"
           onClick={() => setCategory("wheels")}
-          className={cn(
-            "px-3 py-1 rounded text-[10px] font-semibold uppercase transition-colors",
-            category === "wheels"
-              ? "bg-primary text-white"
-              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-          )}
+          className={cn("px-3 py-1 rounded text-[10px] font-semibold uppercase transition-colors", category === "wheels" ? "bg-primary text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200")}
         >
           Wheels
         </button>
@@ -190,90 +200,93 @@ export default function VehicleTab() {
 
       <div className="flex flex-col lg:flex-row gap-3">
         <div className="flex-1 flex flex-col sm:flex-row gap-3">
-        <div className="flex-1">
-          <YmmCustomSelect
-            label="YEAR"
-            required={true}
-            value={year || undefined}
-            options={years || []}
-            disabled={isYearDisabled}
-            loading={isYearLoading}
-            onChange={handleYearChange}
-            placeholder="YEAR"
-          />
-        </div>
-
-        <div className="flex-1">
-          <YmmCustomSelect
-            label="MAKE"
-            required={true}
-            value={make === "__DEFAULT_MAKE__" ? undefined : make}
-            options={(makes || []).filter(m => m !== "__DEFAULT_MAKE__")}
-            disabled={isMakeDisabled}
-            loading={isMakeLoading}
-            onChange={handleMakeChange}
-            placeholder="MAKE"
-          />
-        </div>
-
-        <div className="flex-1">
-          <YmmCustomSelect
-            label="MODEL"
-            required={true}
-            value={model === "__DEFAULT_MODEL__" ? undefined : model}
-            options={models || []}
-            disabled={isModelDisabled}
-            loading={isModelLoading}
-            onChange={handleModelChange}
-            placeholder="MODEL"
-          />
-        </div>
-
-        {showTrim && (
           <div className="flex-1">
             <YmmCustomSelect
-              label="TRIM"
+              label="YEAR"
               required={true}
-              value={trim === "__DEFAULT_TRIM__" ? undefined : trim}
-              options={trims || []}
-              disabled={isTrimDisabled}
-              loading={isTrimLoading}
-              onChange={handleTrimChange}
-              placeholder="TRIM"
+              value={year || undefined}
+              options={years || []}
+              disabled={isYearDisabled}
+              loading={isYearLoading}
+              onChange={trackedHandlers.onYearChange}
+              placeholder="YEAR"
             />
           </div>
-        )}
 
-        {showDrive && (
           <div className="flex-1">
             <YmmCustomSelect
-              label="DRIVE"
+              label="MAKE"
               required={true}
-              value={drive === "__DEFAULT_DRIVE__" ? undefined : drive}
-              options={drives || []}
-              disabled={isDriveDisabled}
-              loading={isDriveLoading}
-              onChange={handleDriveChange}
-              placeholder="DRIVE"
+              value={make === "__DEFAULT_MAKE__" ? undefined : make}
+              options={(makes || []).filter((m) => m !== "__DEFAULT_MAKE__")}
+              disabled={isMakeDisabled}
+              loading={isMakeLoading}
+              onChange={trackedHandlers.onMakeChange}
+              placeholder="MAKE"
+              open={dropdownState.openMake}
+              onOpenChange={setOpenMake}
             />
           </div>
-        )}
-      </div>
 
-      <div className="lg:w-32 shrink-0">
-        <button
-          onClick={(e) => onSubmit(e)}
-          disabled={isDisabledSubmit || !shouldShowSubmit}
-          className={cn(
-            "w-full h-14 text-white font-bold text-lg uppercase rounded shadow flex items-center justify-center transition-opacity",
-            isDisabledSubmit || !shouldShowSubmit
-              ? "bg-primary/50 cursor-not-allowed opacity-80"
-              : "bg-primary hover:bg-primary/90"
+          <div className="flex-1">
+            <YmmCustomSelect
+              label="MODEL"
+              required={true}
+              value={model === "__DEFAULT_MODEL__" ? undefined : model}
+              options={models || []}
+              disabled={isModelDisabled}
+              loading={isModelLoading}
+              onChange={trackedHandlers.onModelChange}
+              placeholder="MODEL"
+              open={dropdownState.openModel}
+              onOpenChange={setOpenModel}
+            />
+          </div>
+
+          {showTrim && (
+            <div className="flex-1">
+              <YmmCustomSelect
+                label="TRIM"
+                required={true}
+                value={trim === "__DEFAULT_TRIM__" ? undefined : trim}
+                options={trims || []}
+                disabled={isTrimDisabled}
+                loading={isTrimLoading}
+                onChange={trackedHandlers.onTrimChange}
+                placeholder="TRIM"
+                open={dropdownState.openTrim}
+                onOpenChange={setOpenTrim}
+              />
+            </div>
           )}
-        >
-          GO
-        </button>
-      </div>
+
+          {showDrive && (
+            <div className="flex-1">
+              <YmmCustomSelect
+                label="DRIVE"
+                required={true}
+                value={drive === "__DEFAULT_DRIVE__" ? undefined : drive}
+                options={drives || []}
+                disabled={isDriveDisabled}
+                loading={isDriveLoading}
+                onChange={trackedHandlers.onDriveChange}
+                placeholder="DRIVE"
+                open={dropdownState.openDrive}
+                onOpenChange={setOpenDrive}
+              />
+            </div>
+          )}
+        </div>
+
+        <div className="lg:w-32 shrink-0">
+          <button
+            onClick={(e) => onSubmit(e)}
+            disabled={isDisabledSubmit || !shouldShowSubmit}
+            className={cn("w-full h-14 text-white font-bold text-lg uppercase rounded shadow flex items-center justify-center transition-opacity", isDisabledSubmit || !shouldShowSubmit ? "bg-primary/50 cursor-not-allowed opacity-80" : "bg-primary hover:bg-primary/90")}
+          >
+            GO
+          </button>
+        </div>
       </div>
     </div>
   );
