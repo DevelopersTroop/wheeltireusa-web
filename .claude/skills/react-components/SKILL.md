@@ -15,6 +15,7 @@ The code examples are given in minified way. But at the time of implementation, 
 ├── hooks/useMyComponent.ts  # All business logic
 └── components/SubComponent/SubComponent.tsx
 ```
+- Each component must have its own folder named in PascalCase (`MyComponent/`)
 
 - Folder = PascalCase component name; hooks in `hooks/`; nested components in `components/`
 

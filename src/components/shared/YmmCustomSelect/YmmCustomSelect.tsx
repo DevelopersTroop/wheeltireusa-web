@@ -15,6 +15,11 @@ type YmmCustomSelectProps = {
   label?: string;
   required?: boolean;
   /**
+   * Optional label text size (Tailwind class)
+   * @default "text-xs"
+   */
+  labelSize?: string;
+  /**
    * If provided, renders an absolute positioned number indicator inside the button
    */
   stepNumber?: string | number;
@@ -26,6 +31,15 @@ type YmmCustomSelectProps = {
    * Calculate available height dynamically based on modal/container bounds
    */
   useDynamicHeight?: boolean;
+  /**
+   * Externally controlled open state. When provided, component becomes controlled.
+   * Omit this prop to use internal uncontrolled state.
+   */
+  open?: boolean;
+  /**
+   * Callback when open state changes (for controlled mode)
+   */
+  onOpenChange?: (open: boolean) => void;
 };
 
 export default function YmmCustomSelect({
@@ -38,11 +52,28 @@ export default function YmmCustomSelect({
   className,
   label,
   required,
+  labelSize = "text-xs",
   stepNumber,
   dropdownMaxHeight = "250px",
   useDynamicHeight = false,
+  open: controlledOpen,
+  onOpenChange,
 }: YmmCustomSelectProps) {
-  const [open, setOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  // Use controlled open if provided, otherwise use internal state
+  const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
+
+  // Unified function to handle open state changes
+  const setOpen = (newOpen: boolean | ((prev: boolean) => boolean)) => {
+    const newValue = typeof newOpen === 'function' ? newOpen(open) : newOpen;
+    if (controlledOpen !== undefined) {
+      // Controlled mode - call the callback
+      onOpenChange?.(newValue);
+    } else {
+      // Uncontrolled mode - use internal state
+      setInternalOpen(newValue);
+    }
+  };
   const [dynamicMaxHeight, setDynamicMaxHeight] = useState<number | undefined>(undefined);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
@@ -51,11 +82,13 @@ export default function YmmCustomSelect({
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
       if (!containerRef.current) return;
-      if (!containerRef.current.contains(e.target as Node)) setOpen(false);
+      if (!containerRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
     };
     document.addEventListener("mousedown", onClick);
     return () => document.removeEventListener("mousedown", onClick);
-  }, []);
+  }, [controlledOpen, onOpenChange]);
 
   // Calculate available height when dropdown opens
   useEffect(() => {
@@ -120,7 +153,7 @@ export default function YmmCustomSelect({
         )}
 
         {label && !stepNumber ? (
-          <span className="absolute -top-2 left-2 px-1 bg-white text-xs font-semibold text-gray-700">
+          <span className={cn("absolute -top-2 left-2 px-1 bg-white font-semibold text-gray-700", labelSize)}>
             {required && <span className="text-red-600 mr-0.5">*</span>}
             {label}
           </span>

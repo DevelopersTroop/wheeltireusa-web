@@ -4,11 +4,17 @@ import { useEffect, useRef, useState } from "react";
 import useYmm from "@/hooks/useYmm";
 import { cn } from "@/lib/utils";
 import YmmCustomSelect from "@/components/shared/YmmCustomSelect/YmmCustomSelect";
-import { useAppDispatch } from "@/redux/store";
+import { useAppDispatch, useTypedSelector } from "@/redux/store";
 import { setHomeYmmInView, addToGarage, submitYmm } from "@/redux/features/yearMakeModelSlice";
 import { TYmmGarageItem } from "@/types/ymm";
+import { useRouter } from "next/navigation";
+
+type Category = "tire" | "wheels";
 
 export default function VehicleTab() {
+  const router = useRouter();
+  const [category, setCategory] = useState<Category>("wheels");
+
   const {
     isYearLoading,
     isMakeLoading,
@@ -34,7 +40,6 @@ export default function VehicleTab() {
     model,
     trim,
     drive,
-    isActive,
   } = useYmm("home_hero_ymm");
 
   const dispatch = useAppDispatch();
@@ -42,6 +47,39 @@ export default function VehicleTab() {
   const isFirstRender = useRef(true);
   const hasUserInteracted = useRef(false);
   const [isInView, setIsInView] = useState(false);
+
+  // Get garage state
+  const garage = useTypedSelector(
+    (state) => state.persisted.yearMakeModel.garage
+  );
+  const activeGarageId = useTypedSelector(
+    (state) => state.persisted.yearMakeModel.activeGarageId
+  );
+
+  const activeGarageItem = activeGarageId
+    ? garage?.[activeGarageId]
+    : undefined;
+
+  // Sync with active garage vehicle on mount
+  useEffect(() => {
+    if (activeGarageItem && isFirstRender.current) {
+      if (activeGarageItem.year && !year) {
+        onYearChange(activeGarageItem.year);
+      }
+      if (activeGarageItem.make && !make) {
+        onMakeChange(activeGarageItem.make);
+      }
+      if (activeGarageItem.model && !model) {
+        onModelChange(activeGarageItem.model);
+      }
+      if (activeGarageItem.trim && !trim) {
+        onTrimChange(activeGarageItem.trim);
+      }
+      if (activeGarageItem.drive && !drive) {
+        onDriveChange(activeGarageItem.drive);
+      }
+    }
+  }, [activeGarageItem]);
 
   useEffect(() => {
     isFirstRender.current = false;
@@ -82,7 +120,7 @@ export default function VehicleTab() {
     const cleanTrim = trim && trim !== "__DEFAULT_TRIM__" ? trim : "";
     const cleanDrive = drive && drive !== "__DEFAULT_DRIVE__" ? drive : "";
 
-    if (year && make && cleanModel && cleanTrim && cleanDrive) {
+    if (year && make && cleanModel) {
       const newItem: TYmmGarageItem = {
         year,
         make,
@@ -92,9 +130,16 @@ export default function VehicleTab() {
       };
       dispatch(addToGarage(newItem));
       dispatch(submitYmm(newItem));
-    }
 
-    onSubmit(e, options);
+      // Redirect based on selected category
+      const targetPath = category === "tire"
+        ? "/collections/product-category/tires"
+        : "/collections/product-category/wheels";
+
+      router.push(`${targetPath}?vehicle=selectedVehicleInformation`);
+    } else {
+      onSubmit(e, options);
+    }
   };
 
   const handleInteraction = <T extends (...args: any[]) => void>(fn: T) => {
@@ -114,8 +159,37 @@ export default function VehicleTab() {
   const showDrive = (drives?.length ?? 0) > 0;
 
   return (
-    <div className="flex flex-col lg:flex-row gap-3" ref={containerRef}>
-      <div className="flex-1 flex flex-col sm:flex-row gap-3">
+    <div className="flex flex-col" ref={containerRef}>
+      {/* Category Toggle - Top Left, Small */}
+      <div className="flex gap-2 mb-3">
+        <button
+          type="button"
+          onClick={() => setCategory("tire")}
+          className={cn(
+            "px-3 py-1 rounded text-[10px] font-semibold uppercase transition-colors",
+            category === "tire"
+              ? "bg-primary text-white"
+              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+          )}
+        >
+          Tires
+        </button>
+        <button
+          type="button"
+          onClick={() => setCategory("wheels")}
+          className={cn(
+            "px-3 py-1 rounded text-[10px] font-semibold uppercase transition-colors",
+            category === "wheels"
+              ? "bg-primary text-white"
+              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+          )}
+        >
+          Wheels
+        </button>
+      </div>
+
+      <div className="flex flex-col lg:flex-row gap-3">
+        <div className="flex-1 flex flex-col sm:flex-row gap-3">
         <div className="flex-1">
           <YmmCustomSelect
             label="YEAR"
@@ -134,7 +208,7 @@ export default function VehicleTab() {
             label="MAKE"
             required={true}
             value={make === "__DEFAULT_MAKE__" ? undefined : make}
-            options={makes || []}
+            options={(makes || []).filter(m => m !== "__DEFAULT_MAKE__")}
             disabled={isMakeDisabled}
             loading={isMakeLoading}
             onChange={handleMakeChange}
@@ -199,6 +273,7 @@ export default function VehicleTab() {
         >
           GO
         </button>
+      </div>
       </div>
     </div>
   );

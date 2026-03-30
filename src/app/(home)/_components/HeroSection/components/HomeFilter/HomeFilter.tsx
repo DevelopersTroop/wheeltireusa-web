@@ -141,16 +141,16 @@ export default function HomeFilter({ variant = "hero" }: { variant?: "hero" | "p
         </TabsList>
 
         {/* Content Area */}
-        <div className="p-4 sm:p-6 lg:p-8 bg-[#F8F8F8] rounded-b-sm">
-          <TabsContent value="vehicle" className="m-0 mt-0">
+        <div className="bg-[#F8F8F8] rounded-b-sm">
+          <TabsContent value="vehicle" className="px-4 pt-0 pb-4 m-0 mt-0">
             <VehicleTab />
           </TabsContent>
 
-          <TabsContent value="brand" className="m-0 mt-0">
+          <TabsContent value="brand" className="px-4 py-6 m-0 mt-0">
             <BrandTab />
           </TabsContent>
 
-          <TabsContent value="size" className="m-0 mt-0">
+          <TabsContent value="size" className="px-4 pt-0 pb-4 m-0 mt-0">
             <SizeTab />
           </TabsContent>
         </div>

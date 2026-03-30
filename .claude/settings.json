@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rm -rf components hooks)",
+      "Bash(mkdir -p CategoryToggle VehicleDropdowns GoButton DesktopView MobileView)"
+    ]
+  }
+}
