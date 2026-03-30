@@ -3,21 +3,37 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useDispatch } from 'react-redux';
-import { ImSpinner2 } from 'react-icons/im';
 import {
   setAccessToken,
   setRefreshToken,
   setUserDetails,
 } from '@/redux/features/userSlice';
 import { apiBaseUrl } from '@/utils/api';
-import { FaGoogle } from 'react-icons/fa';
 
-export default function GoogleAuth({ role }: any) {
+export interface UseGoogleAuthParams {
+  role: string;
+}
+
+export interface UseGoogleAuthReturn {
+  loading: boolean;
+  error: string | null;
+  handleGoogleLogin: () => void;
+}
+
+/**
+ * Hook for Google OAuth authentication flow
+ * Handles OAuth callback params (accessToken, refreshToken, userDetails) from URL
+ * Dispatches auth data to Redux and redirects to dashboard on success
+ */
+export const useGoogleAuth = ({
+  role,
+}: UseGoogleAuthParams): UseGoogleAuthReturn => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
+  // Handle OAuth callback on mount - check for auth params in URL
   useEffect(() => {
     const accessToken = searchParams.get('accessToken');
     const refreshToken = searchParams.get('refreshToken');
@@ -31,37 +47,17 @@ export default function GoogleAuth({ role }: any) {
       dispatch(setUserDetails({ userDetails: parsedUser }));
       router.push('/dashboard');
     }
-  }, [searchParams, router]);
+  }, [searchParams, router, dispatch]);
 
-  const handleGoogleLogin = () => {
+  const handleGoogleLogin = (): void => {
     window.location.href = `${apiBaseUrl}/auth/signin-with-google?role=${role}`;
   };
 
-  return (
-    <div className="mt-5 w-full">
-      <button
-        onClick={handleGoogleLogin}
-        className="flex items-center gap-2  h-14 border cursor-pointer rounded-lg hover:bg-gray-50 transition-all bg-white w-full relative overflow-hidden"
-      >
-        <img
-          src="/google-logo-white.webp"
-          alt="Google"
-          className="absolute left-2 w-10 h-10 bg-white"
-        />
-        {loading ? (
-          <ImSpinner2 className="w-6 h-6 m-auto animate-spin text-[#DB1922]" />
-        ) : (
-          <p className="text-center w-full text-black font-semibold">
-            Continue with Google
-          </p>
-        )}
-      </button>
+  const error = searchParams.get('error');
 
-      {searchParams.get('error') && (
-        <p className="mt-4 text-red-500">
-          Authentication failed. Please try again.
-        </p>
-      )}
-    </div>
-  );
-}
+  return {
+    loading,
+    error,
+    handleGoogleLogin,
+  };
+};

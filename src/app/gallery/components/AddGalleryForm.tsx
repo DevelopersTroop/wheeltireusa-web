@@ -2,7 +2,7 @@
 import {
   MultipleImageUploader,
   SingleImageUploader,
-} from "@/components/shared/imageUploader";
+} from "@/components/shared/ImageUploader";
 import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/hooks/useDebounce";
 import useYmm from "@/hooks/useYmm";

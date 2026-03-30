@@ -3,8 +3,8 @@ import { Field, Form, Formik } from "formik";
 import Link from "next/link";
 import { useState } from "react";
 
-import FacebookAuth from "@/components/shared/FacebookAuth";
-import GoogleAuth from "@/components/shared/GoogleAuth";
+import FacebookAuth from "@/components/shared/FacebookAuth/FacebookAuth";
+import GoogleAuth from "@/components/shared/GoogleAuth/GoogleAuth";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -189,8 +189,8 @@ const RegisterPage = () => {
           <div className="w-full mt-6 flex flex-col items-center">
             <p className="text-white mb-3">Or continue with</p>
             <div className="flex flex-col w-full gap-2">
-              <GoogleAuth />
-              <FacebookAuth />
+              <GoogleAuth role="customer" />
+              <FacebookAuth role="customer" />
             </div>
           </div>
 

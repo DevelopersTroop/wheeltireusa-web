@@ -16,8 +16,8 @@ import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { userLogin } from './login';
-import GoogleAuth from '@/components/shared/GoogleAuth';
-import FacebookAuth from '@/components/shared/FacebookAuth';
+import GoogleAuth from '@/components/shared/GoogleAuth/GoogleAuth';
+import FacebookAuth from '@/components/shared/FacebookAuth/FacebookAuth';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Email is required'),

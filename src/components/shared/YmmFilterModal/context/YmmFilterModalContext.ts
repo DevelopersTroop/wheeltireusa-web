@@ -49,6 +49,10 @@ export type TYmmFilterModalContext = {
   onModelChange: (value: string) => void;
   onTrimChange: (value: string) => void;
   onDriveChange: (value: string) => void;
+  garage: Record<string, TYmmGarageItem>;
+  activeGarageId: string | null;
+  setActiveGarage: (id: string | null) => void;
+  handleSelectGarageWithRedirect: (garageId: string) => void;
 };
 
 export const YmmFilterModalContext = createContext<TYmmFilterModalContext | null>(

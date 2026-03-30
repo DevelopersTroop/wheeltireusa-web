@@ -5,6 +5,7 @@ import useYmmFilterModal from "../../context/useYmmFilterModal";
 import useAutoOpenYmmDropdowns from "@/hooks/useAutoOpenYmmDropdowns";
 import FitmentGuidanceCard from "./components/FitmentGuidanceCard/FitmentGuidanceCard";
 import VehicleFitmentSelect from "./components/VehicleFitmentSelect/VehicleFitmentSelect";
+import SearchHistory from "./components/SearchHistory/SearchHistory";
 
 export default function VehicleTabPanel() {
   const {
@@ -150,6 +151,7 @@ export default function VehicleTabPanel() {
         </div>
       )}
 
+      <SearchHistory />
       <FitmentGuidanceCard />
     </div>
   );

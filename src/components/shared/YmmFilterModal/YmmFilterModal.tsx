@@ -57,19 +57,18 @@ const YmmFilterModalDialog = () => {
         <DialogContent
           hideCloseButton
           onPointerDownOutside={() => closeModal()}
-          className="w-[95vw] sm:w-[92vw] max-w-[980px]! border-0 bg-transparent p-0 shadow-none"
-          style={{ height: `${modalHeight}px` }}
+          className="w-[95vw] sm:w-[92vw] max-w-[980px]! border-0 bg-transparent p-0 shadow-none max-h-[90vh]"
         >
+          <DialogClose className="absolute -top-3 -right-3 sm:-top-4 sm:-right-4 rounded-full bg-white p-1.5 sm:p-2 shadow-lg hover:bg-gray-100 z-50 border border-gray-200">
+            <X className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+          </DialogClose>
           <div
-            className="w-full h-full rounded-md bg-white px-4 py-4 sm:px-6 sm:py-6 relative flex flex-col"
+            className="w-full rounded-md bg-white px-4 py-4 sm:px-6 sm:py-6 relative flex flex-col max-h-[90vh] overflow-hidden"
           >
-            <DialogClose className="absolute -top-3 -right-3 sm:-top-4 sm:-right-4 rounded-full bg-white p-1.5 sm:p-2 shadow-lg hover:bg-gray-100 z-50 border border-gray-200">
-              <X className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
-            </DialogClose>
             <div className="shrink-0">
               <ModalTopTabs />
             </div>
-            <div className="flex-1 overflow-y-auto min-h-0 custom-scrollbar">
+            <div className="flex-1 overflow-y-auto min-h-0 custom-scrollbar overscroll-contain">
               {activeMainTab === "vehicle" && <VehicleTabPanel />}
               {activeMainTab === "brand" && <ShopByBrandPanel />}
               {activeMainTab === "size" && <ShopBySizePanel />}

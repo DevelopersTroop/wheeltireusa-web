@@ -12,7 +12,7 @@ import {
   YmmFilterModalContext,
 } from "./YmmFilterModalContext";
 
-import { addToGarage, submitYmm, clearYearMakeModel, setYmm } from "@/redux/features/yearMakeModelSlice";
+import { addToGarage, submitYmm, clearYearMakeModel, setYmm, setActiveGarage } from "@/redux/features/yearMakeModelSlice";
 import { TYmmGarageItem } from "@/types/ymm";
 import { useRouter, usePathname } from "next/navigation";
 
@@ -172,6 +172,21 @@ export default function YmmFilterModalProvider({ children }: Props) {
     setIsNeedHelpModalOpen(false);
   };
 
+  const handleSelectGarageWithRedirect = (garageId: string) => {
+    // Set the active garage
+    dispatch(setActiveGarage(garageId));
+
+    // Close the modal
+    dispatch(setIsModalOpen(false));
+
+    // Redirect to the configured path or default to wheels
+    if (redirectPath) {
+      router.push(redirectPath);
+    } else {
+      router.push('/collections/product-category/wheels');
+    }
+  };
+
   // Compute header title and subtitle based on current selection state
   const headerTitle = useMemo(() => {
     if (yearValue && makeValue && modelValue) {
@@ -247,6 +262,10 @@ export default function YmmFilterModalProvider({ children }: Props) {
       onModelChange: (value: string) => onModelChange(value),
       onTrimChange: (value: string) => onTrimChange(value),
       onDriveChange: (value: string) => handleDriveChange(value),
+      garage,
+      activeGarageId,
+      setActiveGarage: (id: string | null) => dispatch(setActiveGarage(id)),
+      handleSelectGarageWithRedirect,
     }),
     [
       isModalOpen,
@@ -293,6 +312,11 @@ export default function YmmFilterModalProvider({ children }: Props) {
       onModelChange,
       onTrimChange,
       onDriveChange, handleDriveChange,
+      garage,
+      activeGarageId,
+      dispatch,
+      redirectPath,
+      router,
     ]
   );
 
