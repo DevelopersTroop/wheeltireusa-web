@@ -17,9 +17,7 @@ const ThumbnailGallery = ({ product, fallbackImage, onImageSelect }: ThumbnailGa
   // Collect all available images
   const images: string[] = [];
   const mainImage = getProductThumbnail(product);
-  if (mainImage && mainImage !== fallbackImage) {
-    images.push(mainImage);
-  }
+  if (mainImage) images.push(mainImage);
 
   if (product?.images && Array.isArray(product.images)) {
     product.images.forEach((img: string) => {
@@ -29,8 +27,10 @@ const ThumbnailGallery = ({ product, fallbackImage, onImageSelect }: ThumbnailGa
     });
   }
 
-  // Ensure we have at least one image (fallback)
-  const displayImages = images.length > 0 ? images : [fallbackImage];
+  // Ensure we have at least the fallback
+  if (images.length === 0) {
+    images.push(fallbackImage);
+  }
 
   const handleThumbnailClick = (imageUrl: string) => {
     setSelectedImage(imageUrl);
@@ -38,19 +38,13 @@ const ThumbnailGallery = ({ product, fallbackImage, onImageSelect }: ThumbnailGa
   };
 
   const handleViewAll = () => {
-    // Could open a modal or scroll to a full gallery section
     console.log("View all images clicked");
   };
 
-  if (displayImages.length === 0) {
-    return null;
-  }
-
   return (
     <div className="flex flex-col gap-2 sm:gap-2.5">
-      {/* Thumbnails */}
       <div className="flex flex-row lg:flex-col gap-2 sm:gap-2.5 overflow-x-auto lg:overflow-visible scrollbar-hide">
-        {displayImages.map((imageUrl, index) => (
+        {images.map((imageUrl, index) => (
           <button
             key={index}
             onClick={() => handleThumbnailClick(imageUrl)}
@@ -64,29 +58,23 @@ const ThumbnailGallery = ({ product, fallbackImage, onImageSelect }: ThumbnailGa
             `}
           >
             <img
-              src={imageUrl || "/tire-not-available.png"}
+              src={imageUrl}
               alt={`Tire thumbnail ${index + 1}`}
               className="w-full h-full object-cover bg-white"
               onError={(e) => {
-                const target = e.currentTarget;
-                if (target.src !== "/tire-not-available.png") {
-                  target.src = "/tire-not-available.png";
-                }
+                e.currentTarget.src = fallbackImage;
               }}
             />
           </button>
         ))}
       </div>
 
-      {/* View All Button */}
-      {displayImages.length > 1 && (
-        <button
-          onClick={handleViewAll}
-          className="text-xs text-gray-600 hover:text-gray-900 font-medium transition-colors text-left hidden lg:block"
-        >
-          View All
-        </button>
-      )}
+      <button
+        onClick={handleViewAll}
+        className="text-xs text-gray-600 hover:text-gray-900 font-medium transition-colors text-left hidden lg:block"
+      >
+        View All
+      </button>
     </div>
   );
 };

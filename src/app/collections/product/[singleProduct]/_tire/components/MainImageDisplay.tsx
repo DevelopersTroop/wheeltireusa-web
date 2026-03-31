@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Image from "next/image";
-import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
 import { getProductThumbnail } from "@/utils/product";
+import { useState, useEffect } from "react";
+import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
 
 interface MainImageDisplayProps {
   product: any;
@@ -14,16 +13,13 @@ interface MainImageDisplayProps {
 const MainImageDisplay = ({ product, fallbackImage, selectedImage }: MainImageDisplayProps) => {
   const [currentImage, setCurrentImage] = useState<string>(fallbackImage);
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
-  const [imageError, setImageError] = useState<boolean>(false);
 
   useEffect(() => {
     if (selectedImage) {
       setCurrentImage(selectedImage);
-      setImageError(false);
     } else {
       const mainImage = getProductThumbnail(product);
       setCurrentImage(mainImage || fallbackImage);
-      setImageError(!mainImage);
     }
   }, [selectedImage, product, fallbackImage]);
 
@@ -32,22 +28,19 @@ const MainImageDisplay = ({ product, fallbackImage, selectedImage }: MainImageDi
     // Could integrate with a favorites/wishlist system
   };
 
-  const handleImageError = () => {
-    if (!imageError) {
-      setImageError(true);
-      setCurrentImage("/tire-not-available.png");
-    }
-  };
-
   return (
     <div className="relative w-full">
       {/* Main Image Container */}
-      <div className="w-full aspect-square max-w-[450px] mx-auto mt-2 sm:mt-3 md:mt-5 bg-white rounded-lg overflow-hidden flex items-center justify-center border border-gray-100">
+      <div className="w-full aspect-square max-w-[450px] mx-auto mt-2 sm:mt-3 md:mt-5 bg-white rounded-lg overflow-hidden flex items-center justify-center border border-gray-100 relative">
+        {/* Green gradient effect behind tire */}
+        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-40 bg-gradient-to-r from-transparent via-green-500/20 to-transparent rounded pointer-events-none -rotate-4 z-0" />
         <img
-          src={currentImage || "/tire-not-available.png"}
+          src={currentImage}
           alt={product?.title || "Tire"}
-          className="w-full h-full object-contain p-3 sm:p-4 md:p-6"
-          onError={handleImageError}
+          className="w-full h-full object-contain p-3 sm:p-4 md:p-8 mix-blend-multiply relative z-10"
+          onError={(e) => {
+            e.currentTarget.src = fallbackImage;
+          }}
         />
       </div>
 

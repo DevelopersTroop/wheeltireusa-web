@@ -2,8 +2,10 @@
 
 import { TTireProduct } from "@/types/product";
 import { useGetReviewsQuery } from "@/redux/apis/reviews";
-import { MdStar } from "react-icons/md";
+import { useTypedSelector } from "@/redux/store";
+import { MdStar, MdInfo } from "react-icons/md";
 import { TbPhone } from "react-icons/tb";
+import DealerBadge from "./DealerBadge";
 
 interface TireProductInfoCenterProps {
   product: TTireProduct;
@@ -14,6 +16,11 @@ const TireProductInfoCenter = ({ product }: TireProductInfoCenterProps) => {
     { productId: product.id, page: 1 },
     { skip: !product.id }
   );
+
+  // Get active garage vehicle for fitment info
+  const garage = useTypedSelector((state) => state.persisted.yearMakeModel.garage);
+  const activeGarageId = useTypedSelector((state) => state.persisted.yearMakeModel.activeGarageId);
+  const activeGarageItem = activeGarageId ? garage?.[activeGarageId] : undefined;
 
   const averageRating = data?.average || 0;
   const reviewCount = data?.count || 0;
@@ -30,17 +37,6 @@ const TireProductInfoCenter = ({ product }: TireProductInfoCenterProps) => {
         }`}
       />
     ));
-  };
-
-  // Get tire subtitle based on tire type
-  const getTireSubtitle = () => {
-    if (product?.category) {
-      return `${product.category} tire`;
-    }
-    if (product?.speedRating && product?.loadIndex) {
-      return `Passenger tire`;
-    }
-    return "All Weather Passenger tire";
   };
 
   return (
@@ -65,16 +61,80 @@ const TireProductInfoCenter = ({ product }: TireProductInfoCenterProps) => {
         </div>
       )}
 
-      {/* Tire Subtitle */}
-      <p className="text-sm text-gray-500">
-        {getTireSubtitle()}
-      </p>
-
       {/* Item Number */}
       {product?.partNumber && (
         <p className="text-sm text-gray-500 font-medium">
           Item # {product.partNumber}
         </p>
+      )}
+
+      {/* Vehicle Fitment Note */}
+      {activeGarageItem ? (
+        <div className="rounded-lg bg-blue-50 border border-blue-100 px-3 sm:px-4 py-2.5 sm:py-3">
+          <div className="flex items-start gap-2 sm:gap-3">
+            {/* Blue Info Icon */}
+            <MdInfo className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500 flex-shrink-0 mt-0.5" />
+
+            {/* Content */}
+            <div className="flex-1 min-w-0">
+              <p className="text-sm sm:text-base text-gray-700 font-medium mb-1.5 sm:mb-2">
+                Vehicle Specific
+              </p>
+
+              {/* Bullet Points */}
+              <ul className="space-y-1 sm:space-y-1.5 text-xs sm:text-sm text-gray-600">
+                {product?.tireSize && (
+                  <li className="flex items-start gap-1.5 sm:gap-2">
+                    <span className="text-blue-500 mt-0.5 sm:mt-1 text-[10px] sm:text-xs">•</span>
+                    <span>Size: {product.tireSize}</span>
+                  </li>
+                )}
+                <li className="flex items-start gap-1.5 sm:gap-2">
+                  <span className="text-blue-500 mt-0.5 sm:mt-1 text-[10px] sm:text-xs">•</span>
+                  <span>Fits: {activeGarageItem.year} {activeGarageItem.make} {activeGarageItem.model}
+                    {activeGarageItem.trim && activeGarageItem.trim !== "__DEFAULT_TRIM__" && ` ${activeGarageItem.trim}`}
+                  </span>
+                </li>
+                <li className="flex items-start gap-1.5 sm:gap-2">
+                  <span className="text-blue-500 mt-0.5 sm:mt-1 text-[10px] sm:text-xs">•</span>
+                  <span>Fitment guaranteed when purchased as a set</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="rounded-lg bg-blue-50 border border-blue-100 px-3 sm:px-4 py-2.5 sm:py-3">
+          <div className="flex items-start gap-2 sm:gap-3">
+            {/* Blue Info Icon */}
+            <MdInfo className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500 flex-shrink-0 mt-0.5" />
+
+            {/* Content */}
+            <div className="flex-1 min-w-0">
+              <p className="text-sm sm:text-base text-gray-700 font-medium mb-1.5 sm:mb-2">
+                Vehicle Specific
+              </p>
+
+              {/* Bullet Points */}
+              <ul className="space-y-1 sm:space-y-1.5 text-xs sm:text-sm text-gray-600">
+                {product?.tireSize && (
+                  <li className="flex items-start gap-1.5 sm:gap-2">
+                    <span className="text-blue-500 mt-0.5 sm:mt-1 text-[10px] sm:text-xs">•</span>
+                    <span>Size: {product.tireSize}</span>
+                  </li>
+                )}
+                <li className="flex items-start gap-1.5 sm:gap-2">
+                  <span className="text-blue-500 mt-0.5 sm:mt-1 text-[10px] sm:text-xs">•</span>
+                  <span>Select your vehicle to verify fitment</span>
+                </li>
+                <li className="flex items-start gap-1.5 sm:gap-2">
+                  <span className="text-blue-500 mt-0.5 sm:mt-1 text-[10px] sm:text-xs">•</span>
+                  <span>Fitment guaranteed when purchased as a set</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Key-Value Pairs - Product Specs */}
@@ -87,27 +147,11 @@ const TireProductInfoCenter = ({ product }: TireProductInfoCenterProps) => {
           </div>
         )}
 
-        {/* Width */}
-        {product?.tireWidth && (
+        {/* Tire Type */}
+        {product?.tireType && (
           <div className="flex items-center gap-2">
-            <span className="text-gray-400 font-medium">Width:</span>
-            <span className="text-gray-700 font-semibold">{product.tireWidth}</span>
-          </div>
-        )}
-
-        {/* Aspect Ratio */}
-        {product?.tireRatio && (
-          <div className="flex items-center gap-2">
-            <span className="text-gray-400 font-medium">Aspect Ratio:</span>
-            <span className="text-gray-700 font-semibold">{product.tireRatio}</span>
-          </div>
-        )}
-
-        {/* Rim Diameter */}
-        {product?.tireDiameter && (
-          <div className="flex items-center gap-2">
-            <span className="text-gray-400 font-medium">Rim Diameter:</span>
-            <span className="text-gray-700 font-semibold">{product.tireDiameter}</span>
+            <span className="text-gray-400 font-medium">Type:</span>
+            <span className="text-gray-700 font-semibold">{product.tireType}</span>
           </div>
         )}
 
@@ -126,15 +170,41 @@ const TireProductInfoCenter = ({ product }: TireProductInfoCenterProps) => {
             <span className="text-gray-700 font-semibold">{product.loadIndex}</span>
           </div>
         )}
+
+        {/* UTQG Rating */}
+        {product?.utqg && (
+          <div className="flex items-center gap-2">
+            <span className="text-gray-400 font-medium">UTQG:</span>
+            <span className="text-gray-700 font-semibold">{product.utqg}</span>
+          </div>
+        )}
+
+        {/* Load Range */}
+        {product?.loadRange && (
+          <div className="flex items-center gap-2">
+            <span className="text-gray-400 font-medium">Load Range:</span>
+            <span className="text-gray-700 font-semibold">{product.loadRange}</span>
+          </div>
+        )}
+
+        {/* Sidewall */}
+        {product?.sidewall && (
+          <div className="flex items-center gap-2">
+            <span className="text-gray-400 font-medium">Sidewall:</span>
+            <span className="text-gray-700 font-semibold">{product.sidewall}</span>
+          </div>
+        )}
+
+        {/* Tire Class */}
+        {product?.tireClass && (
+          <div className="flex items-center gap-2">
+            <span className="text-gray-400 font-medium">Class:</span>
+            <span className="text-gray-700 font-semibold">{product.tireClass}</span>
+          </div>
+        )}
       </div>
 
-      {/* Fitment */}
-      <div className="flex items-center gap-2 text-sm">
-        <span className="text-green-500 text-lg">👍</span>
-        <span className="text-gray-700">
-          Fits the <span className="font-semibold">{product?.title}</span>
-        </span>
-      </div>
+      
 
       {/* Phone Support */}
       <div className="rounded-lg -ml-2">
@@ -153,6 +223,8 @@ const TireProductInfoCenter = ({ product }: TireProductInfoCenterProps) => {
           </div>
         </div>
       </div>
+      {/* Dealer Badge */}
+      <DealerBadge product={product} />
     </div>
   );
 };
