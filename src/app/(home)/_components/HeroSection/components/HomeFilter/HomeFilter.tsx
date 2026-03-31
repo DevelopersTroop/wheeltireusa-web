@@ -36,7 +36,7 @@ export default function HomeFilter({ variant = "hero" }: { variant?: "hero" | "p
   if (variant === "product") {
     if (hasVehicleSelected) {
       return (
-        <div className="w-full bg-white border-b-4 border-primary px-4 md:px-6 py-4 shadow-md rounded-t-sm flex flex-col md:flex-row items-center justify-center gap-5">
+        <div className="hidden md:flex w-full bg-white border-b-4 border-primary px-6 py-4 shadow-md rounded-t-sm flex-row items-center justify-center gap-5">
           <div className="flex items-center gap-3">
             <CheckCircle2 className="w-6 h-6 shrink-0 fill-primary text-white" />
             <span className="font-extrabold text-gray-900 uppercase text-[15px] tracking-tight">
@@ -127,7 +127,7 @@ export default function HomeFilter({ variant = "hero" }: { variant?: "hero" | "p
             <Tag
               className={cn("w-4 h-4", activeTab === "brand" ? "text-primary" : "text-gray-400")}
             />
-            SHOP BY BRAND
+            BY BRAND
           </TabsTrigger>
           <TabsTrigger
             value="size"
@@ -136,7 +136,7 @@ export default function HomeFilter({ variant = "hero" }: { variant?: "hero" | "p
             <Ruler
               className={cn("w-4 h-4", activeTab === "size" ? "text-primary" : "text-gray-400")}
             />
-            SHOP BY SIZE
+            BY SIZE
           </TabsTrigger>
         </TabsList>
 
