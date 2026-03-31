@@ -130,26 +130,21 @@ const products = baseApi.injectEndpoints({
     }),
     getFilterList: builder.query<
       { filters: TFilters },
-      { 
-        category?: 'wheels' | 'tire' | 'accessories', 
-        wheelDiameter?: string, 
-        wheelWidth?: string,
-        tireWidth?: string,
-        tireRatio?: string,
-        tireDiameter?: string
-      } | void
+      { category?: 'wheels' | 'tire' | 'accessories' } & Record<string, any> | void
     >({
-      query: (arg) => ({
-        url: '/products/filter-list',
-        params: { 
-          category: arg?.category ?? 'tire',
-          ...(arg?.wheelDiameter ? { wheelDiameter: arg.wheelDiameter } : {}),
-          ...(arg?.wheelWidth ? { wheelWidth: arg.wheelWidth } : {}),
-          ...(arg?.tireWidth ? { tireWidth: arg.tireWidth } : {}),
-          ...(arg?.tireRatio ? { tireRatio: arg.tireRatio } : {}),
-          ...(arg?.tireDiameter ? { tireDiameter: arg.tireDiameter } : {}),
-        },
-      }),
+      query: (arg) => {
+        if (!arg) {
+          return { url: '/products/filter-list', params: { category: 'tire' } };
+        }
+        const { category, ...rest } = arg;
+        return {
+          url: '/products/filter-list',
+          params: {
+            category: category ?? 'tire',
+            ...rest,
+          },
+        };
+      },
       transformResponse(
         baseQueryReturnValue: { filters: TFilters },
         _meta,
@@ -164,113 +159,7 @@ const products = baseApi.injectEndpoints({
         }
         return {
           filters: {
-            ...baseQueryReturnValue.filters,
-            speed_index: [
-              {
-                value: 'H',
-                count: 0,
-              },
-              {
-                value: 'T',
-                count: 0,
-              },
-              {
-                value: 'V',
-                count: 0,
-              },
-              {
-                value: 'W',
-                count: 0,
-              },
-              {
-                value: 'Y',
-                count: 0,
-              },
-              {
-                value: 'Z',
-                count: 0,
-              },
-              {
-                value: 'Q',
-                count: 0,
-              },
-              {
-                value: 'S',
-                count: 0,
-              },
-            ],
-            category: [
-              {
-                value: 'Passenger',
-                count: 0,
-              },
-              {
-                value: 'Truck/SUV',
-                count: 0,
-              },
-              {
-                value: 'Truck/SUV - Sport Truck',
-                count: 0,
-              },
-            ],
-            customer_rating: [
-              {
-                value: '5 Stars',
-                count: 0,
-              },
-              {
-                value: '4 Stars',
-                count: 0,
-              },
-            ],
-            special_offers: [
-              {
-                value: 'Free Shipping',
-                count: 0,
-              },
-              {
-                value: 'Save $100',
-                count: 0,
-              },
-              {
-                value: 'Consumer Rebate',
-                count: 0,
-              },
-            ],
-            mileage_warranty: [
-              {
-                value: 'None',
-                count: 0,
-              },
-              {
-                value: '30,000 miles',
-                count: 0,
-              },
-              {
-                value: '40,000 miles',
-                count: 0,
-              },
-              {
-                value: '50,000 miles',
-                count: 0,
-              },
-              {
-                value: '60,000 miles',
-                count: 0,
-              },
-              {
-                value: '70,000 miles',
-                count: 0,
-              },
-              {
-                value: '80,000 miles',
-                count: 0,
-              },
-              {
-                value: '90,000 miles',
-                count: 0,
-              },
-            ],
+            ...baseQueryReturnValue.filters
           },
         };
       },

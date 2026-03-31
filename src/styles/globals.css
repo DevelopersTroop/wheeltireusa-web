@@ -422,7 +422,7 @@ button {
 [id*="brevo"],
 [id*="Brevo"] {
   /* Position above mobile sticky bar */
-  bottom: 85px !important;
+  bottom: 100px !important;
 }
 
 /* Desktop specific */
@@ -445,6 +445,6 @@ button {
   [class*="Brevo"],
   [id*="brevo"],
   [id*="Brevo"] {
-    bottom: 75px !important;
+    bottom: 95px !important;
   }
 }

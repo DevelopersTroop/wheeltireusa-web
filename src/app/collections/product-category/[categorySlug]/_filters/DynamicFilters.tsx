@@ -93,6 +93,8 @@ function isArrayFilter(value: unknown): value is TSingleFilter[] {
     return Array.isArray(value);
 }
 
+import { useSearchParams } from "next/navigation";
+
 /**
  * A single collapsible filter section with a heading and content.
  */
@@ -107,7 +109,16 @@ const FilterSection = React.memo(({
     data: TSingleFilter[];
     defaultOpen?: boolean;
 }) => {
-    const [showFilter, setShowFilter] = useState(defaultOpen);
+    const searchParams = useSearchParams();
+    const hasSelection = !!searchParams?.get(filterKey);
+    
+    const [showFilter, setShowFilter] = useState(defaultOpen || hasSelection);
+
+    React.useEffect(() => {
+        if (hasSelection) {
+            setShowFilter(true);
+        }
+    }, [hasSelection]);
 
     return (
         <div className="border-b border-gray-200 px-5 py-4">

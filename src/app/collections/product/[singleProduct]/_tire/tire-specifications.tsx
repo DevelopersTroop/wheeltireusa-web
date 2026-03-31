@@ -70,15 +70,15 @@ const TireSpecifications = ({
         <div className="flex-1 h-px bg-gray-100" />
       </div>
 
-      <div className="rounded-xl border border-gray-200 overflow-hidden divide-y divide-gray-100">
+      <div className="rounded border border-gray-200 overflow-hidden divide-y divide-gray-100">
 
-        <div className="grid grid-cols-2 bg-[#111111] px-4 py-2.5">
+        <div className="grid grid-cols-2 bg-[#111111] px-4 md:px-10 py-2.5">
           <span className="text-xs font-bold text-gray-300 uppercase tracking-wider">
             Spec
           </span>
         </div>
 
-        <div className="grid grid-cols-2 px-4 py-3 bg-gray-50">
+        <div className="grid grid-cols-2 px-4 md:px-10 py-3 bg-gray-50">
           <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
             Brand
           </span>
@@ -87,7 +87,7 @@ const TireSpecifications = ({
           </span>
         </div>
 
-        <div className="grid grid-cols-2 px-4 py-3">
+        <div className="grid grid-cols-2 px-4 md:px-10 py-3">
           <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
             Model
           </span>
@@ -103,7 +103,7 @@ const TireSpecifications = ({
           return (
             <div
               key={key}
-              className={`grid grid-cols-2 px-4 py-3 ${
+              className={`grid grid-cols-2 px-4 md:px-10 py-3 ${
                 i % 2 === 0 ? "bg-gray-50" : "bg-white"
               }`}
             >
