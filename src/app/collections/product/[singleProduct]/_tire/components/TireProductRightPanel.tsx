@@ -126,15 +126,16 @@ const TireProductRightPanel = ({
         <StarRating />
       </div>
 
- <div className="flex gap-4 items-center justify-between">
+ {/* Price Section */}
+ <div className="flex flex-col sm:flex-row sm:gap-4 sm:items-center sm:justify-between gap-4">
     {/* Price */}
-      <div>
+      <div className="flex-1">
         {discountPct > 0 && (
           <span className="inline-block text-[11px] font-bold text-orange-600 bg-orange-50 border border-orange-200 rounded px-1.5 py-0.5 mb-2">
             {discountPct}% OFF
           </span>
         )}
-        <div className="flex items-baseline gap-2">
+        <div className="flex items-baseline gap-2 flex-wrap">
           <span className="text-2xl sm:text-[2rem] font-extrabold text-gray-900 leading-none tracking-tight">
             ${sellingPrice.toFixed(2)}
           </span>
@@ -142,6 +143,12 @@ const TireProductRightPanel = ({
           {discountPct > 0 && (
             <span className="text-sm text-gray-400 line-through">${originalPrice.toFixed(2)}</span>
           )}
+        </div>
+        <div className="flex items-center gap-2 mt-1 flex-wrap">
+          <span className="text-gray-500 text-xs uppercase tracking-wider">Set of 4</span>
+          <span className="text-primary text-xl sm:text-2xl font-extrabold">
+            ${(sellingPrice * 4).toFixed(2)}
+          </span>
         </div>
         <p className="text-sm text-gray-700 font-medium mt-1">
           Total savings on {qty} tires:
@@ -152,12 +159,12 @@ const TireProductRightPanel = ({
       </div>
 
       {/* Qty + CTA */}
-      <div className="flex gap-2.5">
-        <div className="relative">
+      <div className="flex gap-2 sm:gap-2.5">
+        <div className="relative w-24 sm:w-auto">
           <select
             value={qty}
             onChange={(e) => setQty(Number(e.target.value))}
-            className="appearance-none bg-white border-[1.5px] border-gray-200 rounded-lg pl-3.5 pr-8 py-3 text-sm font-semibold text-gray-900 focus:outline-none focus:border-gray-900 hover:border-gray-400 transition-colors cursor-pointer"
+            className="appearance-none bg-white border-[1.5px] border-gray-200 rounded-lg pl-3.5 pr-8 py-3 text-sm font-semibold text-gray-900 focus:outline-none focus:border-gray-900 hover:border-gray-400 transition-colors cursor-pointer w-full"
           >
             {QTY_OPTIONS.map((q) => <option key={q} value={q}>{q} tires</option>)}
           </select>
@@ -168,7 +175,7 @@ const TireProductRightPanel = ({
           onClick={handleAddToCart}
           disabled={!inStock}
           className={[
-            "flex-1 rounded-lg py-3 px-2 text-[15px] font-bold text-white transition-all duration-200 tracking-wide",
+            "flex-1 min-w-[140px] sm:min-w-0 rounded-lg py-3 px-2 sm:px-3 text-[13px] sm:text-[15px] font-bold text-white transition-all duration-200 tracking-wide",
             !inStock
               ? "bg-gray-400 cursor-not-allowed"
               : isInCart || justAdded

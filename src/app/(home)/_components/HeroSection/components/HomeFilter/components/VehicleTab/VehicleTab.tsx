@@ -191,9 +191,9 @@ export default function VehicleTab() {
         </button>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-3">
-        <div className="flex-1 flex flex-col sm:flex-row gap-3">
-          <div className="flex-1">
+      <div className="flex flex-col gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
+          <div className="col-span-1">
             <YmmCustomSelect
               label="YEAR"
               required={true}
@@ -206,7 +206,7 @@ export default function VehicleTab() {
             />
           </div>
 
-          <div className="flex-1">
+          <div className="col-span-1">
             <YmmCustomSelect
               label="MAKE"
               required={true}
@@ -221,7 +221,7 @@ export default function VehicleTab() {
             />
           </div>
 
-          <div className="flex-1">
+          <div className="col-span-1">
             <YmmCustomSelect
               label="MODEL"
               required={true}
@@ -237,7 +237,7 @@ export default function VehicleTab() {
           </div>
 
           {showTrim && (
-            <div className="flex-1">
+            <div className="col-span-1">
               <YmmCustomSelect
                 label="TRIM"
                 required={true}
@@ -254,7 +254,7 @@ export default function VehicleTab() {
           )}
 
           {showDrive && (
-            <div className="flex-1">
+            <div className="col-span-1">
               <YmmCustomSelect
                 label="DRIVE"
                 required={true}
@@ -271,11 +271,11 @@ export default function VehicleTab() {
           )}
         </div>
 
-        <div className="lg:w-32 shrink-0">
+        <div className="w-full sm:w-auto sm:self-end">
           <button
             onClick={(e) => onSubmit(e)}
             disabled={isDisabledSubmit || !shouldShowSubmit}
-            className={cn("w-full h-14 text-white font-bold text-lg uppercase rounded shadow flex items-center justify-center transition-opacity", isDisabledSubmit || !shouldShowSubmit ? "bg-primary/50 cursor-not-allowed opacity-80" : "bg-primary hover:bg-primary/90")}
+            className={cn("w-full sm:w-32 h-12 sm:h-14 text-white font-bold text-base sm:text-lg uppercase rounded shadow flex items-center justify-center transition-opacity", isDisabledSubmit || !shouldShowSubmit ? "bg-primary/50 cursor-not-allowed opacity-80" : "bg-primary hover:bg-primary/90")}
           >
             GO
           </button>
