@@ -1,12 +1,18 @@
 "use client";
 
 import { ActionFilter } from "@/components/shared/ActionFilter/ActionFilter";
-import { useFetchFilters } from "@/hooks/useFetchFilters";
+import { useGetFilterListQuery } from "@/redux/apis/product";
 import React from "react";
 import DynamicFilters from "./DynamicFilters";
+import { useFilterSync } from "@/hooks/useFilterSync";
 
 const TireFilters = React.memo(() => {
-  const { filters, loading } = useFetchFilters("tire");
+  const { filters: syncedFilters } = useFilterSync()
+  const { data, isLoading: loading } = useGetFilterListQuery({
+    category: "tire",
+    ...syncedFilters
+  }, { refetchOnMountOrArgChange: true });
+  const filters = data?.filters || null;
 
   return (
     <div className="filter-shadow ">
