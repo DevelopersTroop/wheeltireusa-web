@@ -4,7 +4,10 @@ import { IApiRes } from '@/types/reduxHelper';
 import { useEffect, useState } from 'react';
 
 export const useFetchFilters = (
-  category: 'wheels' | 'tire' | 'accessories'
+  category: 'wheels' | 'tire' | 'accessories',
+  options?: {
+    queryParams?: Record<string, string>;
+  }
 ) => {
   const [filters, setFilters] = useState<TFilters | null>(null);
   const [loading, setLoading] = useState(false);
@@ -19,6 +22,7 @@ export const useFetchFilters = (
           {
             queryParams: {
               category,
+              ...options?.queryParams,
             },
           }
         );
@@ -30,7 +34,7 @@ export const useFetchFilters = (
       }
     };
     fetchData();
-  }, [category]);
+  }, [category, options?.queryParams]);
 
   return {
     filters,
