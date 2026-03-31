@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useGetFilterListQuery } from "@/redux/apis/product";
 import useYmmFilterModal from "../../../../context/useYmmFilterModal";
@@ -16,26 +16,52 @@ export default function WheelsSizeFlow() {
   const [selectedDiameter, setSelectedDiameter] = useState<string | null>(null);
   const [selectedWidth, setSelectedWidth] = useState<string | null>(null);
 
+  // Preserve dropdown options independently
+  const [diameters, setDiameters] = useState<any[]>([]);
+  const [widths, setWidths] = useState<any[]>([]);
+  const [boltPatterns, setBoltPatterns] = useState<any[]>([]);
+
   const { data: filterData, isLoading, isFetching } = useGetFilterListQuery({
     category: "wheels",
     ...(step >= 2 && selectedDiameter ? { wheelDiameter: selectedDiameter } : {}),
     ...(step >= 3 && selectedWidth && selectedWidth !== "any" ? { wheelWidth: selectedWidth } : {}),
   });
 
-  // Clear data when fetching to avoid showing stale options
-  const diameters = (!isLoading && !isFetching && Array.isArray(filterData?.filters?.wheelDiameter)) ? filterData.filters.wheelDiameter : [];
-  const widths = (step >= 2 && !isLoading && !isFetching && Array.isArray(filterData?.filters?.wheelWidth)) ? filterData.filters.wheelWidth : [];
-  const boltPatterns = (step >= 3 && !isLoading && !isFetching && Array.isArray(filterData?.filters?.boltPatterns)) ? filterData.filters.boltPatterns : [];
+  // Preserve diameters from initial API response
+  useEffect(() => {
+    if (Array.isArray(filterData?.filters?.wheelDiameter) && filterData.filters.wheelDiameter.length > 0) {
+      setDiameters(current => current.length === 0 ? filterData.filters.wheelDiameter : current);
+    }
+  }, [filterData?.filters?.wheelDiameter]);
+
+  // Preserve widths when diameter is selected
+  useEffect(() => {
+    if (selectedDiameter && Array.isArray(filterData?.filters?.wheelWidth) && filterData.filters.wheelWidth.length > 0) {
+      setWidths(current => current.length === 0 ? filterData.filters.wheelWidth : current);
+    }
+  }, [filterData?.filters?.wheelWidth, selectedDiameter]);
+
+  // Preserve bolt patterns when width is selected
+  useEffect(() => {
+    if (selectedWidth && selectedWidth !== "any" && Array.isArray(filterData?.filters?.boltPatterns) && filterData.filters.boltPatterns.length > 0) {
+      setBoltPatterns(current => current.length === 0 ? filterData.filters.boltPatterns : current);
+    }
+  }, [filterData?.filters?.boltPatterns, selectedWidth]);
 
   const handleDiameterSelect = (val: string) => {
     setSelectedDiameter(val);
     setSelectedWidth(null);
     setStep(2);
+    // Reset downstream preserved options
+    setWidths([]);
+    setBoltPatterns([]);
   };
 
   const handleWidthSelect = (val: string) => {
     setSelectedWidth(val);
     setStep(3);
+    // Reset downstream preserved options
+    setBoltPatterns([]);
   };
 
   const handleBoltPatternSelect = (val: string) => {
@@ -55,7 +81,13 @@ export default function WheelsSizeFlow() {
       isCompleted: !!selectedDiameter,
       isActive: step === 1,
       isDisabled: false,
-      onClick: () => setStep(1),
+      onClick: () => {
+        setStep(1);
+        // Reset all preserved options when going back to first step
+        setDiameters([]);
+        setWidths([]);
+        setBoltPatterns([]);
+      },
     },
     {
       id: 2,
@@ -63,7 +95,14 @@ export default function WheelsSizeFlow() {
       isCompleted: !!selectedWidth,
       isActive: step === 2,
       isDisabled: !selectedDiameter,
-      onClick: () => selectedDiameter && setStep(2),
+      onClick: () => {
+        if (selectedDiameter) {
+          setStep(2);
+          // Reset downstream preserved options when going back to width
+          setWidths([]);
+          setBoltPatterns([]);
+        }
+      },
     },
     {
       id: 3,

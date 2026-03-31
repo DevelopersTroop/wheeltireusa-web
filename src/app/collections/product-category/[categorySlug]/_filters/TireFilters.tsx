@@ -15,21 +15,21 @@ const TireFilters = React.memo(() => {
         filters={filters}
         loading={loading}
         include={[
-          { key: "price" },
-          { key: "tireDiameter", title: "Tire Diameter", defaultOpen: true },
-          { key: "tireWidth", title: "Tire Width" },
-          { key: "tireRatio", title: "Aspect Ratio" },
-          { key: "tireType", title: "Tire Type" },
-          { key: "brand", title: "Brand" },
-          { key: "model", title: "Model" },
-          { key: "loadIndex", title: "Load Index" },
-          { key: "speedRating", title: "Speed Rating" },
-          { key: "tireSize", title: "Tire Size" },
-          { key: "loadRange", title: "Load Range" },
-          { key: "mileageWarranty", title: "Mileage Warranty" },
-          { key: "terrain", title: "Terrain" },
-          { key: "sidewall", title: "Sidewall" },
-          { key: "ply", title: "Ply" },
+          "price",
+          { key: "tireDiameter", defaultOpen: true },
+          "tireWidth",
+          "tireRatio",
+          "tireType",
+          "brand",
+          "model",
+          "loadIndex",
+          "speedRating",
+          "tireSize",
+          "loadRange",
+          "mileageWarranty",
+          "terrain",
+          "sidewall",
+          "ply",
         ]}
       />
     </div>

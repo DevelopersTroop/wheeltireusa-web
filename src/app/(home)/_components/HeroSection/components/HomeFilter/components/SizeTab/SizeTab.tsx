@@ -31,6 +31,14 @@ export default function SizeTab() {
   // Track if user made manual selection (to prevent auto-redirect on initial load)
   const hasUserManuallyChangedRef = useRef(false);
 
+  // Preserve dropdown options independently
+  const [tireWidths, setTireWidths] = useState<any[]>([]);
+  const [tireRatios, setTireRatios] = useState<any[]>([]);
+  const [tireDiameters, setTireDiameters] = useState<any[]>([]);
+  const [wheelDiameters, setWheelDiameters] = useState<any[]>([]);
+  const [wheelWidths, setWheelWidths] = useState<any[]>([]);
+  const [boltPatterns, setBoltPatterns] = useState<any[]>([]);
+
   // Fetch tire data
   const { data: tireData, isLoading: isTireLoading, isFetching: isTireFetching } = useGetFilterListQuery({
     category: "tire",
@@ -45,6 +53,48 @@ export default function SizeTab() {
     ...(wheelWidth && wheelWidth !== "any" && wheelDiameter ? { wheelWidth, wheelDiameter } : {}),
   });
 
+  // Preserve tire widths from initial API response
+  useEffect(() => {
+    if (Array.isArray(tireData?.filters?.tireWidth) && tireData.filters.tireWidth.length > 0) {
+      setTireWidths(current => current.length === 0 ? tireData.filters.tireWidth : current);
+    }
+  }, [tireData?.filters?.tireWidth]);
+
+  // Preserve tire ratios when width is selected
+  useEffect(() => {
+    if (tireWidth && Array.isArray(tireData?.filters?.tireRatio) && tireData.filters.tireRatio.length > 0) {
+      setTireRatios(current => current.length === 0 ? tireData.filters.tireRatio : current);
+    }
+  }, [tireData?.filters?.tireRatio, tireWidth]);
+
+  // Preserve tire diameters when ratio is selected
+  useEffect(() => {
+    if (tireRatio && Array.isArray(tireData?.filters?.tireDiameter) && tireData.filters.tireDiameter.length > 0) {
+      setTireDiameters(current => current.length === 0 ? tireData.filters.tireDiameter : current);
+    }
+  }, [tireData?.filters?.tireDiameter, tireRatio]);
+
+  // Preserve wheel diameters from initial API response
+  useEffect(() => {
+    if (Array.isArray(wheelData?.filters?.wheelDiameter) && wheelData.filters.wheelDiameter.length > 0) {
+      setWheelDiameters(current => current.length === 0 ? wheelData.filters.wheelDiameter : current);
+    }
+  }, [wheelData?.filters?.wheelDiameter]);
+
+  // Preserve wheel widths when diameter is selected
+  useEffect(() => {
+    if (wheelDiameter && Array.isArray(wheelData?.filters?.wheelWidth) && wheelData.filters.wheelWidth.length > 0) {
+      setWheelWidths(current => current.length === 0 ? wheelData.filters.wheelWidth : current);
+    }
+  }, [wheelData?.filters?.wheelWidth, wheelDiameter]);
+
+  // Preserve bolt patterns when width is selected
+  useEffect(() => {
+    if (wheelWidth && wheelWidth !== "any" && Array.isArray(wheelData?.filters?.boltPatterns) && wheelData.filters.boltPatterns.length > 0) {
+      setBoltPatterns(current => current.length === 0 ? wheelData.filters.boltPatterns : current);
+    }
+  }, [wheelData?.filters?.boltPatterns, wheelWidth]);
+
   // Reset state when category changes
   useEffect(() => {
     setTireWidth(null);
@@ -55,6 +105,13 @@ export default function SizeTab() {
     setBoltPattern(null);
     hasUserManuallyChangedRef.current = false;
     setIsRedirecting(false);
+    // Reset preserved options
+    setTireWidths([]);
+    setTireRatios([]);
+    setTireDiameters([]);
+    setWheelDiameters([]);
+    setWheelWidths([]);
+    setBoltPatterns([]);
   }, [category]);
 
   // Determine which specific dropdown should show loading
@@ -69,13 +126,14 @@ export default function SizeTab() {
   const isBoltPatternLoading = Boolean(wheelWidth && wheelWidth !== "any" && isWheelFetching);
 
   // Get options from API data - only return empty for the specific dropdown that's loading
-  const tireWidths = (!isWidthLoading && Array.isArray(tireData?.filters?.tireWidth)) ? tireData.filters.tireWidth : [];
-  const tireRatios = (tireWidth && !isRatioLoading && Array.isArray(tireData?.filters?.tireRatio)) ? tireData.filters.tireRatio : [];
-  const tireDiameters = (tireRatio && !isDiameterLoading && Array.isArray(tireData?.filters?.tireDiameter)) ? tireData.filters.tireDiameter : [];
+  // Note: Using stored state to preserve dropdown options independently
+  const displayTireWidths = (!isWidthLoading && tireWidths.length > 0) ? tireWidths : [];
+  const displayTireRatios = (tireWidth && !isRatioLoading && tireRatios.length > 0) ? tireRatios : [];
+  const displayTireDiameters = (tireRatio && !isDiameterLoading && tireDiameters.length > 0) ? tireDiameters : [];
 
-  const wheelDiameters = (!isWheelDiameterLoading && Array.isArray(wheelData?.filters?.wheelDiameter)) ? wheelData.filters.wheelDiameter : [];
-  const wheelWidths = (wheelDiameter && !isWheelWidthLoading && Array.isArray(wheelData?.filters?.wheelWidth)) ? wheelData.filters.wheelWidth : [];
-  const boltPatterns = (wheelWidth && wheelWidth !== "any" && !isBoltPatternLoading && Array.isArray(wheelData?.filters?.boltPatterns)) ? wheelData.filters.boltPatterns : [];
+  const displayWheelDiameters = (!isWheelDiameterLoading && wheelDiameters.length > 0) ? wheelDiameters : [];
+  const displayWheelWidths = (wheelDiameter && !isWheelWidthLoading && wheelWidths.length > 0) ? wheelWidths : [];
+  const displayBoltPatterns = (wheelWidth && wheelWidth !== "any" && !isBoltPatternLoading && boltPatterns.length > 0) ? boltPatterns : [];
 
   const canShowTireRatio = tireWidth !== null;
   const canShowTireDiameter = tireRatio !== null;
@@ -162,7 +220,7 @@ export default function SizeTab() {
                 label="Width"
                 value={tireWidth}
                 placeholder="Select Width"
-                options={tireWidths.map((w: any) => ({ label: w.value, value: w.value }))}
+                options={displayTireWidths.map((w: any) => ({ label: w.value, value: w.value }))}
                 isOpen={openDropdown === "width"}
                 onToggle={() => setOpenDropdown(openDropdown === "width" ? null : "width")}
                 onSelect={(val) => {
@@ -171,6 +229,9 @@ export default function SizeTab() {
                   setTireDiameter(null);
                   setOpenDropdown(null);
                   setIsRedirecting(false);
+                  // Reset downstream preserved options
+                  setTireRatios([]);
+                  setTireDiameters([]);
                 }}
                 isLoading={isWidthLoading}
               />
@@ -182,7 +243,7 @@ export default function SizeTab() {
                 label="Ratio"
                 value={tireRatio}
                 placeholder="Select Ratio"
-                options={tireRatios.map((r: any) => ({ label: r.value, value: r.value }))}
+                options={displayTireRatios.map((r: any) => ({ label: r.value, value: r.value }))}
                 isOpen={openDropdown === "ratio"}
                 onToggle={() => setOpenDropdown(openDropdown === "ratio" ? null : "ratio")}
                 onSelect={(val) => {
@@ -191,6 +252,8 @@ export default function SizeTab() {
                   setOpenDropdown(null);
                   setIsRedirecting(false);
                   hasUserManuallyChangedRef.current = true;
+                  // Reset downstream preserved options
+                  setTireDiameters([]);
                 }}
                 isLoading={isRatioLoading}
               />
@@ -202,7 +265,7 @@ export default function SizeTab() {
                 label="Diameter"
                 value={tireDiameter}
                 placeholder="Select Diameter"
-                options={tireDiameters.map((d: any) => ({ label: d.value, value: d.value }))}
+                options={displayTireDiameters.map((d: any) => ({ label: d.value, value: d.value }))}
                 isOpen={openDropdown === "diameter"}
                 onToggle={() => setOpenDropdown(openDropdown === "diameter" ? null : "diameter")}
                 onSelect={(val) => {
@@ -241,7 +304,7 @@ export default function SizeTab() {
                 label="Diameter"
                 value={wheelDiameter}
                 placeholder="Select Diameter"
-                options={wheelDiameters.map((d: any) => ({ label: `${d.value}"`, value: d.value }))}
+                options={displayWheelDiameters.map((d: any) => ({ label: `${d.value}"`, value: d.value }))}
                 isOpen={openDropdown === "diameter"}
                 onToggle={() => setOpenDropdown(openDropdown === "diameter" ? null : "diameter")}
                 onSelect={(val) => {
@@ -250,6 +313,9 @@ export default function SizeTab() {
                   setBoltPattern(null);
                   setOpenDropdown(null);
                   setIsRedirecting(false);
+                  // Reset downstream preserved options
+                  setWheelWidths([]);
+                  setBoltPatterns([]);
                 }}
                 isLoading={isWheelDiameterLoading}
               />
@@ -263,7 +329,7 @@ export default function SizeTab() {
                 placeholder="Select Width"
                 options={[
                   { label: "Any", value: "any" },
-                  ...wheelWidths.map((w: any) => ({ label: w.value, value: w.value }))
+                  ...displayWheelWidths.map((w: any) => ({ label: w.value, value: w.value }))
                 ]}
                 isOpen={openDropdown === "width"}
                 onToggle={() => setOpenDropdown(openDropdown === "width" ? null : "width")}
@@ -273,6 +339,8 @@ export default function SizeTab() {
                   setOpenDropdown(null);
                   setIsRedirecting(false);
                   hasUserManuallyChangedRef.current = true;
+                  // Reset downstream preserved options
+                  setBoltPatterns([]);
                 }}
                 isLoading={isWheelWidthLoading}
               />
@@ -284,7 +352,7 @@ export default function SizeTab() {
                 label="Bolt Pattern"
                 value={boltPattern}
                 placeholder="Select Bolt Pattern"
-                options={boltPatterns.map((b: any) => ({ label: b.value, value: b.value }))}
+                options={displayBoltPatterns.map((b: any) => ({ label: b.value, value: b.value }))}
                 isOpen={openDropdown === "boltPattern"}
                 onToggle={() => setOpenDropdown(openDropdown === "boltPattern" ? null : "boltPattern")}
                 onSelect={(val) => {

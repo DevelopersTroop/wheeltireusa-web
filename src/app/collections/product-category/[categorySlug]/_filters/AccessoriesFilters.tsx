@@ -22,9 +22,9 @@ const AccessoriesFilters = React.memo(() => {
         filters={filters}
         loading={loading}
         include={[
-          { key: "price" },
-          { key: "brand", title: "Brand", defaultOpen: true },
-          { key: "category", title: "Category" },
+          "price",
+          { key: "brand", defaultOpen: true },
+          "category",
         ]}
       />
       <div className="border-b border-gray-300 px-5 py-3">
