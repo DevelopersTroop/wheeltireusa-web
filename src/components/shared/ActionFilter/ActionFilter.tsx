@@ -55,7 +55,7 @@ export const ActionFilter = () => {
             const displayValue = key === "sort" ? queryParamsObject[value] : value;
             const keyTitle = getFilterKeyTitle(key);
             return (
-              <Tooltip key={`${key}-${value}`}>
+              <Tooltip delayDuration={0} key={`${key}-${value}`}>
                 <TooltipTrigger asChild>
                   <button
                     className="flex items-center gap-2 rounded-[4px] bg-primary px-2 py-1 text-sm text-white"
