@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useGetFilterListQuery } from "@/redux/apis/product";
 import useYmmFilterModal from "../../../../context/useYmmFilterModal";
@@ -17,28 +17,54 @@ export default function TireSizeFlow() {
   const [selectedRatio, setSelectedRatio] = useState<string | null>(null);
   const [selectedDiameter, setSelectedDiameter] = useState<string | null>(null);
 
+  // Preserve dropdown options independently
+  const [widths, setWidths] = useState<any[]>([]);
+  const [ratios, setRatios] = useState<any[]>([]);
+  const [diameters, setDiameters] = useState<any[]>([]);
+
   const { data: filterData, isLoading, isFetching } = useGetFilterListQuery({
     category: "tire",
     ...(step >= 2 && selectedWidth ? { tireWidth: selectedWidth } : {}),
     ...(step >= 3 && selectedRatio && selectedWidth ? { tireRatio: selectedRatio, tireWidth: selectedWidth } : {}),
   });
 
-  // Clear data when fetching to avoid showing stale options
-  const widths = (!isLoading && !isFetching && Array.isArray(filterData?.filters?.tireWidth)) ? filterData.filters.tireWidth : [];
-  const ratios = (step >= 2 && !isLoading && !isFetching && Array.isArray(filterData?.filters?.tireRatio)) ? filterData.filters.tireRatio : [];
-  const diameters = (step >= 3 && !isLoading && !isFetching && Array.isArray(filterData?.filters?.tireDiameter)) ? filterData.filters.tireDiameter : [];
+  // Preserve widths from initial API response
+  useEffect(() => {
+    if (Array.isArray(filterData?.filters?.tireWidth) && filterData.filters.tireWidth.length > 0) {
+      setWidths(current => current.length === 0 ? filterData.filters.tireWidth : current);
+    }
+  }, [filterData?.filters?.tireWidth]);
+
+  // Preserve ratios when width is selected
+  useEffect(() => {
+    if (selectedWidth && Array.isArray(filterData?.filters?.tireRatio) && filterData.filters.tireRatio.length > 0) {
+      setRatios(current => current.length === 0 ? filterData.filters.tireRatio : current);
+    }
+  }, [filterData?.filters?.tireRatio, selectedWidth]);
+
+  // Preserve diameters when ratio is selected
+  useEffect(() => {
+    if (selectedRatio && Array.isArray(filterData?.filters?.tireDiameter) && filterData.filters.tireDiameter.length > 0) {
+      setDiameters(current => current.length === 0 ? filterData.filters.tireDiameter : current);
+    }
+  }, [filterData?.filters?.tireDiameter, selectedRatio]);
 
   const handleWidthSelect = (val: string) => {
     setSelectedWidth(val);
     setSelectedRatio(null);
     setSelectedDiameter(null);
     setStep(2);
+    // Reset downstream preserved options
+    setRatios([]);
+    setDiameters([]);
   };
 
   const handleRatioSelect = (val: string) => {
     setSelectedRatio(val);
     setSelectedDiameter(null);
     setStep(3);
+    // Reset downstream preserved options
+    setDiameters([]);
   };
 
   const handleDiameterSelect = (val: string) => {
@@ -51,6 +77,10 @@ export default function TireSizeFlow() {
     setSelectedRatio(null);
     setSelectedDiameter(null);
     setStep(1);
+    // Reset preserved options to allow fresh fetch
+    setWidths([]);
+    setRatios([]);
+    setDiameters([]);
   };
 
   const handleViewTires = () => {
@@ -66,7 +96,13 @@ export default function TireSizeFlow() {
       isCompleted: !!selectedWidth,
       isActive: step === 1,
       isDisabled: false,
-      onClick: () => setStep(1),
+      onClick: () => {
+        setStep(1);
+        // Reset all preserved options when going back to first step
+        setWidths([]);
+        setRatios([]);
+        setDiameters([]);
+      },
     },
     {
       id: 2,
@@ -74,7 +110,14 @@ export default function TireSizeFlow() {
       isCompleted: !!selectedRatio,
       isActive: step === 2,
       isDisabled: !selectedWidth,
-      onClick: () => selectedWidth && setStep(2),
+      onClick: () => {
+        if (selectedWidth) {
+          setStep(2);
+          // Reset downstream preserved options when going back to ratio
+          setRatios([]);
+          setDiameters([]);
+        }
+      },
     },
     {
       id: 3,
@@ -82,7 +125,13 @@ export default function TireSizeFlow() {
       isCompleted: !!selectedDiameter,
       isActive: step === 3 || step === 4,
       isDisabled: !selectedRatio,
-      onClick: () => selectedRatio && setStep(3),
+      onClick: () => {
+        if (selectedRatio) {
+          setStep(3);
+          // Reset downstream preserved options when going back to diameter
+          setDiameters([]);
+        }
+      },
     },
   ];
 

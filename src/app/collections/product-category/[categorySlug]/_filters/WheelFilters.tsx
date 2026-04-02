@@ -28,19 +28,19 @@ const WheelFilters = React.memo(() => {
         filters={filters}
         loading={loading}
         include={[
-          { key: "price" },
-          { key: "wheelDiameter", title: "Wheel Diameter", defaultOpen: true },
-          { key: "wheelWidth", title: "Wheel Width" },
-          { key: "color", title: "Color" },
-          { key: "brand", title: "Brand" },
-          { key: "model", title: "Model" },
-          { key: "boltPatterns", title: "Bolt Pattern" },
-          { key: "offset", title: "Wheel Offset" },
-          { key: "backspacing", title: "Backspacing" },
-          { key: "loadRating", title: "Load Rating" },
-          { key: "centerBore", title: "Center Bore" },
-          { key: "wheelMaterial", title: "Wheel Material" },
-          { key: "wheelStructure", title: "Wheel Structure" },
+          "price",
+          { key: "wheelDiameter", defaultOpen: true },
+          "wheelWidth",
+          "color",
+          "brand",
+          "model",
+          "boltPatterns",
+          "offset",
+          "backspacing",
+          "loadRating",
+          "centerBore",
+          "wheelMaterial",
+          "wheelStructure",
         ]}
       />
     </div>

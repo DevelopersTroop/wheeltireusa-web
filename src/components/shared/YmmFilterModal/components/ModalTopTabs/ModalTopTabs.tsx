@@ -14,17 +14,17 @@ type TopTab = {
 const topTabs: TopTab[] = [
   {
     id: "vehicle",
-    label: "Shop by Vehicle",
+    label: "By Vehicle",
     icon: <CarFront className="h-5 w-5" />,
   },
   {
     id: "size",
-    label: "Shop by Size",
+    label: "By Size",
     icon: <Ruler className="h-5 w-5" />,
   },
   {
     id: "brand",
-    label: "Shop by Brand",
+    label: "By Brand",
     icon: <Tag className="h-5 w-5" />,
   },
 ];

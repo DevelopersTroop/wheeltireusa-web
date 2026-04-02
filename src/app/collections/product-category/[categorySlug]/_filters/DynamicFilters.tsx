@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import FilterHeading from "./template/FilterHeading";
 import SelectFilterTemplate from "./template/SelectFilterTemplate";
 import PriceRange from "./widgets/components/PriceRange";
+import { getFilterKeyTitle } from "@/constants/filterKeys";
 
 /**
  * Configuration for a single dynamic filter section.
@@ -71,24 +72,6 @@ const FiltersSkeleton = ({ count = 6 }: { count?: number }) => (
         ))}
     </>
 );
-
-/**
- * Convert a camelCase or snake_case key into a human-readable title.
- * "wheelDiameter" → "Wheel Diameter"
- * "bolt_pattern_metric" → "Bolt Pattern Metric"
- * "boltPatterns" → "Bolt Patterns"
- */
-function formatKeyToTitle(key: string): string {
-    return (
-        key
-            // insert a space before each uppercase letter in camelCase
-            .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
-            // replace underscores with spaces
-            .replace(/_/g, " ")
-            // capitalize each word
-            .replace(/\b\w/g, (c) => c.toUpperCase())
-    );
-}
 
 /**
  * Checks if a filter value is a price range object (min/max).
@@ -202,7 +185,7 @@ const DynamicFilters = ({ filters, exclude = [], include, loading = false }: Dyn
                         <FilterSection
                             key={key}
                             filterKey={key}
-                            title={title || formatKeyToTitle(key)}
+                            title={title || getFilterKeyTitle(key)}
                             data={value}
                             defaultOpen={defaultOpen}
                         />
