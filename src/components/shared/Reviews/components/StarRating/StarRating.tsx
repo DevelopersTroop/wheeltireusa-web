@@ -27,10 +27,10 @@ export const StarRating: FC<StarRatingProps> = ({
                         key={i}
                         className={cn(`relative inline-block w-[${size}px] h-[${size}px]`)}
                     >
-                        {/* Base gray star */}
-                        <StarIcon size={size} className="text-[#9e9e9e] fill-[#9e9e9e]" />
+                        {/* Base yellow star */}
+                        <StarIcon size={size} className="text-yellow-400 fill-yellow-400" />
 
-                        {/* Overlay for full or half yellow star */}
+                        {/* Overlay for full or half darker yellow star */}
                         {(isFull || isHalf) && (
                             <div
                                 className="absolute top-0 left-0 h-full overflow-hidden"

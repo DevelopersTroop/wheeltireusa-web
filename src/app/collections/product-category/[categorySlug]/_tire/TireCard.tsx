@@ -9,6 +9,8 @@ import TireCardDescription from './TireCardDescription';
 import CompareButton from '@/components/shared/CompareButton/CompareButton';
 import { useTypedSelector } from '@/redux/store';
 import { cn } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
+import { Sparkles } from 'lucide-react';
 
 const TireCard = ({ product }: { product: TInventoryItem }) => {
   const searchparams = useSearchParams();
@@ -19,29 +21,40 @@ const TireCard = ({ product }: { product: TInventoryItem }) => {
   return (
     <div
       className={cn(
-        'flex w-full flex-row overflow-hidden md:rounded-xl md:border md:border-[#cfcfcf] md:bg-white min-[600px]:flex-col md:shadow-xl gap-2 md:px-4 relative group',
-        viewType === 'grid' ? 'flex-col' : 'flex-row'
+        'flex flex-col bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 relative group h-full',
+        viewType === 'grid' ? 'w-full' : 'flex-row'
       )}
     >
       <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
         <CompareButton product={product} variant="icon" />
       </div>
 
-      <div className="flex w-full items-center justify-center pt-5">
-        <Link href={productLink}>
+      {/* New Badge */}
+      <div className="absolute top-3 left-3 z-10">
+        <Badge className="bg-amber-500 hover:bg-amber-600 text-white px-2.5 py-1 text-xs font-semibold rounded-full flex items-center gap-1">
+          <Sparkles className="w-3 h-3" />
+          NEW
+        </Badge>
+      </div>
+
+      {/* Product Image */}
+      <div className="relative bg-linear-to-br from-gray-50 to-gray-100 p-4 sm:p-6 flex items-center justify-center aspect-square">
+        <Link href={productLink} className="w-full h-full flex items-center justify-center">
           <ProductImage
-            className={'d-block mx-auto w-full rounded-xl object-cover'}
-            height={238}
-            width={238}
+            className="max-h-full max-w-full object-contain mix-blend-multiply hover:scale-105 transition-transform duration-300"
+            height={280}
+            width={280}
             alt="product image"
             src={getProductThumbnail(product)}
             onError={() => setImageErr(true)}
           />
         </Link>
       </div>
-      <Link href={productLink} className="py-6">
+
+      {/* Product Info */}
+      <div className="p-4 sm:p-5 flex flex-col gap-3 flex-1">
         <TireCardDescription product={product as TTireProduct} />
-      </Link>
+      </div>
     </div>
   );
 };

@@ -45,7 +45,7 @@ const WheelCategory: React.FC<{
     <>
       {topDescription && (
         <div
-          className="container mx-auto px-4 my-4"
+          className="container mx-auto px-3 sm:px-4 my-4"
           dangerouslySetInnerHTML={{ __html: topDescription }}
         />
       )}
@@ -53,86 +53,90 @@ const WheelCategory: React.FC<{
       <HomeFilter variant="product" />
       <Container className={
         cn(
-          "flex w-full flex-col gap-6 md:px-4 pb-6 pt-2 md:flex-row",
+          "flex w-full flex-col gap-4 sm:gap-6 px-3 sm:px-4 pb-4 sm:pb-6 pt-2 lg:flex-row",
           viewType === "grid" ? "" : "max-w-[1450px]"
         )
       }>
-        <div className="w-full flex flex-row gap-2 justify-between  md:hidden">
+        {/* Mobile Filters Header */}
+        <div className="flex w-full flex-row gap-2 justify-between lg:hidden sticky top-16 z-20 bg-white py-2">
           <SidebarFilters>
             <WheelFilters />
           </SidebarFilters>
-          <div className="w-full">
+          <div className="w-full max-w-[140px] sm:max-w-[180px]">
             <SortByFilter />
           </div>
         </div>
-        <div className="hidden h-full flex-col gap-3 md:flex md:w-[400px]">
-          <WheelFilters />
-        </div>
-        {loading || isFetching ? <ProductCategoryLoading /> : data?.products?.length === 0 ? (
-          <>
-            <NoProductsFound />
-          </>
-        ) : (
-          <>
-            <div className="flex w-full flex-col">
-              <div className="flex w-full flex-row justify-between items-center mb-4">
-                <div className="p-2">
-                  <Breadcrumb>
-                    <Item href={'/'}>Home</Item>
-                    <Item href={'/'}>Collections</Item>
-                    <Item href={'/collections/product-category/wheels'}>
-                      Wheels
-                    </Item>
-                  </Breadcrumb>
-                </div>
-                {/* Mobile View Toggle */}
-                <div className="md:hidden pr-2">
-                  <ViewToggle />
-                </div>
-                {/* Desktop View Toggle & Sort */}
-                <div className="hidden md:flex w-full max-w-[240px] gap-2 items-center justify-end">
-                  <ViewToggle />
-                  <div className="w-[180px]">
-                    <SortByFilter />
-                  </div>
-                </div>
-              </div>
-              <div
-                className={
-                  viewType === 'grid'
-                    ? 'grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4'
-                    : 'flex w-full flex-col gap-4'
-                }
-              >
-                {data?.products?.map((products) => {
-                  const product = products[0];
-                  return (
-                    <div key={product.id}>
-                      {viewType === 'grid' ? (
-                        <WheelCard product={product} key={`grid-${product.id}`} />
-                      ) : (
-                        <WheelCardList product={product} key={`list-${product.id}`} />
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
 
-              <div className="mt-8 flex w-full flex-row justify-center">
-                <Paginate
-                  searchParams={new URLSearchParams(searchParams)}
-                  page={page}
-                  totalPages={data?.pages}
-                  categorySlug={'wheels'}
-                />
+        {/* Desktop Sidebar */}
+        <aside className="hidden lg:flex lg:w-[280px] xl:w-[320px] 2xl:w-[400px] h-full flex-col gap-3 shrink-0">
+          <WheelFilters />
+        </aside>
+
+        {/* Products Section */}
+        {loading || isFetching ? <ProductCategoryLoading /> : data?.products?.length === 0 ? (
+          <div className="w-full">
+            <NoProductsFound />
+          </div>
+        ) : (
+          <div className="flex w-full flex-col">
+            {/* Header with Breadcrumb, View Toggle & Sort */}
+            <div className="flex flex-col sm:flex-row w-full justify-between items-start sm:items-center gap-2 sm:gap-4 mb-4 px-2">
+              <div className="w-full overflow-hidden">
+                <Breadcrumb>
+                  <Item href={'/'}>Home</Item>
+                  <Item href={'/'}>Collections</Item>
+                  <Item href={'/collections/product-category/wheels'}>
+                    Wheels
+                  </Item>
+                </Breadcrumb>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <div className="hidden sm:flex">
+                  <ViewToggle />
+                </div>
+                <div className="w-[120px] sm:w-[160px] lg:w-[180px]">
+                  <SortByFilter />
+                </div>
               </div>
             </div>
-          </>
+
+            {/* Products Grid */}
+            <div
+              className={
+                viewType === 'grid'
+                  ? 'grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-4'
+                  : 'flex w-full flex-col gap-4'
+              }
+            >
+              {data?.products?.map((products) => {
+                const product = products[0];
+                return (
+                  <div key={product.id} className="w-full">
+                    {viewType === 'grid' ? (
+                      <WheelCard product={product} key={`grid-${product.id}`} />
+                    ) : (
+                      <WheelCardList product={product} key={`list-${product.id}`} />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Pagination */}
+            <div className="mt-6 sm:mt-8 flex w-full justify-center">
+              <Paginate
+                searchParams={new URLSearchParams(searchParams)}
+                page={page}
+                totalPages={data?.pages}
+                categorySlug={'wheels'}
+              />
+            </div>
+          </div>
         )}
       </Container>
       {bottomDescription && (
         <div
-          className="container mx-auto px-4 my-6 text-center max-w-4xl text-gray-700 leading-relaxed text-sm md:text-base [&>p]:mb-4"
+          className="container mx-auto px-3 sm:px-4 my-4 sm:my-6 text-center max-w-4xl text-gray-700 leading-relaxed text-xs sm:text-sm md:text-base [&>p]:mb-3 sm:[&>p]:mb-4"
           dangerouslySetInnerHTML={{ __html: bottomDescription }}
         />
       )}

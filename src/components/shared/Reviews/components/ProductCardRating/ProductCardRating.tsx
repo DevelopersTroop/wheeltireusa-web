@@ -7,26 +7,13 @@ export const ProductCardRating: React.FC<{ productId: number }> = ({ productId }
         { productId, page: 1 },
         { skip: !productId }
     );
-
-    if (!data?.average || !data.count) return null;
+if (!data?.average || !data.count) return null;
     return (
-        // Main container for the rating component
-        <div className="rounded-md flex gap-2 items-center self-stretch relative w-full justify-between py-2">
-            <div className="border-y-0 pl-0 pr-2 flex gap-1 items-center">
-                <StarRating size={18} rating={data?.average || 0} />
-                {/* <small className="text-sm leading-[17px] text-[#210203]">
-                    <span className="text-[#210203] text-sm font-semibold">
-                        ({data?.average || 0})
-                    </span>
-                </small> */}
-            </div>
-            {/* <small className="text-sm leading-[17px] text-[#210203]">
-                <span className="text-[#210203] text-sm font-normal">Reviews</span>
-            </small> */}
-
-            <small className="text-sm leading-[17px] text-gray-500">
-                {data?.count || 0} Reviews
-            </small>
+        <div className="flex items-center gap-2">
+            <StarRating size={14} rating={data?.average || 0} />
+            <span className="text-xs text-gray-600">
+                {data?.count || 0} review{data.count !== 1 ? 's' : ''}
+            </span>
         </div>
     );
 };
