@@ -31,21 +31,21 @@ export default function TireSizeFlow() {
   // Preserve widths from initial API response
   useEffect(() => {
     if (Array.isArray(filterData?.filters?.tireWidth) && filterData.filters.tireWidth.length > 0) {
-      setWidths(current => current.length === 0 ? filterData.filters.tireWidth : current);
+      setWidths((current) => (current.length === 0 ? [...(filterData.filters.tireWidth as any[])] : current));
     }
   }, [filterData?.filters?.tireWidth]);
 
   // Preserve ratios when width is selected
   useEffect(() => {
     if (selectedWidth && Array.isArray(filterData?.filters?.tireRatio) && filterData.filters.tireRatio.length > 0) {
-      setRatios(current => current.length === 0 ? filterData.filters.tireRatio : current);
+      setRatios((current) => (current.length === 0 ? [...(filterData.filters.tireRatio as any[])] : current));
     }
   }, [filterData?.filters?.tireRatio, selectedWidth]);
 
   // Preserve diameters when ratio is selected
   useEffect(() => {
     if (selectedRatio && Array.isArray(filterData?.filters?.tireDiameter) && filterData.filters.tireDiameter.length > 0) {
-      setDiameters(current => current.length === 0 ? filterData.filters.tireDiameter : current);
+      setDiameters((current) => (current.length === 0 ? [...(filterData.filters.tireDiameter as any[])] : current));
     }
   }, [filterData?.filters?.tireDiameter, selectedRatio]);
 

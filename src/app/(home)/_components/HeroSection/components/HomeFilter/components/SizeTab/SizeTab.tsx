@@ -56,42 +56,42 @@ export default function SizeTab() {
   // Preserve tire widths from initial API response
   useEffect(() => {
     if (Array.isArray(tireData?.filters?.tireWidth) && tireData.filters.tireWidth.length > 0) {
-      setTireWidths(current => current.length === 0 ? tireData.filters.tireWidth : current);
+      setTireWidths((current) => (current.length === 0 ? [...(tireData.filters.tireWidth as any[])] : current));
     }
   }, [tireData?.filters?.tireWidth]);
 
   // Preserve tire ratios when width is selected
   useEffect(() => {
     if (tireWidth && Array.isArray(tireData?.filters?.tireRatio) && tireData.filters.tireRatio.length > 0) {
-      setTireRatios(current => current.length === 0 ? tireData.filters.tireRatio : current);
+      setTireRatios((current) => (current.length === 0 ? [...(tireData.filters.tireRatio as any[])] : current));
     }
   }, [tireData?.filters?.tireRatio, tireWidth]);
 
   // Preserve tire diameters when ratio is selected
   useEffect(() => {
     if (tireRatio && Array.isArray(tireData?.filters?.tireDiameter) && tireData.filters.tireDiameter.length > 0) {
-      setTireDiameters(current => current.length === 0 ? tireData.filters.tireDiameter : current);
+      setTireDiameters((current) => (current.length === 0 ? [...(tireData.filters.tireDiameter as any[])] : current));
     }
   }, [tireData?.filters?.tireDiameter, tireRatio]);
 
   // Preserve wheel diameters from initial API response
   useEffect(() => {
     if (Array.isArray(wheelData?.filters?.wheelDiameter) && wheelData.filters.wheelDiameter.length > 0) {
-      setWheelDiameters(current => current.length === 0 ? wheelData.filters.wheelDiameter : current);
+      setWheelDiameters((current) => (current.length === 0 ? [...(wheelData.filters.wheelDiameter as any[])] : current));
     }
   }, [wheelData?.filters?.wheelDiameter]);
 
   // Preserve wheel widths when diameter is selected
   useEffect(() => {
     if (wheelDiameter && Array.isArray(wheelData?.filters?.wheelWidth) && wheelData.filters.wheelWidth.length > 0) {
-      setWheelWidths(current => current.length === 0 ? wheelData.filters.wheelWidth : current);
+      setWheelWidths((current) => (current.length === 0 ? [...(wheelData.filters.wheelWidth as any[])] : current));
     }
   }, [wheelData?.filters?.wheelWidth, wheelDiameter]);
 
   // Preserve bolt patterns when width is selected
   useEffect(() => {
     if (wheelWidth && wheelWidth !== "any" && Array.isArray(wheelData?.filters?.boltPatterns) && wheelData.filters.boltPatterns.length > 0) {
-      setBoltPatterns(current => current.length === 0 ? wheelData.filters.boltPatterns : current);
+      setBoltPatterns((current) => (current.length === 0 ? [...(wheelData.filters.boltPatterns as any[])] : current));
     }
   }, [wheelData?.filters?.boltPatterns, wheelWidth]);
 

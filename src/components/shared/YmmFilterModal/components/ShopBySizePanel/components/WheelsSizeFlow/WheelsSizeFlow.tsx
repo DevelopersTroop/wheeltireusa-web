@@ -30,21 +30,21 @@ export default function WheelsSizeFlow() {
   // Preserve diameters from initial API response
   useEffect(() => {
     if (Array.isArray(filterData?.filters?.wheelDiameter) && filterData.filters.wheelDiameter.length > 0) {
-      setDiameters(current => current.length === 0 ? filterData.filters.wheelDiameter : current);
+      setDiameters((current) => (current.length === 0 ? [...(filterData.filters.wheelDiameter as any[])] : current));
     }
   }, [filterData?.filters?.wheelDiameter]);
 
   // Preserve widths when diameter is selected
   useEffect(() => {
     if (selectedDiameter && Array.isArray(filterData?.filters?.wheelWidth) && filterData.filters.wheelWidth.length > 0) {
-      setWidths(current => current.length === 0 ? filterData.filters.wheelWidth : current);
+      setWidths((current) => (current.length === 0 ? [...(filterData.filters.wheelWidth as any[])] : current));
     }
   }, [filterData?.filters?.wheelWidth, selectedDiameter]);
 
   // Preserve bolt patterns when width is selected
   useEffect(() => {
     if (selectedWidth && selectedWidth !== "any" && Array.isArray(filterData?.filters?.boltPatterns) && filterData.filters.boltPatterns.length > 0) {
-      setBoltPatterns(current => current.length === 0 ? filterData.filters.boltPatterns : current);
+      setBoltPatterns((current) => (current.length === 0 ? [...(filterData.filters.boltPatterns as any[])] : current));
     }
   }, [filterData?.filters?.boltPatterns, selectedWidth]);
 
