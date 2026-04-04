@@ -42,19 +42,20 @@ export default function Homepage() {
       <ProductGallery
         category="tire"
         title="
-            Popular Tires Available & in-stock"
+            Popular Tires"
       />
       <ProductGallery
         category="wheels"
         title="
-            Popular Wheels Available & in-stock"
+            Popular Wheels"
       />
       <TodaysDeals />
-      <HomeBlogList />
       <WheelsSection />
       <BannerAndPoster />
       <ViewGallery />
       <SuspensionBrands />
+      <HomeBlogList />
+
       {/* <SuspensionSection /> */}
     </div>
   );

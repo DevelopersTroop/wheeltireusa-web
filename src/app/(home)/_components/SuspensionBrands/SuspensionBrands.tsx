@@ -16,7 +16,7 @@ const SuspensionBrands = () => {
       <div className="py-4 lg:py-8 px-4 sm:px-0">
         <hr className="border-primary border-[1.5px] w-[80px] mb-3" />
         <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold uppercase tracking-wide text-gray-800">
-          Top Suspension Brands
+          Top Brands
         </h3>
       </div>
 
