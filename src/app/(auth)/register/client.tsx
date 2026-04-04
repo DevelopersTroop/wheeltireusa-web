@@ -115,7 +115,7 @@ const RegisterPage = () => {
                         <Input
                           {...field}
                           placeholder="First Name"
-                          className={`w-full text-gray-300 ${formErrors.firstName && touched.firstName ? "border-red-500" : ""}`}
+                          className={`w-full text-gray-300 placeholder:text-gray-400 ${formErrors.firstName && touched.firstName ? "border-red-500" : ""}`}
                         />
                       )}
                     </Field>
@@ -130,7 +130,7 @@ const RegisterPage = () => {
                         <Input
                           {...field}
                           placeholder="Last Name"
-                          className={`w-full text-gray-300 ${formErrors.lastName && touched.lastName ? "border-red-500" : ""}`}
+                          className={`w-full text-gray-300 placeholder:text-gray-400 ${formErrors.lastName && touched.lastName ? "border-red-500" : ""}`}
                         />
                       )}
                     </Field>
@@ -148,7 +148,7 @@ const RegisterPage = () => {
                         {...field}
                         type="email"
                         placeholder="you@example.com"
-                        className={`w-full text-gray-300 ${formErrors.email && touched.email ? "border-red-500" : ""}`}
+                        className={`w-full text-gray-300 placeholder:text-gray-400 ${formErrors.email && touched.email ? "border-red-500" : ""}`}
                       />
                     )}
                   </Field>
@@ -165,7 +165,7 @@ const RegisterPage = () => {
                         {...field}
                         type="password"
                         placeholder="••••••••"
-                        className={`w-full text-gray-300 ${formErrors.password && touched.password ? "border-red-500" : ""}`}
+                        className={`w-full text-gray-300 placeholder:text-gray-400 ${formErrors.password && touched.password ? "border-red-500" : ""}`}
                       />
                     )}
                   </Field>

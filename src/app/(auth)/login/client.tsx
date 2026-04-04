@@ -125,7 +125,7 @@ const LoginPage = () => {
                         {...field}
                         type="email"
                         placeholder="you@example.com"
-                        className={`w-full text-gray-300 ${formErrors.email && touched.email ? 'border-red-500' : ''}`}
+                        className={`w-full text-gray-300 placeholder:text-gray-400 ${formErrors.email && touched.email ? 'border-red-500' : ''}`}
                       />
                     )}
                   </Field>
@@ -146,7 +146,7 @@ const LoginPage = () => {
                         {...field}
                         type="password"
                         placeholder="••••••••"
-                        className={`w-full text-gray-300 ${formErrors.password && touched.password ? 'border-red-500' : ''}`}
+                        className={`w-full text-gray-300 placeholder:text-gray-400 ${formErrors.password && touched.password ? 'border-red-500' : ''}`}
                       />
                     )}
                   </Field>

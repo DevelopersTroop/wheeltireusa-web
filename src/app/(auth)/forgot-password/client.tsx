@@ -1,11 +1,11 @@
 "use client";
 import { apiBaseUrl } from "@/utils/api";
-import { TextInput } from "@/components/ui/textinput";
 import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Alert } from "@/components/ui/alert";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Input } from "@/components/ui/input";
+import Link from "next/link";
 
 const Page = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -49,68 +49,119 @@ const Page = () => {
     setIsSubmitting(false);
   };
 
-  const banner = {
-    backgroundImage: `url('/images/forgothero.jpeg')`,
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover",
-    height: "750px",
-  };
-
   return (
-    <div className="px-4 pt-2 md:p-0" style={banner}>
-      <div className="w-full md:h-full flex flex-col md:flex-row py-8 px-4 md:p-0 bg-gray-400 bg-opacity-70 rounded-md md:bg-transparent">
-        <div className="w-full md:w-[60%] text-white md:pt-2">
-          <h1 className="text-2xl md:text-6xl text-center uppercase">
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Hero Background Image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center opacity-80 animate-fade-in"
+        style={{ backgroundImage: "url('/images/loginhero.jpeg')" }}
+      ></div>
+
+      {/* Transparent Gray Overlay */}
+      <div className="absolute inset-0 bg-gray-900/50"></div>
+
+      {/* Forgot Password Container */}
+      <div className="relative z-10 my-3 w-full max-w-4xl mx-4 rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row bg-white/10 backdrop-blur-lg border border-white/20">
+        {/* Left Hero Section */}
+        <div className="hidden md:flex md:w-2/3 flex-col justify-center p-12 text-white">
+          <h1 className="text-5xl font-extrabold uppercase mb-4 animate-slide-up">
             Forgot Password
           </h1>
-          <div className="w-full h-2 bg-primary"></div>
+          <p className="text-lg text-gray-200 animate-slide-up animate-delay-200">
+            Don&apos;t worry, it happens to the best of us. We&apos;ll get you
+            rolling on all 4 here shortly.
+          </p>
+          <div className="mt-6 w-24 h-1 bg-primary rounded"></div>
         </div>
-        <div className="md:bg-gray-400 md:bg-opacity-90 w-full md:w-[40%] flex justify-center items-center">
-          <div className="w-full shadow-[0_1px_3px_0_rgba(0,0,0,0.09)] pt-2 md:px-12 md:py-20">
-            <div className="text-center text-gray-200 py-5">
-              <p>
-                Don't worry, it happens to the best of us. We'll get you rolling
-                on all 4 here shortly.
-              </p>
+
+        {/* Right Forgot Password Form */}
+        <div className="w-full md:w-2/3 p-8 md:p-12 flex flex-col items-center justify-center bg-gray-800/40 backdrop-blur-lg animate-slide-up rounded-lg">
+          <h2 className="text-2xl font-bold text-white mb-6 border-b border-white/30 w-full pb-3 uppercase">
+            Reset Password
+          </h2>
+
+          {/* Error & Success Alerts */}
+          {status.error.length > 0 && (
+            <Alert variant="destructive" className="mb-3 w-full">
+              <AlertDescription>{status.error}</AlertDescription>
+            </Alert>
+          )}
+          {status.success.length > 0 && (
+            <Alert className="mb-3 w-full">
+              <AlertDescription>{status.success}</AlertDescription>
+            </Alert>
+          )}
+
+          {/* Form */}
+          <form
+            onSubmit={form.handleSubmit(submit)}
+            className="w-full space-y-4"
+          >
+            <div>
+              <label className="block mb-1 font-semibold text-white">
+                Email Address
+              </label>
+              <Input
+                {...form.register("email", { required: true })}
+                type="email"
+                placeholder="you@example.com"
+                className="w-full text-gray-300 placeholder:text-gray-400"
+              />
             </div>
 
-            {status.error.length ? (
-              <Alert variant={"destructive"}>{status.error}</Alert>
-            ) : (
-              ""
-            )}
-            {status.success.length ? (
-              <Alert variant={"default"}>{status.success}</Alert>
-            ) : (
-              ""
-            )}
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full bg-primary hover:bg-primary-dark transition-colors duration-300 uppercase"
+            >
+              {isSubmitting ? "Sending..." : "Send Reset Email"}
+            </Button>
+          </form>
 
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(submit)}
-                className="space-y-3 pt-2"
-              >
-                <TextInput
-                  control={form.control}
-                  label="Email address"
-                  required
-                  name={"email"}
-                  type={"email"}
-                  className="bg-white"
-                  labelClassName="!text-white"
-                />
-                <Button
-                  disabled={isSubmitting}
-                  className="w-full text-lg font-semibold"
-                >
-                  Send Reset Email
-                </Button>
-              </form>
-            </Form>
-          </div>
+          {/* Back to Login Link */}
+          <p className="mt-6 text-white text-sm">
+            Remember your password?{" "}
+            <Link href="/login" className="underline font-semibold">
+              Sign In
+            </Link>
+          </p>
+
+          {/* Logo */}
+          <img className="w-28 mt-6" src="/images/logo.png" alt="logo" />
         </div>
       </div>
+
+      {/* Animations */}
+      <style jsx>{`
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+        .animate-fade-in {
+          animation: fade-in 1.5s ease-in-out;
+        }
+
+        @keyframes slide-up {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-slide-up {
+          animation: slide-up 0.8s ease-out forwards;
+        }
+        .animate-delay-200 {
+          animation-delay: 0.2s;
+        }
+      `}</style>
     </div>
   );
 };
