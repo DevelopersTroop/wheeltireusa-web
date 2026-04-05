@@ -192,8 +192,8 @@ export default function VehicleTab() {
       </div>
 
       <div className="flex flex-col gap-3">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
-          <div className="col-span-1">
+        <div className="flex flex-col sm:flex-nowrap sm:flex-row gap-2 sm:gap-3">
+          <div className="w-full sm:flex-1 sm:min-w-[120px]">
             <YmmCustomSelect
               label="YEAR"
               required={true}
@@ -206,7 +206,7 @@ export default function VehicleTab() {
             />
           </div>
 
-          <div className="col-span-1">
+          <div className="w-full sm:flex-1 sm:min-w-[120px]">
             <YmmCustomSelect
               label="MAKE"
               required={true}
@@ -221,7 +221,7 @@ export default function VehicleTab() {
             />
           </div>
 
-          <div className="col-span-1">
+          <div className="w-full sm:flex-1 sm:min-w-[120px]">
             <YmmCustomSelect
               label="MODEL"
               required={true}
@@ -237,7 +237,7 @@ export default function VehicleTab() {
           </div>
 
           {showTrim && (
-            <div className="col-span-1">
+            <div className="w-full sm:flex-1 sm:min-w-[120px]">
               <YmmCustomSelect
                 label="TRIM"
                 required={true}
@@ -254,7 +254,7 @@ export default function VehicleTab() {
           )}
 
           {showDrive && (
-            <div className="col-span-1">
+            <div className="w-full sm:flex-1 sm:min-w-[120px]">
               <YmmCustomSelect
                 label="DRIVE"
                 required={true}
