@@ -81,7 +81,7 @@ export const useStripeCheckout = () => {
         totalWithTax,
       };
       const response = await apiInstance.post<{ data: { orderId: string } }>(
-        '/payments/stripe/create-order',
+        '/payments/stripe/checkout',
         { orderData, paymentIntentId }
       );
 
