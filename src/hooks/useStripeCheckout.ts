@@ -93,11 +93,11 @@ export const useStripeCheckout = () => {
           return_url: `${window.location.origin}/checkout?step=2&order_id=${response.data.data.orderId}&method=stripe`,
         },
       });
-      // if (error && error.message) {
-      //   window.location.href = `${window.location.origin}/checkout?order_status=false`;
-      // }
+      if (error && error.message) {
+        window.location.href = `${window.location.origin}/checkout?order_status=false`;
+      }
     } catch (err) {
-      // window.location.href = `${window.location.origin}/checkout?order_status=false`;
+      window.location.href = `${window.location.origin}/checkout?order_status=false`;
       toast.error('Error', {
         description: (err as Error).message,
       });
