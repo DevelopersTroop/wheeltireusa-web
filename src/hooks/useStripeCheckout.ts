@@ -5,6 +5,7 @@ import { useCheckout } from '@/context/checkoutContext';
 import { toast } from 'sonner';
 import useAuth from './useAuth';
 import { Stripe, StripeElements } from '@stripe/stripe-js';
+import { hasAllRequiredShippingFields } from '@/context/stripeProvider';
 
 export const useStripeCheckout = () => {
   const { cartType, subTotalCost, totalCost } = useCheckout();
@@ -42,13 +43,14 @@ export const useStripeCheckout = () => {
     stripe: Stripe | null,
     paymentElement: StripeElements | null
   ) => {
- 
     try {
       if (!stripe || !paymentElement) return;
       const orderData = {
         orderInfo,
         shippingMethod,
-        shippingAddress,
+        shippingAddress: hasAllRequiredShippingFields(shippingAddress)
+          ? shippingAddress
+          : billingAddress,
         billingAddress,
         discount,
         cartType,
@@ -88,14 +90,14 @@ export const useStripeCheckout = () => {
       const { error } = await stripe.confirmPayment({
         elements: paymentElement,
         confirmParams: {
-          return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout?step=2&order_id=${response.data.data.orderId}&method=stripe`,
+          return_url: `${window.location.origin}/checkout?step=2&order_id=${response.data.data.orderId}&method=stripe`,
         },
       });
       if (error && error.message) {
-        window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}/checkout?order_status=false`;
+        window.location.href = `${window.location.origin}/checkout?order_status=false`;
       }
     } catch (err) {
-      // window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}/checkout?&order_status=false`;
+      window.location.href = `${window.location.origin}/checkout?order_status=false`;
       toast.error('Error', {
         description: (err as Error).message,
       });

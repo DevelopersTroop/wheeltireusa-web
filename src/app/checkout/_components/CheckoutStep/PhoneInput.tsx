@@ -11,8 +11,8 @@ export function PhoneInput({
   billingErrors: FieldErrors<TBillingAddress>;
 }) {
   const maskRef = useMask({
-    mask: "(999) 999-9999",
-    replacement: { 9: /\d/ },
+    mask: "(___) ___-____",
+    replacement: { _: /\d/ },
   });
 
   const { ref: registerRef, ...registerProps } = billingRegister("phone", {

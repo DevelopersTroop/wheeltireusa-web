@@ -1,3 +1,4 @@
+
 import LoadingSpinner from '@/components/shared-old/loading/spinner';
 import { useCheckout } from '@/context/checkoutContext';
 import { apiInstance } from '@/redux/apis/base';
@@ -6,7 +7,7 @@ import {
   setTaxAmount,
 } from '@/redux/features/checkoutSlice';
 import { useAppDispatch, useTypedSelector } from '@/redux/store';
-import { TBillingAddress } from '@/types/order';
+import { TBillingAddress, TProductInfo } from '@/types/order';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe, Stripe, StripeElementsOptions } from '@stripe/stripe-js';
 import React, {
@@ -41,14 +42,14 @@ const stripePromise = loadStripe(
 // Constants
 // --------------------
 const REQUIRED_ADDRESS_FIELDS: (keyof TBillingAddress)[] = [
-  "address1",
-  "zipCode",
-  "country",
-  "cityState",
-  "phone",
-  "email",
-  "fname",
-  "lname",
+  'address1',
+  'zipCode',
+  'country',
+  'cityState',
+  'phone',
+  'email',
+  'fname',
+  'lname',
 ];
 
 const DEBOUNCE_MS = 600;
@@ -56,11 +57,11 @@ const DEBOUNCE_MS = 600;
 // --------------------
 // Helpers
 // --------------------
-function hasAllRequiredFields(address: TBillingAddress | null): boolean {
+export function hasAllRequiredShippingFields(address: TBillingAddress | null): boolean {
   if (!address) return false;
   return REQUIRED_ADDRESS_FIELDS.every((field) => {
     const value = address[field];
-    return value !== undefined && value !== null && value !== "";
+    return value !== undefined && value !== null && value !== '';
   });
 }
 
@@ -69,16 +70,16 @@ function hasAllRequiredFields(address: TBillingAddress | null): boolean {
 // --------------------
 export default function StripeProvider({ children }: React.PropsWithChildren) {
   const { totalCost } = useCheckout();
-  const { billingAddress, shippingAddress, paymentIntentId } = useTypedSelector(
+  const { billingAddress, shippingAddress, paymentIntentId, productsInfo } = useTypedSelector(
     (state) => state.persisted.checkout
   );
 
   const stripe = use(stripePromise);
   const [loading, setLoading] = useState(false);
-  const [clientSecret, setClientSecret] = useState<string>("");
-  const lastFetchedHash = useRef<string>("");
+  const [clientSecret, setClientSecret] = useState<string>('');
+  const lastFetchedHash = useRef<string>('');
   const dispatch = useAppDispatch();
-  const [err, setErr] = useState("");
+  const [err, setErr] = useState('');
 
   // Stable serialized strings — only recompute when the underlying object changes
   const billingHash = useMemo(
@@ -93,8 +94,8 @@ export default function StripeProvider({ children }: React.PropsWithChildren) {
   // Derived flags (memoized so they don't re-trigger effects unnecessarily)
   const areAddressesComplete = useMemo(
     () =>
-      hasAllRequiredFields(billingAddress) ||
-      hasAllRequiredFields(shippingAddress),
+      hasAllRequiredShippingFields(billingAddress) ||
+      hasAllRequiredShippingFields(shippingAddress),
     [billingAddress, shippingAddress]
   );
 
@@ -104,8 +105,8 @@ export default function StripeProvider({ children }: React.PropsWithChildren) {
 
     // ── Guard: addresses not ready yet ──
     if (!areAddressesComplete) {
-      setClientSecret("");
-      setErr("");
+      setClientSecret('');
+      setErr('');
       return;
     }
 
@@ -126,7 +127,7 @@ export default function StripeProvider({ children }: React.PropsWithChildren) {
       if (lastFetchedHash.current === currentHash) return;
 
       setLoading(true);
-      setErr("");
+      setErr('');
 
       const amount = Math.round(parseFloat(totalCost) * 100);
 
@@ -137,14 +138,16 @@ export default function StripeProvider({ children }: React.PropsWithChildren) {
             id: string;
             taxAmount: number;
             totalWithTax: number;
+            products: TProductInfo[];
           };
         }>(
-          "/payments/stripe/intent",
+          '/payments/stripe/intent',
           {
             amount,
-            currency: "USD",
+            currency: 'USD',
             billingAddress,
-            shippingAddress,
+            shippingAddress: hasAllRequiredShippingFields(shippingAddress) ? shippingAddress : billingAddress,
+            products: productsInfo
           },
           { signal: abortController.signal }
         )
@@ -166,13 +169,12 @@ export default function StripeProvider({ children }: React.PropsWithChildren) {
           // Ignore aborted requests — they're expected during rapid changes
           if (abortController.signal.aborted) return;
 
-          console.error("StripeProvider error:", error);
+          console.error('StripeProvider error:', error);
           setErr(
-            error?.error?.data?.errors
-              ?.map((c: any) => c.message)
-              .join(", ") || "Failed to create payment intent"
+            error?.error?.data?.errors?.map((c: any) => c.message).join(', ') ||
+            'Failed to create payment intent'
           );
-          setClientSecret("");
+          setClientSecret('');
         })
         .finally(() => {
           if (!abortController.signal.aborted) {
@@ -194,7 +196,7 @@ export default function StripeProvider({ children }: React.PropsWithChildren) {
   if (!clientSecret) {
     return (
       <div className="text-left text-xl text-primary font-semibold">
-        <h2>{err || "Please enter your address to select payment methods"}</h2>
+        <h2>{err || 'Please enter your address to select payment methods'}</h2>
       </div>
     );
   }
@@ -202,13 +204,13 @@ export default function StripeProvider({ children }: React.PropsWithChildren) {
   // Stripe Element appearance and options
   const options: StripeElementsOptions = {
     clientSecret,
-    loader: "always",
+    loader: 'always',
     appearance: {
-      theme: "flat",
+      theme: 'flat',
       variables: {
-        colorPrimary: "#000",
-        accordionItemSpacing: "16px",
-        borderRadius: "12px",
+        colorPrimary: '#000',
+        accordionItemSpacing: '16px',
+        borderRadius: '12px',
       },
     },
   };
@@ -228,6 +230,6 @@ export default function StripeProvider({ children }: React.PropsWithChildren) {
 export const useStripeContext = () => {
   const context = useContext(StripeContext);
   if (!context)
-    throw new Error("useStripeContext must be used within StripeProvider");
+    throw new Error('useStripeContext must be used within StripeProvider');
   return context;
 };

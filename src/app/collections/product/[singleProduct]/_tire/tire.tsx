@@ -91,7 +91,7 @@ const Tire = ({ product }: { product: TTireProduct }) => {
             )}
 
             {/* CENTER COLUMN - Main Image + Product Details (widest) */}
-            <div className="flex-1 min-w-0 order-1 xl:order-2 w-full">
+            <div className="flex-1  min-w-0 order-1 xl:order-2 w-full">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
                 {/* Main Image Display - 60% */}
                 <div className="lg:col-span-7">
