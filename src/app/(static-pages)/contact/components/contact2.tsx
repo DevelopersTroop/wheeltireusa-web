@@ -51,7 +51,7 @@ const Contact: React.FC = () => {
         </div>
         <div>
           <p className="text-center text-gray-200">
-            We'd love to help! Here is how you can reach out to us.
+            We&apos;d love to help! Here is how you can reach out to us.
           </p>
         </div>
         <div>

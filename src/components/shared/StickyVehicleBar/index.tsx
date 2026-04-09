@@ -186,9 +186,10 @@ export default function StickyVehicleBar() {
 
       dispatch(addToGarage(newItem));
       dispatch(submitYmm(newItem));
+      setIsMobileOpen(false);
       router.push(targetPath);
     }
-  }, [year, make, model, trim, drive, dispatch, router, category, hasUserManuallyChanged]);
+  }, [year, make, model, trim, drive, dispatch, router, category, hasUserManuallyChanged, setIsMobileOpen]);
 
   // ==================== HANDLERS ====================
 
@@ -205,6 +206,7 @@ export default function StickyVehicleBar() {
 
     dispatch(addToGarage(newItem));
     dispatch(submitYmm(newItem));
+    setIsMobileOpen(false);
 
     const targetPath =
       category === "tire"

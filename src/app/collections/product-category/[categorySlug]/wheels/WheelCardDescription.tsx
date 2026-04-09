@@ -123,17 +123,17 @@ const WheelCardDescription = ({ product }: { product: TWheelProduct }) => {
       <div className="mt-auto flex flex-col sm:flex-row gap-2">
         <button
           onClick={handleBuyNow}
-          className="flex-1 flex items-center justify-center gap-1.5 px-2 py-2 sm:py-2.5 sm:px-4 bg-gray-900 text-white text-xs sm:text-sm font-semibold rounded-xl hover:bg-gray-800 transition-all duration-200"
+          className="flex-1 flex items-center justify-center gap-1.5 px-2 py-2 sm:py-2.5 sm:px-4 bg-gray-900 text-white text-xs sm:text-sm font-semibold rounded hover:bg-gray-800 transition-all duration-200"
         >
           <span>Buy Now</span>
         </button>
-        <button
+        {/* <button
           onClick={handleNeedHelp}
           className="flex-1 flex items-center justify-center gap-1.5 px-2 py-2 sm:py-2.5 sm:px-4 bg-transparent text-gray-900 text-xs sm:text-xs font-semibold rounded-xl border-2 border-gray-900 hover:bg-gray-100 transition-all duration-200"
         >
           <HeadphonesIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           <span>Need Help</span>
-        </button>
+        </button> */}
       </div>
     </div>
   );

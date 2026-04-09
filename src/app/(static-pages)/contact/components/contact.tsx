@@ -89,14 +89,14 @@ const Contact: React.FC = () => {
               </div>
             </div>
             <div className="mb-4">
-              <label htmlFor="subject" className="block text-sm font-medium">
-                Subject
+              <label htmlFor="phone" className="block text-sm font-medium">
+                Phone
               </label>
               <input
-                type="text"
-                id="subject"
+                type="tel"
+                id="phone"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500"
-                placeholder="Subject"
+                placeholder="Phone Number"
               />
             </div>
             <div className="mb-4">
