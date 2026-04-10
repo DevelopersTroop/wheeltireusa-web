@@ -1,4 +1,5 @@
-import { beautifySlug, buildQueryString } from '@/utils/url'
+import { beautifySlug, buildQueryString, parseQueryString } from '@/utils/url'
+import { result } from 'lodash';
 import { it, expect, describe } from 'vitest'
 
 describe('beautifySlug', () => {
@@ -145,4 +146,129 @@ describe('buildQueryString', () => {
         expect(result).toBe("data=a%2C%20b%2C%20c");
     })
 
-})
+});
+
+describe('parseQueryString', () => {
+    it('should parse simple query string', () => {
+        const result = parseQueryString("name=nahid&age=25");
+
+        expect(result).toEqual({
+            name: "nahid",
+            age: "25"
+        });
+    });
+
+    it('should handle single key-value pair', () => {
+        const result = parseQueryString("name=nahid");
+
+        expect(result).toEqual({
+            name: "nahid",
+        });
+    });
+
+    it('should decode encoded values', () => {
+        const result = parseQueryString("search=hello%20world");
+
+        expect(result).toEqual({
+            search: "hello world",
+        });
+    });
+
+    it('should decode special characters', () => {
+        const result = parseQueryString("q=a%26b%3Dc");
+
+        expect(result).toEqual({
+            q: "a&b=c",
+        });
+    });
+
+    it('should handle key with empty value', () => {
+        const result = parseQueryString("name=");
+
+         expect(result).toEqual({
+          name: "",
+      });
+    });
+
+    // Array support (comma-separated)
+    it('should convert comma-separated values to array', () => {
+        const result = parseQueryString("tags=js,ts,react");
+
+        expect(result).toEqual({
+            tags: ["js", "ts", "react"],
+        });
+    });
+
+    it('should handle single comma value', () => {
+        const result = parseQueryString("data=a,b");
+
+        expect(result).toEqual({
+            data: ["a", "b"],
+        });
+    });
+
+    // Mixed values
+    it('should handle mixed single and array values', () => {
+        const result = parseQueryString("name=nahid&tags=js,ts");
+
+        expect(result).toEqual({
+            name: "nahid",
+            tags: ["js", "ts"]
+        });
+    });
+
+    // Edge cases
+    it('should handle empty query string', () => {
+        const result = parseQueryString("");
+
+        expect(result).toEqual({
+            "":"",
+        });
+    });
+
+    it('should handle multiple equals in value', () => {
+        const result = parseQueryString("token=a=b=c");
+
+        expect(result).toEqual({
+            token: "a",
+        });
+    });
+
+    it('should override duplicate keys (last one wins', () => {
+        const result = parseQueryString("a=1&a=2");
+
+        expect(result).toEqual({
+            a: "2",
+        });
+    });
+
+    it('should handle encoded commas', () => {
+        const result = parseQueryString("data=a%2Cb%2Cc");
+
+        expect(result).toEqual({
+            data: ["a", "b", "c"],
+        });
+    });
+
+
+    it('should handle spaces around commas', () => {
+        const result = parseQueryString("data=a, b, c");
+
+        expect(result).toEqual({
+            data: ["a", " b", " c"],
+        });
+    });
+
+    // Failure / risky cases
+    it('should throw error for malformed URI', () => {
+        expect(() => parseQueryString("%E0%A4%A")).toThrow();
+    });
+
+    it('should handle missing key', () => {
+        const result = parseQueryString("=value");
+
+        expect(result).toEqual({
+            "": "value",
+        });
+    });
+});
