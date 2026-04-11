@@ -70,7 +70,7 @@ const SuspensionBrands = () => {
           href="/collections/product-category/wheels"
           className="inline-block px-5 sm:px-6 py-2.5 sm:py-3 rounded-md text-primary bg-[#d4d2d2]/50 text-base sm:text-lg md:text-xl font-semibold uppercase border border-primary transition-all duration-300 ease-in-out hover:bg-primary hover:text-white"
         >
-          Shop Suspensions
+          Shop
         </Link>
       </div>
     </div>
