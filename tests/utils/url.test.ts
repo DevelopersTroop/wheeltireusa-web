@@ -1,4 +1,4 @@
-import { beautifySlug, buildQueryString, parseQueryString } from '@/utils/url'
+import { beautifySlug, buildQueryString, parseQueryString, parseQueryValuesToArray } from '@/utils/url'
 import { result } from 'lodash';
 import { it, expect, describe } from 'vitest'
 
@@ -271,4 +271,92 @@ describe('parseQueryString', () => {
             "": "value",
         });
     });
+});
+
+describe("parseQueryValuesToArray", () => {
+
+  it("should split comma-separated values into array", () => {
+    const result = parseQueryValuesToArray("a,b,c");
+    expect(result).toEqual(["a", "b", "c"]);
+  });
+
+  it("should decode encoded values", () => {
+    const result = parseQueryValuesToArray("a%2Cb%2Cc");
+    expect(result).toEqual(["a", "b", "c"]);
+  });
+
+  it("should remove empty values", () => {
+    const result = parseQueryValuesToArray("a,,b,");
+    expect(result).toEqual(["a", "b"]);
+  });
+
+  it("should return empty array if all values are empty", () => {
+    const result = parseQueryValuesToArray(",,");
+    expect(result).toEqual([]);
+  });
+
+  it("should skip specified values", () => {
+    const result = parseQueryValuesToArray("a,b,c", ["b"]);
+    expect(result).toEqual(["a", "c"]);
+  });
+
+  it("should skip multiple values", () => {
+    const result = parseQueryValuesToArray("a,b,c,d", ["b", "d"]);
+    expect(result).toEqual(["a", "c"]);
+  });
+
+  it("should not skip when skip is undefined", () => {
+    const result = parseQueryValuesToArray("a,b,c", undefined);
+    expect(result).toEqual(["a", "b", "c"]);
+  });
+
+  it("should not skip when skip is null", () => {
+    const result = parseQueryValuesToArray("a,b,c", null);
+    expect(result).toEqual(["a", "b", "c"]);
+  });
+
+  it("should apply formatter to each value", () => {
+    const result = parseQueryValuesToArray("a,b,c", undefined, (v) => v.toUpperCase());
+    expect(result).toEqual(["A", "B", "C"]);
+  });
+
+  it("should apply formatter after skip", () => {
+    const result = parseQueryValuesToArray(
+      "a,b,c",
+      ["b"],
+      (v) => v.toUpperCase()
+    );
+    expect(result).toEqual(["A", "C"]);
+  });
+
+  it("should handle empty string input", () => {
+    const result = parseQueryValuesToArray("");
+    expect(result).toEqual([]);
+  });
+
+  it("should handle single value", () => {
+    const result = parseQueryValuesToArray("a");
+    expect(result).toEqual(["a"]);
+  });
+
+  it("should handle spaces in values", () => {
+    const result = parseQueryValuesToArray("a, b, c");
+    expect(result).toEqual(["a", " b", " c"]); 
+  });
+
+  it("should not skip correctly when duplicate values exist (mutation bug)", () => {
+    const result = parseQueryValuesToArray("a,b,b,c", ["b"]);
+
+    expect(result).toEqual(["a", "c"]);
+  });
+
+  it("should handle formatter with empty values safely", () => {
+    const result = parseQueryValuesToArray("a,,b", undefined, (v) => v + "!");
+    expect(result).toEqual(["a!", "b!"]);
+  });
+
+  it("should throw error for malformed URI", () => {
+    expect(() => parseQueryValuesToArray("%E0%A4%A")).toThrow();
+  });
+
 });
