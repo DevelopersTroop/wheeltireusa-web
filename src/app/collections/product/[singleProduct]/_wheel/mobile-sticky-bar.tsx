@@ -1,7 +1,7 @@
 'use client';
 
 import { TWheelProduct } from "@/types/product";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { useAppDispatch, useTypedSelector } from '@/redux/store';
 import { WheelContext } from './context/WheelProvider';
@@ -20,22 +20,6 @@ const WheelMobileStickyBar = ({ product }: { product: TWheelProduct }) => {
   );
 
   const [loading, setLoading] = React.useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-
-  // Show/hide sticky bar on scroll
-  useEffect(() => {
-    const handleScroll = () => {
-      // Show after scrolling 300px
-      if (window.scrollY > 300) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   // ✅ check if already in cart
   const isInCart = Object.values(cartProducts).some(
@@ -93,11 +77,10 @@ const WheelMobileStickyBar = ({ product }: { product: TWheelProduct }) => {
   const productImage = product?.itemImage || product?.images?.[0] || "/wheel-not-available.png";
 
   return (
-    <div className={`
+    <div className="
       fixed bottom-0 left-0 w-full z-50 bg-white border-t border-gray-200 shadow-lg
-      transition-transform duration-300 ease-in-out
-      ${isVisible ? 'translate-y-0' : 'translate-y-full'}
-    `}>
+      translate-y-0
+    ">
 
       <div className="flex items-center justify-between px-3 sm:px-4 md:px-6 lg:px-8 xl:px-25 py-2.5 sm:py-3 gap-2 sm:gap-3">
 
