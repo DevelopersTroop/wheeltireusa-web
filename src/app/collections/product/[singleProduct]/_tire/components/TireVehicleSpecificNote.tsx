@@ -1,29 +1,27 @@
 'use client';
 import { useMemo } from "react";
 import { MdInfo, MdCheckCircle, MdWarning } from "react-icons/md";
-import { TWheelProduct } from "@/types/product";
+import { TTireProduct } from "@/types/product";
 import { useTypedSelector } from "@/redux/store";
-import { validateWheelFitment, normalizeWheelFitment, WheelFitmentValidationResult, FitmentCheckType } from "@/lib/fitment";
+import { validateTireFitment, normalizeTireFitment, TireFitmentValidationResult, TireFitmentCheckType } from "@/lib/fitment";
 
 // Helper function to get user-friendly failure messages
-const getFailureMessages = (failedChecks: FitmentCheckType[]): string[] => {
-  const messages: Record<FitmentCheckType, string> = {
-    boltPattern: "Bolt pattern does not match your vehicle",
-    centerBore: "Center bore is too small for your vehicle's hub",
-    loadRating: "Load rating is insufficient for your vehicle",
-    offset: "Wheel offset is outside the acceptable range",
-    wheelSize: "Wheel size (diameter/width) does not match your vehicle's requirements",
-    missingData: "Incomplete wheel specification data",
+const getTireFailureMessages = (failedChecks: TireFitmentCheckType[]): string[] => {
+  const messages: Record<TireFitmentCheckType, string> = {
+    tireSize: "Tire size does not match your vehicle's requirements",
+    loadIndex: "Load index is below your vehicle's requirement",
+    speedRating: "Speed rating is below your vehicle's requirement",
+    missingData: "Incomplete tire specification data",
   };
 
   return failedChecks.map(check => messages[check]);
 };
 
-interface VehicleSpecificNoteProps {
-  product: TWheelProduct;
+interface TireVehicleSpecificNoteProps {
+  product: TTireProduct;
 }
 
-const VehicleSpecificNote = ({ product }: VehicleSpecificNoteProps) => {
+const TireVehicleSpecificNote = ({ product }: TireVehicleSpecificNoteProps) => {
   // Access Redux state
   const vehicleInformation = useTypedSelector(
     (state) => state.persisted.yearMakeModel.vehicleInformation
@@ -45,30 +43,27 @@ const VehicleSpecificNote = ({ product }: VehicleSpecificNoteProps) => {
 
   // Normalize fitment data
   const normalizedFitment = useMemo(() => {
-    return normalizeWheelFitment(
-      vehicleInformation.VehicleDataFromDRD_NA,
-      vehicleInformation.afterMarketDRSizes
-    );
-  }, [vehicleInformation]);
+    return normalizeTireFitment(vehicleInformation, activeGarageId);
+  }, [vehicleInformation, activeGarageId]);
 
   // Validate fitment
   const fitmentValidation = useMemo(() => {
-    return validateWheelFitment(product, normalizedFitment, activeVehicle);
+    return validateTireFitment(product, normalizedFitment, activeVehicle);
   }, [product, normalizedFitment, activeVehicle]);
 
   // No active vehicle selected - show generic info
   if (!activeVehicle) {
-    return <GenericVehicleNote product={product} />;
+    return <TireGenericNote product={product} />;
   }
 
-  // Wheel doesn't fit
+  // Tire doesn't fit
   if (!fitmentValidation.isCompatible) {
-    return <IncompatibleNote product={product} activeVehicle={activeVehicle} fitmentValidation={fitmentValidation} />;
+    return <TireIncompatibleNote product={product} activeVehicle={activeVehicle} fitmentValidation={fitmentValidation} />;
   }
 
-  // Wheel fits - show fitment details
+  // Tire fits - show fitment details
   return (
-    <CompatibleNote
+    <TireCompatibleNote
       product={product}
       fitmentValidation={fitmentValidation}
     />
@@ -76,7 +71,7 @@ const VehicleSpecificNote = ({ product }: VehicleSpecificNoteProps) => {
 };
 
 // Sub-component: Generic note when no vehicle selected
-const GenericVehicleNote = ({ product }: { product: TWheelProduct }) => (
+const TireGenericNote = ({ product }: { product: TTireProduct }) => (
   <div className="rounded-lg bg-blue-50 border border-blue-100 px-3 sm:px-4 py-2.5 sm:py-3">
     <div className="flex items-start gap-2 sm:gap-3">
       <MdInfo className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500 flex-shrink-0 mt-0.5" />
@@ -85,21 +80,27 @@ const GenericVehicleNote = ({ product }: { product: TWheelProduct }) => (
           Vehicle Specific
         </p>
         <ul className="space-y-1 sm:space-y-1.5 text-xs sm:text-sm text-gray-600">
-          {product?.wheelSize && (
+          {product?.tireSize && (
             <li className="flex items-start gap-1.5 sm:gap-2">
               <span className="text-blue-500 mt-0.5 sm:mt-1 text-[10px] sm:text-xs">•</span>
-              <span>Size: {product.wheelSize}</span>
+              <span>Size: {product.tireSize}</span>
             </li>
           )}
-          {product?.boltPatterns && product.boltPatterns.length > 0 && (
+          {product?.loadIndex && (
             <li className="flex items-start gap-1.5 sm:gap-2">
               <span className="text-blue-500 mt-0.5 sm:mt-1 text-[10px] sm:text-xs">•</span>
-              <span>Bolt Pattern: {product.boltPatterns.join(", ")}</span>
+              <span>Load Index: {product.loadIndex}</span>
+            </li>
+          )}
+          {product?.speedRating && (
+            <li className="flex items-start gap-1.5 sm:gap-2">
+              <span className="text-blue-500 mt-0.5 sm:mt-1 text-[10px] sm:text-xs">•</span>
+              <span>Speed Rating: {product.speedRating}</span>
             </li>
           )}
           <li className="flex items-start gap-1.5 sm:gap-2">
             <span className="text-blue-500 mt-0.5 sm:mt-1 text-[10px] sm:text-xs">•</span>
-            <span>Select your vehicle to check fitment</span>
+            <span>Select your vehicle to verify fitment</span>
           </li>
         </ul>
       </div>
@@ -107,17 +108,17 @@ const GenericVehicleNote = ({ product }: { product: TWheelProduct }) => (
   </div>
 );
 
-// Sub-component: Wheel doesn't fit
-const IncompatibleNote = ({
+// Sub-component: Tire doesn't fit
+const TireIncompatibleNote = ({
   product,
   activeVehicle,
   fitmentValidation,
 }: {
-  product: TWheelProduct;
+  product: TTireProduct;
   activeVehicle: { year: string; make: string; model: string; trim?: string; drive?: string };
-  fitmentValidation: WheelFitmentValidationResult;
+  fitmentValidation: TireFitmentValidationResult;
 }) => {
-  const failureReasons = getFailureMessages(fitmentValidation.failedChecks);
+  const failureReasons = getTireFailureMessages(fitmentValidation.failedChecks);
 
   return (
     <div className="rounded-lg bg-red-50 border border-red-100 px-3 sm:px-4 py-2.5 sm:py-3">
@@ -129,11 +130,10 @@ const IncompatibleNote = ({
           </p>
           <p className="text-xs sm:text-sm text-gray-700 mb-2">
             {activeVehicle.year} {activeVehicle.make} {activeVehicle.model}
-            {activeVehicle.trim && ` ${activeVehicle.trim}`}
-            {activeVehicle.drive && ` ${activeVehicle.drive}`}
+            {activeVehicle.trim && activeVehicle.trim !== "__DEFAULT_TRIM__" && ` ${activeVehicle.trim}`}
           </p>
           <p className="text-xs sm:text-sm text-gray-600 mb-2 font-medium">
-            Reason{failureReasons.length > 1 ? 's' : ''} this wheel won't fit:
+            Reason{failureReasons.length > 1 ? 's' : ''} this tire won't fit:
           </p>
           <ul className="space-y-1 sm:space-y-1.5 text-xs sm:text-sm text-gray-600">
             {failureReasons.map((reason, index) => (
@@ -143,15 +143,18 @@ const IncompatibleNote = ({
               </li>
             ))}
           </ul>
-          {(product?.wheelSize || (product?.boltPatterns && product.boltPatterns.length > 0)) && (
+          {(product?.tireSize || product?.loadIndex || product?.speedRating) && (
             <div className="mt-3 pt-2 border-t border-red-200">
-              <p className="text-xs text-gray-500 mb-1">Wheel specifications:</p>
+              <p className="text-xs text-gray-500 mb-1">Tire specifications:</p>
               <ul className="space-y-0.5 text-xs text-gray-600">
-                {product?.wheelSize && (
-                  <li>• Size: {product.wheelSize}</li>
+                {product?.tireSize && (
+                  <li>• Size: {product.tireSize}</li>
                 )}
-                {product?.boltPatterns && product.boltPatterns.length > 0 && (
-                  <li>• Bolt Pattern: {product.boltPatterns.join(", ")}</li>
+                {product?.loadIndex && (
+                  <li>• Load Index: {product.loadIndex}</li>
+                )}
+                {product?.speedRating && (
+                  <li>• Speed Rating: {product.speedRating}</li>
                 )}
               </ul>
             </div>
@@ -162,47 +165,48 @@ const IncompatibleNote = ({
   );
 };
 
-// Sub-component: Wheel fits
-const CompatibleNote = ({
+// Sub-component: Tire fits
+const TireCompatibleNote = ({
   product,
   fitmentValidation,
 }: {
-  product: TWheelProduct;
-  fitmentValidation: WheelFitmentValidationResult;
+  product: TTireProduct;
+  fitmentValidation: TireFitmentValidationResult;
 }) => (
   <div className="rounded-lg bg-green-50 border border-green-100 px-3 sm:px-4 py-2.5 sm:py-3">
     <div className="flex items-start gap-2 sm:gap-3">
       <MdCheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0 mt-0.5" />
       <div className="flex-1 min-w-0">
         <p className="text-sm sm:text-base text-green-700 font-medium mb-1.5 sm:mb-2">
-          Fits Your Vehicle - {fitmentValidation.compatibility}
+          Fits Your Vehicle
         </p>
         <p className="text-xs sm:text-sm text-gray-700 mb-2">
           {fitmentValidation.activeVehicle?.year} {fitmentValidation.activeVehicle?.make}{" "}
           {fitmentValidation.activeVehicle?.model}
-          {fitmentValidation.activeVehicle?.trim && ` ${fitmentValidation.activeVehicle.trim}`}
-          {fitmentValidation.activeVehicle?.drive && ` ${fitmentValidation.activeVehicle.drive}`}
+          {fitmentValidation.activeVehicle?.trim && fitmentValidation.activeVehicle.trim !== "__DEFAULT_TRIM__" && ` ${fitmentValidation.activeVehicle.trim}`}
         </p>
         <ul className="space-y-1 sm:space-y-1.5 text-xs sm:text-sm text-gray-600">
-          {product?.wheelSize && (
+          {product?.tireSize && (
             <li className="flex items-start gap-1.5 sm:gap-2">
               <span className="text-green-500 mt-0.5 sm:mt-1 text-[10px] sm:text-xs">•</span>
-              <span>Size: {product.wheelSize}</span>
+              <span>Size: {product.tireSize}</span>
             </li>
           )}
-          {product?.boltPatterns && product.boltPatterns.length > 0 && (
+          {product?.loadIndex && (
             <li className="flex items-start gap-1.5 sm:gap-2">
               <span className="text-green-500 mt-0.5 sm:mt-1 text-[10px] sm:text-xs">•</span>
-              <span>Bolt Pattern: {product.boltPatterns.join(", ")}</span>
+              <span>Load Index: {product.loadIndex}</span>
+            </li>
+          )}
+          {product?.speedRating && (
+            <li className="flex items-start gap-1.5 sm:gap-2">
+              <span className="text-green-500 mt-0.5 sm:mt-1 text-[10px] sm:text-xs">•</span>
+              <span>Speed Rating: {product.speedRating}</span>
             </li>
           )}
           <li className="flex items-start gap-1.5 sm:gap-2">
             <span className="text-green-500 mt-0.5 sm:mt-1 text-[10px] sm:text-xs">•</span>
-            <span>
-              {/* Load rating is currently disabled in validation logic - to re-enable, uncomment the line below and comment out the active line */}
-              {/* Fitment based on matching bolt pattern, center bore, load rating, offset, and size */}
-              Fitment based on matching bolt pattern, center bore, offset, and size
-            </span>
+            <span>Fitment based on matching size, load index, and speed rating</span>
           </li>
         </ul>
         <p className="mt-2 text-xs text-gray-500 italic">
@@ -213,4 +217,4 @@ const CompatibleNote = ({
   </div>
 );
 
-export default VehicleSpecificNote;
+export default TireVehicleSpecificNote;

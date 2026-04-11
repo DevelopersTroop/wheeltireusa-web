@@ -2,10 +2,10 @@
 
 import { TTireProduct } from "@/types/product";
 import { useGetReviewsQuery } from "@/redux/apis/reviews";
-import { useTypedSelector } from "@/redux/store";
-import { MdStar, MdInfo } from "react-icons/md";
+import { MdStar } from "react-icons/md";
 import { TbPhone } from "react-icons/tb";
 import DealerBadge from "./DealerBadge";
+import TireVehicleSpecificNote from "./TireVehicleSpecificNote";
 
 interface TireProductInfoCenterProps {
   product: TTireProduct;
@@ -16,11 +16,6 @@ const TireProductInfoCenter = ({ product }: TireProductInfoCenterProps) => {
     { productId: product.id, page: 1 },
     { skip: !product.id }
   );
-
-  // Get active garage vehicle for fitment info
-  const garage = useTypedSelector((state) => state.persisted.yearMakeModel.garage);
-  const activeGarageId = useTypedSelector((state) => state.persisted.yearMakeModel.activeGarageId);
-  const activeGarageItem = activeGarageId ? garage?.[activeGarageId] : undefined;
 
   const averageRating = data?.average || 0;
   const reviewCount = data?.count || 0;
@@ -69,73 +64,7 @@ const TireProductInfoCenter = ({ product }: TireProductInfoCenterProps) => {
       )}
 
       {/* Vehicle Fitment Note */}
-      {activeGarageItem ? (
-        <div className="rounded-lg bg-blue-50 border border-blue-100 px-3 sm:px-4 py-2.5 sm:py-3">
-          <div className="flex items-start gap-2 sm:gap-3">
-            {/* Blue Info Icon */}
-            <MdInfo className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500 flex-shrink-0 mt-0.5" />
-
-            {/* Content */}
-            <div className="flex-1 min-w-0">
-              <p className="text-sm sm:text-base text-gray-700 font-medium mb-1.5 sm:mb-2">
-                Vehicle Specific
-              </p>
-
-              {/* Bullet Points */}
-              <ul className="space-y-1 sm:space-y-1.5 text-xs sm:text-sm text-gray-600">
-                {product?.tireSize && (
-                  <li className="flex items-start gap-1.5 sm:gap-2">
-                    <span className="text-blue-500 mt-0.5 sm:mt-1 text-[10px] sm:text-xs">•</span>
-                    <span>Size: {product.tireSize}</span>
-                  </li>
-                )}
-                <li className="flex items-start gap-1.5 sm:gap-2">
-                  <span className="text-blue-500 mt-0.5 sm:mt-1 text-[10px] sm:text-xs">•</span>
-                  <span>Fits: {activeGarageItem.year} {activeGarageItem.make} {activeGarageItem.model}
-                    {activeGarageItem.trim && activeGarageItem.trim !== "__DEFAULT_TRIM__" && ` ${activeGarageItem.trim}`}
-                  </span>
-                </li>
-                <li className="flex items-start gap-1.5 sm:gap-2">
-                  <span className="text-blue-500 mt-0.5 sm:mt-1 text-[10px] sm:text-xs">•</span>
-                  <span>Fitment guaranteed when purchased as a set</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className="rounded-lg bg-blue-50 border border-blue-100 px-3 sm:px-4 py-2.5 sm:py-3">
-          <div className="flex items-start gap-2 sm:gap-3">
-            {/* Blue Info Icon */}
-            <MdInfo className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500 flex-shrink-0 mt-0.5" />
-
-            {/* Content */}
-            <div className="flex-1 min-w-0">
-              <p className="text-sm sm:text-base text-gray-700 font-medium mb-1.5 sm:mb-2">
-                Vehicle Specific
-              </p>
-
-              {/* Bullet Points */}
-              <ul className="space-y-1 sm:space-y-1.5 text-xs sm:text-sm text-gray-600">
-                {product?.tireSize && (
-                  <li className="flex items-start gap-1.5 sm:gap-2">
-                    <span className="text-blue-500 mt-0.5 sm:mt-1 text-[10px] sm:text-xs">•</span>
-                    <span>Size: {product.tireSize}</span>
-                  </li>
-                )}
-                <li className="flex items-start gap-1.5 sm:gap-2">
-                  <span className="text-blue-500 mt-0.5 sm:mt-1 text-[10px] sm:text-xs">•</span>
-                  <span>Select your vehicle to verify fitment</span>
-                </li>
-                <li className="flex items-start gap-1.5 sm:gap-2">
-                  <span className="text-blue-500 mt-0.5 sm:mt-1 text-[10px] sm:text-xs">•</span>
-                  <span>Fitment guaranteed when purchased as a set</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      )}
+      <TireVehicleSpecificNote product={product} />
 
       {/* Key-Value Pairs - Product Specs */}
       <div className="grid grid-cols-1 sm:grid-cols-1 gap-x-4 gap-y-2 text-xs">
