@@ -10,7 +10,6 @@ import { apiBaseUrl } from "@/utils/api";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { Field, Form, Formik } from "formik";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -19,6 +18,8 @@ const Newsletter = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [couponCode, setCouponCode] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
   const isOpen = useSelector(
     (state: RootState) => state.persisted.newsletterModal.isOpen
   );
@@ -30,10 +31,8 @@ const Newsletter = () => {
   );
 
   useEffect(() => {
-    let showModal = true;
     const calculateHourDiff = (closingTime: number) => {
-      const currentTimeStamp = Date.now();
-      const diffMs = currentTimeStamp - closingTime; // difference in milliseconds
+      const diffMs = Date.now() - closingTime;
       return diffMs / (1000 * 60 * 60);
     };
 
@@ -41,142 +40,186 @@ const Newsletter = () => {
     if (
       !isNewsLetterSubmitted &&
       (newsLetterModalClosingTimeStamp === 0 ||
-        (newsLetterModalClosingTimeStamp !== 0 &&
-          calculateHourDiff(newsLetterModalClosingTimeStamp) > timeGap))
-    )
+        calculateHourDiff(newsLetterModalClosingTimeStamp) > timeGap)
+    ) {
       dispatch(openNewsletterModal());
+    }
   }, []);
 
+  const handleCopy = () => {
+    if (couponCode) {
+      navigator.clipboard.writeText(couponCode);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
   return (
-    <>
-      <Dialog
-        open={isOpen}
-        onOpenChange={() => dispatch(closeNewsletterModal())}
-      >
-        <DialogContent
-          closeIconStyle="h-6 w-6 !text-white md:mr-0 md:mt-0 mt-5 mr-5 text-black"
-          className="max-w-3xl  h-full mb- !rounded-none border-none md:p-0 p-6"
+    <Dialog open={isOpen} onOpenChange={() => dispatch(closeNewsletterModal())}>
+      <DialogContent className="max-w-[560px] p-0 rounded-2xl overflow-hidden border border-border fixed left-4 right-4 top-1/2 -translate-y-1/2 translate-x-0 w-auto mx-auto">
+        <DialogTitle className="sr-only">Newsletter Subscription</DialogTitle>
+
+        {/* Header — brand-colored banner */}
+        <div
+          className="px-8 pt-8 pb-6 relative"
+          style={{ backgroundColor: "#EF4F19" }}
         >
-          <DialogTitle className="sr-only">Newsletter Subscription</DialogTitle>
-          <div className="flex flex-col md:flex-row  ">
-            {/* Left section: Static image */}
-            {/* <div className="w-full  h-[40dvh] md:h-[550px] relative">
-              <Image
-                alt="Newsletter"
-                className="object-cover"
-                src="/images/newsletter.png"
-                fill
-                priority
-                fetchPriority="high"
-                quality={80}
-              />
-            </div> */}
+          {/* Subtle decorative ring */}
+          <div
+            className="absolute -top-10 -right-10 w-40 h-40 rounded-full opacity-10 pointer-events-none"
+            style={{ backgroundColor: "#fff" }}
+          />
+          <div
+            className="absolute -bottom-6 -left-6 w-24 h-24 rounded-full opacity-10 pointer-events-none"
+            style={{ backgroundColor: "#fff" }}
+          />
 
-            {/* Right section: Converted background to real <Image /> */}
-            <div className="relative w-full  md:max-w-[368px] flex flex-col justify-center items-center gap-y-4 px-10 pt-[10rem] pb-[10rem] h-[22vh] md:h-[550px] overflow-hidden">
-              {/* Background image */}
-              {/* <Image
-                src="/images/newsletter-form.png"
-                alt="Newsletter Banner"
-                fill
-                fetchPriority="high"
-                quality={80}
-                className="object-cover brightness-75 contrast-125 -z-10 relative"
-              /> */}
+          <span
+            className="inline-block text-[11px] font-medium tracking-wide px-3 py-1 rounded-full mb-3 border"
+            style={{
+              backgroundColor: "rgba(255,255,255,0.15)",
+              borderColor: "rgba(255,255,255,0.3)",
+              color: "#fff",
+            }}
+          >
+            Limited time offer
+          </span>
+          <h2 className="text-[22px] font-semibold text-white leading-snug mb-1.5">
+            Get $50 off your first order
+          </h2>
+          <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.8)" }}>
+            Join our newsletter and receive an exclusive discount code instantly
+            in your inbox.
+          </p>
+        </div>
 
-              <div className="relative z-10 ">
-                {isSuccess ? (
-                  <div className="text-center">
-                    <div className="leading-[1.3] text-4xl font-extrabold text-gray-800 uppercase">
-                      Thank you!
+        {/* Body */}
+        <div className="px-8 pt-6 pb-8 bg-white">
+          {!isSuccess ? (
+            <>
+              {/* Perks */}
+              <div className="flex flex-wrap gap-x-4 gap-y-1.5 mb-5">
+                {["New products first", "Exclusive deals", "No spam, ever"].map(
+                  (perk) => (
+                    <div
+                      key={perk}
+                      className="flex items-center gap-1.5 text-sm text-gray-500"
+                    >
+                      <span
+                        className="w-1.5 h-1.5 rounded-full inline-block"
+                        style={{ backgroundColor: "#EF4F19" }}
+                      />
+                      {perk}
                     </div>
-                    <div className="flex justify-center items-center mt-4">
-                      <p
-                        onClick={() => {
-                          if (couponCode)
-                            window.navigator.clipboard.writeText(couponCode);
-                        }}
-                        className="text-center text-gray-800 font-semibold text-base tracking-wide cursor-pointer"
-                      >
-                        Use code{" "}
-                        <span className="text-base font-bold text-primary">
-                          {couponCode}
-                        </span>{" "}
-                        for 5% off your order.
-                      </p>
-                    </div>
-                  </div>
-                ) : (
-                  <>
-                    <div className="text-center leading-[1.3] text-2xl md:text-[27px] font-extrabold text-gray-800 uppercase">
-                      Get $50 Off Your First Order!
-                    </div>
-                    <div className="text-center text-gray-800 font-semibold text-base tracking-wide py-2.5">
-                      Sign up to receive your exclusive discount instantly.
-                    </div>
-                    <div>
-                      <Formik
-                        initialValues={{ email: "" }}
-                        onSubmit={(values, { setFieldError }) => {
-                          setIsSubmitting(true);
-                          fetch(`${apiBaseUrl}/subscriptions`, {
-                            method: "POST",
-                            headers: {
-                              "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify({ email: values.email }),
-                          })
-                            .then((res) => res.json())
-                            .then((data) => {
-                              if (data.statusCode && data.statusCode === 201) {
-                                setCouponCode(data.data.coupon.code);
-                                triggerEvent(
-                                  "coupon_retrived_using_newsletter",
-                                  {
-                                    coupon_code: data.data.coupon.code,
-                                  }
-                                );
-                                setIsSuccess(true);
-                                dispatch(setIsNewsLetterSubmitted(true));
-                              } else if (data.errors?.length > 0) {
-                                setFieldError("email", data.errors[0].message);
-                              }
-                            })
-                            .finally(() => setIsSubmitting(false));
-                        }}
-                      >
-                        {({ errors }) => (
-                          <Form>
-                            {errors.email && (
-                              <div className="text-red-500 mb-2">
-                                {errors.email}
-                              </div>
-                            )}
-                            <Field
-                              className="border focus:outline-none border-btext p-3 w-full"
-                              type="email"
-                              name="email"
-                              placeholder="E-mail Address"
-                            />
-                            <button
-                              type="submit"
-                              className="py-2 md:py-3.5 border border-primary px-8 bg-primary rounded-xl text-white font-semibold transition duration-300 ease-in-out mt-4 w-full uppercase hover:bg-white hover:border-black hover:text-black"
-                              disabled={isSubmitting}
-                            >
-                              {isSubmitting ? "Please wait..." : "sign-up"}
-                            </button>
-                          </Form>
-                        )}
-                      </Formik>
-                    </div>
-                  </>
+                  )
                 )}
               </div>
+
+              {/* Form */}
+              <Formik
+                initialValues={{ email: "" }}
+                onSubmit={(values, { setFieldError }) => {
+                  setIsSubmitting(true);
+                  fetch(`${apiBaseUrl}/subscriptions`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email: values.email }),
+                  })
+                    .then((res) => res.json())
+                    .then((data) => {
+                      if (data.statusCode === 201) {
+                        setCouponCode(data.data.coupon.code);
+                        triggerEvent("coupon_retrived_using_newsletter", {
+                          coupon_code: data.data.coupon.code,
+                        });
+                        setIsSuccess(true);
+                        dispatch(setIsNewsLetterSubmitted(true));
+                      } else if (data.errors?.length > 0) {
+                        setFieldError("email", data.errors[0].message);
+                      }
+                    })
+                    .finally(() => setIsSubmitting(false));
+                }}
+              >
+                {({ errors }) => (
+                  <Form>
+                    {errors.email && (
+                      <div className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg mb-3">
+                        {errors.email}
+                      </div>
+                    )}
+                    <div className="flex gap-2 sm: flex-col">
+                      <Field
+                        className="flex-1 text-sm px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent bg-white text-gray-900 placeholder:text-gray-400"
+                        style={{ "--tw-ring-color": "#EF4F19" } as React.CSSProperties}
+                        type="email"
+                        name="email"
+                        placeholder="your@email.com"
+                      />
+                      <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="px-5 py-2.5 text-white text-sm font-medium rounded-lg transition-colors whitespace-nowrap disabled:opacity-60"
+                        style={{ backgroundColor: "#EF4F19" }}
+                        onMouseEnter={(e) =>
+                          (e.currentTarget.style.backgroundColor = "#d94315")
+                        }
+                        onMouseLeave={(e) =>
+                          (e.currentTarget.style.backgroundColor = "#EF4F19")
+                        }
+                      >
+                        {isSubmitting ? "Please wait…" : "Claim discount"}
+                      </button>
+                    </div>
+                    <p className="text-xs text-gray-400 mt-3">
+                      By signing up you agree to our privacy policy. Unsubscribe
+                      anytime.
+                    </p>
+                  </Form>
+                )}
+              </Formik>
+            </>
+          ) : (
+            /* Success state */
+            <div className="text-center py-4">
+              <div
+                className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-semibold"
+                style={{ backgroundColor: "#FEE9E3", color: "#EF4F19" }}
+              >
+                ✓
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-1.5">
+                You&apos;re in!
+              </h3>
+              <p className="text-sm text-gray-500 mb-6 leading-relaxed">
+                Here&apos;s your exclusive discount code. Tap to copy it.
+              </p>
+              <button
+                onClick={handleCopy}
+                className="inline-flex items-center gap-3 bg-gray-50 rounded-xl px-6 py-3.5 transition-colors cursor-pointer border-2 border-dashed"
+                style={{
+                  borderColor: copied ? "#EF4F19" : "#e5e7eb",
+                  backgroundColor: copied ? "#FEE9E3" : "#f9fafb",
+                }}
+              >
+                <span
+                  className="font-mono text-xl font-semibold tracking-widest"
+                  style={{ color: "#EF4F19" }}
+                >
+                  {couponCode}
+                </span>
+                <span className="text-xs text-gray-400 font-sans font-normal">
+                  {copied ? "copied!" : "tap to copy"}
+                </span>
+              </button>
+              <p className="text-xs text-gray-400 mt-5">
+                Check your inbox for a confirmation email too.
+              </p>
             </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-    </>
+          )}
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 
