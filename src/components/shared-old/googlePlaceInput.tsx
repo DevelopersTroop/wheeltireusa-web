@@ -43,7 +43,7 @@ export const GooglePlacesInput = React.memo<GooglePlacesInputProps>(
     label,
     value,
     required = true,
-    placeholder = 'Enter address',
+    placeholder = '',
     className,
     ...props
   }) => {
@@ -226,7 +226,7 @@ export const GooglePlacesInput = React.memo<GooglePlacesInputProps>(
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 10 }}
-                className="absolute left-4 top-1/2 -translate-y-1/2 transition-all duration-300 pointer-events-none select-none z-20 font-black tracking-widest uppercase italic text-[13px] text-slate-400"
+                className="absolute left-4 top-1/2 -translate-y-1/2 transition-all duration-300 pointer-events-none select-none z-20 font-black tracking-widest uppercase text-[12px] text-slate-400"
               >
                 {label}
                 {required && <span className="ml-1 text-primary">*</span>}

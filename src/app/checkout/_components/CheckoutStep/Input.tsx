@@ -84,7 +84,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             }}
             className={cn(
               "w-full h-full py-4 px-4 bg-transparent outline-none",
-              "text-slate-900 font-bold text-[15px] tracking-tight italic relative z-10",
+              "text-slate-900 font-bold text-[14px] tracking-tight  relative z-10",
               "placeholder:text-slate-300",
               props.disabled && "cursor-not-allowed opacity-50"
             )}
