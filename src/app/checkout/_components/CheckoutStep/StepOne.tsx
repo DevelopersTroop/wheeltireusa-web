@@ -24,11 +24,12 @@ import {
   StripePaymentElement,
   StripePaymentElementChangeEvent,
 } from '@stripe/stripe-js';
-import { AlertCircle, ChevronRight, InfoIcon, Loader, ShoppingCart, X } from 'lucide-react';
+import { AlertCircle, ChevronRight, Info, Loader2, ShoppingCart, X, CreditCard } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import { useDispatch } from 'react-redux';
 import { PaymentFormWrapper } from './payment-form-wrapper';
 import { BillingAndShippingInput } from './BillingAndShippingInput';
@@ -51,8 +52,8 @@ export const StepOne = ({ }) => {
     taxAmount,
     totalWithTax,
   } = useTypedSelector((state) => state.persisted.checkout);
-  const newsLetterRef = useRef<HTMLDivElement>(null); // Ref for newsletter section
-  const phoneNumberRef = useRef<HTMLDivElement>(null); // Ref for phone number section
+  const newsLetterRef = useRef<HTMLDivElement>(null);
+  const phoneNumberRef = useRef<HTMLDivElement>(null);
   const [billingSameAsShipping, setShippingSameAsBilling] = useState(
     selectedOptionTitle === 'Direct to Customer'
   );
@@ -126,7 +127,6 @@ export const StepOne = ({ }) => {
   const { getSnapFinanceTransactionData, placeOrderWithSnapFinance } =
     useSnapFinanceOrderData();
 
-  // ✅ Define handlers (stable, no re-creation)
   const onClickHandler = (data: any, actions: any) => {
     // Trigger Snap app logic here (apply for credit, etc.)
   };
@@ -379,31 +379,25 @@ export const StepOne = ({ }) => {
           setIsCard(false);
           setCardError('');
         }}
-        className={`group relative rounded-xl p-4 h-16 cursor-pointer transition-all duration-500 border-2 ${activeAccordion === method
-          ? 'border-slate-900 bg-slate-900 text-white shadow-xl -translate-y-0.5'
-          : 'border-slate-100 bg-white hover:border-slate-200 hover:shadow-lg'
+        className={`group relative rounded-xl p-3 h-14 cursor-pointer transition-all duration-200 border
+          ${activeAccordion === method
+            ? 'border-slate-900 bg-slate-900 text-white'
+            : 'border-slate-200 bg-white hover:border-slate-300'
           }`}
       >
         <div className="flex items-center justify-between h-full">
-          <div className="flex items-center gap-4">
-            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${activeAccordion === method ? 'border-primary' : 'border-slate-200'
-              }`}>
-              {activeAccordion === method && <div className="w-2 h-2 rounded-full bg-primary" />}
+          <div className="flex items-center gap-3">
+            <div
+              className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors
+                ${activeAccordion === method ? 'border-white' : 'border-slate-300'
+                }`}
+            >
+              {activeAccordion === method && <div className="w-2 h-2 rounded-full bg-white" />}
             </div>
-            <div className="flex items-center">
-              {icon}
-              {label && (
-                <span className={`text-lg font-black uppercase italic tracking-tighter ml-3 ${activeAccordion === method ? 'text-white' : 'text-slate-900'
-                  }`}>
-                  {label}
-                </span>
-              )}
-            </div>
+            {icon}
           </div>
           {activeAccordion === method && (
-            <div className="bg-primary/20 p-2 rounded-xl">
-              <ChevronRight size={16} className="text-primary" />
-            </div>
+            <ChevronRight size={16} className="text-white" />
           )}
         </div>
       </div>
@@ -411,72 +405,62 @@ export const StepOne = ({ }) => {
     [activeAccordion, toggleAccordion]
   );
 
-  // Order summary component to avoid duplication
+  // Order summary component
   const OrderSummary = useMemo(
     () => (
-      <div className="rounded-3xl bg-white border border-slate-100 shadow-2xl p-6 space-y-6 animate-in fade-in zoom-in duration-500">
-        <div className="space-y-4">
-          <div className="space-y-1">
-            <h3 className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">
-              Protocol: {selectedOptionTitle}
-            </h3>
-            <div className="h-1 w-12 bg-primary rounded-full" />
+      <div className="bg-white border border-slate-100 rounded-2xl p-5 space-y-5 shadow-sm">
+        <div className="space-y-3">
+          <div className="flex flex-col gap-1">
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+              {selectedOptionTitle}
+            </span>
+            <div className="h-[2px] w-7 bg-slate-900 rounded-full" />
           </div>
 
           <div className="space-y-3">
-            <div className="flex justify-between items-baseline group">
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest group-hover:text-slate-900 transition-colors">
-                Base Valuation
-              </p>
-              <div className="flex gap-1 items-baseline">
-                <span className="text-slate-900 text-2xl font-black italic tracking-tighter">
+            <div className="flex justify-between items-center">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Subtotal</span>
+              <div className="flex items-baseline gap-0.5">
+                <span className="text-sm font-bold text-slate-900">
                   ${Math.floor(subTotalCost)}
                 </span>
-                <span className="text-slate-400 text-[10px] font-black italic">
+                <span className="text-xs text-slate-400">
                   .{subTotalCost.toFixed(2).split('.')[1]}
                 </span>
               </div>
             </div>
 
-            <div className="flex justify-between items-baseline group">
+            <div className="flex justify-between items-center">
               <div className="flex flex-col">
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest group-hover:text-slate-900 transition-colors">
-                  Shipping Fee
-                </p>
-                <span className="text-[8px] text-primary font-black uppercase tracking-tighter">Verified: {validatedZipCode}</span>
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Shipping</span>
+                <span className="text-[8px] text-slate-400 uppercase tracking-tighter">{validatedZipCode}</span>
               </div>
-              <div className="flex gap-0 items-baseline">
-                <h4 className="text-lg font-black text-slate-900 uppercase italic tracking-tighter">
-                  {cartType === 'CENTER_CAP_ONLY' ? '$14.99' : 'Free'}
-                </h4>
-              </div>
+              <span className="text-sm font-bold text-slate-900">
+                {cartType === 'CENTER_CAP_ONLY' ? '$14.99' : 'Free'}
+              </span>
             </div>
 
             {taxAmount ? (
-              <div className="flex justify-between items-baseline group">
-                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest group-hover:text-slate-900 transition-colors">
-                  Mandatory Tax
-                </span>
-                <h4 className="text-lg font-black text-slate-900 uppercase italic tracking-tighter">
-                  ${taxAmount.toFixed(2)}
-                </h4>
+              <div className="flex justify-between items-center">
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Tax</span>
+                <span className="text-sm font-bold text-slate-900">${taxAmount.toFixed(2)}</span>
               </div>
             ) : null}
 
-            {discount ? (
-              <div className="flex justify-between items-baseline group">
-                <span className="text-[10px] font-black text-primary uppercase tracking-widest">Incentive Applied</span>
-                <span className="font-black text-primary text-2xl italic tracking-tighter">-${discount}</span>
+            {discount && (
+              <div className="flex justify-between items-center">
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-primary">Discount</span>
+                <span className="text-sm font-bold text-primary">-${discount}</span>
               </div>
-            ) : null}
+            )}
 
-            <div className="pt-4 border-t border-slate-100 flex justify-between items-baseline">
-              <h5 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em]">Net Total</h5>
-              <div className="flex gap-1 items-baseline">
-                <span className="text-slate-900 text-4xl font-black italic tracking-tighter">
+            <div className="pt-3 border-t border-slate-100 flex justify-between items-center">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-900">Total</span>
+              <div className="flex items-baseline gap-0.5">
+                <span className="text-lg font-bold text-slate-900">
                   ${Math.floor(totalWithTax || totalCost || 0)}
                 </span>
-                <span className="text-slate-400 text-lg font-black italic">
+                <span className="text-xs text-slate-400">
                   .{(totalWithTax || totalCost || 0).toFixed(2).split('.')[1]}
                 </span>
               </div>
@@ -484,71 +468,66 @@ export const StepOne = ({ }) => {
           </div>
         </div>
 
-        <div className="py-4 px-6 bg-slate-50/50 rounded-2xl border border-slate-100" ref={termsRef}>
+        <div className="bg-slate-50 rounded-xl p-4" ref={termsRef}>
           <div
             onClick={handleToggleTerms}
-            className="flex items-start gap-3 cursor-pointer group"
+            className="flex items-start gap-3 cursor-pointer"
           >
             <Checkbox
               checked={orderInfo.termsAndConditions}
-              className="rounded-md data-[state=checked]:bg-slate-900 border-slate-300 h-5 w-5 transition-all group-hover:border-primary"
+              className="rounded-md border-slate-300 h-4 w-4 mt-0.5"
             />
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-relaxed">
-              I certify and accept the{' '}
+            <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider leading-relaxed">
+              I accept the{' '}
               <Link
                 href="/terms-conditions"
                 target="_blank"
-                className="text-slate-900 underline decoration-primary decoration-1 underline-offset-4"
+                className="text-slate-900 underline"
               >
-                Terms of Engagement
+                Terms
               </Link>{' '}
-              and the{' '}
+              and{' '}
               <Link
                 href="/privacy-policy"
                 target="_blank"
-                className="text-slate-900 underline decoration-primary decoration-1 underline-offset-4"
+                className="text-slate-900 underline"
               >
-                Privacy Protocol
+                Privacy Policy
               </Link>
               .
             </p>
           </div>
           {showTermsAlert && (
-            <Alert variant="destructive" className="mt-4 border-2 border-rose-500 bg-rose-50 rounded-xl p-3">
-              <AlertDescription className="text-[10px] font-black uppercase tracking-tighter text-rose-700">
-                Action Required: Authorization protocol incomplete.
+            <Alert variant="destructive" className="mt-3 border-rose-500 bg-rose-50 rounded-lg p-3">
+              <AlertDescription className="text-[9px] font-semibold uppercase tracking-wider text-rose-700">
+                Please accept the terms to continue
               </AlertDescription>
             </Alert>
           )}
         </div>
 
-        <div className="px-6">
-          <Button
-            disabled={
-              (!stripeMethod && !activeAccordion) ||
-              !orderInfo.termsAndConditions ||
-              (isCard && !!cardError)
-            }
-            className="group relative font-black uppercase italic tracking-widest w-full h-16 mb-2 overflow-hidden rounded-2xl bg-slate-900 text-white hover:bg-primary transition-all duration-500 shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 active:scale-95 disabled:grayscale disabled:opacity-50 disabled:translate-y-0"
-            onClick={handlePlaceOrder}
-          >
-            <div className="relative z-10 flex items-center justify-center gap-3">
-              {isLoading ? (
-                <>
-                  <Loader className="h-5 w-5 animate-spin text-primary" />
-                  <span className="text-base">Processing...</span>
-                </>
-              ) : (
-                <>
-                  <ShoppingCart className="h-5 w-5 group-hover:animate-bounce" />
-                  <span className="text-base">Finalize Order</span>
-                </>
-              )}
-            </div>
-            <div className="absolute inset-0 bg-linear-to-r from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-          </Button>
-          <p className="text-center text-[8px] font-black text-slate-400 uppercase tracking-widest">Secure TLS 1.3 Encryption Protocol Active</p>
-        </div>
+        <Button
+          disabled={
+            (!stripeMethod && !activeAccordion) ||
+            !orderInfo.termsAndConditions ||
+            (isCard && !!cardError)
+          }
+          className="w-full h-12 rounded-xl bg-slate-900 text-white hover:bg-slate-800 transition-colors font-semibold uppercase tracking-wider text-xs disabled:opacity-50 disabled:cursor-not-allowed"
+          onClick={handlePlaceOrder}
+        >
+          {isLoading ? (
+            <span className="flex items-center gap-2">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              Processing
+            </span>
+          ) : (
+            <span className="flex items-center gap-2">
+              <ShoppingCart className="h-4 w-4" />
+              Place Order
+            </span>
+          )}
+        </Button>
+        <p className="text-center text-[8px] font-semibold text-slate-400 uppercase tracking-wider">Secure checkout</p>
       </div>
     ),
     [
@@ -575,29 +554,27 @@ export const StepOne = ({ }) => {
     ]
   );
 
-  // Modify stripe
-
   return (
     <div className="flex flex-col">
       {showPaymentError && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-red-700">
-            <AlertCircle className="h-5 w-5" />
-            <span>
-              Payment failed. Please try again or choose a different payment
-              method.
+        <div className="bg-rose-50 border border-rose-200 rounded-xl p-4 mb-6 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <AlertCircle className="h-5 w-5 text-rose-600 shrink-0" />
+            <span className="text-rose-700 font-semibold text-sm">
+              Payment failed — Please try again
             </span>
           </div>
           <button
             onClick={handleCloseAlert}
-            className="text-red-700 hover:text-red-900"
+            className="text-rose-600 hover:text-rose-800 transition-colors"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
       )}
-      <div className="grid grid-cols-11 gap-6 lg:gap-8 pt-8 pb-20">
-        <div className="col-span-11 lg:col-span-6 space-y-8">
+
+      <div className="grid grid-cols-11 gap-6 lg:gap-8 pt-6 pb-16">
+        <div className="col-span-11 lg:col-span-7 space-y-8">
           <BillingAndShippingInput
             billingSameAsShipping={billingSameAsShipping}
             setBillingSameAsShipping={setShippingSameAsBilling}
@@ -606,18 +583,20 @@ export const StepOne = ({ }) => {
         </div>
 
         {/**
-         * Order Summary
+         * Order Summary & Payment
          */}
-        <div className="col-span-11 lg:col-span-5 space-y-6">
-          <div className="w-full flex flex-col gap-y-4">
-            <div className="space-y-1">
-              <h3 className="text-2xl font-black text-slate-900 tracking-tighter uppercase italic">
-                Secure Payment
-              </h3>
-              <div className="h-1 w-12 bg-primary rounded-full" />
+        <div className="col-span-11 lg:col-span-4 space-y-5">
+          <div className="space-y-3">
+            {/* Payment Section Header */}
+            <div className="flex flex-col gap-1">
+              <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">
+                Payment method
+              </span>
+              <div className="h-[2px] w-7 bg-slate-900 rounded-full" />
             </div>
 
-            <div className="flex flex-col space-y-4 p-6 bg-white/40 backdrop-blur-3xl rounded-3xl border border-slate-100 shadow-xl">
+            {/* Payment Options */}
+            <div className="bg-white border border-slate-100 rounded-2xl p-4 space-y-2 shadow-sm">
               <StripeProvider>
                 <PaymentFormWrapper
                   setActiveAccordion={setActiveAccordion}
@@ -635,7 +614,7 @@ export const StepOne = ({ }) => {
                     width={100}
                     height={50}
                     alt="PayPal"
-                    className="h-8"
+                    className="h-7"
                   />
                 )}
 
@@ -647,7 +626,7 @@ export const StepOne = ({ }) => {
                     width={100}
                     height={50}
                     alt="PayTomorrow"
-                    className="h-8"
+                    className="h-7"
                   />
                 )}
                 {renderPaymentOption(
@@ -655,25 +634,23 @@ export const StepOne = ({ }) => {
                   '',
                   <img
                     src="https://snapfinance.com/assets/icons/logo.svg"
-                    className="w-auto h-8 mr-2"
+                    className="w-auto h-7"
                     alt="Snap Finance"
                   />
                 )}
               </StripeProvider>
             </div>
-
-            <div>
-              {isCard && !activeAccordion && (
-                <div className="flex items-center gap-1 text-primary py-4">
-                  <InfoIcon />
-                  <p>
-                    Note: If you pay with credit card, we will ship these
-                    products to provided Billing Address
-                  </p>
-                </div>
-              )}
-            </div>
           </div>
+
+          {/* Card Payment Notice */}
+          {isCard && !activeAccordion && (
+            <div className="flex items-start gap-3 bg-slate-50 border border-slate-100 rounded-xl p-3">
+              <Info className="h-4 w-4 text-slate-500 shrink-0 mt-0.5" />
+              <p className="text-xs font-semibold text-slate-600 leading-relaxed">
+                Credit card orders ship to the billing address for security.
+              </p>
+            </div>
+          )}
 
           {OrderSummary}
         </div>

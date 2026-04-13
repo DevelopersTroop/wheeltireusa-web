@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Progress } from '@/components/ui/progress';
-import { Clock, Loader2 } from 'lucide-react';
+import { Clock, Loader2, ShieldCheck } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -48,7 +48,7 @@ export const FinalStep: React.FC = () => {
   const { orderSuccessData, isAccountCreated } = useTypedSelector(
     (state) => state.persisted.checkout
   );
-  const dispatch = useDispatch(); // Redux dispatch hook
+  const dispatch = useDispatch();
 
   // Use a ref to track if verification has already been attempted
   const hasVerified = useRef(false);
@@ -56,17 +56,17 @@ export const FinalStep: React.FC = () => {
   /**
    * Checkout context
    */
-  const { clearCheckoutState, setStep } = useCheckout(); // Functions to clear checkout state and set the current step
-  const { user }: any = useAuth(); // Authentication context
-  const searchParams = useSearchParams(); // Hook to access query parameters
-  const router = useRouter(); // Hook for navigation
+  const { clearCheckoutState, setStep } = useCheckout();
+  const { user }: any = useAuth();
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
   // Component state
-  const [showSurvey, setShowSurvey] = useState(false); // State to show the survey modal
-  const [survey, setSurvey] = useState<'yes' | 'no' | ''>(''); // State to track survey response
-  const [verifying, setVerifying] = useState(true); // State to track payment verification
-  const [progress, setProgress] = useState(0); // State to track progress bar value
-  const [paymentData, setPaymentData] = useState(null); // State to store payment data
+  const [showSurvey, setShowSurvey] = useState(false);
+  const [survey, setSurvey] = useState<'yes' | 'no' | ''>('');
+  const [verifying, setVerifying] = useState(true);
+  const [progress, setProgress] = useState(0);
+  const [paymentData, setPaymentData] = useState(null);
 
   // Function to handle survey submission
   const handleSumbitSurvey = (data: typeof survey) => {
@@ -174,7 +174,6 @@ export const FinalStep: React.FC = () => {
         }
       } catch (err) {
         console.log("TCL: verifyPayment -> err", err)
-        // Redirect to checkout page with error status
         // router.push('/checkout?step=1&order_status=false');
       } finally {
         setVerifying(false);
@@ -202,23 +201,40 @@ export const FinalStep: React.FC = () => {
   // Render loading state while verifying payment
   if (verifying) {
     return (
-      <div className="min-h-[60vh]  flex items-center justify-center p-4">
-        <div className="w-full max-w-2xl space-y-4">
-          <div className="text-center pb-2">
-            <div className="mx-auto mb-4 bg-blue-50 w-16 h-16 rounded-full flex items-center justify-center">
-              <Clock className="h-8 w-8 text-blue-500 animate-pulse" />
+      <div className="min-h-[60vh] flex items-center justify-center p-4">
+        <div className="w-full max-w-md">
+          <div className="bg-white border border-slate-100 rounded-2xl p-8 space-y-6 shadow-sm">
+            {/* Animated Clock Icon */}
+            <div className="flex justify-center">
+              <div className="relative">
+                <div className="bg-slate-900 w-16 h-16 rounded-full flex items-center justify-center">
+                  <Clock className="h-8 w-8 text-white animate-spin-slow" style={{ animationDuration: '3s' }} />
+                </div>
+              </div>
             </div>
-            <h2 className="text-2xl font-bold text-gray-900">
-              Verifying Order
-            </h2>
-            <p className="text-gray-600 mt-2">
-              Please wait while we confirm your order...
-            </p>
-          </div>
-          <Progress value={progress} className="h-2 w-full" />
-          <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
-            <Loader2 className="h-4 w-4 animate-spin" />
-            Processing your order
+
+            {/* Text Content */}
+            <div className="text-center space-y-2">
+              <h2 className="text-lg font-bold text-slate-900 uppercase tracking-wider">Verifying order</h2>
+              <p className="text-slate-500 text-sm">Please wait while we confirm your payment</p>
+            </div>
+
+            {/* Progress Bar */}
+            <div className="space-y-2">
+              <Progress value={progress} className="h-1.5 w-full bg-slate-100" />
+              <div className="flex justify-between text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+                <span>Processing</span>
+                <span>{progress}%</span>
+              </div>
+            </div>
+
+            {/* Security Note */}
+            <div className="flex items-center gap-3 bg-emerald-50 border border-emerald-100 rounded-lg p-3">
+              <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
+              <p className="text-xs font-semibold text-emerald-700 uppercase tracking-wider">
+                Secure SSL Connection • 256-bit Encryption
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -227,65 +243,63 @@ export const FinalStep: React.FC = () => {
 
   // Render final step content
   return (
-    <div>
+    <div className="space-y-6">
       {searchParams.get('method') === 'pay_tomorrow' && (
-        <div className="rounded-2xl border border-blue-300 bg-blue-50 p-4 mt-4">
-          <h3 className="text-lg font-semibold text-primary">
-            Your Order is Being Processed
-          </h3>
-          <p className="text-sm text-primary mt-1">
-            You’ve chosen <strong>Pay Tomorrow</strong> as your payment method.
-            This option allows you to complete your purchase through a loan
-            system. We’ll wait for <strong>verification and funding</strong> to
-            be completed before shipping your order. Stay tuned — we’ll update
-            you by email once your order is cleared for shipment.
-          </p>
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3">
+          <div className="bg-amber-100 p-2 rounded-lg shrink-0">
+            <Clock className="h-5 w-5 text-amber-600" />
+          </div>
+          <div className="flex-1">
+            <h3 className="text-sm font-bold text-amber-900 uppercase tracking-wider mb-1">
+              Order Processing — Pay Tomorrow
+            </h3>
+            <p className="text-xs font-semibold text-amber-700 leading-relaxed">
+              Your loan application is being processed. We'll ship your order once verification and funding are complete.
+            </p>
+          </div>
         </div>
       )}
-      <div className="grid grid-cols-11 gap-6 lg:gap-8 pt-8 pb-20">
+
+      <div className="grid grid-cols-11 gap-6 lg:gap-8 pt-4 pb-16">
         {/* Left Section: Order Details */}
-        <div className="col-span-11 lg:col-span-7">
+        <div className="col-span-11 lg:col-span-7 space-y-6">
           <OrderConfirmation
             email={orderSuccessData?.data?.shippingAddress?.email}
             orderData={orderSuccessData}
           />
 
-          <div className="flex flex-col gap-8">
-            <CartSummary
-              productsInfo={orderSuccessData?.data?.productsInfo as any}
-              totalCost={orderSuccessData?.data?.totalCost}
-            />
+          <CartSummary
+            productsInfo={orderSuccessData?.data?.productsInfo as any}
+            totalCost={orderSuccessData?.data?.totalCost}
+          />
 
-            <DeliveryOptions
-              requestedDealer={orderSuccessData?.data?.requestedDealer}
-              selectedDealerInfo={orderSuccessData?.data?.selectedDealerInfo}
-              selectedOptionTitle={orderSuccessData?.data?.selectedOptionTitle}
-            />
+          <DeliveryOptions
+            requestedDealer={orderSuccessData?.data?.requestedDealer}
+            selectedDealerInfo={orderSuccessData?.data?.selectedDealerInfo}
+            selectedOptionTitle={orderSuccessData?.data?.selectedOptionTitle}
+          />
 
-            <ShippingDetails
-              localDealerInfo={orderSuccessData?.data?.localDealerInfo}
-              selectedDealer={orderSuccessData?.data?.selectedDealer}
-              shippingAddress={orderSuccessData?.data?.shippingAddress}
-              selectedOptionTitle={orderSuccessData?.data?.selectedOptionTitle}
-            // shippingAddress={orderSuccessData?.data?.shippingAddress}
-            // selectedDealer={orderSuccessData?.data?.selectedDealer}
-            />
+          <ShippingDetails
+            localDealerInfo={orderSuccessData?.data?.localDealerInfo}
+            selectedDealer={orderSuccessData?.data?.selectedDealer}
+            shippingAddress={orderSuccessData?.data?.shippingAddress}
+            selectedOptionTitle={orderSuccessData?.data?.selectedOptionTitle}
+          />
 
-            {paymentData && (
-              <PaymentInfo
-                paymentData={
-                  {
-                    ...(paymentData as any),
-                    orderId: orderSuccessData?.orderId,
-                  } as any
-                }
-              />
-            )}
-          </div>
+          {paymentData && (
+            <PaymentInfo
+              paymentData={
+                {
+                  ...(paymentData as any),
+                  orderId: orderSuccessData?.orderId,
+                } as any
+              }
+            />
+          )}
         </div>
 
         {/* Right Section: Order Summary and Account Creation */}
-        <div className="col-span-11 lg:col-span-4 sticky top-0 flex flex-col gap-8">
+        <div className="col-span-11 lg:col-span-4 space-y-6">
           {!isAccountCreated && !user?._id && (
             <CreateAccountSection orderSuccessData={orderSuccessData} />
           )}
@@ -307,6 +321,7 @@ export const FinalStep: React.FC = () => {
           />
         </div>
       </div>
+
       {/* Survey Modal */}
       <Dialog open={showSurvey} onOpenChange={setShowSurvey}>
         <DialogContent>

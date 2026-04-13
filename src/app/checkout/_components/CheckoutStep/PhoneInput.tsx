@@ -27,7 +27,6 @@ export function PhoneInput({
       label="Phone Number"
       type="tel"
       required
-      placeholder="(123) 456-7890"
       error={billingErrors.phone?.message}
       {...registerProps}
       ref={(el: any) => {

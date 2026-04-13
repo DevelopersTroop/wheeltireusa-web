@@ -34,17 +34,9 @@ const Page: React.FC = () => {
     );
   }
 
-  if (isLoading) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <LoadingSpinner />
-      </div>
-    );
-  }
-
   return (
-    <div className="my-10 w-full">
-      <Container className='mx-auto'>
+    <div className="w-full px-4 py-6">
+      <Container className="mx-auto">
         <GoogleLibraryLoader>
           <Renderer setStep={setStep} step={step} />
         </GoogleLibraryLoader>

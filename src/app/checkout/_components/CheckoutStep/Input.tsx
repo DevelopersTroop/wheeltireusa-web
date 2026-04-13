@@ -56,7 +56,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 10 }}
                 className={cn(
-                  "absolute left-4 top-1/2 -translate-y-1/2 transition-all duration-300 pointer-events-none select-none z-20 font-black tracking-widest uppercase italic text-[13px] text-slate-400"
+                  "absolute left-4 top-1/2 -translate-y-1/2 transition-all duration-300 pointer-events-none select-none z-20 font-black tracking-widest uppercase text-[12px] text-slate-400"
                 )}
               >
                 {label}
