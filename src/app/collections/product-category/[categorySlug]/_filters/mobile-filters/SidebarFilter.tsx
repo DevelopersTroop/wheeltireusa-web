@@ -17,7 +17,7 @@ const SidebarFilters = ({ children }: SidebarProps) => {
         className="w-full text-primary px-auto py-[5px] border-2 border-primary hover:bg-primary-hover hover:text-white transition-colors duration-300 rounded-md text-base font-normal uppercase"
         onClick={() => setIsOpenFilter((prev) => !prev)}
       >
-        Filtes
+        Filters
       </button>
 
       <Menu

@@ -41,7 +41,7 @@ const WheelCard = ({ product }: { product: TInventoryItem }) => {
       <div className="relative bg-linear-to-br from-gray-50 to-gray-100 p-4 sm:p-6 flex items-center justify-center aspect-square">
         <Link href={productLink} className="w-full h-full flex items-center justify-center">
           <ProductImage
-            className="max-h-full max-w-full object-contain mix-blend-multiply hover:scale-105 transition-transform duration-300"
+            className="max-h-full max-w-full object-contain mt-4 mix-blend-multiply hover:scale-105 transition-transform duration-300"
             height={280}
             width={280}
             alt="product image"

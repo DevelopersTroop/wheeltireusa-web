@@ -100,7 +100,7 @@ const TextPassword = <T extends FieldValues>({
                       height={24}
                       alt=""
                       src="password.svg"
-                      className="cursor-pointer text-muted w-6 h-6"
+                      className=" text-muted w-6 h-6"
                     />
                   )}
                 </div>

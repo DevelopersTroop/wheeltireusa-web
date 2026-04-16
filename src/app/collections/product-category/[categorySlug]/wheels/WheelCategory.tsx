@@ -51,6 +51,18 @@ const WheelCategory: React.FC<{
       )}
 
       <HomeFilter variant="product" />
+
+      {/* Breadcrumb - Always at top */}
+      <div className="container mx-auto px-3 sm:px-4 py-2">
+        <Breadcrumb>
+          <Item href={'/'}>Home</Item>
+          <Item href={'/'}>Collections</Item>
+          <Item href={'/collections/product-category/wheels'}>
+            Wheels
+          </Item>
+        </Breadcrumb>
+      </div>
+
       <Container className={
         cn(
           "flex w-full flex-col gap-4 sm:gap-6 px-3 sm:px-4 pb-4 sm:pb-6 pt-2 lg:flex-row",
@@ -79,21 +91,10 @@ const WheelCategory: React.FC<{
           </div>
         ) : (
           <div className="flex w-full flex-col">
-            {/* Header with Breadcrumb, View Toggle & Sort */}
-            <div className="flex flex-col sm:flex-row w-full justify-between items-start sm:items-center gap-2 sm:gap-4 mb-4 px-2">
-              <div className="w-full overflow-hidden">
-                <Breadcrumb>
-                  <Item href={'/'}>Home</Item>
-                  <Item href={'/'}>Collections</Item>
-                  <Item href={'/collections/product-category/wheels'}>
-                    Wheels
-                  </Item>
-                </Breadcrumb>
-              </div>
+            {/* Header with View Toggle & Sort (Desktop) */}
+            <div className="hidden sm:flex w-full justify-end items-center gap-4 mb-4 px-2">
               <div className="flex items-center gap-2 shrink-0">
-                <div className="hidden sm:flex">
-                  <ViewToggle />
-                </div>
+                <ViewToggle />
                 <div className="w-[120px] sm:w-[160px] lg:w-[180px]">
                   <SortByFilter />
                 </div>

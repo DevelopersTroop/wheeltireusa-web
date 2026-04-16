@@ -60,7 +60,7 @@ const WheelCardDescription = ({ product }: { product: TWheelProduct }) => {
       </p>
 
       {/* Product Title */}
-      <h3 className="text-base font-semibold text-gray-900 line-clamp-2 leading-snug mb-2">
+      <h3 className="text-base font-semibold text-gray-900 line-clamp-2 leading-snug">
         {product.title}
       </h3>
 
@@ -83,7 +83,7 @@ const WheelCardDescription = ({ product }: { product: TWheelProduct }) => {
 
       <div className="flex items-baseline gap-2 mb-2">
           <div className="flex items-baseline gap-1">
-            <span className="text-2xl font-bold text-gray-900">
+            <span className="text-xl font-bold text-gray-900">
               ${product.sellingPrice?.toFixed(2) ?? 'N/A'}
             </span>
             <span className="text-xs text-gray-500">per wheel</span>
