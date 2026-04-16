@@ -81,7 +81,7 @@ const TireCardDescription = ({ product }: { product: TTireProduct }) => {
 
       <div className="flex items-baseline gap-2 mb-3">
           <div className="flex items-baseline gap-1">
-            <span className="text-xl font-bold text-gray-900">
+            <span className="text-xl font-bold text-gray-900 sm:text-2xl">
               ${product.sellingPrice?.toFixed(2) ?? 'N/A'}
             </span>
             <span className="text-xs text-gray-500">per tire</span>
@@ -109,7 +109,7 @@ const TireCardDescription = ({ product }: { product: TTireProduct }) => {
       )}
 
       {/* Delivery Info */}
-      <div className="mb-4 flex  gap-1.5 text-xs px-2 text-green-700 items-center bg-green-50 rounded-xl">
+      <div className="hidden sm:flex mb-4 gap-1.5 text-xs px-2 text-green-700 items-center bg-green-50 rounded-xl">
         <Truck className="w-3.5 h-3.5 mt-0.5 shrink-0" />
         <div>
           <p className="font-medium ">Free delivery to the lower 48</p>
