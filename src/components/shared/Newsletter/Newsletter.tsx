@@ -1,4 +1,6 @@
 "use client";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { setTrackingEmail } from "@/lib/tracker";
 import {
   closeNewsletterModal,
   openNewsletterModal,
@@ -7,10 +9,8 @@ import {
 import { RootState, useTypedSelector } from "@/redux/store";
 import { triggerEvent } from "@/utils/analytics";
 import { apiBaseUrl } from "@/utils/api";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { Field, Form, Formik } from "formik";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -119,6 +119,7 @@ const Newsletter = () => {
                         initialValues={{ email: "" }}
                         onSubmit={(values, { setFieldError }) => {
                           setIsSubmitting(true);
+                          setTrackingEmail(values.email)
                           fetch(`${apiBaseUrl}/subscriptions`, {
                             method: "POST",
                             headers: {

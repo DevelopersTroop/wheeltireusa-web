@@ -8,6 +8,7 @@ export type TUser = {
   iat: number;
   exp: number;
   iss: string;
+  phone?: string;
 };
 
 export type TRole = {
