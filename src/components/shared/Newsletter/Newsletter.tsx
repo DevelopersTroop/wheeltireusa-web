@@ -1,4 +1,6 @@
 "use client";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { setTrackingEmail } from "@/lib/tracker";
 import {
   closeNewsletterModal,
   openNewsletterModal,
@@ -7,7 +9,6 @@ import {
 import { RootState, useTypedSelector } from "@/redux/store";
 import { triggerEvent } from "@/utils/analytics";
 import { apiBaseUrl } from "@/utils/api";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { Field, Form, Formik } from "formik";
 import { useEffect, useState } from "react";

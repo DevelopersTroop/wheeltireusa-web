@@ -1,18 +1,18 @@
 'use client';
 
 import { useCartHook } from '@/hooks/useCartHook';
-import { useGroupedProducts, TGroupedProducts } from '@/hooks/useGroupedProducts';
+import { TGroupedProducts, useGroupedProducts } from '@/hooks/useGroupedProducts';
+import { trackEvent } from '@/lib/tracker';
+import { initiateCheckout, setSelectedOptionTitle } from '@/redux/features/checkoutSlice';
 import { useAppDispatch, useTypedSelector } from '@/redux/store';
 import { calculateCartTotal, getPrice } from '@/utils/price';
-import { ArrowRight, Info, Lock, ShoppingBag } from 'lucide-react';
+import { ArrowRight, Lock, ShoppingBag } from 'lucide-react';
 import Link from 'next/link';
 import { useMemo } from 'react';
-import ProductCard from '../_components/v2/ProductCard';
-import { ProductQuantity } from '../_components/v2/ProductQuantity';
-import { initiateCheckout, setSelectedOptionTitle } from '@/redux/features/checkoutSlice';
-import { TCartProduct } from '@/redux/features/cartSlice';
 import { FaAngleDoubleRight } from 'react-icons/fa';
 import { PiShoppingBagOpenFill } from 'react-icons/pi';
+import ProductCard from '../_components/v2/ProductCard';
+import { ProductQuantity } from '../_components/v2/ProductQuantity';
 
 // Helper
 const getPackageProducts = (group: TGroupedProducts) => {
@@ -61,9 +61,8 @@ const CartSystem = () => {
 
       {/* Drawer */}
       <div
-        className={`fixed bottom-0 right-0 w-full h-[87.5vh] max-w-[400px] flex flex-col bg-white/90 backdrop-blur-2xl z-50 transform transition-all duration-500 ease-in-out shadow-[0_0_50px_rgba(0,0,0,0.1)] border-l border-white/20 ${
-          open ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
-        }`}
+        className={`fixed bottom-0 right-0 w-full h-[87.5vh] max-w-[400px] flex flex-col bg-white/90 backdrop-blur-2xl z-50 transform transition-all duration-500 ease-in-out shadow-[0_0_50px_rgba(0,0,0,0.1)] border-l border-white/20 ${open ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
+          }`}
       >
         {!groupedProducts.length ? (
           <div className="flex flex-col h-full bg-white">
@@ -165,13 +164,24 @@ const CartSystem = () => {
                 onClick={() => {
                   dispatch(initiateCheckout());
                   dispatch(setSelectedOptionTitle('Direct to Customer'));
+                  trackEvent('checkout_start', {
+                    items: cart.products.map((p) => ({
+                      id: p.id,
+                      price: getPrice(p),
+                      quantity: p.quantity,
+                      title: p.title,
+                      url: `${window.location.origin}/collections/product/${p.slug}`,
+                    })),
+                    total: subTotalCost,
+                    currency: 'USD',
+                  });
                   setOpen();
                 }}
                 className="w-full flex items-center justify-start gap-20 bg-primary text-white px-4 py-2 rounded-xl hover:bg-primary transition"
               >
                 <div className="flex flex-col">
                   <span className="text-[10px] uppercase text-gray-300">
-                    Total 
+                    Total
                   </span>
                   <span className="text-xs font-semibold">
                     ${subTotalCost}
