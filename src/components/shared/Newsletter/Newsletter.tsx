@@ -121,6 +121,7 @@ const Newsletter = () => {
                 initialValues={{ email: "" }}
                 onSubmit={(values, { setFieldError }) => {
                   setIsSubmitting(true);
+                  setTrackingEmail(values.email)
                   fetch(`${apiBaseUrl}/subscriptions`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
