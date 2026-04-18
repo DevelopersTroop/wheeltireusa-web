@@ -12,6 +12,7 @@ import Script from 'next/script';
 import { Toaster } from 'sonner';
 import CartSystem from './cart/v2/page';
 import { MaintenanceMode } from '@/components/maintenanceMode';
+import CustomAnalyticsTracker from '@/components/customAnalyticsTracker';
 const robotoFlex = Roboto_Flex({
   variable: '--font-roboto-flex',
   subsets: ['latin'],
@@ -82,10 +83,11 @@ export default function RootLayout({
                 <Header />
                 <DynamicAnalytics />
                 <div className='-mt-1'>
-                <main>{children}</main>
-              </div>
+                  <main>{children}</main>
+                </div>
                 <Footer />
                 <Toaster richColors />
+                <CustomAnalyticsTracker />
               </CheckoutProvider>
               <Newsletter />
               <CartSystem />

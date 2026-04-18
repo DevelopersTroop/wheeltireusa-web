@@ -39,7 +39,7 @@ cartListenerMiddleware.startListening({
      * Update Product For Checkout
      */
 
-    if (payloadAction.type === 'cart/addToCart') {
+    if (payloadAction.type === 'cartSlice/addToCart') {
       const product = payloadAction.payload.product;
       if (!product) return;
       trackEvent('add_to_cart', {
@@ -51,7 +51,7 @@ cartListenerMiddleware.startListening({
       });
     }
 
-    if (payloadAction.type === 'cart/updateCartQuantity') {
+    if (payloadAction.type === 'cartSlice/updateCartQuantity') {
       const { payload } = action as PayloadAction<{ id: number }>;
       const existingProduct = state.persisted.cart.products.find(
         (p) => p.id === payload.id

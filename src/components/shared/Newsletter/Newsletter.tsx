@@ -1,6 +1,6 @@
 "use client";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { setTrackingEmail } from "@/lib/tracker";
+import { setTrackingEmail, setTrackingPhone } from "@/lib/tracker";
 import {
   closeNewsletterModal,
   openNewsletterModal,

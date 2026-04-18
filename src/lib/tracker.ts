@@ -37,7 +37,7 @@ interface EventPayload {
   timestamp: string;
 }
 
-const DB_NAME = 'UserTrackerDB';
+const DB_NAME = 'WTUserTrackerDB';
 const IDENTITY_STORE = 'identity';
 const QUEUE_STORE = 'event_queue';
 
