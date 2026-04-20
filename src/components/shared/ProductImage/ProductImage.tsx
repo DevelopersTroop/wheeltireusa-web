@@ -34,21 +34,32 @@ const ProductImage = ({ className, onError, alt, ...props }: ProductImageProps) 
           `}</style>
                 </div>
             )}
-            <Image
-                className={cn(
-                    'transition-opacity duration-300 ease-in-out',
-                    isLoaded ? 'opacity-100' : 'opacity-0',
-                    className
-                )}
-                alt={alt}
+            {hasError && (
+                <Image
+                    src="/wheel-not-available.png"
+                    alt={alt || "Image not available"}
+                    fill
+                    className={cn('object-cover rounded-xl', className)}
+                    onError={() => setIsLoaded(true)}
+                />
+            )}
+            {!hasError && (
+                <Image
+                    className={cn(
+                        'transition-opacity duration-300 ease-in-out',
+                        isLoaded ? 'opacity-100' : 'opacity-0',
+                        className
+                    )}
+                    alt={alt}
                 onLoad={() => setIsLoaded(true)}
-                onError={() => {
-                    setHasError(true);
-                    setIsLoaded(true);
-                    onError?.();
-                }}
-                {...props}
-            />
+                    onError={() => {
+                        setHasError(true);
+                        setIsLoaded(true);
+                        onError?.();
+                    }}
+                    {...props}
+                />
+            )}
         </div>
     );
 };
