@@ -10,7 +10,8 @@ import { RootState, useTypedSelector } from "@/redux/store";
 import { triggerEvent } from "@/utils/analytics";
 import { apiBaseUrl } from "@/utils/api";
 import { DialogTitle } from "@radix-ui/react-dialog";
-import { Field, Form, Formik } from "formik";
+import { Field, Form, Formik, FormikHelpers } from "formik";
+import * as Yup from "yup";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -118,14 +119,38 @@ const Newsletter = () => {
 
               {/* Form */}
               <Formik
-                initialValues={{ email: "" }}
+                initialValues={{ email: "", phone: "" }}
+                validationSchema={Yup.object().shape({
+                  email: Yup.string()
+                    .email("Invalid email address")
+                    .test(
+                      "email-or-phone-required",
+                      "Either email or phone number is required",
+                      function (value) {
+                        const phone = this.parent.phone;
+                        return !!value || !!phone;
+                      }
+                    ),
+                  phone: Yup.string()
+                    .test(
+                      "phone-or-email-required",
+                      "Either email or phone number is required",
+                      function (value) {
+                        const email = this.parent.email;
+                        return !!value || !!email;
+                      }
+                    ),
+                })}
                 onSubmit={(values, { setFieldError }) => {
                   setIsSubmitting(true);
                   setTrackingEmail(values.email)
                   fetch(`${apiBaseUrl}/subscriptions`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ email: values.email }),
+                    body: JSON.stringify({
+                      email: values.email || null,
+                      phone: values.phone || null,
+                    }),
                   })
                     .then((res) => res.json())
                     .then((data) => {
@@ -137,27 +162,52 @@ const Newsletter = () => {
                         setIsSuccess(true);
                         dispatch(setIsNewsLetterSubmitted(true));
                       } else if (data.errors?.length > 0) {
-                        setFieldError("email", data.errors[0].message);
+                        if (data.errors[0].field === "phone") {
+                          setFieldError("phone", data.errors[0].message);
+                        } else {
+                          setFieldError("email", data.errors[0].message);
+                        }
                       }
                     })
                     .finally(() => setIsSubmitting(false));
                 }}
               >
-                {({ errors }) => (
+                {({ errors, touched, values }) => (
                   <Form>
-                    {errors.email && (
+                    {(errors.email || errors.phone) && (touched.email || touched.phone) && (
                       <div className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg mb-3">
-                        {errors.email}
+                        {errors.email || errors.phone}
                       </div>
                     )}
                     <div className="flex gap-2 sm: flex-col">
-                      <Field
-                        className="flex-1 text-sm px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent bg-white text-gray-900 placeholder:text-gray-400"
-                        style={{ "--tw-ring-color": "#EF4F19" } as React.CSSProperties}
-                        type="email"
-                        name="email"
-                        placeholder="your@email.com"
-                      />
+                      <div className="flex-1 relative">
+                        <Field
+                          className="w-full text-sm px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent bg-white text-gray-900 placeholder:text-gray-400"
+                          style={{ "--tw-ring-color": "#EF4F19" } as React.CSSProperties}
+                          type="email"
+                          name="email"
+                          placeholder="your@email.com"
+                        />
+                        {values.phone && !values.email && (
+                          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 pointer-events-none">
+                            optional
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex-1 relative">
+                        <Field
+                          className="w-full text-sm px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent bg-white text-gray-900 placeholder:text-gray-400"
+                          style={{ "--tw-ring-color": "#EF4F19" } as React.CSSProperties}
+                          type="phone"
+                          name="phone"
+                          placeholder="(XXX) XXX-XXXX"
+                        />
+                        {values.email && !values.phone && (
+                          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 pointer-events-none">
+                            optional
+                          </span>
+                        )}
+                      </div>
                       <button
                         type="submit"
                         disabled={isSubmitting}
