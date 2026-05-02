@@ -202,7 +202,7 @@ export const FinalStep: React.FC = () => {
   if (verifying) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center p-4">
-        <div className="w-full max-w-md">
+        <div className="w-full max-w-xl">
           <div className="bg-white border border-slate-100 rounded-2xl p-8 space-y-6 shadow-sm">
             {/* Animated Clock Icon */}
             <div className="flex justify-center">
