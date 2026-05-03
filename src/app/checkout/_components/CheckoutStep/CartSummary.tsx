@@ -1,4 +1,5 @@
 'use client';
+import { getProductThumbnail } from '@/utils/product';
 import { Package } from 'lucide-react';
 import Image from 'next/image';
 
@@ -11,6 +12,7 @@ interface Product {
   image: string;
   wheelSize?: string;
   boltPattern?: string;
+  sellingPrice?: number;
 }
 
 interface CartSummaryProps {
@@ -67,7 +69,7 @@ export const CartSummary: React.FC<CartSummaryProps> = ({
                   {/* Product Image */}
                   <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-slate-100 shrink-0">
                     <Image
-                      src={product.image}
+                      src={getProductThumbnail(product as any)}
                       alt={product.title}
                       fill
                       className="object-cover"
@@ -96,7 +98,7 @@ export const CartSummary: React.FC<CartSummaryProps> = ({
                     {/* Price & Quantity */}
                     <div className="flex items-center justify-between mt-2">
                       <span className="text-sm font-bold text-slate-900">
-                        ${product.price.toFixed(2)}
+                        ${Number(product.sellingPrice).toFixed(2)}
                       </span>
                       <span className="text-[10px] text-slate-400">
                         Qty: <span className="font-semibold text-slate-700">{product.quantity}</span>
