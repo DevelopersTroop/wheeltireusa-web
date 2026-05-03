@@ -120,7 +120,14 @@ export const GooglePlacesInput = React.memo<GooglePlacesInputProps>(
 
                 const details = await new Promise<google.maps.places.PlaceResult>((resolve, reject) => {
                   placesService.current?.getDetails(
-                    { placeId: prediction.place_id },
+                    { 
+                      placeId: prediction.place_id,
+                      fields: [
+                        "address_components",
+                        "geometry",
+                        "formatted_address",
+                      ],
+                    },
                     (place, status) => {
                       if (status !== google.maps.places.PlacesServiceStatus.OK || !place) {
                         return reject(status);
@@ -132,7 +139,41 @@ export const GooglePlacesInput = React.memo<GooglePlacesInputProps>(
 
                 const addressComponents = details.address_components || [];
                 const country = addressComponents.find((c) => c.types.includes('country'))?.long_name || '';
-                const zipcode = addressComponents.find((c) => c.types.includes('postal_code'))?.long_name || '';
+                
+                let zipcode = addressComponents.find((c) => c.types.includes('postal_code'))?.long_name || '';
+
+                // Fallback: geocode by coordinates when postal_code is absent
+                if (!zipcode && details.geometry?.location) {
+                  try {
+                    const geocoder = new google.maps.Geocoder();
+                    const geocodeResults = await new Promise<
+                      google.maps.GeocoderResult[]
+                    >((resolve, reject) => {
+                      geocoder.geocode(
+                        { location: details.geometry!.location },
+                        (results, status) => {
+                          if (status === "OK" && results?.length) {
+                            resolve(results);
+                          } else {
+                            reject(status);
+                          }
+                        },
+                      );
+                    });
+                    for (const result of geocodeResults) {
+                      const postalCode = result.address_components.find(
+                        (comp) => comp.types.includes("postal_code"),
+                      )?.long_name;
+                      if (postalCode) {
+                        zipcode = postalCode;
+                        break;
+                      }
+                    }
+                  } catch {
+                    // geocoding fallback failed; proceed without zip code
+                  }
+                }
+
                 const state = addressComponents.find((c) => c.types.includes('administrative_area_level_1'))?.short_name || '';
                 const streetNumber = addressComponents.find((c) => c.types.includes('street_number'))?.long_name || '';
                 const route = addressComponents.find((c) => c.types.includes('route'))?.long_name || '';
