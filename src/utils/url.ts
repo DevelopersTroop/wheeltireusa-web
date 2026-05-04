@@ -72,7 +72,7 @@ export function parseQueryValuesToArray(
   return arr;
 }
 
-export function normalizeImageUrl(url: string | undefined): string {
+export function normalizeImageUrl(url?: string | undefined): string {
   if (!url || url === '') {
     return '/not-available.webp';
   }
