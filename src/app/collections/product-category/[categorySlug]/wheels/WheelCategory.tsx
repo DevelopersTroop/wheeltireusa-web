@@ -35,11 +35,12 @@ const WheelCategory: React.FC<{
   const wheelFitment = normalizeWheelFitment(vehicleInformation.VehicleDataFromDRD_NA, vehicleInformation.afterMarketDRSizes)
   const { data, isLoading: loading, isFetching } = useGetProductsQuery({
     ...filters,
+    page,
     category: 'wheels',
     ...(activeGarageId && vehicleInformation?.boltPattern ? {
-      ...(wheelFitment ? {wheelFitment: wheelFitment} : {})
+      ...(wheelFitment ? { wheelFitment: wheelFitment } : {})
     } : {}),
-  }, {refetchOnMountOrArgChange: true});
+  }, { refetchOnMountOrArgChange: true });
   const viewType = useSelector((state: RootState) => state.persisted.layout.viewType);
   return (
     <>

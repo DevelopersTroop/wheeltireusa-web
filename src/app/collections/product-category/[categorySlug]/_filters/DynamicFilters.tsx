@@ -8,6 +8,12 @@ import PriceRange from "./widgets/components/PriceRange";
 import { getFilterKeyTitle } from "@/constants/filterKeys";
 
 /**
+ * Both TFilters and IGalleryFilters are normalized to this shape
+ * so key lookups work regardless of which type is passed in.
+ */
+type NormalizedFilters = Record<string, TSingleFilter[] | TPriceFilter | undefined>;
+
+/**
  * Configuration for a single dynamic filter section.
  */
 type FilterSectionConfig = {
@@ -21,7 +27,7 @@ type FilterSectionConfig = {
 
 type DynamicFiltersProps = {
     /** The raw filters object from the API */
-    filters: TFilters | null;
+    filters: TFilters | IGalleryFilters | null;
     /**
      * Keys to exclude from rendering.
      * Example: ["category", "vendorName", "priceSource", "compare"]
@@ -94,6 +100,7 @@ function isArrayFilter(value: unknown): value is TSingleFilter[] {
 }
 
 import { useSearchParams } from "next/navigation";
+import { IGalleryFilters } from "@/redux/apis/gallery";
 
 /**
  * A single collapsible filter section with a heading and content.
@@ -111,7 +118,7 @@ const FilterSection = React.memo(({
 }) => {
     const searchParams = useSearchParams();
     const hasSelection = !!searchParams?.get(filterKey);
-    
+
     const [showFilter, setShowFilter] = useState(defaultOpen || hasSelection);
 
     React.useEffect(() => {
@@ -140,6 +147,9 @@ const DynamicFilters = ({ filters, exclude = [], include, loading = false }: Dyn
         return loading ? <FiltersSkeleton count={include?.length || 6} /> : null;
     }
 
+    // Normalize to a plain Record so dynamic key access works for both TFilters and IGalleryFilters
+    const f = filters as NormalizedFilters;
+
     // Normalize include list into FilterSectionConfig[]
     const normalizedInclude: FilterSectionConfig[] | undefined = include?.map(
         (item) => (typeof item === "string" ? { key: item } : item)
@@ -151,17 +161,17 @@ const DynamicFilters = ({ filters, exclude = [], include, loading = false }: Dyn
     if (normalizedInclude) {
         // Use explicit include list (preserves order)
         filterKeys = normalizedInclude.filter((cfg) => {
-            const value = filters[cfg.key];
+            const value = f[cfg.key];
             if (!value) return false;
             if (cfg.key === "price") return isPriceFilter(value);
             return isArrayFilter(value) && value.length > 0;
         });
     } else {
         // Auto-detect: use all keys except excluded, skip empty arrays
-        filterKeys = Object.keys(filters)
+        filterKeys = Object.keys(f)
             .filter((key) => {
                 if (exclude.includes(key)) return false;
-                const value = filters[key];
+                const value = f[key];
                 if (key === "price") return isPriceFilter(value);
                 return isArrayFilter(value) && value.length > 0;
             })
@@ -172,7 +182,7 @@ const DynamicFilters = ({ filters, exclude = [], include, loading = false }: Dyn
         <>
             {filterKeys.map((cfg) => {
                 const { key, title, defaultOpen } = cfg;
-                const value = filters[key];
+                const value = f[key];
 
                 // Render price range
                 if (key === "price" && isPriceFilter(value)) {

@@ -4,10 +4,11 @@ import React from "react";
 import GalleryFilters from "./components/filters/gallery-filters";
 import Gallery from "./components/gallery";
 import SidebarFilters from "../collections/product-category/[categorySlug]/_filters/mobile-filters/SidebarFilter";
+import Container from "@/components/ui/container/container";
 
 const KtcAudioGalleryPage: React.FC = () => {
   return (
-    <div className="">
+    <Container>
       <div className="w-full text-center text-2xl py-4">
         <h1>Largest Gallery of Custom Trucks</h1>
       </div>
@@ -35,7 +36,7 @@ const KtcAudioGalleryPage: React.FC = () => {
         </div>
         <Gallery />
       </div>
-    </div>
+    </Container>
   );
 };
 

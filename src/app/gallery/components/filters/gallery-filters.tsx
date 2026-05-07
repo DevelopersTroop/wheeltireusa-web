@@ -8,6 +8,7 @@ import GalleryWheelDiameter from "./widgets/gallery-wheel-diameter";
 import GalleryWheelOffset from "./widgets/gallery-wheel-offset";
 import GalleryWheelWidth from "./widgets/gallery-wheel-width";
 import SuspensionBrand from "./widgets/suspension-brand";
+import DynamicFilters from "@/app/collections/product-category/[categorySlug]/_filters/DynamicFilters";
 
 const SkeletonItem = () => (
   <div className="px-5 py-3 border-b border-gray-300">
@@ -18,6 +19,7 @@ const SkeletonItem = () => (
 
 const GalleryFilters = () => {
   const { data, isLoading } = useGetFilterListQuery();
+  console.log("🚀 ~ GalleryFilters ~ data:", data)
 
   // Render loading skeleton
   if (!data || isLoading) {
@@ -55,52 +57,10 @@ const GalleryFilters = () => {
           Clear filter
         </p>
       </div>
-
-      <div className={"px-5 py-3 border-b border-gray-300"}>
-        <SuspensionBrand
-          filterKey={"suspensionBrand"}
-          suspensionBrand={data.suspensionBrand}
-        />
-      </div>
-
-      <div className={"px-5 py-3 border-b border-gray-300"}>
-        <GalleryWheelDiameter
-          filterKey={"wheelDiameter"}
-          diameter={data.wheelDiameter}
-        />
-      </div>
-
-      <div className={"px-5 py-3 border-b border-gray-300"}>
-        <GalleryWheelWidth
-          filterKey={"wheelWidth"}
-          wheelWidth={data.wheelWidth}
-        />
-      </div>
-
-      <div className={"px-5 py-3 border-b border-gray-300"}>
-        <GalleryTireHeight
-          filterKey={"tireHeight"}
-          tireHeight={data.tireHeight}
-        />
-      </div>
-
-      <div className={"px-5 py-3 border-b border-gray-300"}>
-        <GalleryTireWidth filterKey={"tireWidth"} tireWidth={data.tireWidth} />
-      </div>
-
-      <div className={"px-5 py-3 border-b border-gray-300"}>
-        <GalleryWheelOffset
-          filterKey={"wheelOffset"}
-          wheelOffset={data.wheelOffset}
-        />
-      </div>
-
-      <div className={"px-5 py-3 border-b border-gray-300"}>
-        <GalleryTypeOfStance
-          filterKey={"stanceType"}
-          typeOfStance={data.stanceType}
-        />
-      </div>
+      <DynamicFilters
+        filters={data}
+        include={["suspensionBrand", "wheelDiameter", "wheelWidth", "tireHeight", "tireWidth", "wheelOffset", "stanceType"]}
+      />
     </div>
   );
 };

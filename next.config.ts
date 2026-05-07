@@ -76,15 +76,19 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'images.carid.com',
-      }, 
+      },
       {
         protocol: 'https',
         hostname: 'cloudfront.net',
       },
       {
-        protocol:'https',
-        hostname:'*.amazonaws.com'
-      }
+        protocol: 'https',
+        hostname: '*.amazonaws.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.example.com',
+      },
     ],
   },
   rewrites: async () => {

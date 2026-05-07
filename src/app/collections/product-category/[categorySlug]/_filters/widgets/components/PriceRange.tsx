@@ -18,6 +18,10 @@ const PriceRange = ({ price }: { price?: TPriceFilter }) => {
   const [currentLow, setCurrentLow] = useState(sliderMin);
   const [currentHigh, setCurrentHigh] = useState(sliderMax);
 
+  // Separate display states for the inputs so typing doesn't affect the slider
+  const [inputLow, setInputLow] = useState(String(sliderMin));
+  const [inputHigh, setInputHigh] = useState(String(sliderMax));
+
   // Track whether we're pushing to the URL to avoid sync-back loop
   const isPushingRef = useRef(false);
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -31,6 +35,8 @@ const PriceRange = ({ price }: { price?: TPriceFilter }) => {
         Number(searchParams.get("maxPrice")) || Math.ceil(price.max * 4);
       setCurrentLow(min);
       setCurrentHigh(max);
+      setInputLow(String(min));
+      setInputHigh(String(max));
     }
     // Only run on price change, not on every searchParams change
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -45,8 +51,14 @@ const PriceRange = ({ price }: { price?: TPriceFilter }) => {
       Number(searchParams.get("maxPrice")) || Math.ceil(price.max * 4);
 
     // Only update if values actually differ to prevent unnecessary re-renders
-    setCurrentLow((prev) => (prev !== urlMin ? urlMin : prev));
-    setCurrentHigh((prev) => (prev !== urlMax ? urlMax : prev));
+    setCurrentLow((prev) => {
+      if (prev !== urlMin) { setInputLow(String(urlMin)); return urlMin; }
+      return prev;
+    });
+    setCurrentHigh((prev) => {
+      if (prev !== urlMax) { setInputHigh(String(urlMax)); return urlMax; }
+      return prev;
+    });
   }, [searchParams, price]);
 
   const pushToUrl = useCallback(
@@ -98,23 +110,34 @@ const PriceRange = ({ price }: { price?: TPriceFilter }) => {
     if (values[0] < values[1]) {
       setCurrentLow(values[0]);
       setCurrentHigh(values[1]);
+      setInputLow(String(values[0]));
+      setInputHigh(String(values[1]));
       pushToUrl(values[0], values[1]);
     }
   };
 
-  const handleMinInputChange = (val: string) => {
-    const num = Number(val) || 0;
-    if (num < currentHigh) {
+  // onChange only updates the raw display string — slider/labels never move while typing
+  const handleMinInputChange = (val: string) => setInputLow(val);
+  const handleMaxInputChange = (val: string) => setInputHigh(val);
+
+  // Commit on blur: validate, update real state, push to URL (or reset if invalid)
+  const handleMinInputBlur = () => {
+    const num = Number(inputLow);
+    if (!isNaN(num) && num >= sliderMin && num < currentHigh) {
       setCurrentLow(num);
       pushToUrl(num, currentHigh);
+    } else {
+      setInputLow(String(currentLow));
     }
   };
 
-  const handleMaxInputChange = (val: string) => {
-    const num = Number(val) || 0;
-    if (num > currentLow) {
+  const handleMaxInputBlur = () => {
+    const num = Number(inputHigh);
+    if (!isNaN(num) && num <= sliderMax && num > currentLow) {
       setCurrentHigh(num);
       pushToUrl(currentLow, num);
+    } else {
+      setInputHigh(String(currentHigh));
     }
   };
 
@@ -129,13 +152,13 @@ const PriceRange = ({ price }: { price?: TPriceFilter }) => {
       />
       {showFilter && (
         <div className="pt-3 pb-1">
-          {/* Min/Max labels above slider */}
+          {/* Min/Max labels above slider — always show fixed slider bounds */}
           <div className="flex items-center justify-between mb-3">
             <span className="text-[13px] text-[#6b7280]">
-              ${currentLow.toLocaleString()}
+              ${sliderMin.toLocaleString()}
             </span>
             <span className="text-[13px] text-[#6b7280]">
-              ${currentHigh.toLocaleString()}
+              ${sliderMax.toLocaleString()}
             </span>
           </div>
 
@@ -157,8 +180,9 @@ const PriceRange = ({ price }: { price?: TPriceFilter }) => {
               </span>
               <input
                 type="number"
-                value={currentLow}
+                value={inputLow}
                 onChange={(e) => handleMinInputChange(e.target.value)}
+                onBlur={handleMinInputBlur}
                 className="w-full py-2 pr-2.5 text-[13px] text-[#1a1a2e] font-medium bg-transparent outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
             </div>
@@ -169,8 +193,9 @@ const PriceRange = ({ price }: { price?: TPriceFilter }) => {
               </span>
               <input
                 type="number"
-                value={currentHigh}
+                value={inputHigh}
                 onChange={(e) => handleMaxInputChange(e.target.value)}
+                onBlur={handleMaxInputBlur}
                 className="w-full py-2 pr-2.5 text-[13px] text-[#1a1a2e] font-medium bg-transparent outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
             </div>

@@ -34,7 +34,7 @@ const TireCategory: React.FC<{
     { tireSize: string; loadIndex: string; maxSpeedMPH: string }[]
   >([]);
   useEffect(() => {
-    if(vehicleInformation?.boltPattern && activeGarageId) {
+    if (vehicleInformation?.boltPattern && activeGarageId) {
       const recommendations = vehicleInformation.tire_fitment?.recommendations ?? {};
       const ymmFilterData: { tireSize: string; loadIndex: string; maxSpeedMPH: string }[] = [];
       const seen = new Set<string>();
@@ -78,8 +78,9 @@ const TireCategory: React.FC<{
   const { data, isLoading: loading, isFetching } = useGetProductsQuery({
     ...filters,
     category: 'tire',
-    ...(ymmFilters.length > 0 ? {ymmFilter: ymmFilters} : {}),
-  }, {refetchOnMountOrArgChange: true});
+    page,
+    ...(ymmFilters.length > 0 ? { ymmFilter: ymmFilters } : {}),
+  }, { refetchOnMountOrArgChange: true });
   const viewType = useSelector((state: RootState) => state.persisted.layout.viewType);
   return (
     <>
