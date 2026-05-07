@@ -86,6 +86,7 @@ const Contact: React.FC = () => {
                   id="name"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500"
                   placeholder="Your Name"
+                  required
                 />
               </div>
               <div className="w-full mb-4">
@@ -95,6 +96,7 @@ const Contact: React.FC = () => {
                 <input
                   type="email"
                   id="email"
+                  required
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500"
                   placeholder="Email Address"
                 />
@@ -119,6 +121,7 @@ const Contact: React.FC = () => {
                 id="message"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500"
                 rows={4}
+                required
                 placeholder="Message"
               ></textarea>
             </div>

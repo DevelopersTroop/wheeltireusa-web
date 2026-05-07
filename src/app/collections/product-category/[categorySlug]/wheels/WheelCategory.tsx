@@ -6,22 +6,20 @@ import Breadcrumb from '@/components/ui/breadcrumb/breadcrumb';
 import Item from '@/components/ui/breadcrumb/item';
 import Container from '@/components/ui/container/container';
 import { useFilterSync } from '@/hooks/useFilterSync';
+import { normalizeWheelFitment } from '@/lib/fitment';
 import { cn } from '@/lib/utils';
 import { useGetProductsQuery } from '@/redux/apis/product';
-import { RootState } from '@/redux/store';
+import { RootState, useTypedSelector } from '@/redux/store';
 import { useSearchParams } from 'next/navigation';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { useTypedSelector } from '@/redux/store';
 import ProductCategoryLoading from '../../_components/_loading';
 import SidebarFilters from '../_filters/mobile-filters/SidebarFilter';
 import SortByFilter from '../_filters/SortByFilter';
-import TireFilters from '../_filters/TireFilters';
+import WheelFilters from '../_filters/WheelFilters';
 import NoProductsFound from '../NoProductsFound';
 import WheelCard from './WheelCard';
 import WheelCardList from './WheelCardList';
-import WheelFilters from '../_filters/WheelFilters';
-import { normalizeWheelFitment } from '@/lib/fitment';
 
 const WheelCategory: React.FC<{
   page: number;
