@@ -7,63 +7,49 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
 import { useFilterSync } from "@/hooks/useFilterSync";
 import { useSearchParams } from "next/navigation";
 
 const SortByFilter = () => {
   const { toggleFilterValue } = useFilterSync();
-  const sortObject = {
-    "Price (low to high)": {
-      value: "msrp",
-      order: "asc",
-    },
-    "Price (high to low)": {
-      value: "msrp",
-      order: "desc",
-    },
-    "Name (A to Z)": {
-      value: "title",
-      order: "asc",
-    },
-    "Name (Z to A)": {
-      value: "title",
-      order: "desc",
-    },
-  };
-
-  const queryParamsObject = {
-    "title,asc": "Name (A to Z)",
-    "title,desc": "Name (Z to A)",
-    "msrp,asc": "Price (low to high)",
-    "msrp,desc": "Price (high to low)",
-  };
-
   const searchParams = useSearchParams();
+
+  const sortOptions = [
+    { label: "Price (low to high)", value: "msrp,asc" },
+    { label: "Price (high to low)", value: "msrp,desc" },
+    { label: "Name (A to Z)", value: "title,asc" },
+    { label: "Name (Z to A)", value: "title,desc" },
+  ];
+
+  const currentSort = searchParams.get("sort") || "";
+
+  const selectedLabel =
+    sortOptions.find((s) => s.value === currentSort)?.label;
+
   return (
     <div className="w-full max-w-[500px]">
       <Select
-        onValueChange={(value: keyof typeof sortObject) =>
-          toggleFilterValue(
-            "sort",
-            `${sortObject[value].value},${sortObject[value].order}`,
-            false,
-          )
-        }
-        value={queryParamsObject[searchParams.get("sort") as keyof typeof queryParamsObject] || undefined}
+        value={currentSort || undefined}
+        onValueChange={(value) => {
+          toggleFilterValue("sort", value, false);
+        }}
       >
         <SelectTrigger className="w-full max-w-[180px]">
-          <SelectValue className="capitalize" placeholder="Sort options" />
+          <SelectValue placeholder="Sort options">
+            {selectedLabel || "Sort options"}
+          </SelectValue>
         </SelectTrigger>
+
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Sort Options</SelectLabel>
-            {Object.entries(sortObject).map(([key]) => {
-              return (
-                <SelectItem key={key} value={key}>
-                  {key}
-                </SelectItem>
-              );
-            })}
+
+            {sortOptions.map((opt) => (
+              <SelectItem key={opt.value} value={opt.value}>
+                {opt.label}
+              </SelectItem>
+            ))}
           </SelectGroup>
         </SelectContent>
       </Select>
