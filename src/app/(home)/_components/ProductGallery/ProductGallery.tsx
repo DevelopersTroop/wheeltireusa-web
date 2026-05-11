@@ -11,6 +11,7 @@ import { useGetProductsQuery } from '@/redux/apis/product';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { getProductThumbnail } from '@/utils/product';
 import React from 'react';
+import ProductImage from '@/components/shared/ProductImage/ProductImage';
 
 const ProductGallery: React.FC<{ category: string; title: string }> = ({ category, title }) => {
   const { data, isLoading } = useGetProductsQuery({ category });
@@ -56,11 +57,12 @@ const ProductGallery: React.FC<{ category: string; title: string }> = ({ categor
                   <SwiperSlide key={index}>
                     <Link href={`/collections/product/${product.slug}`} className="group block">
                       <div className="p-2 sm:p-3 md:p-4">
-                        <div className="overflow-hidden rounded-sm">
-                          <img
+                        <div className="relative w-full aspect-square overflow-hidden rounded-sm">
+                          <ProductImage
                             src={getProductThumbnail(product)}
                             alt={product?.title || ''}
-                            className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105"
+                            fill
+                            className="object-cover group-hover:scale-105"
                           />
                         </div>
                         <h4 className="text-sm sm:text-base lg:text-lg font-semibold mt-2 text-center group-hover:text-primary transition-colors duration-200 line-clamp-2">

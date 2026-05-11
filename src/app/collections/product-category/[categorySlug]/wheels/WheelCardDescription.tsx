@@ -28,13 +28,13 @@ const WheelCardDescription = ({ product }: { product: TWheelProduct }) => {
           wheel: {
             ...product,
             cartPackage,
-          } as any,
+          },
         })
       );
       res({ cartPackage });
     }).then((res) => {
       router.push(
-        `/collections/product-category/tires?wheelDiameter=${product.wheelDiameter}&cartPackage=${res.cartPackage}`
+        `/collections/product-category/tires?tireDiameter=${product.wheelDiameter}&cartPackage=${res.cartPackage}`
       );
     });
   };

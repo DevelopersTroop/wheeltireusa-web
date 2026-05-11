@@ -4,6 +4,7 @@ import { useGetProductsQuery } from "@/redux/apis/product";
 import { getProductThumbnail } from "@/utils/product";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
+import ProductImage from "@/components/shared/ProductImage/ProductImage";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/zoom";
@@ -58,10 +59,11 @@ const TodaysDeals = () => {
                     >
                       <div className="p-2 sm:p-3 md:p-4">
                         <div className="w-full aspect-square overflow-hidden rounded-sm bg-gray-50">
-                          <img
+                          <ProductImage
                             src={getProductThumbnail(product)}
                             alt={product?.title || ""}
-                            className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
+                            fill
+                            className="object-contain group-hover:scale-105"
                           />
                         </div>
                         <h4 className="text-sm sm:text-base lg:text-lg font-semibold mt-2 text-center group-hover:text-primary transition-colors duration-200 line-clamp-2">

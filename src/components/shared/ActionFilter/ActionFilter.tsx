@@ -20,9 +20,9 @@ export const ActionFilter = () => {
 
   const queryParamsObject: Record<string, string> = {
     "title,asc": "Name (A to Z)",
-    "title,desc": "Name (Z to A)",
-    "msrp,asc": "Price (low to high)",
-    "msrp,desc": "Price (high to low)",
+    "testing": "Name (Z to A)",
+    "sellingPrice,asc": "Price (low to high)",
+    "sellingPrice,desc": "Price (high to low)",
   };
   const manipulatedObject = useMemo(() => {
     return Object.entries(activeFilters).filter(([key]) => key !== "packageId" && key !== "selectedVehicleInformation").map(([key, value]) => {

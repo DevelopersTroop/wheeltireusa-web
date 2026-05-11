@@ -14,11 +14,11 @@ const SortByFilter = () => {
   const { toggleFilterValue } = useFilterSync();
   const sortObject = {
     "Price (low to high)": {
-      value: "msrp",
+      value: "sellingPrice",
       order: "asc",
     },
     "Price (high to low)": {
-      value: "msrp",
+      value: "sellingPrice",
       order: "desc",
     },
     "Name (A to Z)": {
@@ -34,8 +34,8 @@ const SortByFilter = () => {
   const queryParamsObject = {
     "title,asc": "Name (A to Z)",
     "title,desc": "Name (Z to A)",
-    "msrp,asc": "Price (low to high)",
-    "msrp,desc": "Price (high to low)",
+    "sellingPrice,asc": "Price (low to high)",
+    "sellingPrice,desc": "Price (high to low)",
   };
 
   const searchParams = useSearchParams();

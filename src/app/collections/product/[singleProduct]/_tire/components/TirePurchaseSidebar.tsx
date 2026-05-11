@@ -4,6 +4,7 @@ import { TTireProduct } from "@/types/product";
 import { v4 as uuidv4 } from "uuid";
 import { useAppDispatch, useTypedSelector } from "@/redux/store";
 import { addToCart } from "@/redux/features/cartSlice";
+import { addPackage } from "@/redux/features/packageSlice";
 import { triggerGaAddToCart } from "@/utils/analytics";
 import { useCartHook } from "@/hooks/useCartHook";
 import { useRouter } from "next/navigation";
@@ -118,8 +119,29 @@ const TirePurchaseSidebar = ({ product }: TirePurchaseSidebarProps) => {
   };
 
   // Buy with wheels - navigate to wheel selection
+  const addWheels = () => {
+    new Promise<{ cartPackage: string }>((res) => {
+      const cartPackage = uuidv4();
+      dispatch(
+        addPackage({
+          packageId: cartPackage,
+          tire: {
+            ...product,
+            cartPackage,
+          },
+        })
+      );
+      res({ cartPackage });
+    }).then((res) => {
+      // Use product.tireDiameter directly for wheel diameter filter
+      router.push(
+        `/collections/product-category/wheels?wheelDiameter=${product.tireDiameter}&cartPackage=${res.cartPackage}`
+      );
+    });
+  };
+
   const handleBuyWithWheels = () => {
-    router.push("/collections/product-category/wheels");
+    addWheels();
   };
 
   return (

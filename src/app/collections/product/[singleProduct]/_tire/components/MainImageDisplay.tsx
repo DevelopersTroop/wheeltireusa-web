@@ -3,6 +3,7 @@
 import { getProductThumbnail } from "@/utils/product";
 import { useState, useEffect } from "react";
 import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
+import ProductImage from "@/components/shared/ProductImage/ProductImage";
 
 interface MainImageDisplayProps {
   product: any;
@@ -34,14 +35,15 @@ const MainImageDisplay = ({ product, fallbackImage, selectedImage }: MainImageDi
       <div className="w-full aspect-square max-w-[450px] mx-auto mt-2 sm:mt-3 md:mt-5 bg-white rounded-lg overflow-hidden flex items-center justify-center border border-gray-100 relative">
         {/* Green gradient effect behind tire */}
         <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-40 bg-gradient-to-r from-transparent via-green-500/20 to-transparent rounded pointer-events-none -rotate-4 z-0" />
-        <img
-          src={currentImage}
-          alt={product?.title || "Tire"}
-          className="w-full h-full object-contain p-3 sm:p-4 md:p-8 mix-blend-multiply relative z-10"
-          onError={(e) => {
-            e.currentTarget.src = fallbackImage;
-          }}
-        />
+        <div className="relative w-full h-full p-3 sm:p-4 md:p-8 mix-blend-multiply z-10">
+          <ProductImage
+            src={currentImage}
+            alt={product?.title || "Tire"}
+            fill
+            className="object-contain"
+            onError={() => setCurrentImage(fallbackImage)}
+          />
+        </div>
       </div>
 
       {/* Favorite Heart Icon */}

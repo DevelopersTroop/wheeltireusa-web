@@ -31,7 +31,7 @@ function ProductItem({ product, type, isPartOfPackage, isLast }: ProductItemProp
   };
 
   const totalPrice = getPrice(product) * product.quantity;
-  const msrpPrice = (product.sellingPrice ?? 0) * product.quantity;
+  const sellingPrice = (product.sellingPrice ?? 0) * product.quantity;
 
   const removeCartProduct = () => {
     dispatch(removeFromCart(product.cartPackage));
@@ -72,9 +72,9 @@ function ProductItem({ product, type, isPartOfPackage, isLast }: ProductItemProp
       </div>
 
       <div className="text-right shrink-0">
-        {msrpPrice > totalPrice && (
+        {sellingPrice > totalPrice && (
           <p className="text-[10px] text-gray-400 line-through">
-            {formatPrice(msrpPrice)}
+            {formatPrice(sellingPrice)}
           </p>
         )}
         <p className="text-sm font-bold text-slate-900">
