@@ -1,7 +1,11 @@
+import path from 'path';
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   /* config options here */
+  turbopack: {
+    root: path.resolve(__dirname),
+  },
   // typescript: {
   //   // Dangerously allow production builds to successfully complete even if
   //   // your project has type errors.
