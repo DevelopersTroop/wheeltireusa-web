@@ -34,7 +34,7 @@ const defaultLipSizeData = [
 ];
 
 export const getPriceFilter = (filters: TFilters) => {
-  return 'min' in filters?.price ? filters?.price : { min: 0, max: 0 };
+  return filters.price && 'min' in filters.price ? filters.price : { min: 0, max: 0 };
 };
 export function isPriceFilter(
   filter: TPriceFilter | TSingleFilter[]
@@ -45,17 +45,13 @@ export const getFiltersExceptPriceFilterBy = (
   filters: TFilters,
   filterKey: string
 ) => {
-  return !isPriceFilter(filters?.price)
-    ? typeof filters.price[filterKey][0] === 'string'
-      ? (filters.price[filterKey] as unknown as string[]).map(
-          (item) =>
-            ({
-              value: item,
-              count: 0,
-            }) as TSingleFilter
-        )
-      : filters.price[filterKey]
-    : ([] as TSingleFilter[]);
+  const price = filters.price as TPriceFilter | TSingleFilter[] | undefined;
+  if (!price || isPriceFilter(price)) return [] as TSingleFilter[];
+  return typeof (price as any)[filterKey][0] === 'string'
+    ? ((price as any)[filterKey] as string[]).map(
+        (item) => ({ value: item, count: 0 }) as TSingleFilter
+      )
+    : (price as any)[filterKey];
 };
 
 export const isPassengerForging = (forging: string) => {
