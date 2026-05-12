@@ -91,7 +91,7 @@ const TextPassword = <T extends FieldValues>({
                       width={24}
                       height={24}
                       alt="password icon"
-                      src="/password.svg"
+                      src="/eye-password-hide.svg"
                       className="cursor-pointer text-muted w-6 h-6"
                     />
                   ) : (
@@ -99,7 +99,7 @@ const TextPassword = <T extends FieldValues>({
                       width={24}
                       height={24}
                       alt="password icon"
-                      src="/password.svg"
+                      src="/eye-close-up.svg"
                       className=" text-muted w-6 h-6"
                     />
                   )}
