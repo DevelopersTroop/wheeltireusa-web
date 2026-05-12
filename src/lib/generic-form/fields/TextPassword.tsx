@@ -90,16 +90,16 @@ const TextPassword = <T extends FieldValues>({
                     <Image
                       width={24}
                       height={24}
-                      alt=""
-                      src="password.svg"
+                      alt="password icon"
+                      src="/password.svg"
                       className="cursor-pointer text-muted w-6 h-6"
                     />
                   ) : (
                     <Image
                       width={24}
                       height={24}
-                      alt=""
-                      src="password.svg"
+                      alt="password icon"
+                      src="/password.svg"
                       className=" text-muted w-6 h-6"
                     />
                   )}
