@@ -164,8 +164,8 @@ const LoginPage = () => {
 
                         src={
                           showPassword
-                            ? "/eye-close-up.svg"
-                            : "/eye-password-hide.svg"
+                            ? "/eye-password-hide.svg"
+                            : "/eye-close-up.svg"
                         }
                         alt="toggle password"
                         className="w-5 h-5 opacity-100 hover:opacity-100"
