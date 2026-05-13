@@ -164,9 +164,9 @@ export default function MobileNavbar() {
       >
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
-          <span className="font-bold text-xl">
+          <Link href='/' className="font-bold text-xl">
             <img src="/images/logo.png" className="h-8" />
-          </span>
+          </Link>
 
           <button onClick={() => setIsOpen(false)}>
             <X className="w-6 h-6" />

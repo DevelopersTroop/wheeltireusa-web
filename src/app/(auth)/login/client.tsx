@@ -26,6 +26,7 @@ const validationSchema = Yup.object().shape({
 
 const LoginPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false)
   const router = useRouter();
   const [errors, setErrors] = useState<{ name: string; message: string }[]>([]);
   const [success, setSuccess] = useState<{
@@ -140,16 +141,37 @@ const LoginPage = () => {
                   <label className="block mb-1 font-semibold text-white">
                     Password
                   </label>
-                  <Field name="password">
-                    {({ field }: any) => (
-                      <Input
-                        {...field}
-                        type="password"
-                        placeholder="••••••••"
-                        className={`w-full text-gray-300 placeholder:text-gray-400 ${formErrors.password && touched.password ? 'border-red-500' : ''}`}
+                  <div className="relative">
+                    <Field name="password">
+                      {({ field }: any) => (
+                        <Input
+                          {...field}
+                          type={showPassword ? "text" : "password"}
+                          placeholder="••••••••"
+                          className={`w-full pr-12 text-gray-300 placeholder:text-gray-400 ${formErrors.password && touched.password ? "border-red-500" : ""
+                            }`}
+                        />
+                      )}
+                    </Field>
+
+                    {/* Eye Toggle Button */}
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2"
+                    >
+                      <img
+
+                        src={
+                          showPassword
+                            ? "/eye-close-up.svg"
+                            : "/eye-password-hide.svg"
+                        }
+                        alt="toggle password"
+                        className="w-5 h-5 opacity-100 hover:opacity-100"
                       />
-                    )}
-                  </Field>
+                    </button>
+                  </div>
                   {formErrors.password && touched.password && (
                     <p className="mt-1 text-sm text-red-500">
                       {formErrors.password}
