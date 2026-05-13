@@ -1,7 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { X, ChevronDown, ChevronUp, ChevronRight } from "lucide-react";
+import {
+  X,
+  ChevronDown,
+  ChevronUp,
+  ChevronRight,
+  User, // ✅ added
+} from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import navMenus, { NavMenu } from "./config";
@@ -14,11 +20,10 @@ export default function MobileNavbar() {
   const [openKeys, setOpenKeys] = useState<string[]>([]);
   const dispatch = useDispatch();
 
-  // ✅ correct auth check (from your redux state)
+  // ✅ auth state
   const isLoggedIn = useSelector(
     (state: any) => !!state.persisted?.user?.accessToken
   );
-
 
   const toggleKey = (label: string) => {
     setOpenKeys((prev) =>
@@ -32,7 +37,6 @@ export default function MobileNavbar() {
     const label = menu.label?.toLowerCase();
 
     const runModal = (payload: any) => {
-      // ✅ router-safe dispatch (prevents Next.js crash)
       setTimeout(() => {
         dispatch(setIsModalOpen(payload));
       }, 0);
@@ -48,7 +52,6 @@ export default function MobileNavbar() {
         brandCategory: "wheels",
         sizeCategory: "wheels",
       });
-
       setIsOpen(false);
       return;
     }
@@ -63,12 +66,10 @@ export default function MobileNavbar() {
         brandCategory: "tire",
         sizeCategory: "tire",
       });
-
       setIsOpen(false);
       return;
     }
 
-    // default close drawer for normal links
     if (!menu.children) {
       setIsOpen(false);
     }
@@ -76,7 +77,12 @@ export default function MobileNavbar() {
 
   const renderMenuItems = (items: NavMenu[], level: number = 0) => {
     return (
-      <ul className={cn("flex flex-col", level > 0 && "pl-5 border-l border-gray-100")}>
+      <ul
+        className={cn(
+          "flex flex-col",
+          level > 0 && "pl-5 border-l border-gray-100"
+        )}
+      >
         {items.map((item) => {
           const isExpanded = openKeys.includes(item.label);
 
@@ -167,24 +173,41 @@ export default function MobileNavbar() {
           </button>
         </div>
 
-        {/* Login Button (only when NOT logged in) */}
-        {!isLoggedIn && (
-          <Link
-            onClick={() => setIsOpen(false)}
-            className="uppercase bg-primary text-white w-full inline-block text-center py-2 text-xl"
-            href="/login"
-          >
-            Sign in or Create Account
-          </Link>
-        )}
+        {/* ✅ Auth Section */}
+        <div className="px-4 py-3 border-b border-gray-200">
+          {!isLoggedIn ? (
+            <Link
+              onClick={() => setIsOpen(false)}
+              className="uppercase bg-primary text-white w-full inline-block text-center py-2 text-xl"
+              href="/login"
+            >
+              Sign in or Create Account
+            </Link>
+          ) : (
+            <Link
+              href="https://wheeltireusa.com/dashboard/account-details"
+              onClick={() => setIsOpen(false)}
+              className="flex items-center gap-3"
+            >
+              <User className="w-6 h-6 text-gray-700" />
+              <span className="text-lg font-medium">My Account</span>
+            </Link>
+          )}
+        </div>
 
         {/* Menu */}
-        <nav className="py-2 uppercase">{renderMenuItems(navMenus)}</nav>
+        <nav className="py-2 uppercase">
+          {renderMenuItems(navMenus)}
+        </nav>
 
         {/* Contact */}
         <div className="px-4 mt-6">
-          <Link className="text-xl font-semibold" href="tel:+1 (813) 812-5257">
-            Call us: <span className="text-primary">+1 (813) 812-5257</span>
+          <Link
+            className="text-xl font-semibold"
+            href="tel:+1 (813) 812-5257"
+          >
+            Call us:{" "}
+            <span className="text-primary">+1 (813) 812-5257</span>
           </Link>
         </div>
       </div>
