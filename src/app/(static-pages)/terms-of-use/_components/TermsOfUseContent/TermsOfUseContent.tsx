@@ -8,8 +8,8 @@ const sections = [
     content: (
       <div className="space-y-4 text-muted-foreground leading-relaxed">
         <p>
-          Welcome to WheelTireUSA ("Company," "we," "us," or "our"). By accessing or using our
-          website (the "Site"), you agree to comply with and be bound by these Terms of Use.
+          Welcome to WheelTireUSA. By accessing or using our
+          website, you agree to comply with and be bound by these Terms of Use.
         </p>
         <p>If you do not agree, you must discontinue use of the Site immediately.</p>
         <p>
