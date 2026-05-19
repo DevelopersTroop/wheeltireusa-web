@@ -3,7 +3,9 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import "swiper/css";
+// @ts-ignore: side-effect import with no type declarations
 import "swiper/css/navigation";
+// @ts-ignore: side-effect import with no type declarations
 import "swiper/css/zoom";
 import { Autoplay, Navigation, Zoom } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
