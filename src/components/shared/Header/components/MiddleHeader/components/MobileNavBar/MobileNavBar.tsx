@@ -1,98 +1,80 @@
 "use client";
 
 import { useState } from "react";
-import { X, ChevronDown, ChevronUp, ChevronRight } from "lucide-react";
+import {
+  X,
+  ChevronDown,
+  ChevronUp,
+  ChevronRight,
+  User, // ✅ added
+} from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import navMenus, { NavMenu } from "./config";
-import { BiMenu } from 'react-icons/bi'
-import { useDispatch } from "react-redux";
+import { BiMenu } from "react-icons/bi";
+import { useDispatch, useSelector } from "react-redux";
 import { setIsModalOpen } from "@/redux/features/ymmFilterSlice";
-// import SearchUnderMenu from "../../../SearchUnderMenu/SearchUnderMenu";
 
-
-// Recursive Mobile Navbar with Drawer
 export default function MobileNavbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [openKeys, setOpenKeys] = useState<string[]>([]); // track all open items
+  const [openKeys, setOpenKeys] = useState<string[]>([]);
   const dispatch = useDispatch();
 
-  // toggle open/close for a label
+  // ✅ auth state
+  const isLoggedIn = useSelector(
+    (state: any) => !!state.persisted?.user?.accessToken
+  );
+
   const toggleKey = (label: string) => {
     setOpenKeys((prev) =>
-      prev.includes(label) ? prev.filter((k) => k !== label) : [...prev, label]
+      prev.includes(label)
+        ? prev.filter((k) => k !== label)
+        : [...prev, label]
     );
   };
 
   const handleNavMenuClick = (menu: NavMenu, e: React.MouseEvent) => {
-    let matched = false;
-    if (menu.label?.toLowerCase() === "shop wheels") {
-      dispatch(setIsModalOpen({
+    const label = menu.label?.toLowerCase();
+
+    const runModal = (payload: any) => {
+      setTimeout(() => {
+        dispatch(setIsModalOpen(payload));
+      }, 0);
+    };
+
+    if (label === "shop wheels") {
+      e.preventDefault();
+      runModal({
         isOpen: true,
         source: "nav_menu",
         redirectPath: "/collections/product-category/wheels",
         mainTab: "vehicle",
         brandCategory: "wheels",
-        sizeCategory: "wheels"
-      }));
-      matched = true;
+        sizeCategory: "wheels",
+      });
+      setIsOpen(false);
+      return;
     }
-    if (menu.label?.toLowerCase() === "shop tires") {
-      dispatch(setIsModalOpen({
+
+    if (label === "shop tires") {
+      e.preventDefault();
+      runModal({
         isOpen: true,
         source: "nav_menu",
         redirectPath: "/collections/product-category/tires",
         mainTab: "vehicle",
         brandCategory: "tire",
-        sizeCategory: "tire"
-      }));
-      matched = true;
-
-    }
-    // if (menu.label?.toLowerCase() === "shop wheels") {
-    //   dispatch(setIsModalOpen({ 
-    //     isOpen: true, 
-    //     source: "nav_menu", 
-    //     redirectPath: "/collections/product-category/wheels",
-    //     mainTab: "size",
-    //     brandCategory: "wheels",
-    //     sizeCategory: "wheels"
-    //   }));
-    //   matched = true;
-    // }
-    // if (menu.label?.toLowerCase() === "shop tires") {
-    //   dispatch(setIsModalOpen({ 
-    //     isOpen: true, 
-    //     source: "nav_menu", 
-    //     redirectPath: "/collections/product-category/tires",
-    //     mainTab: "size",
-    //     brandCategory: "tire",
-    //     sizeCategory: "tire"
-    //   }));
-    //   matched = true;
-    // }
-    // if (menu.label?.toLowerCase() === "wheels by brands") {
-    //   dispatch(setIsModalOpen({ 
-    //     isOpen: true, 
-    //     source: "nav_menu", 
-    //     redirectPath: "/collections/product-category/wheels",
-    //     mainTab: "brand",
-    //     brandCategory: "wheels"
-    //   }));
-    //   matched = true;
-    // }
-
-    if (matched) {
-      e.preventDefault();
+        sizeCategory: "tire",
+      });
       setIsOpen(false);
-    } else if (!menu.children) {
+      return;
+    }
+
+    if (!menu.children) {
       setIsOpen(false);
     }
   };
 
-  /**
-   * Recursive renderer for menu items
-   */
   const renderMenuItems = (items: NavMenu[], level: number = 0) => {
     return (
       <ul
@@ -112,11 +94,10 @@ export default function MobileNavbar() {
                   level === 0
                     ? "px-4 font-semibold text-lg"
                     : level === 1
-                      ? "px-3 text-base font-medium"
-                      : "px-2 text-sm font-normal"
+                    ? "px-3 text-base font-medium"
+                    : "px-2 text-sm font-normal"
                 )}
               >
-                {/* Navigation Link */}
                 <Link
                   href={item.href ?? "#"}
                   target={item.target}
@@ -126,7 +107,6 @@ export default function MobileNavbar() {
                   {item.label}
                 </Link>
 
-                {/* Toggle button if has children */}
                 {item.children && (
                   <button
                     onClick={() => toggleKey(item.label)}
@@ -144,7 +124,6 @@ export default function MobileNavbar() {
                 )}
               </div>
 
-              {/* Render nested children recursively */}
               {item.children && isExpanded && (
                 <div className="transition-all duration-300 ease-in-out">
                   {renderMenuItems(item.children, level + 1)}
@@ -159,7 +138,7 @@ export default function MobileNavbar() {
 
   return (
     <>
-      {/* Hamburger Icon */}
+      {/* Hamburger */}
       <button
         onClick={() => setIsOpen(true)}
         aria-label="Open menu"
@@ -173,7 +152,7 @@ export default function MobileNavbar() {
         <div
           onClick={() => setIsOpen(false)}
           className="fixed inset-0 bg-black/50 z-40"
-        ></div>
+        />
       )}
 
       {/* Drawer */}
@@ -185,35 +164,49 @@ export default function MobileNavbar() {
       >
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
-          <span className="font-bold text-xl">
+          <Link href='/' className="font-bold text-xl">
             <img src="/images/logo.png" className="h-8" />
-          </span>
-          <button
-            onClick={() => setIsOpen(false)}
-            aria-label="Close menu"
-            className="p-2"
-          >
+          </Link>
+
+          <button onClick={() => setIsOpen(false)}>
             <X className="w-6 h-6" />
           </button>
         </div>
-        <Link
-          onClick={() => setIsOpen(false)}
-          className="uppercase bg-primary text-white w-full inline-block text-center py-2 text-xl"
-          href={"/login"}
-        >
-          Sign in or Create Account
-        </Link>
-        {/* <SearchUnderMenu isHomepage={false} /> */}
 
-        {/* Navigation */}
-        <nav className="py-2 uppercase">{renderMenuItems(navMenus)}</nav>
+        {/* ✅ Auth Section */}
+        <div className="px-4 py-3 border-b border-gray-200">
+          {!isLoggedIn ? (
+            <Link
+              onClick={() => setIsOpen(false)}
+              className="uppercase bg-primary text-white w-full inline-block text-center py-2 text-xl"
+              href="/login"
+            >
+              Sign in or Create Account
+            </Link>
+          ) : (
+            <Link
+              href="https://wheeltireusa.com/dashboard/account-details"
+              onClick={() => setIsOpen(false)}
+              className="flex items-center gap-3"
+            >
+              <User className="w-6 h-6 text-gray-700" />
+              <span className="text-lg font-medium">My Account</span>
+            </Link>
+          )}
+        </div>
 
+        {/* Menu */}
+        <nav className="py-2 uppercase">
+          {renderMenuItems(navMenus)}
+        </nav>
+
+        {/* Contact */}
         <div className="px-4 mt-6">
           <Link
             className="text-xl font-semibold"
-            href={"tel:+1 (813) 812-5257"}
+            href="tel:+1 (813) 812-5257"
           >
-            Call us:{"  "}{" "}
+            Call us:{" "}
             <span className="text-primary">+1 (813) 812-5257</span>
           </Link>
         </div>

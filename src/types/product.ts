@@ -75,7 +75,7 @@ export type TTireProduct = {
   dualLoadKg: string | null;
   dualLoadLsb: string | null;
   MSRating: string | null;
-}
+};
 
 export type TWheelProduct = {
   id: number;
@@ -83,7 +83,7 @@ export type TWheelProduct = {
   model: string;
   title: string;
   category: TCategory;
-  itemImage: string | null;
+  itemImage?: string | null;
   images: string[] | null;
   slug: string;
   vendorName: string;
@@ -110,8 +110,5 @@ export type TWheelProduct = {
   sellingPrice: number | null;
   availableStock: number | null;
   shortDescription: string | null;
-
-}
-export type TInventoryItem = TTireProduct | TWheelProduct & {
-
 };
+export type TInventoryItem = TTireProduct | (TWheelProduct & {});

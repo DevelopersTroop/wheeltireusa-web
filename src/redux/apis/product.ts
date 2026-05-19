@@ -54,21 +54,11 @@ const products = baseApi.injectEndpoints({
       queryFn: async (params, _queryApi, _extraOptions, baseQuery) => {
         const shallowParams = { ...params };
 
-        switch (shallowParams?.sort) {
-          case 'Sort by price (high to low)':
-            shallowParams.sort = [{ whom: 'price', order: 'desc' }];
-            break;
-          case 'Sort by price (low to high)':
-            shallowParams.sort = [{ whom: 'price', order: 'asc' }];
-            break;
-          case 'Sort by name (A to Z)':
-            shallowParams.sort = [{ whom: 'description', order: 'asc' }];
-            break;
-          case 'Sort by name (Z to A)':
-            shallowParams.sort = [{ whom: 'description', order: 'desc' }];
-            break;
-          default:
-            shallowParams.sort = [{ whom: 'createdAt', order: 'asc' }];
+        if (typeof shallowParams?.sort === 'string' && shallowParams.sort.includes(',')) {
+          const [whom, order] = shallowParams.sort.split(',');
+          shallowParams.sort = [{ whom, order: order as 'asc' | 'desc' }];
+        } else {
+          shallowParams.sort = [{ whom: 'createdAt', order: 'asc' }];
         }
 
         Object.entries(shallowParams).forEach(([key, value]) => {

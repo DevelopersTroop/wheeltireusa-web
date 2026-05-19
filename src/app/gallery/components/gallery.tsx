@@ -1,29 +1,19 @@
 "use client";
-import { useGetGalleriesQuery } from "@/redux/apis/gallery";
-import { useTypedSelector } from "@/redux/store";
-import { useSearchParams } from "next/navigation";
-import React from "react";
-import { BlogPagination } from "../../blog/_components/pagination";
-import { useFilterSync } from "@/hooks/useFilterSync";
-import ProductCardSkeleton from "./product-card-skeleton";
 import NoProductsFound from "@/app/collections/product-category/[categorySlug]/NoProductsFound";
 import Breadcrumb from "@/components/ui/breadcrumb/breadcrumb";
 import Item from "@/components/ui/breadcrumb/item";
+import { useGetGalleriesQuery } from "@/redux/apis/gallery";
+import { useSearchParams } from "next/navigation";
+import React from "react";
+import { BlogPagination } from "../../blog/_components/pagination";
 import ProductCard from "./product-card";
-import { wrapWheelFilters } from "@/hooks/wheelService";
+import ProductCardSkeleton from "./product-card-skeleton";
 
 
 const Gallery: React.FC = () => {
   const searchParams = useSearchParams();
   const page = searchParams.get("page");
-  const { filters } = useFilterSync();
-  const ymm = useTypedSelector((state) => state.persisted.yearMakeModel);
-  const { category, ...parsedFilter } = wrapWheelFilters(
-    filters,
-    1,
-    filters["vehicle"] ? ymm.vehicleInformation : {}
-  );
-  const { data, isLoading } = useGetGalleriesQuery(parsedFilter);
+  const { data, isLoading } = useGetGalleriesQuery({});
   return (
     <>
       {isLoading ? (

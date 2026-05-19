@@ -1,7 +1,11 @@
+import path from 'path';
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   /* config options here */
+  turbopack: {
+    root: path.resolve(__dirname),
+  },
   // typescript: {
   //   // Dangerously allow production builds to successfully complete even if
   //   // your project has type errors.
@@ -76,11 +80,23 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'images.carid.com',
-      }, 
+      },
       {
         protocol: 'https',
         hostname: 'cloudfront.net',
-      }
+      },
+      {
+        protocol: 'https',
+        hostname: '*.amazonaws.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.example.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.wheeltireusa.com',
+      },
     ],
   },
   rewrites: async () => {

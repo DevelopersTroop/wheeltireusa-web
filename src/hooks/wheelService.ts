@@ -70,7 +70,7 @@ export const wrapWheelFilters = (
   return {
     sort: [
       {
-        whom: 'msrp',
+        whom: 'sellingPrice',
         order: 'desc',
       },
     ],

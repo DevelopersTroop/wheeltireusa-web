@@ -40,7 +40,7 @@ const ProductImage = ({ className, onError, alt, ...props }: ProductImageProps) 
                     alt={alt || "Image not available"}
                     fill
                     className={cn('object-cover rounded-xl', className)}
-                    onError={() => setIsLoaded(true)}
+                    onError={() => {/* Fallback image failed - ignore to keep showing fallback state */}}
                 />
             )}
             {!hasError && (

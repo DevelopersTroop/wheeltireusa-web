@@ -72,16 +72,16 @@ export type TPost = {
   metaTitle?: string;
   metaDescription?: string;
   metaKeywords?: string[];
-  blocks?: BlogBlock[];
-  relatedProducts?: TInventoryItem[];
-  description?: string;
-  categoryId?: TCategory;
+  blocks: BlogBlock[];
+  relatedProducts: TInventoryItem[];
+  description: string;
+  categoryId: TCategory;
   updatedBy: string | null;
   deletedBy: string | null;
   isDelete: boolean;
   createdAt: string; // or Date, depending on your use case
   updatedAt: string; // or Date
-  category?: TCategory;
+  category: TCategory;
   faq?: TFaq;
 };
 

@@ -33,10 +33,13 @@ export async function generateMetadata({
 
 const Collection = async ({
   params,
+  searchParams,
 }: {
-  params: Promise<{ categorySlug: string; page: string }>;
+  params: Promise<{ categorySlug: string }>;
+  searchParams: Promise<{ page?: string; [key: string]: string | string[] | undefined }>;
 }) => {
-  const { categorySlug, page } = await params;
+  const { categorySlug } = await params;
+  const { page } = await searchParams;
 
   let categoryDetails = null;
   try {

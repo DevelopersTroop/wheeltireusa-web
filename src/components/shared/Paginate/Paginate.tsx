@@ -57,14 +57,21 @@ export const Paginate = ({
     }
   }
 
+  // Strip the existing `page` param so it is never duplicated in the URL
+  const baseParams = new URLSearchParams(searchParams.toString());
+  baseParams.delete("page");
+  const qs = baseParams.toString();
+  const suffix = qs ? `&${qs}` : "";
+
+  const buildHref = (p: number) =>
+    `/collections/product-category/${safeSlug}?page=${p}${suffix}`;
+
   return (
     <>
       <Pagination ariaLabel={"Product Pagination"}>
         <PaginationItem
           key={"previous"}
-          href={`/collections/product-category/${safeSlug}?page=${
-            currentPage - 1
-          }&${searchParams.toString()}`}
+          href={buildHref(currentPage - 1)}
           disabled={currentPage === 1}
           className={
             currentPage === 1 ? "not-allowed pointer-events-none" : "pointer"
@@ -90,7 +97,7 @@ export const Paginate = ({
           typeof item === "number" ? (
             <PaginationItem
               key={"apagination_" + index}
-              href={`/collections/product-category/${safeSlug}/${item}?${searchParams.toString()}`}
+              href={buildHref(item)}
               active={currentPage === item}
             >
               {item}
@@ -103,7 +110,7 @@ export const Paginate = ({
         )}
         <PaginationItem
           key={"next"}
-          href={`/collections/product-category/${safeSlug}/${currentPage + 1}?${searchParams.toString()}`}
+          href={buildHref(currentPage + 1)}
           disabled={currentPage === totalPages}
           className={
             currentPage === totalPages

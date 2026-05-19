@@ -25,7 +25,7 @@ export const isWishListData = (
 
 export const getProductThumbnail = (product: TInventoryItem) => {
   if (!product) {
-    return '/images/not-available.webp';
+    return '/wheel-not-available.png';
   } else if (product && !product.itemImage && product.category?.slug === 'tire') {
     return '/tire-not-available.png';
   } else if (product && !product.itemImage && product.category?.slug === 'wheels') {

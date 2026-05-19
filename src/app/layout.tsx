@@ -13,6 +13,7 @@ import { Toaster } from 'sonner';
 import CartSystem from './cart/v2/page';
 import { MaintenanceMode } from '@/components/maintenanceMode';
 import CustomAnalyticsTracker from '@/components/customAnalyticsTracker';
+import ComparisonWidget from '@/components/shared/ComparisonWidget/ComparisonWidget';
 const robotoFlex = Roboto_Flex({
   variable: '--font-roboto-flex',
   subsets: ['latin'],
@@ -93,7 +94,7 @@ export default function RootLayout({
               <CartSystem />
             </GoogleMapScriptLoader>
           </MaintenanceMode>
-          {/* <ComparisonWidget /> */}
+          <ComparisonWidget />
         </ReduxWrapper>
       </body>
     </html>

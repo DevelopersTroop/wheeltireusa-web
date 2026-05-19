@@ -15,7 +15,7 @@ export type TSingleFilter = {
  * Using a loose index signature so we never need to hardcode keys again.
  */
 export type TFilters = {
-  price: TPriceFilter;
+  price?: TPriceFilter;
 } & {
   [key: string]: TSingleFilter[] | TPriceFilter;
 };

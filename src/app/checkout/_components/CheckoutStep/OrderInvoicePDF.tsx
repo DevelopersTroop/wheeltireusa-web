@@ -176,11 +176,11 @@ const OrderInvoicePDF: React.FC<{ order: TOrder | undefined }> = ({
                 </Text>
                 {(order.data.selectedDealerInfo?.address2 ||
                   order.data.shippingAddress.address2) && (
-                  <Text style={styles.addressText}>
-                    {order.data.selectedDealerInfo?.address2 ||
-                      order.data.shippingAddress.address2}
-                  </Text>
-                )}
+                    <Text style={styles.addressText}>
+                      {order.data.selectedDealerInfo?.address2 ||
+                        order.data.shippingAddress.address2}
+                    </Text>
+                  )}
                 <Text style={styles.addressText}>
                   {order.data.selectedDealerInfo?.stateProvince ||
                     order.data.shippingAddress.cityState}
@@ -266,7 +266,7 @@ const OrderInvoicePDF: React.FC<{ order: TOrder | undefined }> = ({
                   {product.quantity}
                 </Text>
                 <Text style={[styles.tableCell, styles.totalCell]}>
-                  {formatCurrency(product.price * product.quantity)}
+                  {formatCurrency(getPrice(product) * product.quantity)}
                 </Text>
               </View>
             ))}

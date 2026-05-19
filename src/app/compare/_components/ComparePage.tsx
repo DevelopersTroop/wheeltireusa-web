@@ -30,6 +30,7 @@ import {
   getSpecValue,
   ViewMode
 } from './comparison-configs';
+import Container from '@/components/ui/container/container';
 
 const ComparePage = () => {
   const dispatch = useAppDispatch();
@@ -144,7 +145,7 @@ const ComparePage = () => {
   // Empty state
   if (products.length === 0) {
     return (
-      <div className="container mx-auto w-full px-4 py-16">
+      <Container className='py-16'>
         <div className="max-w-5xl mx-auto w-full text-center">
           <div className="relative">
             <div className="absolute inset-0 bg-primary/5 rounded-full blur-3xl scale-150" />
@@ -175,12 +176,12 @@ const ComparePage = () => {
             </Link>
           </div>
         </div>
-      </div>
+      </Container>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 pb-32 print:pb-8">
+    <Container>
       <CompareHeader
         products={products}
         categoryName={categoryName}
@@ -224,7 +225,7 @@ const ComparePage = () => {
         expandedCategories={expandedCategories}
         onToggleCategory={toggleCategory}
       />
-    </div>
+    </Container>
   );
 };
 
