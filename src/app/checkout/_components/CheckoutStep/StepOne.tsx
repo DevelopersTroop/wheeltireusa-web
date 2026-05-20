@@ -16,7 +16,7 @@ import { useApplyCoupon } from '@/hooks/useApplyCoupon';
 import { usePaytomorrowCheckout } from '@/hooks/usePayTomorrowCheckout';
 import { usePaypalCheckout } from '@/hooks/usePaypalCheckout';
 import { useStripeCheckout } from '@/hooks/useStripeCheckout';
-import { getLatestOrderId, useSnapFinanceOrderData } from '@/lib/order';
+import { reserveCheckout, useSnapFinanceOrderData } from '@/lib/order';
 import { getSnapFinanceToken } from '@/lib/snapFinance';
 import {
   Stripe,
@@ -57,6 +57,7 @@ export const StepOne = ({ }) => {
   const [billingSameAsShipping, setShippingSameAsBilling] = useState(
     selectedOptionTitle === 'Direct to Customer'
   );
+  const snapCheckoutTokenRef = useRef<string>('');
 
   const { activeAccordion, setActiveAccordion } = useActiveAccordion();
   const [shouldDisableButton, setShouldDisableButton] = useState(false);
@@ -124,7 +125,7 @@ export const StepOne = ({ }) => {
 
   const { cartType, subTotalCost, totalCost } = useCheckout();
 
-  const { getSnapFinanceTransactionData, placeOrderWithSnapFinance } =
+  const { getSnapFinanceTransactionData, placeOrderWithSnapFinance, orderData: snapOrderData } =
     useSnapFinanceOrderData();
 
   const onClickHandler = (data: any, actions: any) => {
@@ -135,7 +136,7 @@ export const StepOne = ({ }) => {
     data: { applicationId: string; type: string },
     actions: any
   ) => {
-    placeOrderWithSnapFinance(data.applicationId, data.type);
+    placeOrderWithSnapFinance(data.applicationId, data.type, snapCheckoutTokenRef.current);
   };
 
   const onErrorHandler = (error: any) => {
@@ -179,21 +180,21 @@ export const StepOne = ({ }) => {
   }, []);
 
   const handleSnapFinanceCheckout = async () => {
-    getLatestOrderId()
-      .then((orderId) => {
-        const stringOrderID = orderId.split('-')?.[1] || `AF-0000`;
-        const newOrderId = `AF-${(parseInt(stringOrderID, 10) + 1)
-          .toString()
-          .padStart(6, '0')}`;
-        if (newOrderId) {
-          dispatch(setOrderId(newOrderId));
-        }
-        const transactionData = getSnapFinanceTransactionData(newOrderId);
-        snapInstanceRef.current?._actions?.launchCheckout(transactionData);
-      })
-      .catch((err) => {
-        console.error(err);
+    try {
+      const { checkoutToken, orderId } = await reserveCheckout({
+        ...snapOrderData,
+        user: undefined,
       });
+      snapCheckoutTokenRef.current = checkoutToken;
+      dispatch(setOrderId(orderId));
+      const transactionData = getSnapFinanceTransactionData(orderId);
+      snapInstanceRef.current?._actions?.launchCheckout(transactionData);
+    } catch (err: any) {
+      toast.error('Error', {
+        description:
+          err?.message ?? 'Failed to initialize checkout. Please try again.',
+      });
+    }
   };
 
   /**

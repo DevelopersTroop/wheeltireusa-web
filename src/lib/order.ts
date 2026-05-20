@@ -1,25 +1,14 @@
 import { useCheckout } from '@/context/checkoutContext';
 import { apiInstance } from '@/redux/apis/base';
 import { useTypedSelector } from '@/redux/store';
-import { TOrder } from '@/types/order';
-import { createSnapFinanceData } from './snapFinance';
 import { apiBaseUrl } from '@/utils/api';
 import { toast } from 'sonner';
+import { createSnapFinanceData } from './snapFinance';
 
 export type TReserveCheckoutResult = {
   checkoutToken: string;
   orderId: string;
   internalId: number;
-};
-
-export const getLatestOrderId = async () => {
-  const { data: response } = await apiInstance.get<{
-    data: {
-      order: TOrder;
-    };
-  }>('/orders/last-order');
-
-  return response.data?.order?.orderId;
 };
 
 export const reserveCheckout = async (
@@ -106,18 +95,19 @@ export const useSnapFinanceOrderData = () => {
 
   const placeOrderWithSnapFinance = async (
     applicationId: string,
-    snapStatus: string
+    snapStatus: string,
+    checkoutToken: string
   ) => {
     try {
       const { productsInfo, ...rest } = orderData;
 
       const response = await fetch(
         `${apiBaseUrl}/payments/snap-finance/checkout`,
-        // `http://localhost:8080/api/v1/payments/create-paypal-payment`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            checkoutToken,
             orderData: {
               ...rest,
               snapStatus,
@@ -142,9 +132,10 @@ export const useSnapFinanceOrderData = () => {
       }
 
       const data = await response.json();
+      const successUrl = data?.data?.success_url ?? data?.success_url;
 
-      if (data?.success_url) {
-        window.location.href = data?.success_url;
+      if (successUrl) {
+        window.location.href = successUrl;
       }
     } catch (err: any) {
       toast.error('Error', {
@@ -154,6 +145,7 @@ export const useSnapFinanceOrderData = () => {
   };
 
   return {
+    orderData,
     getSnapFinanceTransactionData,
     placeOrderWithSnapFinance,
   };
