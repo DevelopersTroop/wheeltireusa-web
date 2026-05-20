@@ -4,6 +4,7 @@ import { useCheckout } from '@/context/checkoutContext';
 import useAuth from './useAuth';
 import { apiBaseUrl } from '@/utils/api';
 import { toast } from 'sonner';
+import { reserveCheckout } from '@/lib/order';
 
 export const usePaytomorrowCheckout = () => {
   const { cartType, subTotalCost, totalCost } = useCheckout();
@@ -28,8 +29,6 @@ export const usePaytomorrowCheckout = () => {
     existingOrderId,
     referralCode,
     affiliateDiscount,
-    totalWithTax,
-    taxAmount,
   } = useTypedSelector((state) => state.persisted.checkout);
   const { user } = useAuth();
 
@@ -63,15 +62,14 @@ export const usePaytomorrowCheckout = () => {
         affiliateDiscount,
       };
 
+      const { checkoutToken } = await reserveCheckout(orderData);
+
       const response = await fetch(
         `${apiBaseUrl}/payments/pay-tomorrow/checkout`,
-        // `http://localhost:8080/api/v1/payments/create-paypal-payment`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            orderData,
-          }),
+          body: JSON.stringify({ orderData, checkoutToken }),
         }
       );
       if (!response.ok) {

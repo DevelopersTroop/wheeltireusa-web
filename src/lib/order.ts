@@ -6,6 +6,12 @@ import { createSnapFinanceData } from './snapFinance';
 import { apiBaseUrl } from '@/utils/api';
 import { toast } from 'sonner';
 
+export type TReserveCheckoutResult = {
+  checkoutToken: string;
+  orderId: string;
+  internalId: number;
+};
+
 export const getLatestOrderId = async () => {
   const { data: response } = await apiInstance.get<{
     data: {
@@ -14,6 +20,15 @@ export const getLatestOrderId = async () => {
   }>('/orders/last-order');
 
   return response.data?.order?.orderId;
+};
+
+export const reserveCheckout = async (
+  orderData: unknown
+): Promise<TReserveCheckoutResult> => {
+  const { data: response } = await apiInstance.post<{
+    data: TReserveCheckoutResult;
+  }>('/payments/reserve-checkout', { orderData });
+  return response.data;
 };
 
 export const useSnapFinanceOrderData = () => {

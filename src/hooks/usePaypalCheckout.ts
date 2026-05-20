@@ -5,6 +5,7 @@ import useAuth from './useAuth';
 import { apiBaseUrl } from '@/utils/api';
 import { toast } from 'sonner';
 import { useCheckout } from '@/context/checkoutContext';
+import { reserveCheckout } from '@/lib/order';
 
 export const usePaypalCheckout = () => {
   const { cartType, subTotalCost, totalCost } = useCheckout();
@@ -75,12 +76,12 @@ export const usePaypalCheckout = () => {
         paymentMethod: 'Paypal',
       };
 
+      const { checkoutToken } = await reserveCheckout(orderData);
+
       const response = await fetch(`${apiBaseUrl}/payments/paypal/checkout`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          orderData,
-        }),
+        body: JSON.stringify({ orderData, checkoutToken }),
       });
       if (!response.ok) {
         const error = await response.text();
