@@ -56,13 +56,12 @@ export default async function Page({
   params: Promise<{ singleProduct: string }>;
 }) {
   const { singleProduct } = await params;
-
+console.log("params:", singleProduct)
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/products/${singleProduct}`
   );
 
   const result = await response.json();
-
 
   return <div className="max-w-[1350px] p-4 mx-auto ">
     <SingleProductClient product={result.data.product} />
