@@ -1,11 +1,12 @@
 'use client';
+import { useCheckout } from '@/context/checkoutContext';
 import { apiInstance } from '@/redux/apis/base';
 import { useTypedSelector } from '@/redux/store';
-import { useCheckout } from '@/context/checkoutContext';
+import { Stripe, StripeElements } from '@stripe/stripe-js';
 import { toast } from 'sonner';
 import useAuth from './useAuth';
-import { Stripe, StripeElements } from '@stripe/stripe-js';
 import { hasAllRequiredShippingFields } from '@/context/stripeProvider';
+import { reserveCheckout } from '@/lib/order';
 
 export const useStripeCheckout = () => {
   const { cartType, subTotalCost, totalCost } = useCheckout();
@@ -80,9 +81,11 @@ export const useStripeCheckout = () => {
         taxAmount,
         totalWithTax,
       };
+      const { checkoutToken } = await reserveCheckout(orderData);
+
       const response = await apiInstance.post<{ data: { orderId: string } }>(
         '/payments/stripe/checkout',
-        { orderData, paymentIntentId }
+        { orderData, paymentIntentId, checkoutToken }
       );
 
       await new Promise((r) => setTimeout(r, 2000));
@@ -94,13 +97,13 @@ export const useStripeCheckout = () => {
         },
       });
       if (error && error.message) {
-        window.location.href = `${window.location.origin}/checkout?order_status=false`;
+				console.log("TCL: useStripeCheckout -> error", error)
+        // window.location.href = '/checkout?order_status=false';
       }
     } catch (err) {
-      window.location.href = `${window.location.origin}/checkout?order_status=false`;
-      toast.error('Error', {
-        description: (err as Error).message,
-      });
+      const error = err as any;
+      // window.location.href = `/checkout?&order_status=false`;
+      toast.error(error.message);
     }
   };
 

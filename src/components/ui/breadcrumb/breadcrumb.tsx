@@ -1,14 +1,17 @@
 import React from "react";
 
 const Breadcrumb = ({ children }: { children: React.ReactNode }) => {
+  const items = React.Children.toArray(children);
+
   return (
     <ol className="flex items-center whitespace-nowrap flex-wrap text-sm">
-      {React.Children.map(children, (child, index) => {
-        const childArray = React.Children.toArray(children);
-        const isLast = index === childArray.length - 1;
+      {items.map((child, index) => {
+        const isLast = index === items.length - 1;
+
         return (
-          <li className="flex items-center">
+          <React.Fragment key={index}>
             {child}
+
             {!isLast && (
               <svg
                 className="mx-2 h-4 w-4 text-gray-400"
@@ -24,7 +27,7 @@ const Breadcrumb = ({ children }: { children: React.ReactNode }) => {
                 />
               </svg>
             )}
-          </li>
+          </React.Fragment>
         );
       })}
     </ol>

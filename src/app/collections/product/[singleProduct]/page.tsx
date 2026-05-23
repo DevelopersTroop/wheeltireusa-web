@@ -11,30 +11,41 @@ export async function generateMetadata({
   params: Promise<{ singleProduct: string }>;
 }): Promise<Metadata> {
   try {
-    const { singleProduct } = await params; 
-    const response = await fetch(`${apiBaseUrl}/products/${singleProduct}`, {
-      cache: "force-cache",
-      next: { revalidate: 300 },
+    const { singleProduct } = await params;
+
+    const response = await fetch(
+      `${apiBaseUrl}/products/${singleProduct}`,
+      {
+        cache: "no-store",
+        next: { revalidate: 300 },
+      }
+    );
+
+    const result = await response.json().catch(() => {
+      throw new Error("Invalid JSON response from API");
     });
 
-    const result = await response.json(); // Parse response.
+    const product = result?.data?.product as TInventoryItem;
 
-
-    const product = result.data?.product as TInventoryItem; // Extract product data.
+    if (!product) {
+      return {
+        title: "Product Not Found",
+      };
+    }
 
     return metaDataHelper({
-      title: `${product.title}`, // Set page title based on product name.
-      description: removeHtmlTags(`${product.title}`), // Set meta description from product data.
+      title: product.title,
+      description: removeHtmlTags(product.title || ""),
       openGraph: {
-        title: `${product.title}`,
-        description: removeHtmlTags(`${product.title}`),
+        title: product.title,
+        description: removeHtmlTags(product.title || ""),
         url: `https://wheeltireusa.com/collections/product/${singleProduct}`,
         images: [
           {
-            url: product?.itemImage ?? '/images/not-available.webp',
+            url: product?.itemImage ?? "/images/not-available.webp",
             width: 1200,
             height: 630,
-            alt: product?.title ?? 'Wheel Tire USA',
+            alt: product?.title ?? "Wheel Tire USA",
           },
         ],
       },
@@ -42,10 +53,9 @@ export async function generateMetadata({
         canonical: `https://wheeltireusa.com/collections/product/${singleProduct}`,
       },
     });
-  } catch (error) {
-    console.error(error);
+  } catch {
     return {
-      title: "Wheel Tire USA", // Fallback title in case of an error.
+      title: "Wheel Tire USA",
     };
   }
 }
@@ -55,16 +65,37 @@ export default async function Page({
 }: {
   params: Promise<{ singleProduct: string }>;
 }) {
-  const { singleProduct } = await params;
+  try {
+    const { singleProduct } = await params;
 
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/products/${singleProduct}`
-  );
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/products/${singleProduct}`;
 
-  const result = await response.json();
+    const response = await fetch(url);
 
+    const result = await response.json().catch(() => {
+      throw new Error("Invalid JSON response from API");
+    });
 
-  return <div className="max-w-[1350px] p-4 mx-auto ">
-    <SingleProductClient product={result.data.product} />
-  </div>;
+    const product = result?.data?.product;
+
+    if (!product) {
+      return (
+        <div className="max-w-[1350px] p-4 mx-auto">
+          Product not found
+        </div>
+      );
+    }
+
+    return (
+      <div className="max-w-[1350px] p-4 mx-auto">
+        <SingleProductClient product={product} />
+      </div>
+    );
+  } catch {
+    return (
+      <div className="max-w-[1350px] p-4 mx-auto">
+        Something went wrong loading product
+      </div>
+    );
+  }
 }

@@ -15,9 +15,12 @@ import { Sparkles } from 'lucide-react';
 const WheelCard = ({ product }: { product: TInventoryItem }) => {
   const searchparams = useSearchParams();
   const cartPackage = searchparams.get('cartPackage');
-  const productLink = `/collections/product/${product.id}` + (cartPackage ? `?cartPackage=${cartPackage}` : '');
+const productLink =
+  `/collections/product/${product.slug}` +
+  (cartPackage ? `?cartPackage=${cartPackage}` : '');
   const [imageErr, setImageErr] = useState(false);
   const { viewType } = useTypedSelector((state) => state.persisted.layout);
+  
   return (
     <div
       className={cn(
