@@ -60,7 +60,7 @@ const Wheel = ({ product }: { product: TWheelProduct }) => {
                 >
                   Wheels & Tires
                 </Link>
-                <MdChevronRight className="text-gray-400" />
+                
               </div>
 
               <div className="flex items-center gap-1 text-xs">
@@ -70,7 +70,7 @@ const Wheel = ({ product }: { product: TWheelProduct }) => {
                 >
                   Custom Wheels
                 </Link>
-                <MdChevronRight className="text-gray-400" />
+                
               </div>
 
               <div className="flex items-center gap-1 text-xs">

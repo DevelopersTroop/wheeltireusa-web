@@ -13,9 +13,6 @@ export async function generateMetadata({
   try {
     const { singleProduct } = await params;
 
-    console.log("🔍 [METADATA] slug:", singleProduct);
-    console.log("🔍 [METADATA] API:", `${apiBaseUrl}/products/${singleProduct}`);
-
     const response = await fetch(
       `${apiBaseUrl}/products/${singleProduct}`,
       {
@@ -24,22 +21,11 @@ export async function generateMetadata({
       }
     );
 
-    console.log("🔍 [METADATA] status:", response.status);
-
-    const text = await response.text();
-    console.log("🔍 [METADATA] raw response:", text);
-
-    let result;
-    try {
-      result = JSON.parse(text);
-    } catch (e) {
-      console.error("❌ [METADATA] JSON parse failed");
+    const result = await response.json().catch(() => {
       throw new Error("Invalid JSON response from API");
-    }
+    });
 
     const product = result?.data?.product as TInventoryItem;
-
-    console.log("🔍 [METADATA] product:", product);
 
     if (!product) {
       return {
@@ -67,8 +53,7 @@ export async function generateMetadata({
         canonical: `https://wheeltireusa.com/collections/product/${singleProduct}`,
       },
     });
-  } catch (error) {
-    console.error("❌ [METADATA ERROR]:", error);
+  } catch {
     return {
       title: "Wheel Tire USA",
     };
@@ -83,26 +68,13 @@ export default async function Page({
   try {
     const { singleProduct } = await params;
 
-    console.log("🔍 [PAGE] slug:", singleProduct);
-
     const url = `${process.env.NEXT_PUBLIC_API_URL}/products/${singleProduct}`;
-
-    console.log("🔍 [PAGE] fetch URL:", url);
 
     const response = await fetch(url);
 
-    console.log("🔍 [PAGE] status:", response.status);
-
-    const text = await response.text();
-    console.log("🔍 [PAGE] raw response:", text);
-
-    let result;
-    try {
-      result = JSON.parse(text);
-    } catch (e) {
-      console.error("❌ [PAGE] JSON parse failed");
+    const result = await response.json().catch(() => {
       throw new Error("Invalid JSON response from API");
-    }
+    });
 
     const product = result?.data?.product;
 
@@ -119,9 +91,7 @@ export default async function Page({
         <SingleProductClient product={product} />
       </div>
     );
-  } catch (error) {
-    console.error("❌ [PAGE ERROR]:", error);
-
+  } catch {
     return (
       <div className="max-w-[1350px] p-4 mx-auto">
         Something went wrong loading product
