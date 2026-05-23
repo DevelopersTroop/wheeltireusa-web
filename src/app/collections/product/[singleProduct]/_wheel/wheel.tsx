@@ -1,3 +1,5 @@
+"use client";
+
 import { TWheelProduct } from "@/types/product";
 import WheelProvider from "./context/WheelProvider";
 import Breadcrumb from "@/components/ui/breadcrumb/breadcrumb";

@@ -68,13 +68,11 @@ export default async function Page({
   try {
     const { singleProduct } = await params;
 
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/products/${singleProduct}`;
+    const url = `${apiBaseUrl}/products/${singleProduct}`;
 
-    const response = await fetch(url);
+    const response = await fetch(url, { cache: "no-store" });
 
-    const result = await response.json().catch(() => {
-      throw new Error("Invalid JSON response from API");
-    });
+    const result = await response.json()
 
     const product = result?.data?.product;
 
