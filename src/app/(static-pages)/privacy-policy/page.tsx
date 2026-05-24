@@ -4,7 +4,7 @@ import PrivacyPolicy from './PrivacyPolicy';
 
 // Metadata for the page
 export const metadata = metaDataHelper({
-  title: 'Privacy Policy - Tirematic',
+  title: 'Privacy Policy - WheelTireUSA',
   keywords: '',
   description: '',
   openGraph: {
@@ -12,7 +12,7 @@ export const metadata = metaDataHelper({
     description: '',
   },
   alternates: {
-    canonical: 'https://tirematic.com/privacy-policy',
+    canonical: 'https://wheeltireusa.com/privacy-policy',
   },
 });
 

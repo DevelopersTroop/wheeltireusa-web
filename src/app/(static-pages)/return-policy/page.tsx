@@ -4,7 +4,7 @@ import ReturnPolicy from './ReturnPolicy';
 
 // Metadata for the page
 export const metadata = metaDataHelper({
-  title: 'Return Policy - Tirematic',
+  title: 'Return Policy - WheelTireUSA',
   keywords: '',
   description: '',
   openGraph: {
@@ -12,7 +12,7 @@ export const metadata = metaDataHelper({
     description: '',
   },
   alternates: {
-    canonical: 'https://tirematic.com/return-policy',
+    canonical: 'https://wheeltireusa.com/return-policy',
   },
 });
 

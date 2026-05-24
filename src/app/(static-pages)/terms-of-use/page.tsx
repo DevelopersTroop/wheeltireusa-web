@@ -4,7 +4,7 @@ import TermsOfUse from './TermsOfUse';
 
 // Metadata for the page
 export const metadata = metaDataHelper({
-  title: 'Terms Of Use - Tirematic',
+  title: 'Terms Of Use - WheelTireUSA',
   keywords: '',
   description: '',
   openGraph: {
@@ -12,7 +12,7 @@ export const metadata = metaDataHelper({
     description: '',
   },
   alternates: {
-    canonical: 'https://tirematic.com/terms-of-use',
+    canonical: 'https://wheeltireusa.com/terms-of-use',
   },
 });
 
