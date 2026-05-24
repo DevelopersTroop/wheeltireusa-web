@@ -7,19 +7,7 @@ import PrivacyPolicyContent from './_components/PrivacyPolicyContent/PrivacyPoli
 const PrivacyPolicy = () => {
   return (
     <>
-      <Container>
-        {/* Breadcrumb navigation */}
-        <div className="flex w-full items-start">
-          <div className="w-full">
-            <Breadcrumb>
-              <Item href={`/`}>Home</Item>
-              <Item href={`/privacy-policy`} isEnd={true}>
-                Privacy Policy
-              </Item>
-            </Breadcrumb>
-          </div>
-        </div>
-      </Container>
+      
       {/* Hero section for the Privacy Policy page */}
       <PrivacyPolicyHero />
       <PrivacyPolicyContent />
