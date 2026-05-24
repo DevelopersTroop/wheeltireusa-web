@@ -7,19 +7,7 @@ import ReturnPolicyContent from './_components/ReturnPolicyContent/ReturnPolicyC
 const ReturnPolicy = () => {
   return (
     <>
-      <Container>
-        {/* Breadcrumb navigation */}
-        <div className="flex w-full items-start">
-          <div className="w-full">
-            <Breadcrumb>
-              <Item href={`/`}>Home</Item>
-              <Item href={`/return-policy`} isEnd={true}>
-                Return Policy
-              </Item>
-            </Breadcrumb>
-          </div>
-        </div>
-      </Container>
+      
       {/* Hero section for the Return Policy page */}
       <ReturnPolicyHero />
       <ReturnPolicyContent />
