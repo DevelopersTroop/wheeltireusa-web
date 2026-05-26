@@ -57,7 +57,7 @@ export default function Footer() {
             <div className="flex flex-col gap-2">
               {[
                 { label: "Terms of service",            href: "/terms-of-use" },
-                { label: "Shipping Policy",             href: "#" },
+                { label: "Shipping Policy",             href: "/shipping-policy" },
                 { label: "Refund policy",               href: "/return-policy" },
                 { label: "Privacy policy",              href: "/privacy-policy" },
                 { label: "Terms and Conditions of Sale",href: "/terms-and-conditions-of-sale" },
